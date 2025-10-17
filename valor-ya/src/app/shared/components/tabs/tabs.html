@@ -1,0 +1,30 @@
+<div class="tabs-container">
+  <div class="tabs-govco">
+    <nav>
+      <div class="nav nav-tabs" role="tablist">
+        @for (tab of tabs; track $index) {
+          <button
+            class="nav-link"
+            (click)="selectTab($index)"
+            [class.active]="selectedTabIndex === $index"
+            [class.disable]="tab.disabled"
+            [attr.aria-disabled]="tab.disabled"
+            [title]="description"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </div>
+    </nav>
+  </div>
+
+  <div class="tab-content">
+    @for (tab of tabs; track $index) {
+      @if (selectedTabIndex === $index) {
+        <div class="tab-pane fade show active" role="tabpanel">
+          <ng-container *ngTemplateOutlet="tab.content"></ng-container>
+        </div>
+      }
+    }
+  </div>
+</div>

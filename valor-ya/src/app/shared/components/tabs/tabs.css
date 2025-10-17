@@ -1,0 +1,76 @@
+.tabs-container {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.nav-tabs .nav-link {
+  border-radius: 0px;
+}
+
+.tabs-govco .nav-tabs {
+  border-bottom: none;
+}
+
+.tabs-govco button {
+  white-space: normal;
+  color: #004884;
+  min-width: 216px;
+  height: 4rem;
+  font-size: 15px;
+  text-align: center;
+  line-height: normal !important;
+  font-family: Montserrat-Medium, sans-serif !important;
+  border: 2px solid #e6effd !important;
+  background-color: #f6f8f9 !important;
+  padding: 20px 1rem 25px 1rem;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.tabs-govco button.active {
+  color: #004884 !important;
+  background-color: white !important;
+  border-bottom: 4px solid #004884 !important;
+}
+
+.tabs-govco button:hover {
+  background-color: #004884 !important;
+  color: #ffffff !important;
+  cursor: pointer;
+}
+
+.tabs-govco button.disable {
+  background-color: #f2f2f2 !important;
+  color: #bababa !important;
+  border-bottom: 4px solid #f2f2f2 !important;
+}
+
+.tabs-govco button.disable:hover {
+  background-color: #f2f2f2 !important;
+  color: #bababa !important;
+  border-bottom: 4px solid #f2f2f2 !important;
+  cursor: not-allowed;
+}
+
+.tab-content {
+  margin-top: 1.5rem;
+}
+
+.tab-pane {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
