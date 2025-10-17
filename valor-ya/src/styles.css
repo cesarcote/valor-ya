@@ -1,9 +1,10 @@
-/* Global styles - Gov.co Design System */
+/* Global styles - ValorYa */
 /*
- * Los estilos base vienen del CDN de Gov.co:
- * https://cdn.www.gov.co/layout/v4/all.css
+ * Sistema de tipografía personalizado:
+ * - Nunito Sans (Variable Font) para todo el texto
+ * - Verdana como fallback principal
  *
- * Aquí solo agregamos personalizaciones y utilidades adicionales
+ * NO usamos Montserrat ni Work Sans del CDN de Gov.co
  */
 
 /* ==================== RESET ==================== */
@@ -11,6 +12,312 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* ==================== FUENTES LOCALES ==================== */
+
+/*
+ * Nunito Sans - Variable Font
+ * Una sola declaración soporta todos los pesos (200-1000) y anchos
+ * Esto es MUY eficiente en tamaño de archivo
+ */
+@font-face {
+  font-family: 'Nunito Sans';
+  src: url('assets/fonts/nunito-sans/NUNITOSANS-VARIABLEFONT_YTLC,OPSZ,WDTH,WGHT.TTF')
+    format('truetype-variations');
+  font-weight: 200 1000; /* Rango completo de pesos disponibles */
+  font-stretch: 75% 125%; /* Rango de anchos disponibles */
+  font-style: normal;
+  font-display: swap; /* Muestra fallback mientras carga */
+}
+
+/*
+ * Verdana - Fuentes estáticas tradicionales
+ * Necesitamos declarar cada variante por separado
+ */
+
+/* Verdana Regular */
+@font-face {
+  font-family: 'Verdana';
+  src: url('assets/fonts/verdana/VERDANA.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Verdana Bold */
+@font-face {
+  font-family: 'Verdana';
+  src: url('assets/fonts/verdana/VERDANAB.TTF') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Verdana Italic */
+@font-face {
+  font-family: 'Verdana';
+  src: url('assets/fonts/verdana/VERDANAI.TTF') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Verdana Bold Italic */
+@font-face {
+  font-family: 'Verdana';
+  src: url('assets/fonts/verdana/VERDANAZ.TTF') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ==================== TIPOGRAFÍA ==================== */
+/*
+ * Font Stack:
+ * - Nunito Sans: Para encabezados y texto destacado
+ * - Verdana: Para cuerpo de texto
+ */
+:root {
+  /* Colores principales */
+  --color-primary: #0943b5;
+  --color-text: #4c4c4c;
+
+  /* Familias de fuentes */
+  --font-nunito: 'Nunito Sans', Verdana, sans-serif;
+  --font-verdana: Verdana, sans-serif;
+
+  /* Pesos de fuentes */
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Desktop - Encabezados (Nunito Sans Bold) */
+  --h1-size: 42px;
+  --h1-line-height: 50px;
+
+  --h2-size: 34px;
+  --h2-line-height: 42px;
+
+  --h3-size: 26px;
+  --h3-line-height: 34px;
+
+  --h4-size: 22px;
+  --h4-line-height: 32px;
+
+  --h5-size: 20px;
+  --h5-line-height: 26px;
+
+  --h6-size: 16px;
+  --h6-line-height: 22px;
+
+  /* Desktop - Textos */
+  --text-description-size: 20px;
+  --text-description-line-height: 24px;
+
+  --text-body1-size: 15px;
+  --text-body1-line-height: 22px;
+
+  --text-body2-size: 14px;
+  --text-body2-line-height: 22px;
+
+  --text-caption-size: 12px;
+  --text-caption-line-height: 20px;
+}
+
+html {
+  font-size: 100%; /* Base 16px */
+}
+
+body {
+  font-family: var(--font-verdana);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body2-size);
+  line-height: var(--text-body2-line-height);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== ENCABEZADOS (DESKTOP) ==================== */
+/* Todos los encabezados usan Nunito Sans Bold */
+
+h1 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h1-size);
+  line-height: var(--h1-line-height);
+  color: var(--color-primary);
+  margin: 0 0 1rem 0;
+}
+
+h2 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h2-size);
+  line-height: var(--h2-line-height);
+  color: var(--color-primary);
+  margin: 0 0 0.875rem 0;
+}
+
+h3 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h3-size);
+  line-height: var(--h3-line-height);
+  color: var(--color-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+h4 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h4-size);
+  line-height: var(--h4-line-height);
+  color: var(--color-primary);
+  margin: 0 0 0.625rem 0;
+}
+
+h5 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h5-size);
+  line-height: var(--h5-line-height);
+  color: var(--color-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+h6 {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--h6-size);
+  line-height: var(--h6-line-height);
+  color: var(--color-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+/* ==================== CLASES DE TEXTO ==================== */
+
+/* Description - Nunito Sans Semibold 20px */
+.text-description {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-description-size);
+  line-height: var(--text-description-line-height);
+}
+
+/* Body text 1 - Verdana Regular 15px */
+.text-body1 {
+  font-family: var(--font-verdana);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body1-size);
+  line-height: var(--text-body1-line-height);
+}
+
+/* Body text 2 - Verdana Regular 14px (default body) */
+.text-body2 {
+  font-family: var(--font-verdana);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body2-size);
+  line-height: var(--text-body2-line-height);
+}
+
+/* Caption - Verdana Regular 12px */
+.text-caption {
+  font-family: var(--font-verdana);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line-height);
+}
+
+/* ==================== UTILIDADES DE PESO ==================== */
+
+.text-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.text-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==================== RESPONSIVE - TABLET (max-width: 1024px) ==================== */
+
+@media (max-width: 1024px) {
+  :root {
+    /* Tablet - Encabezados */
+    --h1-size: 34px;
+    --h1-line-height: 42px;
+
+    --h2-size: 26px;
+    --h2-line-height: 34px;
+
+    --h3-size: 22px;
+    --h3-line-height: 32px;
+
+    --h4-size: 20px;
+    --h4-line-height: 26px;
+
+    --h5-size: 18px;
+    --h5-line-height: 24px;
+
+    --h6-size: 16px;
+    --h6-line-height: 22px;
+
+    /* Tablet - Textos */
+    --text-description-size: 18px;
+    --text-description-line-height: 22px;
+
+    --text-body1-size: 14px;
+    --text-body1-line-height: 20px;
+
+    --text-body2-size: 12px;
+    --text-body2-line-height: 20px;
+
+    --text-caption-size: 12px;
+    --text-caption-line-height: 20px;
+  }
+}
+
+/* ==================== RESPONSIVE - MÓVIL (max-width: 768px) ==================== */
+
+@media (max-width: 768px) {
+  :root {
+    /* Móvil - Encabezados (iguales que tablet) */
+    --h1-size: 34px;
+    --h1-line-height: 42px;
+
+    --h2-size: 26px;
+    --h2-line-height: 34px;
+
+    --h3-size: 22px;
+    --h3-line-height: 32px;
+
+    --h4-size: 20px;
+    --h4-line-height: 26px;
+
+    --h5-size: 18px;
+    --h5-line-height: 24px;
+
+    --h6-size: 16px;
+    --h6-line-height: 22px;
+
+    /* Móvil - Textos (Description más grande) */
+    --text-description-size: 22px;
+    --text-description-line-height: 32px;
+
+    --text-body1-size: 14px;
+    --text-body1-line-height: 20px;
+
+    --text-body2-size: 12px;
+    --text-body2-line-height: 20px;
+
+    --text-caption-size: 12px;
+    --text-caption-line-height: 20px;
+  }
 }
 
 /* ==================== UTILIDADES ==================== */
