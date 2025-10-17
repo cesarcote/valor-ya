@@ -5,42 +5,43 @@
   <p class="subtitle">Selecciona el método de búsqueda y completa la información</p>
 
   <!-- TABS para seleccionar tipo de búsqueda -->
-  <div class="tabs">
-    <button
-      class="tab"
-      [class.active]="tipoBusquedaActual === TipoBusqueda.CHIP"
-      (click)="onTabChange(TipoBusqueda.CHIP)"
-      [disabled]="mostrarResultado"
-    >
-      CHIP
-    </button>
-    <button
-      class="tab"
-      [class.active]="tipoBusquedaActual === TipoBusqueda.DIRECCION"
-      (click)="onTabChange(TipoBusqueda.DIRECCION)"
-      [disabled]="mostrarResultado"
-    >
-      Dirección Catastral
-    </button>
-    <button
-      class="tab"
-      [class.active]="tipoBusquedaActual === TipoBusqueda.FMI"
-      (click)="onTabChange(TipoBusqueda.FMI)"
-      [disabled]="mostrarResultado"
-    >
-      Folio Matrícula Inmobiliaria
-    </button>
+  @if (!mostrarResultado) {
+  <div class="tabs-govco-container">
+    <nav>
+      <div class="nav nav-tabs" role="tablist">
+        <button
+          class="nav-link"
+          [class.active]="tipoBusquedaActual === TipoBusqueda.CHIP"
+          (click)="onTabChangeSimple(TipoBusqueda.CHIP)"
+        >
+          CHIP
+        </button>
+        <button
+          class="nav-link"
+          [class.active]="tipoBusquedaActual === TipoBusqueda.DIRECCION"
+          (click)="onTabChangeSimple(TipoBusqueda.DIRECCION)"
+        >
+          Dirección Catastral
+        </button>
+        <button
+          class="nav-link"
+          [class.active]="tipoBusquedaActual === TipoBusqueda.FMI"
+          (click)="onTabChangeSimple(TipoBusqueda.FMI)"
+        >
+          Folio Matrícula Inmobiliaria
+        </button>
+      </div>
+    </nav>
   </div>
 
-  <!-- FORMULARIOS (solo se muestra uno según el tab activo) -->
-  @if (!mostrarResultado) {
+  <!-- FORMULARIOS -->
   <div class="form-container">
     @if (tipoBusquedaActual === TipoBusqueda.CHIP) {
-    <app-formulario-chip></app-formulario-chip>
+    <app-form-chip></app-form-chip>
     } @if (tipoBusquedaActual === TipoBusqueda.DIRECCION) {
-    <app-formulario-direccion></app-formulario-direccion>
+    <app-form-address></app-form-address>
     } @if (tipoBusquedaActual === TipoBusqueda.FMI) {
-    <app-formulario-fmi></app-formulario-fmi>
+    <app-form-fmi></app-form-fmi>
     }
   </div>
   }

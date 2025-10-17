@@ -40,7 +40,7 @@ export class ApplicationComponent implements OnInit {
     }
   }
 
-  onTabChange(tipo: TipoBusqueda): void {
+  onTabChangeSimple(tipo: TipoBusqueda): void {
     this.stateService.setTipoBusqueda(tipo);
     this.stateService.setMostrarResultado(false);
   }
