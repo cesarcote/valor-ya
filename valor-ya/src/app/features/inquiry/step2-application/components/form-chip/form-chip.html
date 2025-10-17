@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label for="chip">CHIP (Código de Identificación del Predio)</label>
+  <input
+    type="text"
+    id="chip"
+    [(ngModel)]="chip"
+    placeholder="Ingrese el CHIP del predio"
+    class="form-input"
+  />
+
+  <p class="help-text">
+    El CHIP es un código único de 30 dígitos que identifica cada predio en Colombia
+  </p>
+
+  @if (errorMessage) {
+  <app-alert type="error" [dismissible]="true">
+    {{ errorMessage }}
+  </app-alert>
+  }
+</div>
+
+<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="!chip">
+  Consultar
+</button>

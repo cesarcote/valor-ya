@@ -1,0 +1,84 @@
+<app-stepper></app-stepper>
+
+<div class="solicitud-container">
+  <h2>Consulta tu predio</h2>
+  <p class="subtitle">Selecciona el método de búsqueda y completa la información</p>
+
+  <!-- TABS para seleccionar tipo de búsqueda -->
+  <div class="tabs">
+    <button
+      class="tab"
+      [class.active]="tipoBusquedaActual === TipoBusqueda.CHIP"
+      (click)="onTabChange(TipoBusqueda.CHIP)"
+      [disabled]="mostrarResultado"
+    >
+      CHIP
+    </button>
+    <button
+      class="tab"
+      [class.active]="tipoBusquedaActual === TipoBusqueda.DIRECCION"
+      (click)="onTabChange(TipoBusqueda.DIRECCION)"
+      [disabled]="mostrarResultado"
+    >
+      Dirección Catastral
+    </button>
+    <button
+      class="tab"
+      [class.active]="tipoBusquedaActual === TipoBusqueda.FMI"
+      (click)="onTabChange(TipoBusqueda.FMI)"
+      [disabled]="mostrarResultado"
+    >
+      Folio Matrícula Inmobiliaria
+    </button>
+  </div>
+
+  <!-- FORMULARIOS (solo se muestra uno según el tab activo) -->
+  @if (!mostrarResultado) {
+  <div class="form-container">
+    @if (tipoBusquedaActual === TipoBusqueda.CHIP) {
+    <app-formulario-chip></app-formulario-chip>
+    } @if (tipoBusquedaActual === TipoBusqueda.DIRECCION) {
+    <app-formulario-direccion></app-formulario-direccion>
+    } @if (tipoBusquedaActual === TipoBusqueda.FMI) {
+    <app-formulario-fmi></app-formulario-fmi>
+    }
+  </div>
+  }
+
+  <!-- RESULTADO (se muestra después de consultar) -->
+  @if (mostrarResultado && predioData) {
+  <div class="result-container">
+    <div class="result-header">
+      <h3>{{ predioData.mensaje }}</h3>
+      <button class="btn-secondary" (click)="stateService.setMostrarResultado(false)">
+        Realizar nueva búsqueda
+      </button>
+    </div>
+
+    <div class="result-info">
+      <h4>Datos del Predio</h4>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Dirección:</span>
+          <span class="value">{{ predioData.direccion }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Municipio:</span>
+          <span class="value">{{ predioData.municipio }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Localidad:</span>
+          <span class="value">{{ predioData.localidad }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button type="button" class="btn-secondary" (click)="onVolver()">Volver al inicio</button>
+      <button type="button" class="btn-primary" (click)="onContinuar()">
+        Continuar con el proceso
+      </button>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,86 @@
+<app-stepper></app-stepper>
+
+<div class="respuesta-container">
+  <div class="success-header">
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+        />
+      </svg>
+    </div>
+    <h2>¡Cálculo completado!</h2>
+    <p>Hemos calculado el valor estimado de tu predio</p>
+  </div>
+
+  <div class="result-card">
+    <div class="valor-principal">
+      <span class="label">Valor Estimado</span>
+      <span class="valor">{{ valorEstimado | currency : 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+      <span class="disclaimer">* Valor estimado con base en datos catastrales</span>
+    </div>
+
+    @if (predioData) {
+      <div class="detalles-predio">
+        <h3>Detalles del Predio</h3>
+
+        <div class="detalle-item">
+          <span class="detalle-label">Dirección</span>
+          <span class="detalle-value">{{ predioData.direccion }}</span>
+        </div>
+
+        <div class="detalle-item">
+          <span class="detalle-label">Municipio</span>
+          <span class="detalle-value">{{ predioData.municipio }}</span>
+        </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Localidad</span>
+        <span class="detalle-value">{{ predioData.localidad }}</span>
+      </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Barrio</span>
+        <span class="detalle-value">{{ predioData.barrio }}</span>
+      </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Tipo de Predio</span>
+        <span class="detalle-value">{{ predioData.tipoPredio }}</span>
+      </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Estrato</span>
+        <span class="detalle-value">{{ predioData.estrato }}</span>
+      </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Área Construida</span>
+        <span class="detalle-value">{{ predioData.areaConstruida }}</span>
+      </div>
+
+      <div class="detalle-item">
+        <span class="detalle-label">Edad del Predio</span>
+        <span class="detalle-value">{{ predioData.edad }}</span>
+      </div>
+      </div>
+    }
+
+    <div class="fecha-consulta">
+      <span>Fecha de consulta: {{ fechaConsulta }}</span>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button type="button" class="btn-secondary" (click)="onVolverInicio()">Volver al inicio</button>
+    <button type="button" class="btn-outline" (click)="onNuevaConsulta()">Nueva consulta</button>
+    <button type="button" class="btn-primary" (click)="onDescargarPDF()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"
+        />
+      </svg>
+      Descargar PDF
+    </button>
+  </div>
+</div>

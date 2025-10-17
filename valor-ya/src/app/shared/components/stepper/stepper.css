@@ -1,0 +1,92 @@
+.stepper-container {
+  width: 100%;
+  padding: 2rem 0;
+  position: relative;
+}
+
+.stepper-progress {
+  width: 100%;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3366cc 0%, #004884 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease-in-out;
+}
+
+.stepper-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stepper-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #757575;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+}
+
+.stepper-item.active .step-indicator {
+  background-color: #3366cc;
+  color: white;
+  border-color: #004884;
+}
+
+.stepper-item.current .step-indicator {
+  box-shadow: 0 0 0 4px rgba(51, 102, 204, 0.2);
+  transform: scale(1.1);
+}
+
+.step-label {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #757575;
+  max-width: 120px;
+  line-height: 1.2;
+}
+
+.stepper-item.active .step-label {
+  color: #3366cc;
+  font-weight: 600;
+}
+
+.step-number {
+  font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+  .step-label {
+    font-size: 0.75rem;
+    max-width: 80px;
+  }
+
+  .step-indicator {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+}

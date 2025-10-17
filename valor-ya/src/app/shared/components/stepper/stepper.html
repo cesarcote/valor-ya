@@ -1,0 +1,21 @@
+<div class="stepper-container">
+  <div class="stepper-progress">
+    <div class="progress-bar" [style.width]="progressPercentage"></div>
+  </div>
+
+  <div class="stepper-items">
+    @for (stepConfig of stepperService.steps; track stepConfig.step) {
+    <div
+      class="stepper-item"
+      [class.active]="isStepActive(stepConfig.step)"
+      [class.current]="isCurrentStep(stepConfig.step)"
+    >
+      <div class="step-indicator">
+        <span class="step-number">{{ stepConfig.step }}</span>
+      </div>
+
+      <span class="step-label">{{ stepConfig.label }}</span>
+    </div>
+    }
+  </div>
+</div>

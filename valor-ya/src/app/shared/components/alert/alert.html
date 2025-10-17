@@ -1,0 +1,11 @@
+@if (isVisible) {
+<div class="alert" [class]="typeClass" role="alert">
+  <span class="alert-icon" [class]="iconClass"></span>
+  <div class="alert-content">
+    <ng-content></ng-content>
+  </div>
+  @if (dismissible) {
+  <button type="button" class="alert-close" (click)="dismiss()" aria-label="Cerrar">×</button>
+  }
+</div>
+}

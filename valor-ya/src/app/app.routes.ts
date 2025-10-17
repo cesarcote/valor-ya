@@ -1,42 +1,61 @@
 import { Routes } from '@angular/router';
+import {
+  canAccessSolicitudGuard,
+  canAccessProcesoGuard,
+  canAccessRespuestaGuard,
+} from './core/guards/inquiry.guards';
 
 export const routes: Routes = [
   {
     path: 'valor-ya',
-    loadComponent: () =>
-      import('./features/inquiry/home/home.component').then((m) => m.HomeComponent),
-  },
-  {
-    path: 'valor-ya/direccion-catastral',
-    loadComponent: () =>
-      import(
-        './features/inquiry/application/formulario-direccion-catastral/formulario-direccion-catastral.component'
-      ).then((m) => m.FormularioDireccionCatastralComponent),
-  },
-  {
-    path: 'valor-ya/chip',
-    loadComponent: () =>
-      import('./features/inquiry/application/formulario-chip/formulario-chip.component').then(
-        (m) => m.FormularioChipComponent
-      ),
-  },
-  {
-    path: 'valor-ya/fmi',
-    loadComponent: () =>
-      import('./features/inquiry/application/formulario-fmi/formulario-fmi.component').then(
-        (m) => m.FormularioFmiComponent
-      ),
-  },
-  {
-    path: 'valor-ya/process',
-    loadComponent: () =>
-      import('./features/inquiry/process/process-container.component').then(
-        (m) => m.ProcessContainerComponent
-      ),
+    children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        title: 'Valor YA - Inicio',
+        loadComponent: () =>
+          import('./features/inquiry/step1-home/home').then((m) => m.HomeComponent),
+      },
+      {
+        path: 'solicitud',
+        title: 'Valor YA - Consulta tu Predio',
+        canActivate: [canAccessSolicitudGuard],
+        loadComponent: () =>
+          import('./features/inquiry/step2-application/application').then(
+            (m) => m.ApplicationComponent
+          ),
+      },
+      {
+        path: 'proceso',
+        title: 'Valor YA - Procesando Solicitud',
+        canActivate: [canAccessProcesoGuard],
+        loadComponent: () =>
+          import('./features/inquiry/step3-process/process').then((m) => m.ProcessComponent),
+      },
+      {
+        path: 'respuesta',
+        title: 'Valor YA - Resultado de tu Consulta',
+        canActivate: [canAccessRespuestaGuard],
+        loadComponent: () =>
+          import('./features/inquiry/step4-response/response').then((m) => m.ResponseComponent),
+      },
+      {
+        path: '**',
+        redirectTo: 'inicio',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: 'valor-ya',
     pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'valor-ya',
   },
 ];

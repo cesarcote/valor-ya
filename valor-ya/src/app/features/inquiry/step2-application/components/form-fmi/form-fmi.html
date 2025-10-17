@@ -1,0 +1,36 @@
+<div class="form-group">
+  <label for="zona">Zona de Matrícula</label>
+  <select id="zona" [(ngModel)]="zona" class="form-select">
+    <option value="">Seleccione una zona</option>
+    @for (z of zonas; track z.value) {
+    <option [value]="z.value">
+      {{ z.label }}
+    </option>
+    }
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="matricula">Número de Matrícula Inmobiliaria</label>
+  <input
+    type="text"
+    id="matricula"
+    [(ngModel)]="matricula"
+    placeholder="Ej: 123456"
+    class="form-input"
+  />
+
+  <p class="help-text">
+    El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro
+  </p>
+
+  @if (errorMessage) {
+  <app-alert type="error" [dismissible]="true">
+    {{ errorMessage }}
+  </app-alert>
+  }
+</div>
+
+<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="!zona || !matricula">
+  Consultar
+</button>
