@@ -21,18 +21,18 @@
     </div>
 
     @if (predioData) {
-      <div class="detalles-predio">
-        <h3>Detalles del Predio</h3>
+    <div class="detalles-predio">
+      <h3>Detalles del Predio</h3>
 
-        <div class="detalle-item">
-          <span class="detalle-label">Dirección</span>
-          <span class="detalle-value">{{ predioData.direccion }}</span>
-        </div>
+      <div class="detalle-item">
+        <span class="detalle-label">Dirección</span>
+        <span class="detalle-value">{{ predioData.direccion }}</span>
+      </div>
 
-        <div class="detalle-item">
-          <span class="detalle-label">Municipio</span>
-          <span class="detalle-value">{{ predioData.municipio }}</span>
-        </div>
+      <div class="detalle-item">
+        <span class="detalle-label">Municipio</span>
+        <span class="detalle-value">{{ predioData.municipio }}</span>
+      </div>
 
       <div class="detalle-item">
         <span class="detalle-label">Localidad</span>
@@ -63,7 +63,7 @@
         <span class="detalle-label">Edad del Predio</span>
         <span class="detalle-value">{{ predioData.edad }}</span>
       </div>
-      </div>
+    </div>
     }
 
     <div class="fecha-consulta">
@@ -72,23 +72,16 @@
   </div>
 
   <div class="action-buttons">
-    <app-button 
+    <app-button
       text="Volver al inicio"
       variant="outline"
       type="button"
-      (clicked)="onVolverInicio()">
+      (clicked)="onVolverInicio()"
+    >
     </app-button>
-    <app-button 
-      text="Nueva consulta"
-      variant="outline"
-      type="button"
-      (clicked)="onNuevaConsulta()">
+    <app-button text="Nueva consulta" variant="outline" type="button" (clicked)="onNuevaConsulta()">
     </app-button>
-    <app-button 
-      text="Descargar PDF"
-      variant="fill"
-      type="button"
-      (clicked)="onDescargarPDF()">
+    <app-button text="Descargar PDF" variant="fill" type="button" (clicked)="onDescargarPDF()">
     </app-button>
   </div>
 </div>

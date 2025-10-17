@@ -6,20 +6,20 @@
 
   <div class="process-card">
     @if (predioData) {
-      <div class="process-info">
-        <div class="info-item">
-          <span class="label">Dirección:</span>
-          <span class="value">{{ predioData.direccion }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Municipio:</span>
-          <span class="value">{{ predioData.municipio }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Localidad:</span>
-          <span class="value">{{ predioData.localidad }}</span>
-        </div>
+    <div class="process-info">
+      <div class="info-item">
+        <span class="label">Dirección:</span>
+        <span class="value">{{ predioData.direccion }}</span>
       </div>
+      <div class="info-item">
+        <span class="label">Municipio:</span>
+        <span class="value">{{ predioData.municipio }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Localidad:</span>
+        <span class="value">{{ predioData.localidad }}</span>
+      </div>
+    </div>
     }
 
     <div class="calculation-status">
@@ -57,18 +57,14 @@
   </div>
 
   <div class="action-buttons">
-    <app-button 
-      text="Volver"
-      variant="outline"
-      type="button"
-      (clicked)="onVolver()">
-    </app-button>
-    <app-button 
+    <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
+    <app-button
       text="Ver resultado"
       variant="fill"
       type="button"
       [disabled]="isCalculating"
-      (clicked)="onVerResultado()">
+      (clicked)="onVerResultado()"
+    >
     </app-button>
   </div>
 </div>

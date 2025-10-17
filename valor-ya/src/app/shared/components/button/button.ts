@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 
 /**
  * Button component following Gov.co design system
- * 
+ *
  * @example
- * <app-button 
- *   text="Consultar" 
+ * <app-button
+ *   text="Consultar"
  *   variant="fill"
  *   type="submit"
  *   [disabled]="form.invalid">
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-button',
   imports: [CommonModule],
   templateUrl: './button.html',
-  styleUrl: './button.css'
+  styleUrl: './button.css',
 })
 export class ButtonComponent {
   /**
@@ -61,7 +61,7 @@ export class ButtonComponent {
    */
   get buttonClasses(): string {
     const classes = ['btn-govco'];
-    
+
     if (this.variant === 'fill') {
       classes.push('fill-btn-govco');
     } else {

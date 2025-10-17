@@ -30,11 +30,12 @@
   <div class="result-container">
     <div class="result-header">
       <h3>{{ predioData.mensaje }}</h3>
-      <app-button 
+      <app-button
         text="Realizar nueva búsqueda"
         variant="outline"
         type="button"
-        (clicked)="stateService.setMostrarResultado(false)">
+        (clicked)="stateService.setMostrarResultado(false)"
+      >
       </app-button>
     </div>
 
@@ -57,17 +58,14 @@
     </div>
 
     <div class="action-buttons">
-      <app-button 
-        text="Volver al inicio"
-        variant="outline"
-        type="button"
-        (clicked)="onVolver()">
+      <app-button text="Volver al inicio" variant="outline" type="button" (clicked)="onVolver()">
       </app-button>
-      <app-button 
+      <app-button
         text="Continuar con el proceso"
         variant="fill"
         type="button"
-        (clicked)="onContinuar()">
+        (clicked)="onContinuar()"
+      >
       </app-button>
     </div>
   </div>
