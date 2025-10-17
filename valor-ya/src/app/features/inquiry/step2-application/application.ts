@@ -47,7 +47,7 @@ export class ApplicationComponent implements OnInit {
       this.tipoBusquedaActual = state.tipoBusqueda;
       this.mostrarResultado = state.mostrarResultado;
       this.predioData = state.predioData;
-      
+
       this.updateSelectedTabIndex();
       this.updateTabsDisabled();
     });
@@ -68,9 +68,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   updateTabsDisabled(): void {
-    this.tabs = this.tabs.map(tab => ({
+    this.tabs = this.tabs.map((tab) => ({
       ...tab,
-      disabled: this.mostrarResultado
+      disabled: this.mostrarResultado,
     }));
   }
 

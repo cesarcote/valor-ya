@@ -22,11 +22,8 @@ export class FormAddressComponent {
   private stateService = inject(InquiryStateService);
   private loadingService = inject(LoadingService);
 
-  direccionControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5),
-  ]);
-  
+  direccionControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
+
   errorMessage = '';
 
   onConsultar(): void {
@@ -43,7 +40,11 @@ export class FormAddressComponent {
       .pipe(finalize(() => this.loadingService.hide()))
       .subscribe({
         next: (predioData) => {
-          this.stateService.setPredioData(predioData, TipoBusqueda.DIRECCION, this.direccionControl.value!);
+          this.stateService.setPredioData(
+            predioData,
+            TipoBusqueda.DIRECCION,
+            this.direccionControl.value!
+          );
         },
         error: (error) => {
           this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';

@@ -3,16 +3,16 @@
     <nav>
       <div class="nav nav-tabs" role="tablist">
         @for (tab of tabs; track $index) {
-          <button
-            class="nav-link"
-            (click)="selectTab($index)"
-            [class.active]="selectedTabIndex === $index"
-            [class.disable]="tab.disabled"
-            [attr.aria-disabled]="tab.disabled"
-            [title]="description"
-          >
-            {{ tab.label }}
-          </button>
+        <button
+          class="nav-link"
+          (click)="selectTab($index)"
+          [class.active]="selectedTabIndex === $index"
+          [class.disable]="tab.disabled"
+          [attr.aria-disabled]="tab.disabled"
+          [title]="description"
+        >
+          {{ tab.label }}
+        </button>
         }
       </div>
     </nav>

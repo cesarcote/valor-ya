@@ -23,11 +23,8 @@ export class FormFmiComponent {
   private loadingService = inject(LoadingService);
 
   zonaControl = new FormControl('', [Validators.required]);
-  matriculaControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-  ]);
-  
+  matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+
   errorMessage = '';
 
   zonas = [

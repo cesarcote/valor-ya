@@ -83,13 +83,17 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
   }
 
   get showSuccess(): boolean {
-    return !!(this.control.valid && (this.control.touched || this.control.dirty) && this.control.value);
+    return !!(
+      this.control.valid &&
+      (this.control.touched || this.control.dirty) &&
+      this.control.value
+    );
   }
 
   getErrorMessage(): string {
     if (this.control.errors) {
       const errors = this.control.errors;
-      
+
       if (errors['required']) return 'Este campo es obligatorio';
       if (errors['email']) return 'Ingrese un correo electrónico válido';
       if (errors['minlength']) return `Mínimo ${errors['minlength'].requiredLength} caracteres`;
@@ -97,7 +101,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
       if (errors['min']) return `El valor mínimo es ${errors['min'].min}`;
       if (errors['max']) return `El valor máximo es ${errors['max'].max}`;
       if (errors['pattern']) return 'Formato inválido';
-      
+
       return 'Campo inválido';
     }
     return '';

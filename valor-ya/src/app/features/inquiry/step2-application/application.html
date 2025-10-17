@@ -6,25 +6,23 @@
 
   <!-- TABS usando el componente TabsComponent -->
   @if (!mostrarResultado) {
-    <app-tabs 
-      [tabs]="tabs" 
-      [selectedTabIndex]="selectedTabIndex"
-      (tabChange)="onTabChange($event)"
-      description="Selecciona el método de búsqueda"
-    >
-      <!-- Contenido proyectado con ng-content -->
-      <div class="form-container">
-        @if (selectedTabIndex === 0) {
-          <app-form-chip></app-form-chip>
-        }
-        @if (selectedTabIndex === 1) {
-          <app-form-address></app-form-address>
-        }
-        @if (selectedTabIndex === 2) {
-          <app-form-fmi></app-form-fmi>
-        }
-      </div>
-    </app-tabs>
+  <app-tabs
+    [tabs]="tabs"
+    [selectedTabIndex]="selectedTabIndex"
+    (tabChange)="onTabChange($event)"
+    description="Selecciona el método de búsqueda"
+  >
+    <!-- Contenido proyectado con ng-content -->
+    <div class="form-container">
+      @if (selectedTabIndex === 0) {
+      <app-form-chip></app-form-chip>
+      } @if (selectedTabIndex === 1) {
+      <app-form-address></app-form-address>
+      } @if (selectedTabIndex === 2) {
+      <app-form-fmi></app-form-fmi>
+      }
+    </div>
+  </app-tabs>
   }
 
   <!-- RESULTADO (se muestra después de consultar) -->

@@ -27,7 +27,7 @@ export class FormChipComponent {
     Validators.minLength(5),
     Validators.maxLength(30),
   ]);
-  
+
   errorMessage = '';
 
   onConsultar(): void {

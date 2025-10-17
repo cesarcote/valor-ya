@@ -9,16 +9,16 @@
   ></app-input>
 
   @if (errorMessage) {
-    <app-alert type="error" [dismissible]="true">
-      {{ errorMessage }}
-    </app-alert>
+  <app-alert type="error" [dismissible]="true">
+    {{ errorMessage }}
+  </app-alert>
   }
 </div>
 
-<button 
-  type="button" 
-  class="btn-primary" 
-  (click)="onConsultar()" 
+<button
+  type="button"
+  class="btn-primary"
+  (click)="onConsultar()"
   [disabled]="direccionControl.invalid"
 >
   Consultar

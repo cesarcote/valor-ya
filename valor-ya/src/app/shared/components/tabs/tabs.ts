@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output, ContentChildren, QueryList, TemplateRef, AfterContentInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ContentChildren,
+  QueryList,
+  TemplateRef,
+  AfterContentInit,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
 export interface Tab {

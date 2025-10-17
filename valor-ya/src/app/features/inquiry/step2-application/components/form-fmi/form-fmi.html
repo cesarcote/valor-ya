@@ -3,9 +3,9 @@
   <select id="zona" [formControl]="zonaControl" class="form-select">
     <option value="">Seleccione una zona</option>
     @for (z of zonas; track z.value) {
-      <option [value]="z.value">
-        {{ z.label }}
-      </option>
+    <option [value]="z.value">
+      {{ z.label }}
+    </option>
     }
   </select>
 </div>
@@ -21,16 +21,16 @@
   ></app-input>
 
   @if (errorMessage) {
-    <app-alert type="error" [dismissible]="true">
-      {{ errorMessage }}
-    </app-alert>
+  <app-alert type="error" [dismissible]="true">
+    {{ errorMessage }}
+  </app-alert>
   }
 </div>
 
-<button 
-  type="button" 
-  class="btn-primary" 
-  (click)="onConsultar()" 
+<button
+  type="button"
+  class="btn-primary"
+  (click)="onConsultar()"
   [disabled]="zonaControl.invalid || matriculaControl.invalid"
 >
   Consultar
