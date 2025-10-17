@@ -16,53 +16,6 @@ h2 {
   margin-bottom: 2rem;
 }
 
-/* TABS - Estilo Gov.co */
-.tabs-govco-container {
-  margin-bottom: 1.5rem;
-}
-
-.tabs-govco-container .nav-tabs {
-  border-bottom: none;
-  display: flex;
-  gap: 0;
-}
-
-.tabs-govco-container .nav-link {
-  white-space: normal;
-  color: #004884;
-  min-width: 216px;
-  height: 4rem;
-  font-size: 15px;
-  text-align: center;
-  line-height: normal !important;
-  font-family: Montserrat-Medium, sans-serif;
-  border: 2px solid #e6effd !important;
-  background-color: #f6f8f9 !important;
-  padding: 20px 1rem 25px 1rem;
-  opacity: 1;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border-radius: 0;
-}
-
-.tabs-govco-container .nav-link.active {
-  color: #004884 !important;
-  background-color: white !important;
-  border-bottom: 4px solid #004884 !important;
-}
-
-.tabs-govco-container .nav-link:hover {
-  background-color: #004884 !important;
-  color: #ffffff !important;
-}
-
-.tabs-govco-container .nav-link:disabled {
-  background-color: #f2f2f2 !important;
-  color: #bababa !important;
-  border-bottom: 4px solid #f2f2f2 !important;
-  cursor: not-allowed;
-}
-
 /* FORM CONTAINER */
 .form-container {
   background: white;
@@ -101,38 +54,6 @@ h2 {
   justify-content: space-between;
   gap: 1rem;
   margin-top: 2rem;
-}
-
-.btn-primary,
-.btn-secondary {
-  padding: 0.875rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-primary {
-  background-color: #3366cc;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #004884;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(51, 102, 204, 0.3);
-}
-
-.btn-secondary {
-  background-color: white;
-  color: #3366cc;
-  border: 2px solid #3366cc;
-}
-
-.btn-secondary:hover {
-  background-color: #f5f5f5;
 }
 
 @media (max-width: 768px) {

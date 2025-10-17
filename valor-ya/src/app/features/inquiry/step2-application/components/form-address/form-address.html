@@ -1,22 +1,25 @@
 <div class="form-group">
-  <label for="direccion">Dirección Catastral</label>
-  <input
+  <app-input
+    [formControl]="direccionControl"
     type="text"
     id="direccion"
-    [(ngModel)]="direccion"
+    label="Dirección Catastral"
     placeholder="Ej: Calle 25 #45-60"
-    class="form-input"
-  />
-
-  <p class="help-text">Ingrese la dirección completa del predio según el catastro</p>
+    note="Ingrese la dirección completa del predio según el catastro"
+  ></app-input>
 
   @if (errorMessage) {
-  <app-alert type="error" [dismissible]="true">
-    {{ errorMessage }}
-  </app-alert>
+    <app-alert type="error" [dismissible]="true">
+      {{ errorMessage }}
+    </app-alert>
   }
 </div>
 
-<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="!direccion">
+<button 
+  type="button" 
+  class="btn-primary" 
+  (click)="onConsultar()" 
+  [disabled]="direccionControl.invalid"
+>
   Consultar
 </button>

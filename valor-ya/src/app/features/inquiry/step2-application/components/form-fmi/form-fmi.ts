@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import {
@@ -9,10 +9,11 @@ import {
 import { PredioService } from '../../../../../core/services/predio.service';
 import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
+import { InputComponent } from '../../../../../shared/components/input/input';
 
 @Component({
   selector: 'app-form-fmi',
-  imports: [FormsModule, AlertComponent],
+  imports: [ReactiveFormsModule, AlertComponent, InputComponent],
   templateUrl: './form-fmi.html',
   styleUrls: ['./form-fmi.css'],
 })
@@ -21,8 +22,12 @@ export class FormFmiComponent {
   private stateService = inject(InquiryStateService);
   private loadingService = inject(LoadingService);
 
-  zona = '';
-  matricula = '';
+  zonaControl = new FormControl('', [Validators.required]);
+  matriculaControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
+  
   errorMessage = '';
 
   zonas = [
@@ -32,8 +37,9 @@ export class FormFmiComponent {
   ];
 
   onConsultar(): void {
-    if (!this.zona || !this.matricula) {
-      this.errorMessage = 'Por favor, complete todos los campos';
+    if (this.zonaControl.invalid || this.matriculaControl.invalid) {
+      this.zonaControl.markAsTouched();
+      this.matriculaControl.markAsTouched();
       return;
     }
 
@@ -41,11 +47,11 @@ export class FormFmiComponent {
     this.errorMessage = '';
 
     this.predioService
-      .consultarPorFMI(this.zona, this.matricula)
+      .consultarPorFMI(this.zonaControl.value!, this.matriculaControl.value!)
       .pipe(finalize(() => this.loadingService.hide()))
       .subscribe({
         next: (predioData) => {
-          const valorBusqueda = `${this.zona}-${this.matricula}`;
+          const valorBusqueda = `${this.zonaControl.value}-${this.matriculaControl.value}`;
           this.stateService.setPredioData(predioData, TipoBusqueda.FMI, valorBusqueda);
         },
         error: (error) => {

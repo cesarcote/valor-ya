@@ -1,0 +1,60 @@
+<div class="entradas-de-texto-govco">
+  @if (label.trim() !== '') {
+    <label [for]="id">
+      {{ label }}
+      @if (isRequired) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
+
+  <div class="container-input-texto-govco">
+    <input
+      #inputElement
+      [type]="type"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      [id]="id"
+      [attr.readonly]="readonly ? '' : null"
+      [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
+      [class.error]="showError"
+      [class.success]="showSuccess"
+      (blur)="onTouched()"
+      (input)="onInputChange()"
+    />
+    
+    @if (showSuccess) {
+      <div class="icon-entradas-de-texto-govco success-icon-entradas-de-texto-govco" 
+           aria-label="success" 
+           aria-hidden="true">
+      </div>
+    }
+    
+    @if (showError) {
+      <div class="icon-entradas-de-texto-govco error-icon-entradas-de-texto-govco" 
+           aria-label="error" 
+           aria-hidden="true">
+      </div>
+    }
+  </div>
+
+  @if (showError) {
+    <span class="error-texto-govco alert-entradas-de-texto-govco" 
+          role="alert" 
+          aria-live="assertive">
+      {{ getErrorMessage() }}
+    </span>
+  }
+
+  @if (showSuccess) {
+    <span class="success-texto-govco alert-entradas-de-texto-govco">
+      Campo válido
+    </span>
+  }
+
+  @if (note.trim() !== '' && !control.invalid) {
+    <span class="info-entradas-de-texto-govco">
+      {{ note }}
+    </span>
+  }
+</div>

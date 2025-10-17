@@ -1,24 +1,25 @@
 <div class="form-group">
-  <label for="chip">CHIP (Código de Identificación del Predio)</label>
-  <input
+  <app-input
+    [formControl]="chipControl"
     type="text"
     id="chip"
-    [(ngModel)]="chip"
+    label="CHIP (Código de Identificación del Predio)"
     placeholder="Ingrese el CHIP del predio"
-    class="form-input"
-  />
-
-  <p class="help-text">
-    El CHIP es un código único de 30 dígitos que identifica cada predio en Colombia
-  </p>
+    note="El CHIP es un código único de 30 dígitos que identifica cada predio en Colombia"
+  ></app-input>
 
   @if (errorMessage) {
-  <app-alert type="error" [dismissible]="true">
-    {{ errorMessage }}
-  </app-alert>
+    <app-alert type="error" [dismissible]="true">
+      {{ errorMessage }}
+    </app-alert>
   }
 </div>
 
-<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="!chip">
+<button 
+  type="button" 
+  class="btn-primary" 
+  (click)="onConsultar()" 
+  [disabled]="chipControl.invalid"
+>
   Consultar
 </button>

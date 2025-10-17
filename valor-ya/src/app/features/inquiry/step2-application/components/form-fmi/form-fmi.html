@@ -1,36 +1,37 @@
 <div class="form-group">
   <label for="zona">Zona de Matrícula</label>
-  <select id="zona" [(ngModel)]="zona" class="form-select">
+  <select id="zona" [formControl]="zonaControl" class="form-select">
     <option value="">Seleccione una zona</option>
     @for (z of zonas; track z.value) {
-    <option [value]="z.value">
-      {{ z.label }}
-    </option>
+      <option [value]="z.value">
+        {{ z.label }}
+      </option>
     }
   </select>
 </div>
 
 <div class="form-group">
-  <label for="matricula">Número de Matrícula Inmobiliaria</label>
-  <input
+  <app-input
+    [formControl]="matriculaControl"
     type="text"
     id="matricula"
-    [(ngModel)]="matricula"
+    label="Número de Matrícula Inmobiliaria"
     placeholder="Ej: 123456"
-    class="form-input"
-  />
-
-  <p class="help-text">
-    El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro
-  </p>
+    note="El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro"
+  ></app-input>
 
   @if (errorMessage) {
-  <app-alert type="error" [dismissible]="true">
-    {{ errorMessage }}
-  </app-alert>
+    <app-alert type="error" [dismissible]="true">
+      {{ errorMessage }}
+    </app-alert>
   }
 </div>
 
-<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="!zona || !matricula">
+<button 
+  type="button" 
+  class="btn-primary" 
+  (click)="onConsultar()" 
+  [disabled]="zonaControl.invalid || matriculaControl.invalid"
+>
   Consultar
 </button>

@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ContentChildren, QueryList, TemplateRef, AfterContentInit } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
-interface Tab {
+export interface Tab {
   label: string;
-  content: TemplateRef<any>;
   disabled?: boolean;
 }
 
@@ -26,5 +25,3 @@ export class TabsComponent {
     }
   }
 }
-
-export type { Tab };

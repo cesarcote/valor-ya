@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import {
@@ -9,10 +9,11 @@ import {
 import { PredioService } from '../../../../../core/services/predio.service';
 import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
+import { InputComponent } from '../../../../../shared/components/input/input';
 
 @Component({
   selector: 'app-form-chip',
-  imports: [FormsModule, AlertComponent],
+  imports: [ReactiveFormsModule, AlertComponent, InputComponent],
   templateUrl: './form-chip.html',
   styleUrls: ['./form-chip.css'],
 })
@@ -21,12 +22,17 @@ export class FormChipComponent {
   private stateService = inject(InquiryStateService);
   private loadingService = inject(LoadingService);
 
-  chip = '';
+  chipControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(5),
+    Validators.maxLength(30),
+  ]);
+  
   errorMessage = '';
 
   onConsultar(): void {
-    if (!this.chip || this.chip.length < 5) {
-      this.errorMessage = 'Por favor, ingrese un CHIP válido (mínimo 5 caracteres)';
+    if (this.chipControl.invalid) {
+      this.chipControl.markAsTouched();
       return;
     }
 
@@ -34,11 +40,11 @@ export class FormChipComponent {
     this.errorMessage = '';
 
     this.predioService
-      .consultarPorChip(this.chip)
+      .consultarPorChip(this.chipControl.value!)
       .pipe(finalize(() => this.loadingService.hide()))
       .subscribe({
         next: (predioData) => {
-          this.stateService.setPredioData(predioData, TipoBusqueda.CHIP, this.chip);
+          this.stateService.setPredioData(predioData, TipoBusqueda.CHIP, this.chipControl.value!);
         },
         error: (error) => {
           this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';

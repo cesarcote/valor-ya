@@ -4,46 +4,27 @@
   <h2>Consulta tu predio</h2>
   <p class="subtitle">Selecciona el método de búsqueda y completa la información</p>
 
-  <!-- TABS para seleccionar tipo de búsqueda -->
+  <!-- TABS usando el componente TabsComponent -->
   @if (!mostrarResultado) {
-  <div class="tabs-govco-container">
-    <nav>
-      <div class="nav nav-tabs" role="tablist">
-        <button
-          class="nav-link"
-          [class.active]="tipoBusquedaActual === TipoBusqueda.CHIP"
-          (click)="onTabChangeSimple(TipoBusqueda.CHIP)"
-        >
-          CHIP
-        </button>
-        <button
-          class="nav-link"
-          [class.active]="tipoBusquedaActual === TipoBusqueda.DIRECCION"
-          (click)="onTabChangeSimple(TipoBusqueda.DIRECCION)"
-        >
-          Dirección Catastral
-        </button>
-        <button
-          class="nav-link"
-          [class.active]="tipoBusquedaActual === TipoBusqueda.FMI"
-          (click)="onTabChangeSimple(TipoBusqueda.FMI)"
-        >
-          Folio Matrícula Inmobiliaria
-        </button>
+    <app-tabs 
+      [tabs]="tabs" 
+      [selectedTabIndex]="selectedTabIndex"
+      (tabChange)="onTabChange($event)"
+      description="Selecciona el método de búsqueda"
+    >
+      <!-- Contenido proyectado con ng-content -->
+      <div class="form-container">
+        @if (selectedTabIndex === 0) {
+          <app-form-chip></app-form-chip>
+        }
+        @if (selectedTabIndex === 1) {
+          <app-form-address></app-form-address>
+        }
+        @if (selectedTabIndex === 2) {
+          <app-form-fmi></app-form-fmi>
+        }
       </div>
-    </nav>
-  </div>
-
-  <!-- FORMULARIOS -->
-  <div class="form-container">
-    @if (tipoBusquedaActual === TipoBusqueda.CHIP) {
-    <app-form-chip></app-form-chip>
-    } @if (tipoBusquedaActual === TipoBusqueda.DIRECCION) {
-    <app-form-address></app-form-address>
-    } @if (tipoBusquedaActual === TipoBusqueda.FMI) {
-    <app-form-fmi></app-form-fmi>
-    }
-  </div>
+    </app-tabs>
   }
 
   <!-- RESULTADO (se muestra después de consultar) -->

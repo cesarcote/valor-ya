@@ -1,1 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles - Gov.co Design System */
+
+/* ==================== BOTONES ==================== */
+.btn-primary,
+.btn-secondary {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Montserrat-SemiBold', sans-serif;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #3366cc;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #004884;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(51, 102, 204, 0.3);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(51, 102, 204, 0.3);
+}
+
+.btn-primary:disabled {
+  background-color: #bababa;
+  color: #f2f2f2;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: #f6f8f9;
+  color: #004884;
+  border: 2px solid #3366cc;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #e6effd;
+  border-color: #004884;
+}
+
+.btn-secondary:disabled {
+  background-color: #f2f2f2;
+  color: #bababa;
+  border-color: #bababa;
+  cursor: not-allowed;
+}
+
+/* ==================== UTILIDADES ==================== */
+.form-group {
+  margin-bottom: 1.5rem;
+}

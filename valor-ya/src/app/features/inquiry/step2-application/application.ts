@@ -5,13 +5,20 @@ import { StepperService, InquiryStep } from '../../../core/services/stepper.serv
 import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
+import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
 import { FormFmiComponent } from './components/form-fmi/form-fmi';
 
 @Component({
   selector: 'app-application',
-  imports: [StepperComponent, FormChipComponent, FormAddressComponent, FormFmiComponent],
+  imports: [
+    StepperComponent,
+    TabsComponent,
+    FormChipComponent,
+    FormAddressComponent,
+    FormFmiComponent,
+  ],
   templateUrl: './application.html',
   styleUrls: ['./application.css'],
 })
@@ -23,6 +30,13 @@ export class ApplicationComponent implements OnInit {
   tipoBusquedaActual: TipoBusqueda | undefined;
   mostrarResultado: boolean = false;
   predioData?: PredioData;
+  selectedTabIndex: number = 0;
+
+  tabs: Tab[] = [
+    { label: 'CHIP', disabled: false },
+    { label: 'Dirección Catastral', disabled: false },
+    { label: 'Folio Matrícula Inmobiliaria', disabled: false },
+  ];
 
   readonly TipoBusqueda = TipoBusqueda;
 
@@ -33,6 +47,9 @@ export class ApplicationComponent implements OnInit {
       this.tipoBusquedaActual = state.tipoBusqueda;
       this.mostrarResultado = state.mostrarResultado;
       this.predioData = state.predioData;
+      
+      this.updateSelectedTabIndex();
+      this.updateTabsDisabled();
     });
 
     if (!this.tipoBusquedaActual) {
@@ -40,8 +57,26 @@ export class ApplicationComponent implements OnInit {
     }
   }
 
-  onTabChangeSimple(tipo: TipoBusqueda): void {
-    this.stateService.setTipoBusqueda(tipo);
+  updateSelectedTabIndex(): void {
+    if (this.tipoBusquedaActual === TipoBusqueda.CHIP) {
+      this.selectedTabIndex = 0;
+    } else if (this.tipoBusquedaActual === TipoBusqueda.DIRECCION) {
+      this.selectedTabIndex = 1;
+    } else if (this.tipoBusquedaActual === TipoBusqueda.FMI) {
+      this.selectedTabIndex = 2;
+    }
+  }
+
+  updateTabsDisabled(): void {
+    this.tabs = this.tabs.map(tab => ({
+      ...tab,
+      disabled: this.mostrarResultado
+    }));
+  }
+
+  onTabChange(index: number): void {
+    const tipos = [TipoBusqueda.CHIP, TipoBusqueda.DIRECCION, TipoBusqueda.FMI];
+    this.stateService.setTipoBusqueda(tipos[index]);
     this.stateService.setMostrarResultado(false);
   }
 
