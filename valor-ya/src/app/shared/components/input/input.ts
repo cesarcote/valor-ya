@@ -45,7 +45,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
 
   control = new FormControl();
   private onChange: (value: any) => void = () => {};
-  private onTouched: () => void = () => {};
+  onTouched: () => void = () => {};
 
   ngOnInit(): void {
     if (this.formControl) {

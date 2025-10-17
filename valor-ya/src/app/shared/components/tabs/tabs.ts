@@ -8,7 +8,6 @@ import {
   TemplateRef,
   AfterContentInit,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 
 export interface Tab {
   label: string;
@@ -17,7 +16,7 @@ export interface Tab {
 
 @Component({
   selector: 'app-tabs',
-  imports: [NgTemplateOutlet],
+  imports: [],
   templateUrl: './tabs.html',
   styleUrls: ['./tabs.css'],
 })
