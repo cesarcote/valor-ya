@@ -1,0 +1,4 @@
+<div class="map-container" [ngClass]="{ 'map-active': hasData, 'map-placeholder': !hasData }">
+  <p *ngIf="!hasData" class="placeholder-text">Mapa del predio</p>
+  <p *ngIf="hasData" class="active-text">Ubicación del predio</p>
+</div>

@@ -1,0 +1,14 @@
+<div class="process-container">
+  <div class="message" *ngIf="hasData">
+    <p>{{ predioData?.mensaje }}</p>
+  </div>
+
+  <app-map-viewer [hasData]="hasData" [coordenadas]="predioData?.coordenadas"></app-map-viewer>
+
+  <app-property-data [predioData]="predioData"></app-property-data>
+
+  <div class="buttons">
+    <button type="button" (click)="onVolver()">Volver</button>
+    <button type="button" (click)="onConfirmar()" [disabled]="!hasData">Confirmar</button>
+  </div>
+</div>

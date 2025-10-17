@@ -1,0 +1,32 @@
+.property-data-container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.data-item label {
+  font-weight: bold;
+  color: #333;
+}
+
+.data-item span {
+  color: #666;
+}
