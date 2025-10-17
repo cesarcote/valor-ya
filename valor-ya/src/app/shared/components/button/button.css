@@ -1,0 +1,23 @@
+/* 
+ * ButtonComponent styles
+ * 
+ * Los estilos base (.btn-govco, .fill-btn-govco, .outline-btn-govco) 
+ * vienen del CDN de Gov.co.
+ * 
+ * Aquí solo agregamos ajustes específicos si son necesarios.
+ */
+
+/* Ajuste de espaciado personalizado si es necesario */
+.btn-govco {
+  margin-right: 0.75rem;
+}
+
+.btn-govco:last-child {
+  margin-right: 0;
+}
+
+/* Full width variant */
+.btn-govco.w-100 {
+  width: 100%;
+  margin-right: 0;
+}

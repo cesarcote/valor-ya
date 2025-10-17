@@ -57,9 +57,18 @@
   </div>
 
   <div class="action-buttons">
-    <button type="button" class="btn-secondary" (click)="onVolver()">Volver</button>
-    <button type="button" class="btn-primary" (click)="onVerResultado()" [disabled]="isCalculating">
-      Ver resultado
-    </button>
+    <app-button 
+      text="Volver"
+      variant="outline"
+      type="button"
+      (clicked)="onVolver()">
+    </app-button>
+    <app-button 
+      text="Ver resultado"
+      variant="fill"
+      type="button"
+      [disabled]="isCalculating"
+      (clicked)="onVerResultado()">
+    </app-button>
   </div>
 </div>

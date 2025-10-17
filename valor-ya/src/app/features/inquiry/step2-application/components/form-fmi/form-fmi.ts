@@ -10,10 +10,11 @@ import { PredioService } from '../../../../../core/services/predio.service';
 import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
 import { InputComponent } from '../../../../../shared/components/input/input';
+import { ButtonComponent } from '../../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-form-fmi',
-  imports: [ReactiveFormsModule, AlertComponent, InputComponent],
+  imports: [ReactiveFormsModule, AlertComponent, InputComponent, ButtonComponent],
   templateUrl: './form-fmi.html',
   styleUrls: ['./form-fmi.css'],
 })

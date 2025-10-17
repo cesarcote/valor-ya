@@ -10,10 +10,11 @@ import { PredioService } from '../../../../../core/services/predio.service';
 import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
 import { InputComponent } from '../../../../../shared/components/input/input';
+import { ButtonComponent } from '../../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-form-address',
-  imports: [ReactiveFormsModule, AlertComponent, InputComponent],
+  imports: [ReactiveFormsModule, AlertComponent, InputComponent, ButtonComponent],
   templateUrl: './form-address.html',
   styleUrls: ['./form-address.css'],
 })

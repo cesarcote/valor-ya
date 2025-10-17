@@ -15,6 +15,10 @@
   }
 </div>
 
-<button type="button" class="btn-primary" (click)="onConsultar()" [disabled]="chipControl.invalid">
-  Consultar
-</button>
+<app-button 
+  text="Consultar" 
+  variant="fill"
+  type="button"
+  [disabled]="chipControl.invalid"
+  (clicked)="onConsultar()">
+</app-button>

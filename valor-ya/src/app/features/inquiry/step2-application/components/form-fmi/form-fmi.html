@@ -27,11 +27,10 @@
   }
 </div>
 
-<button
+<app-button 
+  text="Consultar" 
+  variant="fill"
   type="button"
-  class="btn-primary"
-  (click)="onConsultar()"
   [disabled]="zonaControl.invalid || matriculaControl.invalid"
->
-  Consultar
-</button>
+  (clicked)="onConsultar()">
+</app-button>

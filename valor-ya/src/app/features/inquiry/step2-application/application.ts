@@ -6,6 +6,7 @@ import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquir
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
+import { ButtonComponent } from '../../../shared/components/button/button';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
 import { FormFmiComponent } from './components/form-fmi/form-fmi';
@@ -15,6 +16,7 @@ import { FormFmiComponent } from './components/form-fmi/form-fmi';
   imports: [
     StepperComponent,
     TabsComponent,
+    ButtonComponent,
     FormChipComponent,
     FormAddressComponent,
     FormFmiComponent,

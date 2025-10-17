@@ -5,10 +5,11 @@ import { StepperService, InquiryStep } from '../../../core/services/stepper.serv
 import { InquiryStateService } from '../../../core/services/inquiry-state.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-process',
-  imports: [StepperComponent],
+  imports: [StepperComponent, ButtonComponent],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })

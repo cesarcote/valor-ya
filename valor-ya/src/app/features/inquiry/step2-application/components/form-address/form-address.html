@@ -15,11 +15,10 @@
   }
 </div>
 
-<button
+<app-button
+  text="Consultar"
+  variant="fill"
   type="button"
-  class="btn-primary"
-  (click)="onConsultar()"
   [disabled]="direccionControl.invalid"
->
-  Consultar
-</button>
+  (clicked)="onConsultar()">
+</app-button>
