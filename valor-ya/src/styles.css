@@ -6,6 +6,13 @@
  * Aquí solo agregamos personalizaciones y utilidades adicionales
  */
 
+/* ==================== RESET ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* ==================== UTILIDADES ==================== */
 .form-group {
   margin-bottom: 1.5rem;

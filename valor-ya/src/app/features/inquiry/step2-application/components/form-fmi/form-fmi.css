@@ -1,12 +1,16 @@
 /* Solo estilos específicos de este formulario */
 .form-group {
   margin-bottom: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Estilos para el select (pendiente crear componente) */
 
 .form-select {
   width: 100%;
+  max-width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
   font-family: 'Montserrat-Regular', sans-serif;
@@ -16,6 +20,7 @@
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .form-select:focus {
