@@ -21,3 +21,46 @@
   width: 100%;
   margin-right: 0;
 }
+
+/* ==========================================================================
+   Overrides para usar la paleta de colores local de Valor YA
+   ========================================================================== */
+
+/*
+ * Botón Relleno (Fill)
+ * Usamos el color de acento amarillo.
+ */
+:host .fill-btn-govco {
+  background-color: var(--color-accent-yellow);
+  border-color: var(--color-accent-yellow);
+  color: #333; /* Texto oscuro para mejor contraste sobre amarillo */
+}
+
+:host .fill-btn-govco:hover,
+:host .fill-btn-govco:focus {
+  background-color: #ffc107; /* Un tono de amarillo ligeramente más oscuro para hover/focus */
+  border-color: #ffc107;
+  color: #333;
+}
+
+:host .fill-btn-govco:disabled {
+  background-color: #ffe082; /* Un tono de amarillo mucho más claro para deshabilitado */
+  border-color: #ffe082;
+  color: #6c757d;
+  opacity: 0.65;
+}
+
+/*
+ * Botón de Contorno (Outline)
+ * Usamos el color primario azul.
+ */
+:host .outline-btn-govco {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+:host .outline-btn-govco:hover,
+:host .outline-btn-govco:focus {
+  background-color: var(--color-primary);
+  color: #fff;
+}
