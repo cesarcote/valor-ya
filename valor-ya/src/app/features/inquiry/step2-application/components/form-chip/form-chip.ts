@@ -1,13 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
 
-import {
-  InquiryStateService,
-  TipoBusqueda,
-} from '../../../../../core/services/inquiry-state.service';
-import { PredioService } from '../../../../../core/services/predio.service';
-import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
@@ -19,9 +12,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button'
   styleUrls: ['./form-chip.css'],
 })
 export class FormChipComponent {
-  private predioService = inject(PredioService);
-  private stateService = inject(InquiryStateService);
-  private loadingService = inject(LoadingService);
+  @Output() consultar = new EventEmitter<string>();
 
   chipControl = new FormControl('', [
     Validators.required,
@@ -37,20 +28,6 @@ export class FormChipComponent {
       return;
     }
 
-    this.loadingService.show();
-    this.errorMessage = '';
-
-    this.predioService
-      .consultarPorChip(this.chipControl.value!)
-      .pipe(finalize(() => this.loadingService.hide()))
-      .subscribe({
-        next: (predioData) => {
-          this.stateService.setPredioData(predioData, TipoBusqueda.CHIP, this.chipControl.value!);
-        },
-        error: (error) => {
-          this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';
-          console.error('Error:', error);
-        },
-      });
+    this.consultar.emit(this.chipControl.value!);
   }
 }

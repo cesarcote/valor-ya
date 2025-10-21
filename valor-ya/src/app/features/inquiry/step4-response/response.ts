@@ -7,10 +7,11 @@ import { InquiryStateService } from '../../../core/services/inquiry-state.servic
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
+import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 
 @Component({
   selector: 'app-response',
-  imports: [StepperComponent, CurrencyPipe, ButtonComponent],
+  imports: [StepperComponent, CurrencyPipe, ButtonComponent, PredioInfoCardComponent],
   templateUrl: './response.html',
   styleUrls: ['./response.css'],
 })

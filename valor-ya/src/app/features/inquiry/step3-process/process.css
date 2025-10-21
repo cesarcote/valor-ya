@@ -18,6 +18,65 @@ h2 {
   text-align: center;
 }
 
+/* Loading Section */
+.loading-section {
+  background: white;
+  padding: 4rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.loading-section .spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  border: 6px solid #e0e0e0;
+  border-top-color: #3366cc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-section p {
+  color: #666;
+  font-size: 1.125rem;
+}
+
+/* Error Section */
+.error-section {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+/* Simple Loading */
+.loading-simple {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.loading-simple p {
+  color: #666;
+  font-size: 1.125rem;
+}
+
 .process-card {
   background: white;
   padding: 3rem;

@@ -1,16 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
 
-import {
-  InquiryStateService,
-  TipoBusqueda,
-} from '../../../../../core/services/inquiry-state.service';
-import { PredioService } from '../../../../../core/services/predio.service';
-import { LoadingService } from '../../../../../shared/services/loading.service';
 import { AlertComponent } from '../../../../../shared/components/alert/alert';
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
+
+export interface FmiData {
+  zona: string;
+  matricula: string;
+}
 
 @Component({
   selector: 'app-form-fmi',
@@ -19,9 +17,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button'
   styleUrls: ['./form-fmi.css'],
 })
 export class FormFmiComponent {
-  private predioService = inject(PredioService);
-  private stateService = inject(InquiryStateService);
-  private loadingService = inject(LoadingService);
+  @Output() consultar = new EventEmitter<FmiData>();
 
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
@@ -41,21 +37,9 @@ export class FormFmiComponent {
       return;
     }
 
-    this.loadingService.show();
-    this.errorMessage = '';
-
-    this.predioService
-      .consultarPorFMI(this.zonaControl.value!, this.matriculaControl.value!)
-      .pipe(finalize(() => this.loadingService.hide()))
-      .subscribe({
-        next: (predioData) => {
-          const valorBusqueda = `${this.zonaControl.value}-${this.matriculaControl.value}`;
-          this.stateService.setPredioData(predioData, TipoBusqueda.FMI, valorBusqueda);
-        },
-        error: (error) => {
-          this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';
-          console.error('Error:', error);
-        },
-      });
+    this.consultar.emit({
+      zona: this.zonaControl.value!,
+      matricula: this.matriculaControl.value!,
+    });
   }
 }

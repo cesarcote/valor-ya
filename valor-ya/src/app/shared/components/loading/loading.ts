@@ -1,20 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
-
+import { Component, inject, OnDestroy } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-loading',
-  imports: [],
+  imports: [AsyncPipe],
   templateUrl: './loading.html',
   styleUrls: ['./loading.css'],
 })
-export class LoadingComponent implements OnInit {
-  private loadingService = inject(LoadingService);
-  isLoading = false;
-
-  ngOnInit(): void {
-    this.loadingService.currentLoading$.subscribe((status) => {
-      this.isLoading = status;
-    });
-  }
+export class LoadingComponent {
+  loadingService = inject(LoadingService);
 }

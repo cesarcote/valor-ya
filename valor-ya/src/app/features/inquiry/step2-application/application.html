@@ -1,73 +1,28 @@
 <app-stepper></app-stepper>
 
 <div class="solicitud-container">
-  <h2>Consulta tu predio</h2>
-  <p class="subtitle">Selecciona el método de búsqueda y completa la información</p>
+  <h2>Ingresa los datos de tu predio</h2>
+  <p class="subtitle">Selecciona el método de búsqueda y completa la información requerida</p>
 
-  <!-- TABS usando el componente TabsComponent -->
-  @if (!mostrarResultado) {
   <app-tabs
     [tabs]="tabs"
     [selectedTabIndex]="selectedTabIndex"
     (tabChange)="onTabChange($event)"
     description="Selecciona el método de búsqueda"
   >
-    <!-- Contenido proyectado con ng-content -->
     <div class="form-container">
       @if (selectedTabIndex === 0) {
-      <app-form-chip></app-form-chip>
+      <app-form-chip (consultar)="onConsultarChip($event)"></app-form-chip>
       } @if (selectedTabIndex === 1) {
-      <app-form-address></app-form-address>
+      <app-form-address (consultar)="onConsultarDireccion($event)"></app-form-address>
       } @if (selectedTabIndex === 2) {
-      <app-form-fmi></app-form-fmi>
+      <app-form-fmi (consultar)="onConsultarFMI($event)"></app-form-fmi>
       }
     </div>
   </app-tabs>
-  }
 
-  <!-- RESULTADO (se muestra después de consultar) -->
-  @if (mostrarResultado && predioData) {
-  <div class="result-container">
-    <div class="result-header">
-      <h3>{{ predioData.mensaje }}</h3>
-      <app-button
-        text="Realizar nueva búsqueda"
-        variant="outline"
-        type="button"
-        (clicked)="stateService.setMostrarResultado(false)"
-      >
-      </app-button>
-    </div>
-
-    <div class="result-info">
-      <h4>Datos del Predio</h4>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="label">Dirección:</span>
-          <span class="value">{{ predioData.direccion }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Municipio:</span>
-          <span class="value">{{ predioData.municipio }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Localidad:</span>
-          <span class="value">{{ predioData.localidad }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="action-buttons">
-      <app-button text="Volver al inicio" variant="outline" type="button" (clicked)="onVolver()">
-      </app-button>
-      <app-button
-        text="Continuar con el proceso"
-        variant="fill"
-        type="button"
-        (clicked)="onContinuar()"
-      >
-      </app-button>
-    </div>
+  <div class="action-buttons">
+    <app-button text="Volver al inicio" variant="outline" type="button" (clicked)="onVolver()">
+    </app-button>
   </div>
-  }
 </div>

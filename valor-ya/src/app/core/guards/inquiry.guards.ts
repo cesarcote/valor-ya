@@ -13,22 +13,22 @@ export const canAccessSolicitudGuard: CanActivateFn = () => {
   }
 
   // Si no hay tipo seleccionado, redirige al inicio
-  console.warn('⚠️ Acceso denegado a /solicitud: No hay tipo de búsqueda seleccionado');
   return router.createUrlTree(['/valor-ya/inicio']);
 };
 
 export const canAccessProcesoGuard: CanActivateFn = () => {
   const stateService = inject(InquiryStateService);
   const router = inject(Router);
+  const state = stateService.getState();
 
-  // Permite acceso solo si hay datos del predio
-  if (stateService.hasPredioData()) {
+  // Permite acceso si hay tipo de búsqueda y valor de búsqueda
+  // (la consulta se hace en este paso)
+  if (state.tipoBusqueda && state.valorBusqueda) {
     return true;
   }
 
-  // Si no hay datos, redirige al inicio
-  console.warn('⚠️ Acceso denegado a /proceso: No hay datos del predio');
-  return router.createUrlTree(['/valor-ya/inicio']);
+  // Si no hay datos suficientes, redirige a solicitud
+  return router.createUrlTree(['/valor-ya/solicitud']);
 };
 
 export const canAccessRespuestaGuard: CanActivateFn = () => {
@@ -41,6 +41,5 @@ export const canAccessRespuestaGuard: CanActivateFn = () => {
   }
 
   // Si no hay datos, redirige al inicio
-  console.warn('⚠️ Acceso denegado a /respuesta: No hay datos del predio');
   return router.createUrlTree(['/valor-ya/inicio']);
 };

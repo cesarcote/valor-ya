@@ -2,14 +2,22 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
-import { InquiryStateService } from '../../../core/services/inquiry-state.service';
+import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
+import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
+import { PredioFoundHeaderComponent } from '../../../shared/components/predio-found-header/predio-found-header';
+import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 
 @Component({
   selector: 'app-process',
-  imports: [StepperComponent, ButtonComponent],
+  imports: [
+    StepperComponent,
+    ButtonComponent,
+    PredioFoundHeaderComponent,
+    PredioInfoCardComponent,
+  ],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
@@ -17,38 +25,65 @@ export class ProcessComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
   private stateService = inject(InquiryStateService);
+  private predioService = inject(PredioService);
 
   predioData?: PredioData;
-  isCalculating: boolean = false;
-  calculationProgress: number = 0;
+  errorMessage: string = '';
 
   ngOnInit(): void {
     this.stepperService.setStep(InquiryStep.PROCESO);
 
     const state = this.stateService.getState();
-    if (!state.predioData) {
+
+    if (!state.tipoBusqueda || !state.valorBusqueda) {
       this.router.navigate(['/valor-ya/inicio']);
       return;
     }
 
-    this.predioData = state.predioData;
-    this.simularCalculo();
+    this.realizarConsulta(state.tipoBusqueda, state.valorBusqueda);
   }
 
-  simularCalculo(): void {
-    this.isCalculating = true;
+  realizarConsulta(tipo: TipoBusqueda, valor: string): void {
+    this.errorMessage = '';
 
-    const interval = setInterval(() => {
-      this.calculationProgress += 10;
+    let consulta$;
 
-      if (this.calculationProgress >= 100) {
-        clearInterval(interval);
-        this.isCalculating = false;
-      }
-    }, 300);
+    switch (tipo) {
+      case TipoBusqueda.CHIP:
+        consulta$ = this.predioService.consultarPorChip(valor);
+        break;
+      case TipoBusqueda.DIRECCION:
+        consulta$ = this.predioService.consultarPorDireccion(valor);
+        break;
+      case TipoBusqueda.FMI:
+        const [zona, matricula] = valor.split('-');
+        consulta$ = this.predioService.consultarPorFMI(zona, matricula);
+        break;
+      default:
+        this.router.navigate(['/valor-ya/solicitud']);
+        return;
+    }
+
+    consulta$.subscribe({
+      next: (data) => {
+        this.predioData = data;
+        this.stateService.setPredioData(data, tipo, valor);
+      },
+      error: (error) => {
+        console.error('Error al consultar el predio:', error);
+        this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';
+      },
+    });
   }
 
   onVolver(): void {
+    this.stateService.setMostrarResultado(false);
+    this.stepperService.setStep(InquiryStep.SOLICITUD);
+    this.router.navigate(['/valor-ya/solicitud']);
+  }
+
+  onNuevaBusqueda(): void {
+    this.stateService.setMostrarResultado(false);
     this.stepperService.setStep(InquiryStep.SOLICITUD);
     this.router.navigate(['/valor-ya/solicitud']);
   }

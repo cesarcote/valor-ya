@@ -3,13 +3,12 @@ import { Router } from '@angular/router';
 
 import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
 import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
-import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
-import { FormFmiComponent } from './components/form-fmi/form-fmi';
+import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
 
 @Component({
   selector: 'app-application',
@@ -27,11 +26,9 @@ import { FormFmiComponent } from './components/form-fmi/form-fmi';
 export class ApplicationComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
-  stateService = inject(InquiryStateService);
+  private stateService = inject(InquiryStateService);
 
   tipoBusquedaActual: TipoBusqueda | undefined;
-  mostrarResultado: boolean = false;
-  predioData?: PredioData;
   selectedTabIndex: number = 0;
 
   tabs: Tab[] = [
@@ -47,11 +44,7 @@ export class ApplicationComponent implements OnInit {
 
     this.stateService.state$.subscribe((state) => {
       this.tipoBusquedaActual = state.tipoBusqueda;
-      this.mostrarResultado = state.mostrarResultado;
-      this.predioData = state.predioData;
-
       this.updateSelectedTabIndex();
-      this.updateTabsDisabled();
     });
 
     if (!this.tipoBusquedaActual) {
@@ -69,27 +62,34 @@ export class ApplicationComponent implements OnInit {
     }
   }
 
-  updateTabsDisabled(): void {
-    this.tabs = this.tabs.map((tab) => ({
-      ...tab,
-      disabled: this.mostrarResultado,
-    }));
-  }
-
   onTabChange(index: number): void {
     const tipos = [TipoBusqueda.CHIP, TipoBusqueda.DIRECCION, TipoBusqueda.FMI];
     this.stateService.setTipoBusqueda(tipos[index]);
-    this.stateService.setMostrarResultado(false);
+  }
+
+  onConsultarChip(chip: string): void {
+    this.stateService.setValorBusqueda(chip);
+    this.irAProceso();
+  }
+
+  onConsultarDireccion(direccion: string): void {
+    this.stateService.setValorBusqueda(direccion);
+    this.irAProceso();
+  }
+
+  onConsultarFMI(data: FmiData): void {
+    this.stateService.setValorBusqueda(`${data.zona}-${data.matricula}`);
+    this.irAProceso();
+  }
+
+  irAProceso(): void {
+    this.stepperService.setStep(InquiryStep.PROCESO);
+    this.router.navigate(['/valor-ya/proceso']);
   }
 
   onVolver(): void {
     this.stateService.reset();
     this.stepperService.setStep(InquiryStep.INICIO);
     this.router.navigate(['/valor-ya/inicio']);
-  }
-
-  onContinuar(): void {
-    this.stepperService.setStep(InquiryStep.PROCESO);
-    this.router.navigate(['/valor-ya/proceso']);
   }
 }

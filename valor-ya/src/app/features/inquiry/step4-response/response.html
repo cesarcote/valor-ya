@@ -20,51 +20,9 @@
       <span class="disclaimer">* Valor estimado con base en datos catastrales</span>
     </div>
 
-    @if (predioData) {
-    <div class="detalles-predio">
-      <h3>Detalles del Predio</h3>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Dirección</span>
-        <span class="detalle-value">{{ predioData.direccion }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Municipio</span>
-        <span class="detalle-value">{{ predioData.municipio }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Localidad</span>
-        <span class="detalle-value">{{ predioData.localidad }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Barrio</span>
-        <span class="detalle-value">{{ predioData.barrio }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Tipo de Predio</span>
-        <span class="detalle-value">{{ predioData.tipoPredio }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Estrato</span>
-        <span class="detalle-value">{{ predioData.estrato }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Área Construida</span>
-        <span class="detalle-value">{{ predioData.areaConstruida }}</span>
-      </div>
-
-      <div class="detalle-item">
-        <span class="detalle-label">Edad del Predio</span>
-        <span class="detalle-value">{{ predioData.edad }}</span>
-      </div>
-    </div>
-    }
+    <!-- Usar componente modular para mostrar detalles -->
+    <app-predio-info-card [predioData]="predioData" [showMessage]="false" [showAllFields]="true">
+    </app-predio-info-card>
 
     <div class="fecha-consulta">
       <span>Fecha de consulta: {{ fechaConsulta }}</span>

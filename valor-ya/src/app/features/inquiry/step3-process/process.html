@@ -1,70 +1,34 @@
 <app-stepper></app-stepper>
 
 <div class="proceso-container">
-  <h2>Procesando tu solicitud</h2>
-  <p class="subtitle">Estamos calculando el valor estimado de tu predio</p>
+  <h2>Resultado de la Búsqueda</h2>
+  <p class="subtitle">Información del predio encontrado</p>
 
-  <div class="process-card">
-    @if (predioData) {
-    <div class="process-info">
-      <div class="info-item">
-        <span class="label">Dirección:</span>
-        <span class="value">{{ predioData.direccion }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Municipio:</span>
-        <span class="value">{{ predioData.municipio }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Localidad:</span>
-        <span class="value">{{ predioData.localidad }}</span>
-      </div>
-    </div>
-    }
-
-    <div class="calculation-status">
-      <div class="status-icon" [class.calculating]="isCalculating">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-          />
-        </svg>
-      </div>
-
-      <h3>{{ isCalculating ? 'Calculando...' : 'Cálculo completado' }}</h3>
-
-      <div class="progress-bar-container">
-        <div class="progress-bar-fill" [style.width.%]="calculationProgress"></div>
-      </div>
-
-      <p class="progress-text">{{ calculationProgress }}%</p>
-    </div>
-
-    <div class="calculation-steps">
-      <div class="step" [class.completed]="calculationProgress >= 33">
-        <span class="step-number">1</span>
-        <span class="step-text">Validando datos catastrales</span>
-      </div>
-      <div class="step" [class.completed]="calculationProgress >= 66">
-        <span class="step-number">2</span>
-        <span class="step-text">Aplicando modelo de valoración</span>
-      </div>
-      <div class="step" [class.completed]="calculationProgress >= 100">
-        <span class="step-number">3</span>
-        <span class="step-text">Generando resultado</span>
-      </div>
-    </div>
+  @if (errorMessage) {
+  <div class="error-section">
+    <p class="error-message">{{ errorMessage }}</p>
+    <app-button text="Volver" variant="fill" type="button" (clicked)="onVolver()"> </app-button>
   </div>
+  } @else if (predioData) {
+  <!-- Predio encontrado -->
+  <app-predio-found-header
+    title="✓ Predio Encontrado"
+    [showNewSearchButton]="true"
+    (newSearch)="onNuevaBusqueda()"
+  ></app-predio-found-header>
+
+  <!-- Información del predio -->
+  <app-predio-info-card [predioData]="predioData" [showMessage]="true" [showAllFields]="true">
+  </app-predio-info-card>
 
   <div class="action-buttons">
     <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
-    <app-button
-      text="Ver resultado"
-      variant="fill"
-      type="button"
-      [disabled]="isCalculating"
-      (clicked)="onVerResultado()"
-    >
+    <app-button text="Ver resultado completo" variant="fill" type="button" (clicked)="onVerResultado()">
     </app-button>
   </div>
+  } @else {
+  <div class="loading-simple">
+    <p>Cargando información del predio...</p>
+  </div>
+  }
 </div>

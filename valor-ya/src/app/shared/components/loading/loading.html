@@ -1,4 +1,4 @@
-@if (isLoading) {
+@if (loadingService.currentLoading$ | async) {
 <div class="loading-overlay">
   <div class="loading-content">
     <div class="spinner" role="status">

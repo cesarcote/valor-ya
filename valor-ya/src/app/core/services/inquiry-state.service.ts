@@ -38,6 +38,11 @@ export class InquiryStateService {
     this.updateState({ tipoBusqueda: tipo });
   }
 
+  // Guardar valor de búsqueda
+  setValorBusqueda(valor: string): void {
+    this.updateState({ valorBusqueda: valor });
+  }
+
   // Guardar resultado de búsqueda
   setPredioData(data: PredioData, tipoBusqueda: TipoBusqueda, valor: string): void {
     this.updateState({
