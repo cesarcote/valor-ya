@@ -84,8 +84,8 @@
   --color-text: #4c4c4c;
 
   /* Colores de acento */
-  --color-accent-yellow: #FEB400; /* Amarillo para botones y elementos destacados */
-  --color-accent-red: #e3192f;   /* Rojo para alertas o acciones destructivas */
+  --color-accent-yellow: #feb400; /* Amarillo para botones y elementos destacados */
+  --color-accent-red: #e3192f; /* Rojo para alertas o acciones destructivas */
 
   /* Familias de fuentes */
   --font-nunito: 'Nunito Sans', Verdana, sans-serif;

@@ -7,12 +7,11 @@ import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
-import { PredioFoundHeaderComponent } from '../../../shared/components/predio-found-header/predio-found-header';
 import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 
 @Component({
   selector: 'app-process',
-  imports: [StepperComponent, ButtonComponent, PredioFoundHeaderComponent, PredioInfoCardComponent],
+  imports: [StepperComponent, ButtonComponent, PredioInfoCardComponent],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })

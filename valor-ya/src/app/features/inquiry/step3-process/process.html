@@ -12,19 +12,14 @@
     <app-button text="Volver" variant="fill" type="button" (clicked)="onVolver()"> </app-button>
   </div>
   } @else if (predioData) {
-  <!-- Predio encontrado -->
-  <app-predio-found-header
-    title="✓ Predio Encontrado"
-    [showNewSearchButton]="true"
-    (newSearch)="onNuevaBusqueda()"
-  ></app-predio-found-header>
-
   <!-- Información del predio -->
   <app-predio-info-card [predioData]="predioData" [showMessage]="true" [showAllFields]="true">
   </app-predio-info-card>
 
   <div class="action-buttons">
-    <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
+    <app-button text="Volver al Inicio" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
+    <app-button text="Nueva búsqueda" variant="outline" type="button" (clicked)="onNuevaBusqueda()">
+    </app-button>
     <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
     </app-button>
   </div>
