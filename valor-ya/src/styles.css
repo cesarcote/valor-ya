@@ -328,3 +328,30 @@ h6 {
 .form-group {
   margin-bottom: 1.5rem;
 }
+
+/* ==================== LAYOUT COMÚN PARA STEPS ==================== */
+.step-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.step-header {
+  margin-bottom: 2rem;
+}
+
+.step-header h2 {
+  margin-bottom: 0.5rem;
+}
+
+.step-header .subtitle {
+  color: var(--color-text);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .step-container {
+    padding: 1rem;
+  }
+}
