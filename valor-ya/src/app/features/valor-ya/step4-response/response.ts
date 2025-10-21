@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
-import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
-import { InquiryStateService } from '../../../core/services/inquiry-state.service';
+import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 
@@ -16,14 +16,14 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 export class ResponseComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
-  private stateService = inject(InquiryStateService);
+  private stateService = inject(ValorYaStateService);
 
   predioData?: PredioData;
   valorEstimado: number = 0;
   fechaConsulta: string = '';
 
   ngOnInit(): void {
-    this.stepperService.setStep(InquiryStep.RESPUESTA);
+    this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
     const state = this.stateService.getState();
     if (!state.predioData) {

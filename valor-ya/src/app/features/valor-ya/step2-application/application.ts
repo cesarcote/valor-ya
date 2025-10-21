@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
-import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
+import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -25,7 +25,7 @@ import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
 export class ApplicationComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
-  private stateService = inject(InquiryStateService);
+  private stateService = inject(ValorYaStateService);
 
   tipoBusquedaActual: TipoBusqueda | undefined;
   selectedTabIndex: number = 0;
@@ -39,7 +39,7 @@ export class ApplicationComponent implements OnInit {
   readonly TipoBusqueda = TipoBusqueda;
 
   ngOnInit(): void {
-    this.stepperService.setStep(InquiryStep.SOLICITUD);
+    this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
     this.stateService.state$.subscribe((state) => {
       this.tipoBusquedaActual = state.tipoBusqueda;
@@ -82,13 +82,13 @@ export class ApplicationComponent implements OnInit {
   }
 
   irAProceso(): void {
-    this.stepperService.setStep(InquiryStep.PROCESO);
+    this.stepperService.setStep(ValorYaStep.PROCESO);
     this.router.navigate(['/valor-ya/proceso']);
   }
 
   onVolver(): void {
     this.stateService.reset();
-    this.stepperService.setStep(InquiryStep.INICIO);
+    this.stepperService.setStep(ValorYaStep.INICIO);
     this.router.navigate(['/valor-ya/inicio']);
   }
 }

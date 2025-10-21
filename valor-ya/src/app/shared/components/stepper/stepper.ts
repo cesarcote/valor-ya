@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
 
-import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
+import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
 
 @Component({
   selector: 'app-stepper',
@@ -14,7 +14,7 @@ export class StepperComponent implements OnInit {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
 
-  currentStep: InquiryStep = InquiryStep.INICIO;
+  currentStep: ValorYaStep = ValorYaStep.INICIO;
   progressPercentage: string = '15%';
 
   ngOnInit(): void {
@@ -26,11 +26,11 @@ export class StepperComponent implements OnInit {
     });
   }
 
-  isStepActive(step: InquiryStep): boolean {
+  isStepActive(step: ValorYaStep): boolean {
     return this.stepperService.isStepActive(step);
   }
 
-  isCurrentStep(step: InquiryStep): boolean {
+  isCurrentStep(step: ValorYaStep): boolean {
     return this.currentStep === step;
   }
 

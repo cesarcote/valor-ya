@@ -3,7 +3,7 @@ import {
   canAccessSolicitudGuard,
   canAccessProcesoGuard,
   canAccessRespuestaGuard,
-} from './core/guards/inquiry.guards';
+} from './core/guards/valor-ya.guards';
 
 export const routes: Routes = [
   {
@@ -18,14 +18,14 @@ export const routes: Routes = [
         path: 'inicio',
         title: 'Valor YA - Inicio',
         loadComponent: () =>
-          import('./features/inquiry/step1-home/home').then((m) => m.HomeComponent),
+          import('./features/valor-ya/step1-home/home').then((m) => m.HomeComponent),
       },
       {
         path: 'solicitud',
         title: 'Valor YA - Consulta tu Predio',
         canActivate: [canAccessSolicitudGuard],
         loadComponent: () =>
-          import('./features/inquiry/step2-application/application').then(
+          import('./features/valor-ya/step2-application/application').then(
             (m) => m.ApplicationComponent
           ),
       },
@@ -34,20 +34,28 @@ export const routes: Routes = [
         title: 'Valor YA - Procesando Solicitud',
         // canActivate: [canAccessProcesoGuard], // Temporalmente deshabilitado
         loadComponent: () =>
-          import('./features/inquiry/step3-process/process').then((m) => m.ProcessComponent),
+          import('./features/valor-ya/step3-process/process').then((m) => m.ProcessComponent),
       },
       {
         path: 'respuesta',
         title: 'Valor YA - Resultado de tu Consulta',
         canActivate: [canAccessRespuestaGuard],
         loadComponent: () =>
-          import('./features/inquiry/step4-response/response').then((m) => m.ResponseComponent),
+          import('./features/valor-ya/step4-response/response').then((m) => m.ResponseComponent),
       },
       {
         path: '**',
         redirectTo: 'inicio',
       },
     ],
+  },
+  {
+    path: 'avaluos-en-garantia',
+    title: 'Avalúos en Garantía',
+    loadComponent: () =>
+      import('./features/avaluos-en-garantia/avaluos-en-garantia').then(
+        (m) => m.AvaluosEnGarantiaComponent
+      ),
   },
   {
     path: '',

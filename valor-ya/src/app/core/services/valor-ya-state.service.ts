@@ -8,7 +8,7 @@ export enum TipoBusqueda {
   FMI = 'fmi',
 }
 
-export interface InquiryState {
+export interface ValorYaState {
   tipoBusqueda?: TipoBusqueda;
   valorBusqueda?: string;
   predioData?: PredioData;
@@ -18,18 +18,18 @@ export interface InquiryState {
 @Injectable({
   providedIn: 'root',
 })
-export class InquiryStateService {
-  private initialState: InquiryState = {
+export class ValorYaStateService {
+  private initialState: ValorYaState = {
     mostrarResultado: false,
   };
 
-  private stateSubject = new BehaviorSubject<InquiryState>(this.initialState);
-  public state$: Observable<InquiryState> = this.stateSubject.asObservable();
+  private stateSubject = new BehaviorSubject<ValorYaState>(this.initialState);
+  public state$: Observable<ValorYaState> = this.stateSubject.asObservable();
 
   constructor() {}
 
   // Obtener el estado actual
-  getState(): InquiryState {
+  getState(): ValorYaState {
     return this.stateSubject.value;
   }
 
@@ -68,7 +68,7 @@ export class InquiryStateService {
     return !!this.stateSubject.value.predioData;
   }
 
-  private updateState(partial: Partial<InquiryState>): void {
+  private updateState(partial: Partial<ValorYaState>): void {
     const currentState = this.stateSubject.value;
     this.stateSubject.next({ ...currentState, ...partial });
   }

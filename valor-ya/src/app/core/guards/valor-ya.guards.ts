@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { InquiryStateService } from '../services/inquiry-state.service';
+import { ValorYaStateService } from '../services/valor-ya-state.service';
 
 export const canAccessSolicitudGuard: CanActivateFn = () => {
-  const stateService = inject(InquiryStateService);
+  const stateService = inject(ValorYaStateService);
   const router = inject(Router);
   const state = stateService.getState();
 
@@ -17,7 +17,7 @@ export const canAccessSolicitudGuard: CanActivateFn = () => {
 };
 
 export const canAccessProcesoGuard: CanActivateFn = () => {
-  const stateService = inject(InquiryStateService);
+  const stateService = inject(ValorYaStateService);
   const router = inject(Router);
   const state = stateService.getState();
 
@@ -32,7 +32,7 @@ export const canAccessProcesoGuard: CanActivateFn = () => {
 };
 
 export const canAccessRespuestaGuard: CanActivateFn = () => {
-  const stateService = inject(InquiryStateService);
+  const stateService = inject(ValorYaStateService);
   const router = inject(Router);
 
   // Permite acceso solo si hay datos del predio

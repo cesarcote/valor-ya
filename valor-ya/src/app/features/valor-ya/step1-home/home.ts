@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
-import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
+import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 
 @Component({
@@ -14,10 +14,10 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 export class HomeComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
-  private stateService = inject(InquiryStateService);
+  private stateService = inject(ValorYaStateService);
 
   ngOnInit(): void {
-    this.stepperService.setStep(InquiryStep.INICIO);
+    this.stepperService.setStep(ValorYaStep.INICIO);
   }
 
   onCardClick(type: string): void {
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
 
     this.stateService.setTipoBusqueda(tipoBusqueda);
 
-    this.stepperService.setStep(InquiryStep.SOLICITUD);
+    this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
     this.router.navigate(['/valor-ya/solicitud']);
   }

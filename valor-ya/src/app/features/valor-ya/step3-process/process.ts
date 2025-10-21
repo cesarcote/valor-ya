@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StepperService, InquiryStep } from '../../../core/services/stepper.service';
-import { InquiryStateService, TipoBusqueda } from '../../../core/services/inquiry-state.service';
+import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
@@ -18,14 +18,14 @@ import { PredioInfoCardComponent } from '../../../shared/components/predio-info-
 export class ProcessComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(StepperService);
-  private stateService = inject(InquiryStateService);
+  private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
 
   predioData?: PredioData;
   errorMessage: string = '';
 
   ngOnInit(): void {
-    this.stepperService.setStep(InquiryStep.PROCESO);
+    this.stepperService.setStep(ValorYaStep.PROCESO);
 
     const state = this.stateService.getState();
 
@@ -72,18 +72,18 @@ export class ProcessComponent implements OnInit {
 
   onVolver(): void {
     this.stateService.setMostrarResultado(false);
-    this.stepperService.setStep(InquiryStep.SOLICITUD);
+    this.stepperService.setStep(ValorYaStep.SOLICITUD);
     this.router.navigate(['/valor-ya/solicitud']);
   }
 
   onNuevaBusqueda(): void {
     this.stateService.setMostrarResultado(false);
-    this.stepperService.setStep(InquiryStep.SOLICITUD);
+    this.stepperService.setStep(ValorYaStep.SOLICITUD);
     this.router.navigate(['/valor-ya/solicitud']);
   }
 
   onContinuar(): void {
-    this.stepperService.setStep(InquiryStep.RESPUESTA);
+    this.stepperService.setStep(ValorYaStep.RESPUESTA);
     this.router.navigate(['/valor-ya/respuesta']);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export enum InquiryStep {
+export enum ValorYaStep {
   INICIO = 1, // Home: Selección del tipo de búsqueda
   SOLICITUD = 2, // Formularios + Resultado de búsqueda
   PROCESO = 3, // Validación/Cálculo del valor
@@ -9,7 +9,7 @@ export enum InquiryStep {
 }
 
 export interface StepConfig {
-  step: InquiryStep;
+  step: ValorYaStep;
   label: string;
   route: string;
   percentage: string;
@@ -19,30 +19,30 @@ export interface StepConfig {
   providedIn: 'root',
 })
 export class StepperService {
-  private currentStepSubject = new BehaviorSubject<InquiryStep>(InquiryStep.INICIO);
-  public currentStep$: Observable<InquiryStep> = this.currentStepSubject.asObservable();
+  private currentStepSubject = new BehaviorSubject<ValorYaStep>(ValorYaStep.INICIO);
+  public currentStep$: Observable<ValorYaStep> = this.currentStepSubject.asObservable();
 
   readonly steps: StepConfig[] = [
     {
-      step: InquiryStep.INICIO,
+      step: ValorYaStep.INICIO,
       label: 'Inicio',
       route: '/valor-ya/inicio',
       percentage: '15%',
     },
     {
-      step: InquiryStep.SOLICITUD,
+      step: ValorYaStep.SOLICITUD,
       label: 'Hago mi solicitud',
       route: '/valor-ya/solicitud',
       percentage: '50%',
     },
     {
-      step: InquiryStep.PROCESO,
+      step: ValorYaStep.PROCESO,
       label: 'Procesan mi solicitud',
       route: '/valor-ya/proceso',
       percentage: '80%',
     },
     {
-      step: InquiryStep.RESPUESTA,
+      step: ValorYaStep.RESPUESTA,
       label: 'Respuesta',
       route: '/valor-ya/respuesta',
       percentage: '100%',
@@ -52,19 +52,19 @@ export class StepperService {
   constructor() {}
 
   // Obtener step actual
-  getCurrentStep(): InquiryStep {
+  getCurrentStep(): ValorYaStep {
     return this.currentStepSubject.value;
   }
 
   // Cambiar a un step específico
-  setStep(step: InquiryStep): void {
+  setStep(step: ValorYaStep): void {
     this.currentStepSubject.next(step);
   }
 
   // Avanzar al siguiente step
   nextStep(): void {
     const current = this.currentStepSubject.value;
-    if (current < InquiryStep.RESPUESTA) {
+    if (current < ValorYaStep.RESPUESTA) {
       this.currentStepSubject.next(current + 1);
     }
   }
@@ -72,24 +72,24 @@ export class StepperService {
   // Retroceder al step anterior
   previousStep(): void {
     const current = this.currentStepSubject.value;
-    if (current > InquiryStep.INICIO) {
+    if (current > ValorYaStep.INICIO) {
       this.currentStepSubject.next(current - 1);
     }
   }
 
   // Verificar si un step está activo
-  isStepActive(step: InquiryStep): boolean {
+  isStepActive(step: ValorYaStep): boolean {
     return this.currentStepSubject.value >= step;
   }
 
   // Obtener configuración de un step
-  getStepConfig(step: InquiryStep): StepConfig | undefined {
+  getStepConfig(step: ValorYaStep): StepConfig | undefined {
     return this.steps.find((s) => s.step === step);
   }
 
   // Resetear al inicio
   reset(): void {
-    this.currentStepSubject.next(InquiryStep.INICIO);
+    this.currentStepSubject.next(ValorYaStep.INICIO);
   }
 
   // Obtener porcentaje de progreso
