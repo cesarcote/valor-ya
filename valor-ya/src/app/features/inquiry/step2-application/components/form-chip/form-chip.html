@@ -15,11 +15,20 @@
   }
 </div>
 
-<app-button
-  text="Consultar"
-  variant="fill"
-  type="button"
-  [disabled]="chipControl.invalid"
-  (clicked)="onConsultar()"
->
-</app-button>
+<div class="form-buttons">
+  <app-button
+    text="Volver"
+    variant="outline"
+    type="button"
+    (clicked)="onVolver()"
+  >
+  </app-button>
+  <app-button
+    text="Consultar"
+    variant="fill"
+    type="button"
+    [disabled]="chipControl.invalid"
+    (clicked)="onConsultar()"
+  >
+  </app-button>
+</div>

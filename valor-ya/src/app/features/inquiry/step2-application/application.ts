@@ -15,7 +15,6 @@ import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
   imports: [
     StepperComponent,
     TabsComponent,
-    ButtonComponent,
     FormChipComponent,
     FormAddressComponent,
     FormFmiComponent,

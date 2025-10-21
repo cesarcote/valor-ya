@@ -13,6 +13,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button'
 })
 export class FormChipComponent {
   @Output() consultar = new EventEmitter<string>();
+  @Output() volver = new EventEmitter<void>();
 
   chipControl = new FormControl('', [
     Validators.required,
@@ -29,5 +30,9 @@ export class FormChipComponent {
     }
 
     this.consultar.emit(this.chipControl.value!);
+  }
+
+  onVolver(): void {
+    this.volver.emit();
   }
 }

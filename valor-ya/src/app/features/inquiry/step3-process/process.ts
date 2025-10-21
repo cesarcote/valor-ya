@@ -12,12 +12,7 @@ import { PredioInfoCardComponent } from '../../../shared/components/predio-info-
 
 @Component({
   selector: 'app-process',
-  imports: [
-    StepperComponent,
-    ButtonComponent,
-    PredioFoundHeaderComponent,
-    PredioInfoCardComponent,
-  ],
+  imports: [StepperComponent, ButtonComponent, PredioFoundHeaderComponent, PredioInfoCardComponent],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
@@ -88,7 +83,7 @@ export class ProcessComponent implements OnInit {
     this.router.navigate(['/valor-ya/solicitud']);
   }
 
-  onVerResultado(): void {
+  onContinuar(): void {
     this.stepperService.setStep(InquiryStep.RESPUESTA);
     this.router.navigate(['/valor-ya/respuesta']);
   }

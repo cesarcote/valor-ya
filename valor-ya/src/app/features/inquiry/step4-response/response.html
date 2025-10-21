@@ -1,45 +1,5 @@
 <app-stepper></app-stepper>
 
 <div class="respuesta-container">
-  <div class="success-header">
-    <div class="success-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-        />
-      </svg>
-    </div>
-    <h2>¡Cálculo completado!</h2>
-    <p>Hemos calculado el valor estimado de tu predio</p>
-  </div>
-
-  <div class="result-card">
-    <div class="valor-principal">
-      <span class="label">Valor Estimado</span>
-      <span class="valor">{{ valorEstimado | currency : 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
-      <span class="disclaimer">* Valor estimado con base en datos catastrales</span>
-    </div>
-
-    <!-- Usar componente modular para mostrar detalles -->
-    <app-predio-info-card [predioData]="predioData" [showMessage]="false" [showAllFields]="true">
-    </app-predio-info-card>
-
-    <div class="fecha-consulta">
-      <span>Fecha de consulta: {{ fechaConsulta }}</span>
-    </div>
-  </div>
-
-  <div class="action-buttons">
-    <app-button
-      text="Volver al inicio"
-      variant="outline"
-      type="button"
-      (clicked)="onVolverInicio()"
-    >
-    </app-button>
-    <app-button text="Nueva consulta" variant="outline" type="button" (clicked)="onNuevaConsulta()">
-    </app-button>
-    <app-button text="Descargar PDF" variant="fill" type="button" (clicked)="onDescargarPDF()">
-    </app-button>
-  </div>
+  <h2>Resultado de la Consulta</h2>
 </div>

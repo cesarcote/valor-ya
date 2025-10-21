@@ -18,6 +18,7 @@ export interface FmiData {
 })
 export class FormFmiComponent {
   @Output() consultar = new EventEmitter<FmiData>();
+  @Output() volver = new EventEmitter<void>();
 
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
@@ -41,5 +42,9 @@ export class FormFmiComponent {
       zona: this.zonaControl.value!,
       matricula: this.matriculaControl.value!,
     });
+  }
+
+  onVolver(): void {
+    this.volver.emit();
   }
 }

@@ -13,6 +13,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button'
 })
 export class FormAddressComponent {
   @Output() consultar = new EventEmitter<string>();
+  @Output() volver = new EventEmitter<void>();
 
   direccionControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
 
@@ -25,5 +26,9 @@ export class FormAddressComponent {
     }
 
     this.consultar.emit(this.direccionControl.value!);
+  }
+
+  onVolver(): void {
+    this.volver.emit();
   }
 }
