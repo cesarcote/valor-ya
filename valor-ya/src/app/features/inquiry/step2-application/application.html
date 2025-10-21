@@ -14,7 +14,10 @@
       @if (selectedTabIndex === 0) {
       <app-form-chip (consultar)="onConsultarChip($event)" (volver)="onVolver()"></app-form-chip>
       } @if (selectedTabIndex === 1) {
-      <app-form-address (consultar)="onConsultarDireccion($event)" (volver)="onVolver()"></app-form-address>
+      <app-form-address
+        (consultar)="onConsultarDireccion($event)"
+        (volver)="onVolver()"
+      ></app-form-address>
       } @if (selectedTabIndex === 2) {
       <app-form-fmi (consultar)="onConsultarFMI($event)" (volver)="onVolver()"></app-form-fmi>
       }
