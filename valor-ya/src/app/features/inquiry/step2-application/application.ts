@@ -31,8 +31,8 @@ export class ApplicationComponent implements OnInit {
   selectedTabIndex: number = 0;
 
   tabs: Tab[] = [
-    { label: 'CHIP', disabled: false },
     { label: 'Dirección Catastral', disabled: false },
+    { label: 'CHIP', disabled: false },
     { label: 'Folio Matrícula Inmobiliaria', disabled: false },
   ];
 
@@ -52,9 +52,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   updateSelectedTabIndex(): void {
-    if (this.tipoBusquedaActual === TipoBusqueda.CHIP) {
+    if (this.tipoBusquedaActual === TipoBusqueda.DIRECCION) {
       this.selectedTabIndex = 0;
-    } else if (this.tipoBusquedaActual === TipoBusqueda.DIRECCION) {
+    } else if (this.tipoBusquedaActual === TipoBusqueda.CHIP) {
       this.selectedTabIndex = 1;
     } else if (this.tipoBusquedaActual === TipoBusqueda.FMI) {
       this.selectedTabIndex = 2;
@@ -62,7 +62,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   onTabChange(index: number): void {
-    const tipos = [TipoBusqueda.CHIP, TipoBusqueda.DIRECCION, TipoBusqueda.FMI];
+    const tipos = [TipoBusqueda.DIRECCION, TipoBusqueda.CHIP, TipoBusqueda.FMI];
     this.stateService.setTipoBusqueda(tipos[index]);
   }
 
