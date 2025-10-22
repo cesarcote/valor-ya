@@ -31,9 +31,7 @@
       <h3>Respuesta Form 1:</h3>
       <pre>{{ responseForm1 | json }}</pre>
     </div>
-    }
-
-    @if (errorForm1) {
+    } @if (errorForm1) {
     <div class="error-section">
       <p class="error">{{ errorForm1 }}</p>
     </div>
@@ -46,13 +44,7 @@
     <form (ngSubmit)="buscarPorChip()">
       <div class="form-group">
         <label for="chip">CHIP:</label>
-        <input
-          type="text"
-          id="chip"
-          name="chip"
-          [(ngModel)]="chip"
-          placeholder="Ej: AAA0228WRAW"
-        />
+        <input type="text" id="chip" name="chip" [(ngModel)]="chip" placeholder="Ej: AAA0228WRAW" />
       </div>
       <button type="submit" [disabled]="loadingForm2">
         {{ loadingForm2 ? 'Buscando...' : 'Buscar por CHIP' }}
@@ -64,9 +56,7 @@
       <h3>Respuesta Form 2:</h3>
       <pre>{{ responseForm2 | json }}</pre>
     </div>
-    }
-
-    @if (errorForm2) {
+    } @if (errorForm2) {
     <div class="error-section">
       <p class="error">{{ errorForm2 }}</p>
     </div>
