@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';

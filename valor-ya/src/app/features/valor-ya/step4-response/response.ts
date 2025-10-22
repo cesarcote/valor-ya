@@ -2,7 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
-import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
