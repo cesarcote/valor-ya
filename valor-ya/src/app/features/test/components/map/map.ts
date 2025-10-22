@@ -64,7 +64,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private initMap(): void {
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [4.6097, -74.0817],
-      zoom: 12,
+      zoom: 14,
+      minZoom: 12,
       maxZoom: 20,
       preferCanvas: true,
       zoomControl: true,
@@ -95,7 +96,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.marker = L.marker([4.6097, -74.0817])
       .addTo(this.map)
-      .bindPopup('Bogotá, Colombia')
       .openPopup();
   }
 }
