@@ -96,6 +96,11 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'tests',
+    title: 'Tests',
+    loadComponent: () => import('./features/test/test').then((m) => m.TestComponent),
+  },
+  {
     path: '',
     redirectTo: 'valor-ya',
     pathMatch: 'full',

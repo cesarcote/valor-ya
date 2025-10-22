@@ -23,9 +23,18 @@ importers:
       '@angular/platform-browser':
         specifier: ^20.3.0
         version: 20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))
+      '@angular/platform-browser-dynamic':
+        specifier: ^20.3.0
+        version: 20.3.6(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))
       '@angular/router':
         specifier: ^20.3.0
         version: 20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))(rxjs@7.8.2)
+      esri-leaflet:
+        specifier: ^3.0.19
+        version: 3.0.19(leaflet@1.9.4)
+      leaflet:
+        specifier: ^1.9.4
+        version: 1.9.4
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
@@ -35,16 +44,25 @@ importers:
     devDependencies:
       '@angular/build':
         specifier: ^20.3.5
-        version: 20.3.5(@angular/compiler-cli@20.3.4(@angular/compiler@20.3.4)(typescript@5.9.3))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))(@types/node@24.7.2)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)
+        version: 20.3.5(@angular/compiler-cli@20.3.4(@angular/compiler@20.3.4)(typescript@5.9.3))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))(@types/node@22.18.12)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)
       '@angular/cli':
         specifier: ^20.3.5
-        version: 20.3.5(@types/node@24.7.2)(chokidar@4.0.3)
+        version: 20.3.5(@types/node@22.18.12)(chokidar@4.0.3)
       '@angular/compiler-cli':
         specifier: ^20.3.0
         version: 20.3.4(@angular/compiler@20.3.4)(typescript@5.9.3)
+      '@types/esri-leaflet':
+        specifier: ^3.0.4
+        version: 3.0.4
       '@types/jasmine':
         specifier: ~5.1.0
         version: 5.1.10
+      '@types/leaflet':
+        specifier: ^1.9.21
+        version: 1.9.21
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.18.12
       jasmine-core:
         specifier: ~5.9.0
         version: 5.9.0
@@ -240,6 +258,15 @@ packages:
       '@angular/core': 20.3.4
       '@angular/platform-browser': 20.3.4
       rxjs: ^6.5.3 || ^7.4.0
+
+  '@angular/platform-browser-dynamic@20.3.6':
+    resolution: {integrity: sha512-teO8tBygk6vD1waiLmHGXtXPF/9a9Bw2XI+s550KtJlQqRpr7IUWOFPPQik/uGkppv5Jrv6fP+8mh9QX9zoWnQ==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
+    peerDependencies:
+      '@angular/common': 20.3.6
+      '@angular/compiler': 20.3.6
+      '@angular/core': 20.3.6
+      '@angular/platform-browser': 20.3.6
 
   '@angular/platform-browser@20.3.4':
     resolution: {integrity: sha512-8eoHC+vk7scb24qjlpsirkh1Q17uFyWdhl+u92XNjvimtZRY96oDZeFEDPoexPqtKUQcCOpEPbL8P/IbpBsqYQ==}
@@ -1125,6 +1152,12 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
+  '@terraformer/arcgis@2.1.2':
+    resolution: {integrity: sha512-IvdfqehcNAUtKU1OFMKwPT8EvdKlVFZ7q7ZKzkIF8XzYZIVsZLuXuOS1UBdRh5u/o+X5Gax7jiZhD8U/4TV+Jw==}
+
+  '@terraformer/common@2.1.2':
+    resolution: {integrity: sha512-cwPdTFzIpekZhZRrgDEkqLKNPoqbyCBQHiemaovnGIeUx0Pl336MY/eCxzJ5zXkrQLVo9zPalq/vYW5HnyKevQ==}
+
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -1136,14 +1169,23 @@ packages:
   '@types/cors@2.8.19':
     resolution: {integrity: sha512-mFNylyeyqN93lfe/9CSxOGREz8cpzAhH+E93xJ4xWQf62V8sQ/24reV2nyzUWM6H6Xji+GGHpkbLe7pVoUEskg==}
 
+  '@types/esri-leaflet@3.0.4':
+    resolution: {integrity: sha512-jbnsz9yo55gLYje8V9D8Oj1NkU2hyXUVIYq2hgTMPR5U/y8GCSLI07y4W71+wqeGaE2eCH81mMifYJs/nXpHxw==}
+
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
   '@types/jasmine@5.1.10':
     resolution: {integrity: sha512-ctILpOSFD58PTyGwr400GadefIHPqdWQ8VlZI9D65USOWR/aIw8dkDAw17KPCu/Wn+e+r9BWpPtmuB5T/pP8ng==}
 
-  '@types/node@24.7.2':
-    resolution: {integrity: sha512-/NbVmcGTP+lj5oa4yiYxxeBjRivKQ5Ns1eSZeB99ExsEQ6rX5XYU1Zy/gGxY/ilqtD4Etx9mKyrPxZRetiahhA==}
+  '@types/leaflet@1.9.21':
+    resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
+
+  '@types/node@22.18.12':
+    resolution: {integrity: sha512-BICHQ67iqxQGFSzfCFTT7MRQ5XcBjG5aeKh5Ok38UBbPe5fxTyE+aHFxwVrGyr8GNlqFMLKD1D3P2K/1ks8tog==}
 
   '@vitejs/plugin-basic-ssl@2.1.0':
     resolution: {integrity: sha512-dOxxrhgyDIEUADhb/8OlV9JIqYLgos03YorAueTIeOUskLJSEsfwCByjbu98ctXitUN3znXKp0bYD/WHSudCeA==}
@@ -1535,6 +1577,11 @@ packages:
 
   escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
+
+  esri-leaflet@3.0.19:
+    resolution: {integrity: sha512-GBMRuRV0zyzVSxdImwKnnTh3ptMvzeaGdnsL68BwPLebibEOsgquRKArwLNpuIz0E03SXccaJafiDLCGvp2PGQ==}
+    peerDependencies:
+      leaflet: ^1.0.0
 
   etag@1.8.1:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
@@ -1932,6 +1979,9 @@ packages:
     resolution: {integrity: sha512-LrtUxbdvt1gOpo3gxG+VAJlJAEMhbWlM4YrFQgql98FwF7+K8K12LYO4hnDdUkNjeztYrOXEMqgTajSWgmtI/w==}
     engines: {node: '>= 10'}
     hasBin: true
+
+  leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
 
   listr2@9.0.1:
     resolution: {integrity: sha512-SL0JY3DaxylDuo/MecFeiC+7pedM0zia33zl0vcjgwcq1q1FWWF1To9EIauPbl8GbMCU0R2e0uJ8bZunhYKD2g==}
@@ -2568,6 +2618,9 @@ packages:
     resolution: {integrity: sha512-nlGpxf+hv0v7GkWBK2V9spgactGOp0qvfWRxUMjqHyzrt3SgwE48DIv/FhqPHJYLHpgW1opq3nERbz5Anq7n1g==}
     engines: {node: '>=18'}
 
+  tiny-binary-search@1.0.3:
+    resolution: {integrity: sha512-STSHX/L5nI9WTLv6wrzJbAPbO7OIISX83KFBh2GVbX1Uz/vgZOU/ANn/8iV6t35yMTpoPzzO+3OQid3mifE0CA==}
+
   tinyglobby@0.2.14:
     resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
     engines: {node: '>=12.0.0'}
@@ -2612,8 +2665,8 @@ packages:
     resolution: {integrity: sha512-O3oYyCMPYgNNHuO7Jjk3uacJWZF8loBgwrfd/5LE/HyZ3lUIOdniQ7DNXJcIgZbwioZxk0fLfI4EVnetdiX5jg==}
     hasBin: true
 
-  undici-types@7.14.0:
-    resolution: {integrity: sha512-QQiYxHuyZ9gQUIrmPo3IA+hUl4KYk8uSA7cHrcKd/l3p1OTpZcM0Tbp9x7FAtXdAYhlasd60ncPpgu6ihG6TOA==}
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
   unique-filename@4.0.0:
     resolution: {integrity: sha512-XSnEewXmQ+veP7xX2dS5Q4yZAvO40cBN2MWkJ7D/6sW4Dg6wYBNwM1Vrnz1FhH5AdeLIlUXRI9e28z1YZi71NQ==}
@@ -2912,7 +2965,7 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@angular/build@20.3.5(@angular/compiler-cli@20.3.4(@angular/compiler@20.3.4)(typescript@5.9.3))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))(@types/node@24.7.2)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)':
+  '@angular/build@20.3.5(@angular/compiler-cli@20.3.4(@angular/compiler@20.3.4)(typescript@5.9.3))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))(@types/node@22.18.12)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2003.5(chokidar@4.0.3)
@@ -2921,8 +2974,8 @@ snapshots:
       '@babel/core': 7.28.3
       '@babel/helper-annotate-as-pure': 7.27.3
       '@babel/helper-split-export-declaration': 7.24.7
-      '@inquirer/confirm': 5.1.14(@types/node@24.7.2)
-      '@vitejs/plugin-basic-ssl': 2.1.0(vite@7.1.5(@types/node@24.7.2)(sass@1.90.0))
+      '@inquirer/confirm': 5.1.14(@types/node@22.18.12)
+      '@vitejs/plugin-basic-ssl': 2.1.0(vite@7.1.5(@types/node@22.18.12)(sass@1.90.0))
       beasties: 0.3.5
       browserslist: 4.26.3
       esbuild: 0.25.9
@@ -2942,7 +2995,7 @@ snapshots:
       tinyglobby: 0.2.14
       tslib: 2.8.1
       typescript: 5.9.3
-      vite: 7.1.5(@types/node@24.7.2)(sass@1.90.0)
+      vite: 7.1.5(@types/node@22.18.12)(sass@1.90.0)
       watchpack: 2.4.4
     optionalDependencies:
       '@angular/core': 20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)
@@ -2963,13 +3016,13 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/cli@20.3.5(@types/node@24.7.2)(chokidar@4.0.3)':
+  '@angular/cli@20.3.5(@types/node@22.18.12)(chokidar@4.0.3)':
     dependencies:
       '@angular-devkit/architect': 0.2003.5(chokidar@4.0.3)
       '@angular-devkit/core': 20.3.5(chokidar@4.0.3)
       '@angular-devkit/schematics': 20.3.5(chokidar@4.0.3)
-      '@inquirer/prompts': 7.8.2(@types/node@24.7.2)
-      '@listr2/prompt-adapter-inquirer': 3.0.1(@inquirer/prompts@7.8.2(@types/node@24.7.2))(@types/node@24.7.2)(listr2@9.0.1)
+      '@inquirer/prompts': 7.8.2(@types/node@22.18.12)
+      '@listr2/prompt-adapter-inquirer': 3.0.1(@inquirer/prompts@7.8.2(@types/node@22.18.12))(@types/node@22.18.12)(listr2@9.0.1)
       '@modelcontextprotocol/sdk': 1.17.3
       '@schematics/angular': 20.3.5(chokidar@4.0.3)
       '@yarnpkg/lockfile': 1.1.0
@@ -3027,6 +3080,14 @@ snapshots:
       '@angular/core': 20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)
       '@angular/platform-browser': 20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))
       rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@angular/platform-browser-dynamic@20.3.6(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/compiler@20.3.4)(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)))':
+    dependencies:
+      '@angular/common': 20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2)
+      '@angular/compiler': 20.3.4
+      '@angular/core': 20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)
+      '@angular/platform-browser': 20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))
       tslib: 2.8.1
 
   '@angular/platform-browser@20.3.4(@angular/common@20.3.4(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2))':
@@ -3262,135 +3323,135 @@ snapshots:
 
   '@inquirer/ansi@1.0.1': {}
 
-  '@inquirer/checkbox@4.3.0(@types/node@24.7.2)':
+  '@inquirer/checkbox@4.3.0(@types/node@22.18.12)':
     dependencies:
       '@inquirer/ansi': 1.0.1
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
       '@inquirer/figures': 1.0.14
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/confirm@5.1.14(@types/node@24.7.2)':
+  '@inquirer/confirm@5.1.14(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/confirm@5.1.19(@types/node@24.7.2)':
+  '@inquirer/confirm@5.1.19(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/core@10.3.0(@types/node@24.7.2)':
+  '@inquirer/core@10.3.0(@types/node@22.18.12)':
     dependencies:
       '@inquirer/ansi': 1.0.1
       '@inquirer/figures': 1.0.14
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
       cli-width: 4.1.0
       mute-stream: 2.0.0
       signal-exit: 4.1.0
       wrap-ansi: 6.2.0
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/editor@4.2.21(@types/node@24.7.2)':
+  '@inquirer/editor@4.2.21(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/external-editor': 1.0.2(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/external-editor': 1.0.2(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/expand@4.0.21(@types/node@24.7.2)':
+  '@inquirer/expand@4.0.21(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/external-editor@1.0.2(@types/node@24.7.2)':
+  '@inquirer/external-editor@1.0.2(@types/node@22.18.12)':
     dependencies:
       chardet: 2.1.0
       iconv-lite: 0.7.0
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
   '@inquirer/figures@1.0.14': {}
 
-  '@inquirer/input@4.2.5(@types/node@24.7.2)':
+  '@inquirer/input@4.2.5(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/number@3.0.21(@types/node@24.7.2)':
+  '@inquirer/number@3.0.21(@types/node@22.18.12)':
     dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/password@4.0.21(@types/node@24.7.2)':
-    dependencies:
-      '@inquirer/ansi': 1.0.1
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
-    optionalDependencies:
-      '@types/node': 24.7.2
-
-  '@inquirer/prompts@7.8.2(@types/node@24.7.2)':
-    dependencies:
-      '@inquirer/checkbox': 4.3.0(@types/node@24.7.2)
-      '@inquirer/confirm': 5.1.19(@types/node@24.7.2)
-      '@inquirer/editor': 4.2.21(@types/node@24.7.2)
-      '@inquirer/expand': 4.0.21(@types/node@24.7.2)
-      '@inquirer/input': 4.2.5(@types/node@24.7.2)
-      '@inquirer/number': 3.0.21(@types/node@24.7.2)
-      '@inquirer/password': 4.0.21(@types/node@24.7.2)
-      '@inquirer/rawlist': 4.1.9(@types/node@24.7.2)
-      '@inquirer/search': 3.2.0(@types/node@24.7.2)
-      '@inquirer/select': 4.4.0(@types/node@24.7.2)
-    optionalDependencies:
-      '@types/node': 24.7.2
-
-  '@inquirer/rawlist@4.1.9(@types/node@24.7.2)':
-    dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 24.7.2
-
-  '@inquirer/search@3.2.0(@types/node@24.7.2)':
-    dependencies:
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/figures': 1.0.14
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 24.7.2
-
-  '@inquirer/select@4.4.0(@types/node@24.7.2)':
+  '@inquirer/password@4.0.21(@types/node@22.18.12)':
     dependencies:
       '@inquirer/ansi': 1.0.1
-      '@inquirer/core': 10.3.0(@types/node@24.7.2)
-      '@inquirer/figures': 1.0.14
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
+    optionalDependencies:
+      '@types/node': 22.18.12
+
+  '@inquirer/prompts@7.8.2(@types/node@22.18.12)':
+    dependencies:
+      '@inquirer/checkbox': 4.3.0(@types/node@22.18.12)
+      '@inquirer/confirm': 5.1.19(@types/node@22.18.12)
+      '@inquirer/editor': 4.2.21(@types/node@22.18.12)
+      '@inquirer/expand': 4.0.21(@types/node@22.18.12)
+      '@inquirer/input': 4.2.5(@types/node@22.18.12)
+      '@inquirer/number': 3.0.21(@types/node@22.18.12)
+      '@inquirer/password': 4.0.21(@types/node@22.18.12)
+      '@inquirer/rawlist': 4.1.9(@types/node@22.18.12)
+      '@inquirer/search': 3.2.0(@types/node@22.18.12)
+      '@inquirer/select': 4.4.0(@types/node@22.18.12)
+    optionalDependencies:
+      '@types/node': 22.18.12
+
+  '@inquirer/rawlist@4.1.9(@types/node@22.18.12)':
+    dependencies:
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
 
-  '@inquirer/type@3.0.9(@types/node@24.7.2)':
+  '@inquirer/search@3.2.0(@types/node@22.18.12)':
+    dependencies:
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/figures': 1.0.14
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
+      yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
+
+  '@inquirer/select@4.4.0(@types/node@22.18.12)':
+    dependencies:
+      '@inquirer/ansi': 1.0.1
+      '@inquirer/core': 10.3.0(@types/node@22.18.12)
+      '@inquirer/figures': 1.0.14
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 22.18.12
+
+  '@inquirer/type@3.0.9(@types/node@22.18.12)':
+    optionalDependencies:
+      '@types/node': 22.18.12
 
   '@isaacs/balanced-match@4.0.1': {}
 
@@ -3432,10 +3493,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@listr2/prompt-adapter-inquirer@3.0.1(@inquirer/prompts@7.8.2(@types/node@24.7.2))(@types/node@24.7.2)(listr2@9.0.1)':
+  '@listr2/prompt-adapter-inquirer@3.0.1(@inquirer/prompts@7.8.2(@types/node@22.18.12))(@types/node@22.18.12)(listr2@9.0.1)':
     dependencies:
-      '@inquirer/prompts': 7.8.2(@types/node@24.7.2)
-      '@inquirer/type': 3.0.9(@types/node@24.7.2)
+      '@inquirer/prompts': 7.8.2(@types/node@22.18.12)
+      '@inquirer/type': 3.0.9(@types/node@22.18.12)
       listr2: 9.0.1
     transitivePeerDependencies:
       - '@types/node'
@@ -3799,6 +3860,12 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
+  '@terraformer/arcgis@2.1.2':
+    dependencies:
+      '@terraformer/common': 2.1.2
+
+  '@terraformer/common@2.1.2': {}
+
   '@tufjs/canonical-json@2.0.0': {}
 
   '@tufjs/models@3.0.1':
@@ -3808,19 +3875,29 @@ snapshots:
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
+
+  '@types/esri-leaflet@3.0.4':
+    dependencies:
+      '@types/leaflet': 1.9.21
 
   '@types/estree@1.0.8': {}
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/jasmine@5.1.10': {}
 
-  '@types/node@24.7.2':
+  '@types/leaflet@1.9.21':
     dependencies:
-      undici-types: 7.14.0
+      '@types/geojson': 7946.0.16
 
-  '@vitejs/plugin-basic-ssl@2.1.0(vite@7.1.5(@types/node@24.7.2)(sass@1.90.0))':
+  '@types/node@22.18.12':
     dependencies:
-      vite: 7.1.5(@types/node@24.7.2)(sass@1.90.0)
+      undici-types: 6.21.0
+
+  '@vitejs/plugin-basic-ssl@2.1.0(vite@7.1.5(@types/node@22.18.12)(sass@1.90.0))':
+    dependencies:
+      vite: 7.1.5(@types/node@22.18.12)(sass@1.90.0)
 
   '@yarnpkg/lockfile@1.1.0': {}
 
@@ -4184,7 +4261,7 @@ snapshots:
   engine.io@6.6.4:
     dependencies:
       '@types/cors': 2.8.19
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -4254,6 +4331,12 @@ snapshots:
   escalade@3.2.0: {}
 
   escape-html@1.0.3: {}
+
+  esri-leaflet@3.0.19(leaflet@1.9.4):
+    dependencies:
+      '@terraformer/arcgis': 2.1.2
+      leaflet: 1.9.4
+      tiny-binary-search: 1.0.3
 
   etag@1.8.1: {}
 
@@ -4697,6 +4780,8 @@ snapshots:
       - debug
       - supports-color
       - utf-8-validate
+
+  leaflet@1.9.4: {}
 
   listr2@9.0.1:
     dependencies:
@@ -5464,6 +5549,8 @@ snapshots:
       minizlib: 3.1.0
       yallist: 5.0.0
 
+  tiny-binary-search@1.0.3: {}
+
   tinyglobby@0.2.14:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.3)
@@ -5507,7 +5594,7 @@ snapshots:
 
   ua-parser-js@0.7.41: {}
 
-  undici-types@7.14.0: {}
+  undici-types@6.21.0: {}
 
   unique-filename@4.0.0:
     dependencies:
@@ -5542,7 +5629,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@7.1.5(@types/node@24.7.2)(sass@1.90.0):
+  vite@7.1.5(@types/node@22.18.12)(sass@1.90.0):
     dependencies:
       esbuild: 0.25.9
       fdir: 6.5.0(picomatch@4.0.3)
@@ -5551,7 +5638,7 @@ snapshots:
       rollup: 4.52.3
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.7.2
+      '@types/node': 22.18.12
       fsevents: 2.3.3
       sass: 1.90.0
 
