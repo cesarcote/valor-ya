@@ -65,33 +65,35 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [4.6097, -74.0817],
       zoom: 12,
+      maxZoom: 20,
       preferCanvas: true,
       zoomControl: true,
       attributionControl: false,
     });
 
-    esri.basemapLayer('Streets').addTo(this.map);
-
-    const catastroLayer = esri.dynamicMapLayer({
-      url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/imagenes/mapa_base_3857/MapServer',
+    const catastroLayer = esri.tiledMapLayer({
+      url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/Mapa_Referencia/mapa_base_3857/MapServer',
       opacity: 0.8,
-      layers: [7, 19, 91],
-      f: 'image',
-      format: 'png8',
-      transparent: true,
-      useCors: false,
+      maxZoom: 20,
     });
 
     let zoomTimeout: any;
     this.map.on('zoomstart', () => {
       catastroLayer.setOpacity(0.3);
+      console.log('🔍 Zoom iniciado - Nivel:', this.map.getZoom());
     });
 
     this.map.on('zoomend', () => {
+      const currentZoom = this.map.getZoom();
+      console.log('✅ Zoom finalizado - Nivel:', currentZoom);
       clearTimeout(zoomTimeout);
       zoomTimeout = setTimeout(() => {
         catastroLayer.setOpacity(0.8);
       }, 200);
+    });
+
+    this.map.on('zoom', () => {
+      console.log('🔄 Zoom en progreso - Nivel:', this.map.getZoom());
     });
 
     catastroLayer.addTo(this.map);
