@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 
@@ -13,7 +13,7 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 })
 export class HomeComponent implements OnInit {
   private router = inject(Router);
-  private stepperService = inject(StepperService);
+  private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
 
   ngOnInit(): void {

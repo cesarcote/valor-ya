@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
@@ -17,7 +17,7 @@ import { PredioInfoCardComponent } from '../../../shared/components/predio-info-
 })
 export class ProcessComponent implements OnInit {
   private router = inject(Router);
-  private stepperService = inject(StepperService);
+  private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
 

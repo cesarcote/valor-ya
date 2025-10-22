@@ -18,7 +18,7 @@ export interface StepConfig {
 @Injectable({
   providedIn: 'root',
 })
-export class StepperService {
+export class ValorYaStepperService {
   private currentStepSubject = new BehaviorSubject<ValorYaStep>(ValorYaStep.INICIO);
   public currentStep$: Observable<ValorYaStep> = this.currentStepSubject.asObservable();
 

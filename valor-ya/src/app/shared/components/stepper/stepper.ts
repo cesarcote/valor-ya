@@ -8,7 +8,7 @@ import {
   Optional,
 } from '@angular/core';
 
-import { StepperService } from '../../../core/services/stepper.service';
+import { ValorYaStepperService } from '../../../core/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
 
 @Component({
@@ -27,10 +27,9 @@ export class StepperComponent implements OnInit {
   progressPercentage: string = '15%';
 
   constructor(
-    @Optional() private valorYaStepperService: StepperService,
+    @Optional() private valorYaStepperService: ValorYaStepperService,
     @Optional() private avaluosStepperService: AvaluosStepperService
   ) {
-    // Usa el servicio que esté disponible
     this.stepperService = this.avaluosStepperService || this.valorYaStepperService;
   }
 

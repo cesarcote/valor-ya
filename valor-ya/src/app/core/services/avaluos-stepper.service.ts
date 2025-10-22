@@ -15,9 +15,7 @@ export interface AvaluosStepConfig {
   percentage: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AvaluosStepperService {
   private currentStepSubject = new BehaviorSubject<AvaluosStep>(AvaluosStep.INICIO);
   public currentStep$: Observable<AvaluosStep> = this.currentStepSubject.asObservable();
