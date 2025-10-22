@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, ElementRef, Renderer2, ChangeDetectorRef, Optional } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ElementRef,
+  Renderer2,
+  ChangeDetectorRef,
+  Optional,
+} from '@angular/core';
 
 import { StepperService } from '../../../core/services/stepper.service';
 import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
