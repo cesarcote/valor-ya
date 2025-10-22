@@ -94,8 +94,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     catastroLayer.addTo(this.map);
 
-    this.marker = L.marker([4.6097, -74.0817])
-      .addTo(this.map)
-      .openPopup();
+    this.marker = L.marker([4.6097, -74.0817]).addTo(this.map).openPopup();
   }
 }
