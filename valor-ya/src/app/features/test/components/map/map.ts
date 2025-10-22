@@ -75,7 +75,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/Mapa_Referencia/mapa_base_3857/MapServer',
       opacity: 0.8,
       maxZoom: 20,
-      attribution: 'Powered by <a href="https://www.esri.com">Esri</a> | IDECA - UAECD, Secretaría General de la Alcaldía Mayor de Bogotá D.C.',
+      attribution:
+        'Powered by <a href="https://www.esri.com">Esri</a> | IDECA - UAECD, Secretaría General de la Alcaldía Mayor de Bogotá D.C.',
     });
 
     let zoomTimeout: any;
