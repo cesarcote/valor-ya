@@ -51,11 +51,49 @@ export const routes: Routes = [
   },
   {
     path: 'avaluos-en-garantia',
-    title: 'Avalúos en Garantía',
-    loadComponent: () =>
-      import('./features/avaluos-en-garantia/avaluos-en-garantia').then(
-        (m) => m.AvaluosEnGarantiaComponent
-      ),
+    children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        title: 'Avalúos en Garantía - Inicio',
+        loadComponent: () =>
+          import('./features/avaluos-en-garantia/step1-home/home').then(
+            (m) => m.AvaluosHomeComponent
+          ),
+      },
+      {
+        path: 'solicitud',
+        title: 'Avalúos en Garantía - Solicitud',
+        loadComponent: () =>
+          import('./features/avaluos-en-garantia/step2-application/application').then(
+            (m) => m.AvaluosApplicationComponent
+          ),
+      },
+      {
+        path: 'proceso',
+        title: 'Avalúos en Garantía - Proceso',
+        loadComponent: () =>
+          import('./features/avaluos-en-garantia/step3-process/process').then(
+            (m) => m.AvaluosProcessComponent
+          ),
+      },
+      {
+        path: 'respuesta',
+        title: 'Avalúos en Garantía - Respuesta',
+        loadComponent: () =>
+          import('./features/avaluos-en-garantia/step4-response/response').then(
+            (m) => m.AvaluosResponseComponent
+          ),
+      },
+      {
+        path: '**',
+        redirectTo: 'inicio',
+      },
+    ],
   },
   {
     path: '',

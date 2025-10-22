@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, Renderer2, ChangeDetectorRef, Optional } from '@angular/core';
 
-import { StepperService, ValorYaStep } from '../../../core/services/stepper.service';
+import { StepperService } from '../../../core/services/stepper.service';
+import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
 
 @Component({
   selector: 'app-stepper',
@@ -9,16 +10,24 @@ import { StepperService, ValorYaStep } from '../../../core/services/stepper.serv
   styleUrls: ['./stepper.css'],
 })
 export class StepperComponent implements OnInit {
-  stepperService = inject(StepperService);
+  stepperService: any;
   private cdr = inject(ChangeDetectorRef);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
 
-  currentStep: ValorYaStep = ValorYaStep.INICIO;
+  currentStep: number = 1;
   progressPercentage: string = '15%';
 
+  constructor(
+    @Optional() private valorYaStepperService: StepperService,
+    @Optional() private avaluosStepperService: AvaluosStepperService
+  ) {
+    // Usa el servicio que esté disponible
+    this.stepperService = this.avaluosStepperService || this.valorYaStepperService;
+  }
+
   ngOnInit(): void {
-    this.stepperService.currentStep$.subscribe((step) => {
+    this.stepperService.currentStep$.subscribe((step: number) => {
       this.currentStep = step;
       this.progressPercentage = this.stepperService.getProgressPercentage();
       this.cdr.detectChanges();
@@ -26,11 +35,11 @@ export class StepperComponent implements OnInit {
     });
   }
 
-  isStepActive(step: ValorYaStep): boolean {
+  isStepActive(step: number): boolean {
     return this.stepperService.isStepActive(step);
   }
 
-  isCurrentStep(step: ValorYaStep): boolean {
+  isCurrentStep(step: number): boolean {
     return this.currentStep === step;
   }
 
