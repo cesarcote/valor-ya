@@ -1,11 +1,50 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  signal,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 
+interface BackendResponse {
+  success: boolean;
+  message: string;
+  data: {
+    infoGeografica: {
+      areaPoligono: number;
+      longitudPoligono: number;
+      coordenadasPoligono: number[][][];
+    };
+    infoConsultaPredio: {
+      chip: string;
+      loteid: string;
+    };
+    infoAdicional: {
+      municipio: string;
+      localidad: string;
+      barrio: string;
+      direccion: string;
+      tipoPredio: string;
+      estrato: string;
+      areaConstruidaPrivada: string;
+      edad: string;
+    };
+  };
+  error: null | string;
+}
+
 @Component({
   selector: 'app-map',
+  imports: [CommonModule],
   templateUrl: './map.html',
   styleUrls: ['./map.css'],
 })
@@ -16,6 +55,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private map!: L.Map;
   private marker!: L.Marker;
   private loteLayer?: L.Polygon;
+
+  isLoadingUbicacion = signal(false);
+  ubicacionData = signal<BackendResponse | null>(null);
 
   ngOnInit(): void {
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -62,6 +104,128 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         marker.bindPopup(popupText);
       }
     }
+  }
+
+  private getUbicacionFromBackend(): Observable<BackendResponse> {
+    const mockResponse: BackendResponse = {
+      success: true,
+      message: 'Consulta catastral realizada exitosamente',
+      data: {
+        infoGeografica: {
+          areaPoligono: 451.58018913,
+          longitudPoligono: 90.1995572949003,
+          coordenadasPoligono: [
+            [
+              [-74.13142385200001, 4.718488246999982],
+              [-74.13149593100002, 4.718488249000018],
+              [-74.13149593000003, 4.718528927000023],
+              [-74.13144637599999, 4.718528925999976],
+              [-74.13142385100002, 4.718528924999987],
+              [-74.131396822, 4.7185289239999975],
+              [-74.131396822, 4.718488246999982],
+              [-74.13142385200001, 4.718488246999982],
+            ],
+          ],
+        },
+        infoConsultaPredio: {
+          chip: 'AAA0228WRAW',
+          loteid: '008213033003',
+        },
+        infoAdicional: {
+          municipio: 'Bogotá D.C.',
+          localidad: 'Suba',
+          barrio: 'Costa Azul',
+          direccion: 'KR 119B 73B 15',
+          tipoPredio: 'Residencial',
+          estrato: '3',
+          areaConstruidaPrivada: '120',
+          edad: '10-20',
+        },
+      },
+      error: null,
+    };
+
+    return of(mockResponse).pipe(delay(500));
+  }
+
+  private parseCoordenadasPoligono(coordenadas: number[][][]): L.LatLngExpression[] {
+    if (!coordenadas || coordenadas.length === 0) {
+      console.error('Coordenadas vacías o inválidas');
+      return [];
+    }
+
+    const ring = coordenadas[0];
+
+    if (!ring || ring.length === 0) {
+      console.error('Ring principal vacío o inválido');
+      return [];
+    }
+
+    return ring.map((coord) => [coord[1], coord[0]]);
+  }
+
+  buscarUbicacionDesdeBackend(): void {
+    this.isLoadingUbicacion.set(true);
+
+    this.getUbicacionFromBackend().subscribe({
+      next: (response) => {
+        this.isLoadingUbicacion.set(false);
+        this.ubicacionData.set(response);
+
+        if (response.success && response.data.infoGeografica.coordenadasPoligono) {
+          this.dibujarPoligonoDesdeBackend(response);
+        }
+      },
+      error: (error) => {
+        this.isLoadingUbicacion.set(false);
+        console.error('Error al obtener ubicación del backend:', error);
+      },
+    });
+  }
+
+  private dibujarPoligonoDesdeBackend(response: BackendResponse): void {
+    if (this.loteLayer) {
+      this.map.removeLayer(this.loteLayer);
+    }
+
+    const coordinates = this.parseCoordenadasPoligono(
+      response.data.infoGeografica.coordenadasPoligono
+    );
+
+    if (coordinates.length === 0) {
+      console.error('No se pudieron parsear las coordenadas');
+      return;
+    }
+
+    this.loteLayer = L.polygon(coordinates, {
+      color: '#e3192f',
+      weight: 3,
+      fillColor: '#FEB400',
+      fillOpacity: 0.3,
+    }).addTo(this.map);
+
+    const bounds = this.loteLayer.getBounds();
+    this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
+
+    if (this.marker) {
+      this.map.removeLayer(this.marker);
+    }
+
+    const center = bounds.getCenter();
+    const popupContent = `
+      <div style="font-family: Verdana, sans-serif; font-size: 13px;">
+        <strong>${response.data.infoAdicional.direccion}</strong><br>
+        <strong>CHIP:</strong> ${response.data.infoConsultaPredio.chip}<br>
+        <strong>Lote ID:</strong> ${response.data.infoConsultaPredio.loteid}<br>
+        <strong>Área:</strong> ${response.data.infoGeografica.areaPoligono.toFixed(2)} m²<br>
+        <strong>Estrato:</strong> ${response.data.infoAdicional.estrato}
+      </div>
+    `;
+
+    this.marker = L.marker([center.lat, center.lng])
+      .addTo(this.map)
+      .bindPopup(popupContent)
+      .openPopup();
   }
 
   ubicarLotePorCodigo(lotcodigo: string): void {
