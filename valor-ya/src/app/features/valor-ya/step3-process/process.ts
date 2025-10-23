@@ -74,9 +74,7 @@ export class ProcessComponent implements OnInit {
   }
 
   onNoEsCorrecta(): void {
-    this.stateService.setMostrarResultado(false);
-    this.stepperService.setStep(ValorYaStep.SOLICITUD);
-    this.router.navigate(['/valor-ya/solicitud']);
+    this.router.navigate(['/valor-ya/complementar']);
   }
 
   onContinuar(): void {

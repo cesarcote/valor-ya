@@ -1,0 +1,123 @@
+.entradas-de-texto-govco {
+  padding: 0;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.entradas-de-texto-govco label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font: normal normal normal 15px/22px Verdana;
+  letter-spacing: 0px;
+  color: #4c4c4c;
+  text-align: left;
+  opacity: 1;
+}
+
+.entradas-de-texto-govco label .required {
+  color: #a80521;
+  margin-left: 0.25rem;
+}
+
+.container-input-texto-govco {
+  position: relative;
+}
+
+.entradas-de-texto-govco textarea {
+  outline: none;
+  background-color: #ffffff;
+  border: 0.094rem solid #737373;
+  border-radius: 0.313rem;
+  width: 100%;
+  padding: 0.5rem;
+  color: #4b4b4b;
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+  display: block;
+  height: auto;
+  box-sizing: border-box;
+  line-height: 1.375rem;
+  font-family: Verdana, sans-serif;
+}
+
+.entradas-de-texto-govco textarea:focus {
+  border: 0.094rem solid #3366cc;
+  box-shadow: 0 0.25rem 0 #3366cc24;
+}
+
+.entradas-de-texto-govco textarea:disabled {
+  background-color: #f2f2f2;
+  border: 0.094rem solid #bababa;
+  color: #bababa;
+  cursor: not-allowed;
+}
+
+.container-input-texto-govco textarea.error {
+  border: #a80521 solid 0.094rem;
+  background-color: #fff5f5;
+}
+
+.container-input-texto-govco textarea.success {
+  border: #068460 solid 0.094rem;
+}
+
+.entradas-de-texto-govco textarea.error:focus {
+  border: 0.094rem solid #a80521;
+  outline-offset: max(0.125rem, 0.15em);
+  outline: max(0.125rem, 0.15em) solid #000000;
+}
+
+.entradas-de-texto-govco textarea.success:focus {
+  border: 0.094rem solid #068460;
+  outline-offset: max(0.125rem, 0.15em);
+  outline: max(0.125rem, 0.15em) solid #000000;
+}
+
+.counter-entradas-de-texto-govco {
+  text-align: right;
+  font-size: 0.875rem;
+  color: #737373;
+  margin-bottom: 0.5rem;
+}
+
+.number-entradas-de-texto-govco {
+  font-weight: 600;
+}
+
+.error-texto-govco {
+  display: block;
+  color: #a80521;
+  font-size: 0.75rem;
+  margin-top: 0.375rem;
+}
+
+.success-texto-govco {
+  display: block;
+  color: #068460;
+  font-size: 0.75rem;
+  margin-top: 0.375rem;
+}
+
+.info-entradas-de-texto-govco {
+  display: block;
+  font-size: 0.75rem;
+  color: #737373;
+  margin-top: 0.25rem;
+  font-family: Verdana, sans-serif;
+}
+
+.alert-entradas-de-texto-govco {
+  font-family: Verdana, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .entradas-de-texto-govco textarea {
+    font-size: 0.875rem;
+  }
+
+  .entradas-de-texto-govco label {
+    font-size: 0.875rem;
+  }
+}

@@ -1,0 +1,49 @@
+<div class="entradas-de-texto-govco">
+  @if (label.trim() != '') {
+  <label [for]="dataId">
+    {{ label }}
+    @if (isRequired()) {
+    <span class="required">*</span>
+    }
+  </label>
+  }
+
+  <div class="container-input-texto-govco">
+    <textarea
+      [attr.id]="dataId"
+      [placeholder]="placeholder"
+      [attr.rows]="rows"
+      [name]="name"
+      [attr.cols]="cols"
+      [ngStyle]="{ resize: isResizable ? 'both' : 'none' }"
+      [ngClass]="
+        ({
+          errores: control.errors,
+          dirty: control.dirty,
+          valid: control.valid,
+          touched: control.touched
+        }
+        | validateStatusField)
+      "
+      [formControl]="control"
+      [attr.maxLength]="maxLength"
+    ></textarea>
+
+    <div class="counter-entradas-de-texto-govco">
+      <span class="number-entradas-de-texto-govco">{{ totalChart() }}</span>
+      <span> de {{ maxLength }}</span>
+    </div>
+
+    @if (control.invalid && (control.touched || control.dirty)) {
+    <span class="error-texto-govco alert-entradas-de-texto-govco" role="alert" aria-live="assertive">
+      {{ control.errors | validateMessageField }}
+    </span>
+    } @else if (control.valid && (control.touched || control.dirty)) {
+    <span class="success-texto-govco alert-entradas-de-texto-govco"> Campo válido </span>
+    } @if (note.trim() !== '' && !control.invalid) {
+    <span class="info-entradas-de-texto-govco">
+      {{ note }}
+    </span>
+    }
+  </div>
+</div>

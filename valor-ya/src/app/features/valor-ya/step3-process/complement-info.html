@@ -1,0 +1,123 @@
+<app-stepper></app-stepper>
+
+<div class="step-container">
+  <div class="step-header">
+    <h2>Completa la información de tu predio</h2>
+    <p class="subtitle">Ayúdanos a complementar la información de tu predio</p>
+  </div>
+
+  <form [formGroup]="complementForm" class="complement-form">
+    <!-- Tipo de predio -->
+    <div class="form-section">
+      <h3>Tipo de predio</h3>
+
+      <app-select
+        dataId="tipoPredio"
+        label="Tipo de predio"
+        [formControl]="tipoPredioControl"
+        [options]="tiposPredio"
+        placeholder="Selecciona una opción"
+      ></app-select>
+
+      @if (tipoPredioControl.value === 'otro') {
+      <app-input
+        type="text"
+        id="otroTipoPredio"
+        label="Otro tipo de predio"
+        [formControl]="otroTipoPredioControl"
+        placeholder="Especifique el tipo de predio"
+      ></app-input>
+      }
+    </div>
+
+    <!-- Características del predio -->
+    <div class="form-section">
+      <h3>Características del predio</h3>
+      <div class="form-row">
+        <app-input
+          type="number"
+          id="numeroHabitaciones"
+          label="Número de habitaciones"
+          [formControl]="numeroHabitacionesControl"
+          [min]="0"
+        ></app-input>
+
+        <app-input
+          type="number"
+          id="numeroBanos"
+          label="Número de baños"
+          [formControl]="numeroBanosControl"
+          [min]="0"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="number"
+          id="areaConstruida"
+          label="Área construida en m²"
+          [formControl]="areaConstruidaControl"
+          [min]="1"
+        ></app-input>
+
+        <app-input
+          type="number"
+          id="edad"
+          label="Edad"
+          [formControl]="edadControl"
+          [min]="0"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="number"
+          id="estrato"
+          label="Estrato"
+          [formControl]="estratoControl"
+          [min]="1"
+          [max]="6"
+        ></app-input>
+      </div>
+    </div>
+
+    <!-- Equipamientos y garajes -->
+    <div class="form-section">
+      <h3>Equipamientos y garajes</h3>
+      <div class="form-row">
+        <app-input
+          type="number"
+          id="numeroAscensores"
+          label="Número de ascensores"
+          [formControl]="numeroAscensoresControl"
+          [min]="0"
+        ></app-input>
+
+        <app-input
+          type="number"
+          id="numeroParqueaderos"
+          label="Número de parqueaderos"
+          [formControl]="numeroParqueaderosControl"
+          [min]="0"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="number"
+          id="numeroDepositos"
+          label="Número de depósitos"
+          [formControl]="numeroDepositosControl"
+          [min]="0"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()">
+      </app-button>
+      <app-button text="Consultar" variant="fill" type="button" (clicked)="onConsultar()">
+      </app-button>
+    </div>
+  </form>
+</div>

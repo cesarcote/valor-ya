@@ -1,0 +1,43 @@
+<div class="entradas-de-texto-govco">
+  <label [for]="dataId">
+    {{ label }}
+    @if (isRequired()) {
+    <span class="required">*</span>
+    }
+  </label>
+  <select
+    [attr.id]="dataId"
+    [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
+    [formControl]="control"
+    [ngClass]="{
+      'error-border':
+        ({
+          errores: control.errors,
+          dirty: control.dirty,
+          valid: control.valid,
+          touched: control.touched
+        }
+        | validateStatusField) === 'error',
+      'success-border':
+        ({
+          errores: control.errors,
+          dirty: control.dirty,
+          valid: control.valid,
+          touched: control.touched
+        }
+        | validateStatusField) === 'success'
+    }"
+  >
+    <option selected disabled value="">{{ placeholder }}</option>
+    @for (option of options; track option.value) {
+    <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+  @if (control.invalid && (control.touched || control.dirty)) {
+  <span class="error-texto-govco alert-entradas-de-texto-govco" role="alert" aria-live="assertive">
+    {{ control.errors | validateMessageField }}
+  </span>
+  } @else if (control.valid && (control.touched || control.dirty)) {
+  <span class="success-texto-govco alert-entradas-de-texto-govco"> Campo válido </span>
+  }
+</div>

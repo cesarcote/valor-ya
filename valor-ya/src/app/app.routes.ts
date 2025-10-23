@@ -37,6 +37,14 @@ export const routes: Routes = [
           import('./features/valor-ya/step3-process/process').then((m) => m.ProcessComponent),
       },
       {
+        path: 'complementar',
+        title: 'Valor YA - Complementar Información',
+        loadComponent: () =>
+          import('./features/valor-ya/step3-process/complement-info').then(
+            (m) => m.ComplementInfoComponent
+          ),
+      },
+      {
         path: 'respuesta',
         title: 'Valor YA - Resultado de tu Consulta',
         canActivate: [canAccessRespuestaGuard],

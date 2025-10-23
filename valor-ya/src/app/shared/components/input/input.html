@@ -16,6 +16,8 @@
       [placeholder]="placeholder"
       [id]="id"
       [attr.readonly]="readonly ? '' : null"
+      [attr.min]="min"
+      [attr.max]="max"
       [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
       [class.error]="showError"
       [class.success]="showSuccess"
