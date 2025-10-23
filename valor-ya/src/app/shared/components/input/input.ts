@@ -9,6 +9,7 @@ import {
   AfterViewInit,
   Renderer2,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -19,7 +20,7 @@ import {
 
 @Component({
   selector: 'app-input',
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -35,11 +36,14 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() id: string = '';
-  @Input() note: string = '';
+  @Input() name: string = '';
+  @Input() helpText: string = '';
   @Input() readonly: boolean = false;
   @Input() min?: number;
   @Input() max?: number;
-  @Input() formControl!: FormControl;
+  @Input() maxLength?: number;
+  @Input() minLength?: number;
+  @Input() formCtr: any; // ← Cambiado de formControl a formCtr
 
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
@@ -50,8 +54,8 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
   onTouched: () => void = () => {};
 
   ngOnInit(): void {
-    if (this.formControl) {
-      this.control = this.formControl;
+    if (this.formCtr) {
+      this.control = this.formCtr;
     }
   }
 

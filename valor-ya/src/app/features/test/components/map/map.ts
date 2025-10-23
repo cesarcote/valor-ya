@@ -6,7 +6,6 @@ import * as esri from 'esri-leaflet';
 
 @Component({
   selector: 'app-map',
-  imports: [],
   templateUrl: './map.html',
   styleUrls: ['./map.css'],
 })

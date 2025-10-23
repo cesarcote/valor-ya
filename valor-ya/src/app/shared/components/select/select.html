@@ -1,12 +1,16 @@
-<div class="entradas-de-texto-govco">
-  <label [for]="dataId">
+<div class="custom-dropdown-container">
+  @if (label.trim() !== '') {
+  <label [for]="name || dataId" [ngClass]="{ disabled: control.disabled }">
     {{ label }}
     @if (isRequired()) {
-    <span class="required">*</span>
+    <span>*</span>
     }
   </label>
+  }
+
   <select
-    [attr.id]="dataId"
+    [attr.id]="name || dataId"
+    [name]="name"
     [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
     [formControl]="control"
     [ngClass]="{
@@ -15,14 +19,16 @@
           errores: control.errors,
           dirty: control.dirty,
           valid: control.valid,
-          touched: control.touched
+          touched: control.touched,
+          status: control.status
         } | validateStatusField) === 'error',
       'success-border':
         ({
           errores: control.errors,
           dirty: control.dirty,
           valid: control.valid,
-          touched: control.touched
+          touched: control.touched,
+          status: control.status
         } | validateStatusField) === 'success'
     }"
   >
@@ -31,11 +37,12 @@
     <option [value]="option.value">{{ option.label }}</option>
     }
   </select>
-  @if (control.invalid && (control.touched || control.dirty)) {
-  <span class="error-texto-govco alert-entradas-de-texto-govco" role="alert" aria-live="assertive">
-    {{ control.errors | validateMessageField }}
-  </span>
-  } @else if (control.valid && (control.touched || control.dirty)) {
-  <span class="success-texto-govco alert-entradas-de-texto-govco"> Campo válido </span>
+
+  @if (helpText && !control.invalid) {
+  <p class="help-input-gov-text">{{ helpText }}</p>
+  } @if (control.invalid && (control.touched || control.dirty)) {
+  <div class="error-container" role="alert" aria-live="assertive">
+    <span>{{ control.errors | validateMessageField }}</span>
+  </div>
   }
 </div>

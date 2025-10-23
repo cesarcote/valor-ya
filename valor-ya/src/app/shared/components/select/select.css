@@ -1,90 +1,117 @@
-.entradas-de-texto-govco {
-  padding: 0;
+.custom-dropdown-container {
+  font: normal normal normal 15px/22px Verdana;
+  color: #4c4c4c;
   margin-bottom: 1rem;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
-.entradas-de-texto-govco label {
+.custom-dropdown-container label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 10px;
   font: normal normal normal 15px/22px Verdana;
   letter-spacing: 0px;
   color: #4c4c4c;
   text-align: left;
-  opacity: 1;
 }
 
-.entradas-de-texto-govco label .required {
+.custom-dropdown-container label span {
   color: #a80521;
   margin-left: 0.25rem;
 }
 
-.entradas-de-texto-govco select {
-  outline: none;
-  background-color: #ffffff;
-  border: 0.094rem solid #737373;
-  border-radius: 0.313rem;
+.custom-dropdown-container label.disabled {
+  color: #bababa;
+}
+
+.custom-dropdown-container select {
+  display: inline-block;
+  position: relative;
+  border: 1.5px solid #737373;
   width: 100%;
-  padding: 0.5rem;
-  color: #4b4b4b;
-  font-size: 16px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: white;
   margin-bottom: 0.5rem;
-  display: inline;
-  height: auto;
-  box-sizing: inherit;
-  line-height: 1.375rem;
+  cursor: pointer;
+  outline: none;
+  padding: 0 16px;
+  font-size: 16px;
+  font-family: Verdana, sans-serif;
+  color: #4c4c4c;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233366cc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
 
-.entradas-de-texto-govco select:focus-within {
-  border: 0.094rem solid #1653c6;
+.custom-dropdown-container select:focus,
+.custom-dropdown-container select:hover {
+  border: 1.5px solid #3366cc;
+  box-shadow: 0 0.25rem 0 #3366cc24;
 }
 
-.entradas-de-texto-govco select.error-border {
-  border: 1px solid #a80521;
+.custom-dropdown-container select:focus {
+  outline: none;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
 }
 
-.entradas-de-texto-govco select.success-border {
-  border: 1px solid #068460;
+.custom-dropdown-container select.error-border {
+  border: 1.5px solid #a80521;
+  color: #a80521;
+  box-shadow: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a80521'%3e%3cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3e%3c/svg%3e");
 }
 
-.entradas-de-texto-govco select:focus {
-  outline-offset: max(0.125rem, 0.15em);
-  outline: max(0.125rem, 0.15em) solid #000000;
+.custom-dropdown-container select.success-border {
+  border: 1.5px solid #068460;
+  color: #068460;
 }
 
-.entradas-de-texto-govco select:disabled {
+.custom-dropdown-container select:disabled {
+  pointer-events: none;
+  border: 1.5px solid #bababa;
   background-color: #f2f2f2;
-  border-color: #bababa;
   color: #bababa;
   cursor: not-allowed;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bababa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
-.error-texto-govco {
-  display: block;
+.custom-dropdown-container select option {
+  padding: 11px 16px 10px 16px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: white;
+  color: #4c4c4c;
+}
+
+.custom-dropdown-container select option:hover {
+  background-color: #e6effd;
+}
+
+.error-container {
   color: #a80521;
   font-size: 0.75rem;
   margin-top: 0.375rem;
+  font-family: Verdana, sans-serif;
 }
 
-.success-texto-govco {
-  display: block;
-  color: #068460;
+.help-input-gov-text {
+  color: #737373;
   font-size: 0.75rem;
-  margin-top: 0.375rem;
-}
-
-.alert-entradas-de-texto-govco {
+  margin-bottom: 0.5rem;
   font-family: Verdana, sans-serif;
 }
 
 @media (max-width: 768px) {
-  .entradas-de-texto-govco select {
+  .custom-dropdown-container select {
     font-size: 0.875rem;
   }
 
-  .entradas-de-texto-govco label {
+  .custom-dropdown-container label {
     font-size: 0.875rem;
   }
 }

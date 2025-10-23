@@ -1,54 +1,45 @@
-<div class="entradas-de-texto-govco">
+<div class="input-text-gov-container">
   @if (label.trim() !== '') {
-  <label [for]="id">
+  <label [for]="name || id" [ngClass]="{ disabled: control.disabled }">
     {{ label }}
     @if (isRequired) {
-    <span class="required">*</span>
+    <span>*</span>
     }
   </label>
   }
 
-  <div class="container-input-texto-govco">
+  <div class="input-wrapper">
     <input
       #inputElement
       [type]="type"
       [formControl]="control"
       [placeholder]="placeholder"
-      [id]="id"
+      [id]="name || id"
+      [name]="name"
       [attr.readonly]="readonly ? '' : null"
       [attr.min]="min"
       [attr.max]="max"
+      [attr.minlength]="minLength"
+      [attr.maxlength]="maxLength"
+      [attr.inputmode]="type === 'number' ? 'numeric' : type"
       [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
-      [class.error]="showError"
-      [class.success]="showSuccess"
+      [ngClass]="{ withValue: control.value != null && control.value !== '' }"
       (blur)="onTouched()"
       (input)="onInputChange()"
     />
 
     @if (showSuccess) {
-    <div
-      class="icon-entradas-de-texto-govco success-icon-entradas-de-texto-govco"
-      aria-label="success"
-      aria-hidden="true"
-    ></div>
+    <span class="validator-icon success-icon" aria-label="success" aria-hidden="true">✓</span>
     } @if (showError) {
-    <div
-      class="icon-entradas-de-texto-govco error-icon-entradas-de-texto-govco"
-      aria-label="error"
-      aria-hidden="true"
-    ></div>
+    <span class="validator-icon error-icon" aria-label="error" aria-hidden="true">!</span>
     }
   </div>
 
-  @if (showError) {
-  <span class="error-texto-govco alert-entradas-de-texto-govco" role="alert" aria-live="assertive">
-    {{ getErrorMessage() }}
-  </span>
-  } @if (showSuccess) {
-  <span class="success-texto-govco alert-entradas-de-texto-govco"> Campo válido </span>
-  } @if (note.trim() !== '' && !control.invalid) {
-  <span class="info-entradas-de-texto-govco">
-    {{ note }}
-  </span>
+  @if (helpText && !control.invalid) {
+  <p class="help-input-gov-text">{{ helpText }}</p>
+  } @if (showError) {
+  <div class="error-container" role="alert" aria-live="assertive">
+    <span>{{ getErrorMessage() }}</span>
+  </div>
   }
 </div>

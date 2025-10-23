@@ -39,18 +39,22 @@ export interface SelectOption {
 export class SelectComponent implements ControlValueAccessor, OnInit {
   @Input() dataId: string = '';
   @Input() label: string = '';
+  @Input() name: string = '';
   @Input() placeholder: string = 'Selecciona una opción';
   @Input() options: SelectOption[] = [];
   @Input() disabled: boolean = false;
-  @Input() formControl!: FormControl;
+  @Input() helpText: string = '';
+  @Input() formCtr: any;
 
-  control = new FormControl();
+  control!: FormControl;
   onChange: any = (value: any) => {};
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    if (this.formControl) {
-      this.control = this.formControl;
+    if (this.formCtr) {
+      this.control = this.formCtr;
+    } else {
+      this.control = new FormControl();
     }
   }
 

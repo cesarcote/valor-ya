@@ -14,7 +14,7 @@
       <app-select
         dataId="tipoPredio"
         label="Tipo de predio"
-        [formControl]="tipoPredioControl"
+        [formCtr]="tipoPredioControl"
         [options]="tiposPredio"
         placeholder="Selecciona una opción"
       ></app-select>
@@ -24,7 +24,7 @@
         type="text"
         id="otroTipoPredio"
         label="Otro tipo de predio"
-        [formControl]="otroTipoPredioControl"
+        [formCtr]="otroTipoPredioControl"
         placeholder="Especifique el tipo de predio"
       ></app-input>
       }
@@ -38,7 +38,7 @@
           type="number"
           id="numeroHabitaciones"
           label="Número de habitaciones"
-          [formControl]="numeroHabitacionesControl"
+          [formCtr]="numeroHabitacionesControl"
           [min]="0"
         ></app-input>
 
@@ -46,7 +46,7 @@
           type="number"
           id="numeroBanos"
           label="Número de baños"
-          [formControl]="numeroBanosControl"
+          [formCtr]="numeroBanosControl"
           [min]="0"
         ></app-input>
       </div>
@@ -56,7 +56,7 @@
           type="number"
           id="areaConstruida"
           label="Área construida en m²"
-          [formControl]="areaConstruidaControl"
+          [formCtr]="areaConstruidaControl"
           [min]="1"
         ></app-input>
 
@@ -64,7 +64,7 @@
           type="number"
           id="edad"
           label="Edad"
-          [formControl]="edadControl"
+          [formCtr]="edadControl"
           [min]="0"
         ></app-input>
       </div>
@@ -74,7 +74,7 @@
           type="number"
           id="estrato"
           label="Estrato"
-          [formControl]="estratoControl"
+          [formCtr]="estratoControl"
           [min]="1"
           [max]="6"
         ></app-input>
@@ -89,7 +89,7 @@
           type="number"
           id="numeroAscensores"
           label="Número de ascensores"
-          [formControl]="numeroAscensoresControl"
+          [formCtr]="numeroAscensoresControl"
           [min]="0"
         ></app-input>
 
@@ -97,7 +97,7 @@
           type="number"
           id="numeroParqueaderos"
           label="Número de parqueaderos"
-          [formControl]="numeroParqueaderosControl"
+          [formCtr]="numeroParqueaderosControl"
           [min]="0"
         ></app-input>
       </div>
@@ -107,7 +107,7 @@
           type="number"
           id="numeroDepositos"
           label="Número de depósitos"
-          [formControl]="numeroDepositosControl"
+          [formCtr]="numeroDepositosControl"
           [min]="0"
         ></app-input>
       </div>
