@@ -202,11 +202,33 @@ h3 {
   font-weight: 600;
 }
 
+/* Confirmation Section */
+.confirmation-section {
+  margin-top: 2rem;
+}
+
+.confirmation-question {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
 .action-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
+}
+
+.action-buttons app-button {
+  min-width: 150px;
+}
+
+.action-buttons app-button ::ng-deep .btn-govco {
+  width: 100%;
+  margin-right: 0;
 }
 
 .btn-primary,

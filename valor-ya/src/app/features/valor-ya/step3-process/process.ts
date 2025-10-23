@@ -73,13 +73,7 @@ export class ProcessComponent implements OnInit {
     });
   }
 
-  onVolver(): void {
-    this.stateService.setMostrarResultado(false);
-    this.stepperService.setStep(ValorYaStep.SOLICITUD);
-    this.router.navigate(['/valor-ya/solicitud']);
-  }
-
-  onNuevaBusqueda(): void {
+  onNoEsCorrecta(): void {
     this.stateService.setMostrarResultado(false);
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
     this.router.navigate(['/valor-ya/solicitud']);
