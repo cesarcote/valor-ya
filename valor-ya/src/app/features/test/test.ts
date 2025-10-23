@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +13,8 @@ import { CatastroResponse } from '../../core/models/catastro-response.model';
   styleUrls: ['./test.css'],
 })
 export class TestComponent {
+  @ViewChild(MapComponent) mapComponent!: MapComponent;
+
   private catastroService = inject(CatastroService);
   private cd = inject(ChangeDetectorRef);
 
@@ -35,6 +37,11 @@ export class TestComponent {
       next: (response) => {
         this.responseForm1 = response;
         this.loadingForm1 = false;
+
+        if (response.LOTEID) {
+          this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
+        }
+
         this.cd.detectChanges();
       },
       error: (error) => {
@@ -54,6 +61,11 @@ export class TestComponent {
       next: (response) => {
         this.responseForm2 = response;
         this.loadingForm2 = false;
+
+        if (response.LOTEID) {
+          this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
+        }
+
         this.cd.detectChanges();
       },
       error: (error) => {

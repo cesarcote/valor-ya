@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject } from '@angular/core';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 
@@ -11,8 +13,10 @@ import * as esri from 'esri-leaflet';
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
 
+  private http = inject(HttpClient);
   private map!: L.Map;
   private marker!: L.Marker;
+  private loteLayer?: L.Polygon;
 
   ngOnInit(): void {
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -59,6 +63,50 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         marker.bindPopup(popupText);
       }
     }
+  }
+
+  ubicarLotePorCodigo(lotcodigo: string): void {
+    const url = `https://sig.catastrobogota.gov.co/arcgis/rest/services/catastro/lote/MapServer/0/query?returnGeometry=true&where=LOTCODIGO%20%3D%20%27${lotcodigo}%27&outSr=4326&outFields=*&f=json`;
+
+    this.http.get<any>(url).subscribe({
+      next: (response) => {
+        if (response.features && response.features.length > 0) {
+          const feature = response.features[0];
+          const rings = feature.geometry.rings;
+
+          if (this.loteLayer) {
+            this.map.removeLayer(this.loteLayer);
+          }
+
+          const coordinates = rings.map((ring: number[][]) =>
+            ring.map((coord: number[]) => [coord[1], coord[0]])
+          );
+
+          this.loteLayer = L.polygon(coordinates, {
+            color: '#e3192f',
+            weight: 3,
+            fillColor: '#FEB400',
+            fillOpacity: 0.3,
+          }).addTo(this.map);
+
+          const bounds = this.loteLayer.getBounds();
+          this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
+
+          if (this.marker) {
+            this.map.removeLayer(this.marker);
+          }
+
+          const center = bounds.getCenter();
+          this.marker = L.marker([center.lat, center.lng])
+            .addTo(this.map)
+            .bindPopup(`LOTE: ${lotcodigo}`)
+            .openPopup();
+        }
+      },
+      error: (error) => {
+        console.error('Error al buscar lote:', error);
+      },
+    });
   }
 
   private initMap(): void {
