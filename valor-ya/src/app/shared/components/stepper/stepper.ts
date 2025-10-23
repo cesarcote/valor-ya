@@ -1,12 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ElementRef,
-  Renderer2,
-  ChangeDetectorRef,
-  Optional,
-} from '@angular/core';
+import { Component, inject, OnInit, ElementRef, Renderer2, Optional, signal } from '@angular/core';
 
 import { ValorYaStepperService } from '../../../core/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
@@ -19,12 +11,11 @@ import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.se
 })
 export class StepperComponent implements OnInit {
   stepperService: any;
-  private cdr = inject(ChangeDetectorRef);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
 
-  currentStep: number = 1;
-  progressPercentage: string = '15%';
+  currentStep = signal(1);
+  progressPercentage = signal('15%');
 
   constructor(
     @Optional() private valorYaStepperService: ValorYaStepperService,
@@ -35,9 +26,8 @@ export class StepperComponent implements OnInit {
 
   ngOnInit(): void {
     this.stepperService.currentStep$.subscribe((step: number) => {
-      this.currentStep = step;
-      this.progressPercentage = this.stepperService.getProgressPercentage();
-      this.cdr.detectChanges();
+      this.currentStep.set(step);
+      this.progressPercentage.set(this.stepperService.getProgressPercentage());
       this.updateStepColors();
     });
   }
@@ -47,7 +37,7 @@ export class StepperComponent implements OnInit {
   }
 
   isCurrentStep(step: number): boolean {
-    return this.currentStep === step;
+    return this.currentStep() === step;
   }
 
   private updateStepColors(): void {
@@ -57,7 +47,7 @@ export class StepperComponent implements OnInit {
       const circulo = item.querySelector('.indicator-linea-avance-govco');
       const stepNumber = index + 1;
 
-      if (stepNumber <= this.currentStep) {
+      if (stepNumber <= this.currentStep()) {
         this.renderer.setStyle(circulo, 'color', 'white');
       } else {
         this.renderer.setStyle(circulo, 'color', '#3366cc');

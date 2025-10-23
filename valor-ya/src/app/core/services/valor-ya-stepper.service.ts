@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export enum ValorYaStep {
-  INICIO = 1, // Home: Selección del tipo de búsqueda
-  SOLICITUD = 2, // Formularios + Resultado de búsqueda
-  PROCESO = 3, // Validación/Cálculo del valor
-  RESPUESTA = 4, // Resultado final con PDF
+  INICIO = 1,
+  SOLICITUD = 2,
+  PROCESO = 3,
+  RESPUESTA = 4,
 }
 
 export interface StepConfig {
@@ -51,17 +51,14 @@ export class ValorYaStepperService {
 
   constructor() {}
 
-  // Obtener step actual
   getCurrentStep(): ValorYaStep {
     return this.currentStepSubject.value;
   }
 
-  // Cambiar a un step específico
   setStep(step: ValorYaStep): void {
     this.currentStepSubject.next(step);
   }
 
-  // Avanzar al siguiente step
   nextStep(): void {
     const current = this.currentStepSubject.value;
     if (current < ValorYaStep.RESPUESTA) {
@@ -69,7 +66,6 @@ export class ValorYaStepperService {
     }
   }
 
-  // Retroceder al step anterior
   previousStep(): void {
     const current = this.currentStepSubject.value;
     if (current > ValorYaStep.INICIO) {
@@ -77,22 +73,18 @@ export class ValorYaStepperService {
     }
   }
 
-  // Verificar si un step está activo
   isStepActive(step: ValorYaStep): boolean {
     return this.currentStepSubject.value >= step;
   }
 
-  // Obtener configuración de un step
   getStepConfig(step: ValorYaStep): StepConfig | undefined {
     return this.steps.find((s) => s.step === step);
   }
 
-  // Resetear al inicio
   reset(): void {
     this.currentStepSubject.next(ValorYaStep.INICIO);
   }
 
-  // Obtener porcentaje de progreso
   getProgressPercentage(): string {
     const config = this.getStepConfig(this.currentStepSubject.value);
     return config?.percentage || '0%';

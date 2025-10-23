@@ -1,7 +1,7 @@
 <div class="container-example-linea-avance-govco">
   <div class="linea-avance-govco h-linea-avance-govco">
     <div class="progress">
-      <div class="progress-bar" [style.width]="progressPercentage"></div>
+      <div class="progress-bar" [style.width]="progressPercentage()"></div>
     </div>
     <div class="items-header-linea-avance-govco">
       @for (stepConfig of stepperService.steps; track stepConfig.step) {

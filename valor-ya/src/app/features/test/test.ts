@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -16,62 +16,55 @@ export class TestComponent {
   @ViewChild(MapComponent) mapComponent!: MapComponent;
 
   private catastroService = inject(CatastroService);
-  private cd = inject(ChangeDetectorRef);
 
   direccion = 'KR 119B 73B 15';
-  responseForm1: CatastroResponse | null = null;
-  loadingForm1 = false;
-  errorForm1 = '';
+  responseForm1 = signal<CatastroResponse | null>(null);
+  loadingForm1 = signal(false);
+  errorForm1 = signal('');
 
   chip = 'AAA0228WRAW';
-  responseForm2: CatastroResponse | null = null;
-  loadingForm2 = false;
-  errorForm2 = '';
+  responseForm2 = signal<CatastroResponse | null>(null);
+  loadingForm2 = signal(false);
+  errorForm2 = signal('');
 
   buscarPorDireccion(): void {
-    this.loadingForm1 = true;
-    this.errorForm1 = '';
-    this.responseForm1 = null;
+    this.loadingForm1.set(true);
+    this.errorForm1.set('');
+    this.responseForm1.set(null);
 
     this.catastroService.buscarPorDireccion(this.direccion).subscribe({
       next: (response) => {
-        this.responseForm1 = response;
-        this.loadingForm1 = false;
+        this.responseForm1.set(response);
+        this.loadingForm1.set(false);
 
         if (response.LOTEID) {
           this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
         }
-
-        this.cd.detectChanges();
       },
       error: (error) => {
-        this.errorForm1 = `Error: ${error.message}`;
-        this.loadingForm1 = false;
-        this.cd.detectChanges();
+        this.errorForm1.set(`Error: ${error.message}`);
+        this.loadingForm1.set(false);
       },
     });
   }
 
   buscarPorChip(): void {
-    this.loadingForm2 = true;
-    this.errorForm2 = '';
-    this.responseForm2 = null;
+    this.loadingForm2.set(true);
+    this.errorForm2.set('');
+    this.responseForm2.set(null);
 
     this.catastroService.buscarPorChip(this.chip).subscribe({
       next: (response) => {
-        this.responseForm2 = response;
-        this.loadingForm2 = false;
+        this.responseForm2.set(response);
+        this.loadingForm2.set(false);
 
         if (response.LOTEID) {
           this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
         }
-
-        this.cd.detectChanges();
       },
       error: (error) => {
-        this.errorForm2 = `Error: ${error.message}`;
-        this.loadingForm2 = false;
-        this.cd.detectChanges();
+        this.errorForm2.set(`Error: ${error.message}`);
+        this.loadingForm2.set(false);
       },
     });
   }

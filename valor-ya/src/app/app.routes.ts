@@ -32,7 +32,6 @@ export const routes: Routes = [
       {
         path: 'proceso',
         title: 'Valor YA - Procesando Solicitud',
-        // canActivate: [canAccessProcesoGuard], // Temporalmente deshabilitado
         loadComponent: () =>
           import('./features/valor-ya/step3-process/process').then((m) => m.ProcessComponent),
       },

@@ -83,8 +83,6 @@ export class ComplementInfoComponent implements OnInit {
 
   onConsultar(): void {
     if (this.complementForm.valid) {
-      const complementData = this.complementForm.value;
-      console.log('Datos complementarios:', complementData);
       this.stepperService.setStep(ValorYaStep.RESPUESTA);
       this.router.navigate(['/valor-ya/respuesta']);
     } else {
