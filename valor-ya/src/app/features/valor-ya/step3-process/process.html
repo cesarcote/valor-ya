@@ -9,7 +9,8 @@
   @if (errorMessage) {
   <div class="error-section">
     <p class="error-message">{{ errorMessage }}</p>
-    <app-button text="Volver" variant="fill" type="button" (clicked)="onNoEsCorrecta()"> </app-button>
+    <app-button text="Volver" variant="fill" type="button" (clicked)="onNoEsCorrecta()">
+    </app-button>
   </div>
   } @else if (predioData) {
   <!-- Información del predio -->
@@ -21,7 +22,8 @@
       ¿La información que reposa en nuestro sistema de información es la correcta?
     </p>
     <div class="action-buttons">
-      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()"> </app-button>
+      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()">
+      </app-button>
       <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
       </app-button>
     </div>
