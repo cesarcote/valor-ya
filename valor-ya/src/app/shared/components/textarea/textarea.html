@@ -17,13 +17,12 @@
       [attr.cols]="cols"
       [ngStyle]="{ resize: isResizable ? 'both' : 'none' }"
       [ngClass]="
-        ({
+        {
           errores: control.errors,
           dirty: control.dirty,
           valid: control.valid,
           touched: control.touched
-        }
-        | validateStatusField)
+        } | validateStatusField
       "
       [formControl]="control"
       [attr.maxLength]="maxLength"
@@ -35,7 +34,11 @@
     </div>
 
     @if (control.invalid && (control.touched || control.dirty)) {
-    <span class="error-texto-govco alert-entradas-de-texto-govco" role="alert" aria-live="assertive">
+    <span
+      class="error-texto-govco alert-entradas-de-texto-govco"
+      role="alert"
+      aria-live="assertive"
+    >
       {{ control.errors | validateMessageField }}
     </span>
     } @else if (control.valid && (control.touched || control.dirty)) {

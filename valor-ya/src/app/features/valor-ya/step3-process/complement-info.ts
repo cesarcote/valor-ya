@@ -1,8 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -11,7 +20,13 @@ import { SelectComponent, SelectOption } from '../../../shared/components/select
 
 @Component({
   selector: 'app-complement-info',
-  imports: [ReactiveFormsModule, StepperComponent, ButtonComponent, InputComponent, SelectComponent],
+  imports: [
+    ReactiveFormsModule,
+    StepperComponent,
+    ButtonComponent,
+    InputComponent,
+    SelectComponent,
+  ],
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],
 })

@@ -16,16 +16,14 @@
           dirty: control.dirty,
           valid: control.valid,
           touched: control.touched
-        }
-        | validateStatusField) === 'error',
+        } | validateStatusField) === 'error',
       'success-border':
         ({
           errores: control.errors,
           dirty: control.dirty,
           valid: control.valid,
           touched: control.touched
-        }
-        | validateStatusField) === 'success'
+        } | validateStatusField) === 'success'
     }"
   >
     <option selected disabled value="">{{ placeholder }}</option>
