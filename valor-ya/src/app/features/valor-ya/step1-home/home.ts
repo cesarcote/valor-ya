@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
       case 'chip':
         tipoBusqueda = TipoBusqueda.CHIP;
         break;
-      case 'folio':
+      case 'fmi':
         tipoBusqueda = TipoBusqueda.FMI;
         break;
       default:

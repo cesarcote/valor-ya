@@ -21,10 +21,11 @@
   min-width: 216px;
   height: 4rem;
   font-size: 15px;
+  font-weight: 700 !important;
   text-align: center;
   line-height: normal !important;
   font-family: 'Nunito Sans', Verdana, sans-serif !important;
-  border: 2px solid #e6effd !important;
+  border: 2px solid #eaf1fb !important;
   background-color: #f6f8f9 !important;
   padding: 20px 1rem 25px 1rem;
   opacity: 1;

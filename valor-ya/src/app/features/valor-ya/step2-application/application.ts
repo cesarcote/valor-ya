@@ -43,7 +43,7 @@ export class ApplicationComponent implements OnInit {
   tabs: Tab[] = [
     { label: 'Dirección Catastral', disabled: false },
     { label: 'CHIP', disabled: false },
-    { label: 'Folio Matrícula Inmobiliaria', disabled: true },
+    { label: 'Folio Matrícula Inmobiliaria', disabled: false },
   ];
 
   readonly TipoBusqueda = TipoBusqueda;
@@ -115,9 +115,21 @@ export class ApplicationComponent implements OnInit {
   }
 
   onConsultarFMI(data: FmiData): void {
-    this.errorMessage.set(
-      'La búsqueda por Folio de Matrícula Inmobiliaria (FMI) no está disponible en este momento. Por favor, use búsqueda por CHIP o Dirección.'
-    );
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.catastroService.buscarPorDireccion(data.matricula).subscribe({
+      next: (response: CatastroResponse) => {
+        this.isLoading.set(false);
+        this.stateService.setValorBusqueda(`${data.matricula} - ${data.zona}`);
+        this.stateService.setCatastroResponse(response);
+        this.irAProceso();
+      },
+      error: (error: Error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(`Error al consultar FMI: ${error.message || 'Intente nuevamente'}`);
+      },
+    });
   }
 
   irAProceso(): void {
