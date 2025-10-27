@@ -40,6 +40,10 @@ export class StepperComponent implements OnInit {
     return this.currentStep() === step;
   }
 
+  isPastStep(step: number): boolean {
+    return step < this.currentStep();
+  }
+
   private updateStepColors(): void {
     const stepElements = this.el.nativeElement.querySelectorAll('.header-linea-avance-govco');
 
