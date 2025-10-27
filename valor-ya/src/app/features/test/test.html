@@ -7,6 +7,50 @@
     <app-map></app-map>
   </div>
 
+  <!-- Mock Data -->
+  <div class="mock-section">
+    <h2>Búsqueda con Datos Prueba</h2>
+    <button class="btn-mock" (click)="buscarMockCompleto()" [disabled]="loadingMock()">
+      {{ loadingMock() ? 'Cargando...' : 'Buscar con Mock Completo' }}
+    </button>
+
+    @if (mockResponse()) {
+    <div class="info-section">
+      <h3>Información del Predio</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Municipio:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.municipio || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Localidad:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.localidad || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Barrio:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.barrio || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Dirección:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.direccion || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Tipo de Predio:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.tipoPredio || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Estrato:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.estrato || 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Área construida privada:</label>
+          <span>{{ mockResponse()!.data?.infoAdicional?.areaConstruidaPrivada || 'N/A' }} m²</span>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
   <!-- Form 1: Búsqueda por Dirección -->
   <div class="form-section">
     <h2>Form 1: Búsqueda por Dirección</h2>

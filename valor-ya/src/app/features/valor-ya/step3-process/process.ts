@@ -9,7 +9,7 @@ import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-
 import { CatastroResponse } from '../../../core/models/catastro-response.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
-import { MapComponent } from '../../test/components/map/map';
+import { MapComponent } from '../../../shared/components/map/map';
 
 @Component({
   selector: 'app-process',
