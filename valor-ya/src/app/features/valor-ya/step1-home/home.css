@@ -30,3 +30,20 @@
 .card h3 {
   margin: 0;
 }
+
+.card-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9f9f9;
+}
+
+.card-disabled:hover {
+  background-color: #f9f9f9;
+}
+
+.disabled-text {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
