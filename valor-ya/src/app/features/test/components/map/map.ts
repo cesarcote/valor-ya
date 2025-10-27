@@ -158,16 +158,14 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private dibujarPoligonoDesdeBackend(response: CatastroResponse): void {
     if (!response.data) return;
-    
+
     const data = response.data;
-    
+
     if (this.loteLayer) {
       this.map.removeLayer(this.loteLayer);
     }
 
-    const coordinates = this.parseCoordenadasPoligono(
-      data.infoGeografica.coordenadasPoligono
-    );
+    const coordinates = this.parseCoordenadasPoligono(data.infoGeografica.coordenadasPoligono);
 
     if (coordinates.length === 0) {
       console.error('No se pudieron parsear las coordenadas');

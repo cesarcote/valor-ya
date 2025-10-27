@@ -25,22 +25,25 @@
     <div class="info-grid">
       <div class="info-item">
         <label>CHIP:</label>
-        <span>{{ 
-          tipoBusqueda() === TipoBusqueda.CHIP ? valorBusqueda() : 
-          (catastroData()!.CHIP || catastroData()!.data?.infoConsultaPredio?.chip || 'N/A') 
+        <span>{{
+          tipoBusqueda() === TipoBusqueda.CHIP
+            ? valorBusqueda()
+            : catastroData()!.CHIP || catastroData()!.data?.infoConsultaPredio?.chip || 'N/A'
         }}</span>
       </div>
       <div class="info-item">
         <label>LOTEID:</label>
-        <span>{{ catastroData()!.LOTEID || catastroData()!.data?.infoConsultaPredio?.loteid || 'N/A' }}</span>
+        <span>{{
+          catastroData()!.LOTEID || catastroData()!.data?.infoConsultaPredio?.loteid || 'N/A'
+        }}</span>
       </div>
       <div class="info-item">
         <label>Dirección:</label>
-        <span>{{ 
-          catastroData()!.DIRECCION_REAL || 
-          (tipoBusqueda() === TipoBusqueda.DIRECCION ? valorBusqueda() : '') ||
-          catastroData()!.data?.infoAdicional?.direccion || 
-          'N/A' 
+        <span>{{
+          catastroData()!.DIRECCION_REAL ||
+            (tipoBusqueda() === TipoBusqueda.DIRECCION ? valorBusqueda() : '') ||
+            catastroData()!.data?.infoAdicional?.direccion ||
+            'N/A'
         }}</span>
       </div>
       @if (catastroData()!.data) {

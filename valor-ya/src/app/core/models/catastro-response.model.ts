@@ -9,7 +9,7 @@ export interface CatastroResponse {
   DIRECCION_REAL?: string;
   success?: boolean;
   message?: string;
-  
+
   // Respuesta completa (si el endpoint devuelve información detallada)
   data?: {
     infoGeografica: {

@@ -51,8 +51,9 @@ export class ProcessComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const state = this.stateService.getState();
-    const loteid = state.catastroResponse?.LOTEID || state.catastroResponse?.data?.infoConsultaPredio?.loteid;
-    
+    const loteid =
+      state.catastroResponse?.LOTEID || state.catastroResponse?.data?.infoConsultaPredio?.loteid;
+
     if (loteid && this.mapComponent) {
       this.mapComponent.ubicarLotePorCodigo(loteid);
     }
