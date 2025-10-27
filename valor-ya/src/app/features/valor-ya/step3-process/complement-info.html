@@ -8,17 +8,15 @@
 
   <!-- Mensajes de error y éxito -->
   @if (errorMessage()) {
-    <div class="alert alert-error">
-      <span class="alert-icon">⚠️</span>
-      <span class="alert-message">{{ errorMessage() }}</span>
-    </div>
-  }
-
-  @if (successMessage()) {
-    <div class="alert alert-success">
-      <span class="alert-icon">✓</span>
-      <span class="alert-message">{{ successMessage() }}</span>
-    </div>
+  <div class="alert alert-error">
+    <span class="alert-icon">⚠️</span>
+    <span class="alert-message">{{ errorMessage() }}</span>
+  </div>
+  } @if (successMessage()) {
+  <div class="alert alert-success">
+    <span class="alert-icon">✓</span>
+    <span class="alert-message">{{ successMessage() }}</span>
+  </div>
   }
 
   <form [formGroup]="complementForm" class="complement-form">
@@ -129,19 +127,21 @@
     </div>
 
     <div class="action-buttons">
-      <app-button 
-        text="Volver" 
-        variant="outline" 
-        type="button" 
+      <app-button
+        text="Volver"
+        variant="outline"
+        type="button"
         [disabled]="isLoading()"
-        (clicked)="onVolver()">
+        (clicked)="onVolver()"
+      >
       </app-button>
-      <app-button 
-        [text]="isLoading() ? 'Guardando...' : 'Consultar'" 
-        variant="fill" 
-        type="button" 
+      <app-button
+        [text]="isLoading() ? 'Guardando...' : 'Consultar'"
+        variant="fill"
+        type="button"
         [disabled]="isLoading()"
-        (clicked)="onConsultar()">
+        (clicked)="onConsultar()"
+      >
       </app-button>
     </div>
   </form>

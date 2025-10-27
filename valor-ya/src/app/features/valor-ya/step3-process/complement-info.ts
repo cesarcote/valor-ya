@@ -104,15 +104,16 @@ export class ComplementInfoComponent implements OnInit {
     const loteId = state.catastroResponse?.LOTEID;
 
     if (!loteId) {
-      this.errorMessage.set('No se encontró información del lote. Por favor, vuelva a realizar la búsqueda.');
+      this.errorMessage.set(
+        'No se encontró información del lote. Por favor, vuelva a realizar la búsqueda.'
+      );
       return;
     }
 
     // Preparar los datos para enviar
     const formValues = this.complementForm.value;
-    const tipoPredio = formValues.tipoPredio === 'otro' 
-      ? formValues.otroTipoPredio 
-      : formValues.tipoPredio;
+    const tipoPredio =
+      formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio;
 
     const datos: DatosComplementariosRequest = {
       lote_id: loteId,
@@ -136,7 +137,7 @@ export class ComplementInfoComponent implements OnInit {
       next: (response) => {
         this.isLoading.set(false);
         this.successMessage.set('Datos complementarios guardados exitosamente.');
-        
+
         // Navegar al siguiente paso después de guardar
         setTimeout(() => {
           this.stepperService.setStep(ValorYaStep.RESPUESTA);

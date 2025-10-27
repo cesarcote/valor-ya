@@ -87,10 +87,7 @@ export class PredioService {
   consultarPorChip(chip: string): Observable<PredioData> {
     console.log('🔍 Consultando CHIP:', chip);
 
-    const params = new HttpParams()
-      .set('Opcion', '3')
-      .set('Identificador', chip)
-      .set('f', 'pjson');
+    const params = new HttpParams().set('Opcion', '3').set('Identificador', chip).set('f', 'pjson');
 
     const url = `${currentEnvironment.baseUrl}/catastro/consultar`;
 
