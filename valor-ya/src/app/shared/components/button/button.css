@@ -1,25 +1,29 @@
 /*
  * ButtonComponent styles
  *
- * Estilos basados en Gov.co Design System con colores de Valor YA
+ * Estilos basados en Catastro Bogotá con colores de Valor YA
  */
 
 /* ==================== ESTILOS BASE DEL BOTÓN ==================== */
 .btn-govco {
-  border-radius: 1.563rem; /* 25px - Bordes redondeados Gov.co */
+  box-sizing: border-box;
+  border-radius: 6.25rem;
   font-family: 'Nunito Sans', Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 0.563rem;
-  padding: 0.75rem 1rem; /* 12px 16px */
-  border-width: 0.125rem; /* 2px */
-  border-style: solid;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.625rem 1.25rem;
+  height: 2.75rem;
+  border: none;
   cursor: pointer;
   user-select: none;
   text-align: center;
   vertical-align: middle;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 0.75rem;
+  min-width: 7.5rem;
   transition: all 0.15s ease-in-out;
 }
 
@@ -27,48 +31,50 @@
   margin-right: 0;
 }
 
-/* Full width variant */
 .btn-govco.w-100 {
   width: 100%;
   margin-right: 0;
 }
 
-/* ==================== BOTÓN RELLENO (FILL) - AMARILLO ==================== */
+/* ==================== BOTÓN RELLENO (FILL) ==================== */
 .btn-govco.fill-btn-govco {
-  background-color: #feb400; /* Amarillo Valor YA */
-  border-color: #feb400;
-  color: #333333;
+  background-color: #feb400;
+  color: #481f00;
+  border: none;
 }
 
 .btn-govco.fill-btn-govco:hover,
 .btn-govco.fill-btn-govco:focus-visible {
-  background-color: #e5a200; /* Amarillo más oscuro en hover */
-  border-color: #e5a200;
-  color: #333333;
+  background-color: #ffd51b;
+  color: #481f00;
 }
 
 .btn-govco.fill-btn-govco:focus-visible {
-  outline: max(0.125rem, 0.125rem) solid #000000;
-  outline-offset: max(0.125rem, 0.188rem);
+  outline: 0.125rem solid #000000;
+  outline-offset: 0.125rem;
 }
 
-/* ==================== BOTÓN DE CONTORNO (OUTLINE) - AMARILLO ==================== */
+/* ==================== BOTÓN DE CONTORNO (OUTLINE) ==================== */
 .btn-govco.outline-btn-govco {
-  background-color: #ffffff;
-  border-color: #feb400; /* Amarillo Valor YA */
-  color: #333333;
+  background-color: transparent;
+  border: 0.125rem solid #cacaca;
+  border-radius: 6.25rem;
+  color: #4b4b4b;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.625rem 1.25rem;
 }
 
 .btn-govco.outline-btn-govco:hover,
 .btn-govco.outline-btn-govco:focus-visible {
-  background-color: #feb400; /* Amarillo en hover */
-  border-color: #feb400;
-  color: #333333;
+  background-color: whitesmoke;
+  border: 0.125rem solid #ffc107;
+  color: #4b4b4b;
 }
 
 .btn-govco.outline-btn-govco:focus-visible {
-  outline: max(0.125rem, 0.125rem) solid #000000;
-  outline-offset: max(0.125rem, 0.188rem);
+  outline: 0.125rem solid #000000;
+  outline-offset: 0.125rem;
 }
 
 /* ==================== ESTADO DISABLED ==================== */
@@ -78,12 +84,15 @@
   color: #ffffff;
   pointer-events: none;
   cursor: not-allowed;
+  opacity: 0.65;
 }
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
   .btn-govco {
-    font-size: 14px;
-    padding: 0.625rem 0.875rem; /* 10px 14px */
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    height: 2.5rem;
+    min-width: 6.25rem;
   }
 }
