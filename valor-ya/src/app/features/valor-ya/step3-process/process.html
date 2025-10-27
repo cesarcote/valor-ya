@@ -25,36 +25,50 @@
     <div class="info-grid">
       <div class="info-item">
         <label>CHIP:</label>
-        <span>{{ catastroData()!.CHIP || 'N/A' }}</span>
+        <span>{{ 
+          tipoBusqueda() === TipoBusqueda.CHIP ? valorBusqueda() : 
+          (catastroData()!.CHIP || catastroData()!.data?.infoConsultaPredio?.chip || 'N/A') 
+        }}</span>
+      </div>
+      <div class="info-item">
+        <label>LOTEID:</label>
+        <span>{{ catastroData()!.LOTEID || catastroData()!.data?.infoConsultaPredio?.loteid || 'N/A' }}</span>
       </div>
       <div class="info-item">
         <label>Dirección:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.direccion || 'N/A' }}</span>
+        <span>{{ 
+          catastroData()!.DIRECCION_REAL || 
+          (tipoBusqueda() === TipoBusqueda.DIRECCION ? valorBusqueda() : '') ||
+          catastroData()!.data?.infoAdicional?.direccion || 
+          'N/A' 
+        }}</span>
       </div>
+      @if (catastroData()!.data) {
       <div class="info-item">
         <label>Localidad:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.localidad || 'N/A' }}</span>
+        <span>{{ catastroData()!.data!.infoAdicional.localidad }}</span>
       </div>
       <div class="info-item">
         <label>Barrio:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.barrio || 'N/A' }}</span>
+        <span>{{ catastroData()!.data!.infoAdicional.barrio }}</span>
       </div>
       <div class="info-item">
-        <label>Área Terreno:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.areaTerreno || 'N/A' }} m²</span>
+        <label>Área Polígono:</label>
+        <span>{{ catastroData()!.data!.infoGeografica.areaPoligono.toFixed(2) }} m²</span>
       </div>
       <div class="info-item">
         <label>Área Construida:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.areaConstruida || 'N/A' }} m²</span>
+        <span>{{ catastroData()!.data!.infoAdicional.areaConstruidaPrivada }} m²</span>
       </div>
       <div class="info-item">
-        <label>Uso del Suelo:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.usoSuelo || 'N/A' }}</span>
+        <label>Tipo de Predio:</label>
+        <span>{{ catastroData()!.data!.infoAdicional.tipoPredio }}</span>
       </div>
       <div class="info-item">
         <label>Estrato:</label>
-        <span>{{ catastroData()!.data?.infoAdicional?.estrato || 'N/A' }}</span>
+        <span>{{ catastroData()!.data!.infoAdicional.estrato }}</span>
       </div>
+      }
     </div>
   </div>
 

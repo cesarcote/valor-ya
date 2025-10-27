@@ -35,7 +35,7 @@ export const canAccessRespuestaGuard: CanActivateFn = () => {
   const stateService = inject(ValorYaStateService);
   const router = inject(Router);
 
-  if (stateService.hasCatastroResponse() || stateService.hasPredioData()) {
+  if (stateService.hasCatastroResponse()) {
     return true;
   }
 

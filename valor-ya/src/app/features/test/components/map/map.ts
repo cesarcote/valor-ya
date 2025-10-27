@@ -13,33 +13,7 @@ import { inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
-
-interface BackendResponse {
-  success: boolean;
-  message: string;
-  data: {
-    infoGeografica: {
-      areaPoligono: number;
-      longitudPoligono: number;
-      coordenadasPoligono: number[][][];
-    };
-    infoConsultaPredio: {
-      chip: string;
-      loteid: string;
-    };
-    infoAdicional: {
-      municipio: string;
-      localidad: string;
-      barrio: string;
-      direccion: string;
-      tipoPredio: string;
-      estrato: string;
-      areaConstruidaPrivada: string;
-      edad: string;
-    };
-  };
-  error: null | string;
-}
+import { CatastroResponse } from '../../../../core/models/catastro-response.model';
 
 @Component({
   selector: 'app-map',
@@ -56,7 +30,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private loteLayer?: L.Polygon;
 
   isLoadingUbicacion = signal(false);
-  ubicacionData = signal<BackendResponse | null>(null);
+  ubicacionData = signal<CatastroResponse | null>(null);
 
   ngOnInit(): void {
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -105,8 +79,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private getUbicacionFromBackend(): Observable<BackendResponse> {
-    const mockResponse: BackendResponse = {
+  private getUbicacionFromBackend(): Observable<CatastroResponse> {
+    const mockResponse: CatastroResponse = {
       success: true,
       message: 'Consulta catastral realizada exitosamente',
       data: {
@@ -171,7 +145,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoadingUbicacion.set(false);
         this.ubicacionData.set(response);
 
-        if (response.success && response.data.infoGeografica.coordenadasPoligono) {
+        if (response.success && response.data?.infoGeografica.coordenadasPoligono) {
           this.dibujarPoligonoDesdeBackend(response);
         }
       },
@@ -182,13 +156,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private dibujarPoligonoDesdeBackend(response: BackendResponse): void {
+  private dibujarPoligonoDesdeBackend(response: CatastroResponse): void {
+    if (!response.data) return;
+    
+    const data = response.data;
+    
     if (this.loteLayer) {
       this.map.removeLayer(this.loteLayer);
     }
 
     const coordinates = this.parseCoordenadasPoligono(
-      response.data.infoGeografica.coordenadasPoligono
+      data.infoGeografica.coordenadasPoligono
     );
 
     if (coordinates.length === 0) {
@@ -213,11 +191,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     const center = bounds.getCenter();
     const popupContent = `
       <div style="font-family: Verdana, sans-serif; font-size: 13px;">
-        <strong>${response.data.infoAdicional.direccion}</strong><br>
-        <strong>CHIP:</strong> ${response.data.infoConsultaPredio.chip}<br>
-        <strong>Lote ID:</strong> ${response.data.infoConsultaPredio.loteid}<br>
-        <strong>Área:</strong> ${response.data.infoGeografica.areaPoligono.toFixed(2)} m²<br>
-        <strong>Estrato:</strong> ${response.data.infoAdicional.estrato}
+        <strong>${data.infoAdicional.direccion}</strong><br>
+        <strong>CHIP:</strong> ${data.infoConsultaPredio.chip}<br>
+        <strong>Lote ID:</strong> ${data.infoConsultaPredio.loteid}<br>
+        <strong>Área:</strong> ${data.infoGeografica.areaPoligono.toFixed(2)} m²<br>
+        <strong>Estrato:</strong> ${data.infoAdicional.estrato}
       </div>
     `;
 

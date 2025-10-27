@@ -37,8 +37,9 @@ export class TestComponent {
         this.responseForm1.set(response);
         this.loadingForm1.set(false);
 
-        if (response.LOTEID) {
-          this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
+        const loteid = response.LOTEID || response.data?.infoConsultaPredio?.loteid;
+        if (loteid) {
+          this.mapComponent.ubicarLotePorCodigo(loteid);
         }
       },
       error: (error) => {
@@ -58,8 +59,9 @@ export class TestComponent {
         this.responseForm2.set(response);
         this.loadingForm2.set(false);
 
-        if (response.LOTEID) {
-          this.mapComponent.ubicarLotePorCodigo(response.LOTEID);
+        const loteid = response.LOTEID || response.data?.infoConsultaPredio?.loteid;
+        if (loteid) {
+          this.mapComponent.ubicarLotePorCodigo(loteid);
         }
       },
       error: (error) => {

@@ -1,18 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
 
 import {
   ValorYaStepperService,
   ValorYaStep,
 } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
-import { PredioData } from '../../../core/models/predio-data.model';
+import { CatastroResponse } from '../../../core/models/catastro-response.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-response',
-  imports: [StepperComponent],
+  imports: [StepperComponent, ButtonComponent],
   templateUrl: './response.html',
   styleUrls: ['./response.css'],
 })
@@ -21,7 +21,7 @@ export class ResponseComponent implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
 
-  predioData?: PredioData;
+  catastroData?: CatastroResponse;
   valorEstimado: number = 0;
   fechaConsulta: string = '';
 
@@ -34,7 +34,7 @@ export class ResponseComponent implements OnInit {
       return;
     }
 
-    this.predioData = state.predioData;
+    this.catastroData = state.catastroResponse;
     this.fechaConsulta = new Date().toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'long',
