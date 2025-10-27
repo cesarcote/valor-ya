@@ -35,11 +35,9 @@ export const canAccessRespuestaGuard: CanActivateFn = () => {
   const stateService = inject(ValorYaStateService);
   const router = inject(Router);
 
-  // Permite acceso solo si hay datos del predio
-  if (stateService.hasPredioData()) {
+  if (stateService.hasCatastroResponse() || stateService.hasPredioData()) {
     return true;
   }
 
-  // Si no hay datos, redirige al inicio
   return router.createUrlTree(['/valor-ya/inicio']);
 };

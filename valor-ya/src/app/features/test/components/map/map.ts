@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 
@@ -145,7 +144,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       error: null,
     };
 
-    return of(mockResponse).pipe(delay(500));
+    return of(mockResponse);
   }
 
   private parseCoordenadasPoligono(coordenadas: number[][][]): L.LatLngExpression[] {
@@ -229,6 +228,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ubicarLotePorCodigo(lotcodigo: string): void {
+    if (!this.map) {
+      console.warn('Mapa no inicializado aún, esperando...');
+      setTimeout(() => this.ubicarLotePorCodigo(lotcodigo), 100);
+      return;
+    }
+
     const url = `https://sig.catastrobogota.gov.co/arcgis/rest/services/catastro/lote/MapServer/0/query?returnGeometry=true&where=LOTCODIGO%20%3D%20%27${lotcodigo}%27&outSr=4326&outFields=*&f=json`;
 
     this.http.get<any>(url).subscribe({
@@ -291,16 +296,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         'Powered by <a href="https://www.esri.com">Esri</a> | IDECA - UAECD, Secretaría General de la Alcaldía Mayor de Bogotá D.C.',
     });
 
-    let zoomTimeout: any;
     this.map.on('zoomstart', () => {
       catastroLayer.setOpacity(0.3);
     });
 
     this.map.on('zoomend', () => {
-      clearTimeout(zoomTimeout);
-      zoomTimeout = setTimeout(() => {
-        catastroLayer.setOpacity(0.8);
-      }, 200);
+      catastroLayer.setOpacity(0.8);
     });
 
     catastroLayer.addTo(this.map);

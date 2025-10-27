@@ -1,9 +1,4 @@
 import { Routes } from '@angular/router';
-import {
-  canAccessSolicitudGuard,
-  canAccessProcesoGuard,
-  canAccessRespuestaGuard,
-} from './core/guards/valor-ya.guards';
 
 export const routes: Routes = [
   {
@@ -23,7 +18,6 @@ export const routes: Routes = [
       {
         path: 'solicitud',
         title: 'Valor YA - Consulta tu Predio',
-        canActivate: [canAccessSolicitudGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2-application/application').then(
             (m) => m.ApplicationComponent
@@ -46,7 +40,6 @@ export const routes: Routes = [
       {
         path: 'respuesta',
         title: 'Valor YA - Resultado de tu Consulta',
-        canActivate: [canAccessRespuestaGuard],
         loadComponent: () =>
           import('./features/valor-ya/step4-response/response').then((m) => m.ResponseComponent),
       },

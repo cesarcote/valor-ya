@@ -6,16 +6,57 @@
     <p class="subtitle">Información del predio encontrado</p>
   </div>
 
-  @if (errorMessage) {
+  @if (errorMessage()) {
   <div class="error-section">
-    <p class="error-message">{{ errorMessage }}</p>
+    <p class="error-message">{{ errorMessage() }}</p>
     <app-button text="Volver" variant="fill" type="button" (clicked)="onNoEsCorrecta()">
     </app-button>
   </div>
-  } @else if (predioData) {
+  } @else if (catastroData()) {
+  <!-- Mapa con ubicación -->
+  <div class="map-section">
+    <h3>Ubicación del Predio</h3>
+    <app-map></app-map>
+  </div>
+
   <!-- Información del predio -->
-  <app-predio-info-card [predioData]="predioData" [showMessage]="true" [showAllFields]="true">
-  </app-predio-info-card>
+  <div class="info-section">
+    <h3>Información del Predio</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <label>CHIP:</label>
+        <span>{{ catastroData()!.CHIP || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Dirección:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.direccion || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Localidad:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.localidad || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Barrio:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.barrio || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Área Terreno:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.areaTerreno || 'N/A' }} m²</span>
+      </div>
+      <div class="info-item">
+        <label>Área Construida:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.areaConstruida || 'N/A' }} m²</span>
+      </div>
+      <div class="info-item">
+        <label>Uso del Suelo:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.usoSuelo || 'N/A' }}</span>
+      </div>
+      <div class="info-item">
+        <label>Estrato:</label>
+        <span>{{ catastroData()!.data?.infoAdicional?.estrato || 'N/A' }}</span>
+      </div>
+    </div>
+  </div>
 
   <div class="confirmation-section">
     <p class="confirmation-question">

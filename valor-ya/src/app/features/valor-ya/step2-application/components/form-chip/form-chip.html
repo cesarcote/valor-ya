@@ -7,12 +7,6 @@
     placeholder="Ingrese el CHIP del predio"
     note="El CHIP es un código único de 30 dígitos que identifica cada predio en Colombia"
   ></app-input>
-
-  @if (errorMessage) {
-  <app-alert type="error" [dismissible]="true">
-    {{ errorMessage }}
-  </app-alert>
-  }
 </div>
 
 <div class="form-buttons">

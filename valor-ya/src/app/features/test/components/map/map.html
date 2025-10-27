@@ -1,18 +1,4 @@
 <div class="map-container">
-  <div class="map-controls">
-    <button
-      class="btn-ubicacion"
-      (click)="buscarUbicacionDesdeBackend()"
-      [disabled]="isLoadingUbicacion()"
-    >
-      @if (isLoadingUbicacion()) {
-      <span>Cargando ubicación...</span>
-      } @else {
-      <span>Buscar Ubicación desde Backend</span>
-      }
-    </button>
-  </div>
-
   <div #map class="map"></div>
 
   @if (ubicacionData()) {

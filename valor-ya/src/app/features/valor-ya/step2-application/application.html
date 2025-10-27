@@ -6,23 +6,32 @@
     <p class="subtitle">Selecciona el método de búsqueda y completa la información requerida</p>
   </div>
 
+  @if (isLoading()) {
+  <app-loading></app-loading>
+  } @else { @if (errorMessage()) {
+  <div class="error-message-box">
+    <p>{{ errorMessage() }}</p>
+  </div>
+  }
+
   <app-tabs
     [tabs]="tabs"
-    [selectedTabIndex]="selectedTabIndex"
+    [selectedTabIndex]="selectedTabIndex()"
     (tabChange)="onTabChange($event)"
     description="Selecciona el método de búsqueda"
   >
     <div class="form-container">
-      @if (selectedTabIndex === 0) {
+      @if (selectedTabIndex() === 0) {
       <app-form-address
         (consultar)="onConsultarDireccion($event)"
         (volver)="onVolver()"
       ></app-form-address>
-      } @if (selectedTabIndex === 1) {
+      } @if (selectedTabIndex() === 1) {
       <app-form-chip (consultar)="onConsultarChip($event)" (volver)="onVolver()"></app-form-chip>
-      } @if (selectedTabIndex === 2) {
+      } @if (selectedTabIndex() === 2) {
       <app-form-fmi (consultar)="onConsultarFMI($event)" (volver)="onVolver()"></app-form-fmi>
       }
     </div>
   </app-tabs>
+  }
 </div>

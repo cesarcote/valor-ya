@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PredioData } from '../models/predio-data.model';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class PredioService {
       areaConstruida: 'área construida del predio.',
       edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
       coordenadas: { lat: 4.711, lng: -74.0721 },
-    }).pipe(delay(1000));
+    });
   }
 
   consultarPorChip(chip: string): Observable<PredioData> {
@@ -33,7 +33,7 @@ export class PredioService {
       areaConstruida: 'área construida del predio.',
       edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
       coordenadas: { lat: 4.711, lng: -74.0721 },
-    }).pipe(delay(1000));
+    });
   }
 
   consultarPorFMI(zona: string, matricula: string): Observable<PredioData> {
@@ -48,6 +48,6 @@ export class PredioService {
       areaConstruida: 'área construida del predio.',
       edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
       coordenadas: { lat: 4.711, lng: -74.0721 },
-    }).pipe(delay(1000));
+    });
   }
 }

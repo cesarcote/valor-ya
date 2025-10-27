@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PredioData } from '../../core/models/predio-data.model';
+import { CatastroResponse } from '../models/catastro-response.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -12,6 +13,7 @@ export interface ValorYaState {
   tipoBusqueda?: TipoBusqueda;
   valorBusqueda?: string;
   predioData?: PredioData;
+  catastroResponse?: CatastroResponse;
   mostrarResultado: boolean;
 }
 
@@ -49,6 +51,10 @@ export class ValorYaStateService {
     });
   }
 
+  setCatastroResponse(response: CatastroResponse): void {
+    this.updateState({ catastroResponse: response });
+  }
+
   setMostrarResultado(mostrar: boolean): void {
     this.updateState({ mostrarResultado: mostrar });
   }
@@ -59,6 +65,10 @@ export class ValorYaStateService {
 
   hasPredioData(): boolean {
     return !!this.stateSubject.value.predioData;
+  }
+
+  hasCatastroResponse(): boolean {
+    return !!this.stateSubject.value.catastroResponse;
   }
 
   private updateState(partial: Partial<ValorYaState>): void {

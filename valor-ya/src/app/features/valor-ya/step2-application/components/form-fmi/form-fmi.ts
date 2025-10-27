@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
-import { AlertComponent } from '../../../../../shared/components/alert/alert';
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
 
@@ -12,7 +11,7 @@ export interface FmiData {
 
 @Component({
   selector: 'app-form-fmi',
-  imports: [ReactiveFormsModule, AlertComponent, InputComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, InputComponent, ButtonComponent],
   templateUrl: './form-fmi.html',
   styleUrls: ['./form-fmi.css'],
 })
@@ -22,8 +21,6 @@ export class FormFmiComponent {
 
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
-
-  errorMessage = '';
 
   zonas = [
     { value: '50C', label: '50C-Bogota Zona Centro' },

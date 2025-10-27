@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
@@ -6,12 +6,15 @@ import {
   ValorYaStep,
 } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
+import { CatastroService } from '../../../core/services/catastro.service';
+import { CatastroResponse } from '../../../core/models/catastro-response.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
 import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
+import { LoadingComponent } from '../../../shared/components/loading/loading';
 
 @Component({
   selector: 'app-application',
@@ -21,6 +24,7 @@ import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
     FormChipComponent,
     FormAddressComponent,
     FormFmiComponent,
+    LoadingComponent,
   ],
   templateUrl: './application.html',
   styleUrls: ['./application.css'],
@@ -29,9 +33,12 @@ export class ApplicationComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
+  private catastroService = inject(CatastroService);
 
-  tipoBusquedaActual: TipoBusqueda | undefined;
-  selectedTabIndex: number = 0;
+  tipoBusquedaActual = signal<TipoBusqueda | undefined>(undefined);
+  selectedTabIndex = signal(0);
+  isLoading = signal(false);
+  errorMessage = signal('');
 
   tabs: Tab[] = [
     { label: 'Dirección Catastral', disabled: false },
@@ -45,22 +52,22 @@ export class ApplicationComponent implements OnInit {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
     this.stateService.state$.subscribe((state) => {
-      this.tipoBusquedaActual = state.tipoBusqueda;
+      this.tipoBusquedaActual.set(state.tipoBusqueda);
       this.updateSelectedTabIndex();
     });
 
-    if (!this.tipoBusquedaActual) {
+    if (!this.tipoBusquedaActual()) {
       this.router.navigate(['/valor-ya/inicio']);
     }
   }
 
   updateSelectedTabIndex(): void {
-    if (this.tipoBusquedaActual === TipoBusqueda.DIRECCION) {
-      this.selectedTabIndex = 0;
-    } else if (this.tipoBusquedaActual === TipoBusqueda.CHIP) {
-      this.selectedTabIndex = 1;
-    } else if (this.tipoBusquedaActual === TipoBusqueda.FMI) {
-      this.selectedTabIndex = 2;
+    if (this.tipoBusquedaActual() === TipoBusqueda.DIRECCION) {
+      this.selectedTabIndex.set(0);
+    } else if (this.tipoBusquedaActual() === TipoBusqueda.CHIP) {
+      this.selectedTabIndex.set(1);
+    } else if (this.tipoBusquedaActual() === TipoBusqueda.FMI) {
+      this.selectedTabIndex.set(2);
     }
   }
 
@@ -70,13 +77,41 @@ export class ApplicationComponent implements OnInit {
   }
 
   onConsultarChip(chip: string): void {
-    this.stateService.setValorBusqueda(chip);
-    this.irAProceso();
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.catastroService.buscarPorChip(chip).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.stateService.setValorBusqueda(chip);
+        this.stateService.setCatastroResponse(response);
+        this.irAProceso();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(`Error al consultar CHIP: ${error.message || 'Intente nuevamente'}`);
+      },
+    });
   }
 
   onConsultarDireccion(direccion: string): void {
-    this.stateService.setValorBusqueda(direccion);
-    this.irAProceso();
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.catastroService.buscarPorDireccion(direccion).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.stateService.setValorBusqueda(direccion);
+        this.stateService.setCatastroResponse(response);
+        this.irAProceso();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          `Error al consultar dirección: ${error.message || 'Intente nuevamente'}`
+        );
+      },
+    });
   }
 
   onConsultarFMI(data: FmiData): void {

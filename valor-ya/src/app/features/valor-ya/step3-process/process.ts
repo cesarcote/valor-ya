@@ -1,76 +1,52 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
   ValorYaStepperService,
   ValorYaStep,
 } from '../../../core/services/valor-ya-stepper.service';
-import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
-import { PredioService } from '../../../shared/services/predio.service';
-import { PredioData } from '../../../core/models/predio-data.model';
+import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
+import { CatastroResponse } from '../../../core/models/catastro-response.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
-import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
+import { MapComponent } from '../../test/components/map/map';
 
 @Component({
   selector: 'app-process',
-  imports: [StepperComponent, ButtonComponent, PredioInfoCardComponent],
+  imports: [StepperComponent, ButtonComponent, MapComponent],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
-export class ProcessComponent implements OnInit {
+export class ProcessComponent implements OnInit, AfterViewInit {
+  @ViewChild(MapComponent) mapComponent!: MapComponent;
+
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
-  private predioService = inject(PredioService);
 
-  predioData?: PredioData;
-  errorMessage: string = '';
+  catastroData = signal<CatastroResponse | null>(null);
+  isLoading = signal(true);
+  errorMessage = signal('');
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
 
     const state = this.stateService.getState();
 
-    if (!state.tipoBusqueda || !state.valorBusqueda) {
+    if (!state.tipoBusqueda || !state.valorBusqueda || !state.catastroResponse) {
       this.router.navigate(['/valor-ya/inicio']);
       return;
     }
 
-    this.realizarConsulta(state.tipoBusqueda, state.valorBusqueda);
+    this.catastroData.set(state.catastroResponse);
+    this.isLoading.set(false);
   }
 
-  realizarConsulta(tipo: TipoBusqueda, valor: string): void {
-    this.errorMessage = '';
-
-    let consulta$;
-
-    switch (tipo) {
-      case TipoBusqueda.CHIP:
-        consulta$ = this.predioService.consultarPorChip(valor);
-        break;
-      case TipoBusqueda.DIRECCION:
-        consulta$ = this.predioService.consultarPorDireccion(valor);
-        break;
-      case TipoBusqueda.FMI:
-        const [zona, matricula] = valor.split('-');
-        consulta$ = this.predioService.consultarPorFMI(zona, matricula);
-        break;
-      default:
-        this.router.navigate(['/valor-ya/solicitud']);
-        return;
+  ngAfterViewInit(): void {
+    const state = this.stateService.getState();
+    if (state.catastroResponse?.LOTEID && this.mapComponent) {
+      this.mapComponent.ubicarLotePorCodigo(state.catastroResponse.LOTEID);
     }
-
-    consulta$.subscribe({
-      next: (data) => {
-        this.predioData = data;
-        this.stateService.setPredioData(data, tipo, valor);
-      },
-      error: (error) => {
-        console.error('Error al consultar el predio:', error);
-        this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';
-      },
-    });
   }
 
   onNoEsCorrecta(): void {

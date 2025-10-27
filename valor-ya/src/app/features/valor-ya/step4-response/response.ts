@@ -29,26 +29,17 @@ export class ResponseComponent implements OnInit {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
     const state = this.stateService.getState();
-    if (!state.predioData) {
+    if (!state.catastroResponse) {
       this.router.navigate(['/valor-ya/inicio']);
       return;
     }
 
     this.predioData = state.predioData;
-    this.valorEstimado = this.calcularValorEstimado();
     this.fechaConsulta = new Date().toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
-  }
-
-  calcularValorEstimado(): number {
-    return Math.floor(Math.random() * (500000000 - 200000000) + 200000000);
-  }
-
-  onDescargarPDF(): void {
-    alert('Funcionalidad de descarga PDF en desarrollo');
   }
 
   onNuevaConsulta(): void {
