@@ -7,10 +7,22 @@
   </div>
 
   @if (errorMessage) {
-  <div class="error-section">
+  <!-- Mensaje de error cuando no se encuentran datos -->
+  <div class="no-data-section">
+    <h3>No se encontró información</h3>
     <p class="error-message">{{ errorMessage }}</p>
-    <app-button text="Volver" variant="fill" type="button" (clicked)="onNoEsCorrecta()">
-    </app-button>
+  </div>
+
+  <div class="confirmation-section">
+    <p class="confirmation-question">
+      ¿La información que reposa en nuestro sistema de información es la correcta?
+    </p>
+    <div class="action-buttons">
+      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()">
+      </app-button>
+      <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
+      </app-button>
+    </div>
   </div>
   } @else if (predioData) {
   <!-- Información del predio -->

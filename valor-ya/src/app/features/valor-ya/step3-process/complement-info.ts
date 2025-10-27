@@ -13,6 +13,8 @@ import {
   ValorYaStep,
 } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
+import { DatosComplementariosService } from '../../../shared/services/datos-complementarios.service';
+import { DatosComplementariosRequest } from '../../../core/models/datos-complementarios.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { InputComponent } from '../../../shared/components/input/input';
@@ -35,8 +37,11 @@ export class ComplementInfoComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
+  private datosComplementariosService = inject(DatosComplementariosService);
 
   complementForm!: FormGroup;
+  isLoading = false;
+  errorMessage = '';
 
   tiposPredio: SelectOption[] = [
     { value: 'casa', label: 'Casa' },
@@ -81,11 +86,68 @@ export class ComplementInfoComponent implements OnInit {
     this.router.navigate(['/valor-ya/proceso']);
   }
 
-  onConsultar(): void {
+  onConsultarMCM(): void {
     if (this.complementForm.valid) {
-      this.stepperService.setStep(ValorYaStep.RESPUESTA);
-      this.router.navigate(['/valor-ya/respuesta']);
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      // Obtener el estado actual con los datos del predio
+      const state = this.stateService.getState();
+      
+      if (!state.predioData) {
+        this.errorMessage = 'No se encontraron datos del predio. Por favor, vuelva a realizar la consulta.';
+        this.isLoading = false;
+        return;
+      }
+
+      // Obtener el loteid real desde los datos del predio
+      const loteid = state.predioData.loteid;
+      
+      if (!loteid) {
+        this.errorMessage = 'No se encontró el identificador del lote (Lote ID). Por favor, vuelva a realizar la consulta.';
+        this.isLoading = false;
+        return;
+      }
+      debugger;
+      // Preparar los datos para enviar con los tipos correctos
+      const formValues = this.complementForm.value;
+      const datosComplementarios: DatosComplementariosRequest = {
+        lote_id: loteid,
+        area_construida: parseFloat(formValues.areaConstruida) || undefined,
+        estrato: parseInt(formValues.estrato) || undefined,
+        edad: formValues.edad?.toString() || undefined,
+        tipo_predio: formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio,
+        num_ascensores: parseInt(formValues.numeroAscensores) || 0,
+        num_banos: parseInt(formValues.numeroBanos) || 0,
+        num_depositos: parseInt(formValues.numeroDepositos) || 0,
+        num_habitaciones: parseInt(formValues.numeroHabitaciones) || 0,
+        num_parqueaderos: parseInt(formValues.numeroParqueaderos) || 0
+      };
+
+      console.log('Registrando datos complementarios:', datosComplementarios);
+
+      // Consumir el servicio para registrar los datos
+      this.datosComplementariosService.registrarDatos(datosComplementarios).subscribe({
+        next: (datosGuardados) => {
+          console.log('Datos complementarios registrados exitosamente:', datosGuardados);
+          
+          // Guardar los datos complementarios en el estado
+          this.stateService.setDatosComplementarios(datosGuardados);
+          
+          this.isLoading = false;
+          
+          // Continuar con el flujo
+          this.stepperService.setStep(ValorYaStep.RESPUESTA);
+          this.router.navigate(['/valor-ya/respuesta']);
+        },
+        error: (error) => {
+          console.error('Error al registrar datos complementarios:', error);
+          this.errorMessage = `Error al guardar los datos: ${error.message}`;
+          this.isLoading = false;
+        }
+      });
     } else {
+      // Marcar campos como tocados para mostrar errores
       Object.keys(this.complementForm.controls).forEach((key) => {
         const control = this.complementForm.get(key);
         if (control?.invalid) {
@@ -93,9 +155,7 @@ export class ComplementInfoComponent implements OnInit {
         }
       });
     }
-  }
-
-  get tipoPredioControl() {
+  }  get tipoPredioControl() {
     return this.complementForm.get('tipoPredio') as FormControl;
   }
 

@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import {
   ValorYaStepperService,
@@ -12,6 +13,34 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 
+// Interfaz para la respuesta de la API del catastro
+interface CatastroApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    infoConsultaPredio: {
+      chip: string;
+      loteid: string;
+    };
+    infoGeografica: {
+      areaPoligono: number;
+      longitudPoligono: number;
+      coordenadasPoligono: number[][][];
+    };
+    infoAdicional: {
+      municipio: string;
+      localidad: string;
+      barrio: string;
+      direccion: string;
+      tipoPredio: string;
+      estrato: string;
+      areaConstruidaPrivada: string;
+      edad: string;
+    };
+  };
+  error: any;
+}
+
 @Component({
   selector: 'app-process',
   imports: [StepperComponent, ButtonComponent, PredioInfoCardComponent],
@@ -23,6 +52,7 @@ export class ProcessComponent implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
+  private cdr = inject(ChangeDetectorRef);
 
   predioData?: PredioData;
   errorMessage: string = '';
@@ -41,35 +71,68 @@ export class ProcessComponent implements OnInit {
   }
 
   realizarConsulta(tipo: TipoBusqueda, valor: string): void {
+    console.log('🔍 Iniciando consulta:', { tipo, valor });
     this.errorMessage = '';
+    this.predioData = undefined; // Limpiar datos anteriores
 
-    let consulta$;
+    let consulta$: Observable<PredioData>;
 
     switch (tipo) {
       case TipoBusqueda.CHIP:
+        console.log('📍 Consultando por CHIP:', valor);
         consulta$ = this.predioService.consultarPorChip(valor);
         break;
       case TipoBusqueda.DIRECCION:
+        console.log('📍 Consultando por DIRECCION:', valor);
         consulta$ = this.predioService.consultarPorDireccion(valor);
         break;
       case TipoBusqueda.FMI:
         const [zona, matricula] = valor.split('-');
+        console.log('📍 Consultando por FMI:', { zona, matricula });
         consulta$ = this.predioService.consultarPorFMI(zona, matricula);
         break;
       default:
+        console.log('❌ Tipo de búsqueda no válido:', tipo);
         this.router.navigate(['/valor-ya/solicitud']);
         return;
     }
 
+    console.log('🔄 Observable creado, ejecutando suscripción...');
+    console.log('🔄 Estado antes de suscripción - predioData:', this.predioData, 'errorMessage:', this.errorMessage);
+
+    console.log('🔄 Observable creado, ejecutando suscripción...');
+    console.log('🔄 Estado antes de suscripción - predioData:', this.predioData, 'errorMessage:', this.errorMessage);
     consulta$.subscribe({
-      next: (data) => {
-        this.predioData = data;
-        this.stateService.setPredioData(data, tipo, valor);
+      next: (predioData: PredioData) => {
+        console.log('✅ Datos del predio recibidos exitosamente');
+        console.log('📊 Datos completos:', predioData);
+        console.log('🔧 ANTES de asignar - this.predioData:', this.predioData);
+        this.predioData = predioData;
+        console.log('🔧 DESPUÉS de asignar - this.predioData:', this.predioData);
+        console.log('💾 predioData asignado:', this.predioData);
+        this.stateService.setPredioData(predioData, tipo, valor);
+        
+        // Forzar detección de cambios para asegurar que la vista se actualice
+        this.cdr.detectChanges();
+        console.log('🔄 Detección de cambios ejecutada');
+        console.log('🔧 FINAL - this.predioData:', this.predioData);
       },
-      error: (error) => {
-        console.error('Error al consultar el predio:', error);
-        this.errorMessage = 'Error al consultar el predio. Por favor, intente nuevamente.';
+      error: (error: any) => {
+        console.error('❌ Error en suscripción:', error);
+        // Mostrar mensaje específico del error
+        if (error.message && error.message.includes('No se encontraron datos')) {
+          this.errorMessage = error.message;
+        } else {
+          this.errorMessage = 'Error al consultar el predio. Por favor, verifique los datos e intente nuevamente.';
+        }
+        
+        this.cdr.detectChanges();
+        console.log('💥 Error manejado, errorMessage:', this.errorMessage);
       },
+      complete: () => {
+        console.log('🏁 Suscripción completada');
+        console.log('🏁 Estado final - predioData:', this.predioData, 'errorMessage:', this.errorMessage);
+      }
     });
   }
 

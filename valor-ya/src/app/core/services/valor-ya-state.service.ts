@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PredioData } from '../../core/models/predio-data.model';
+import { DatosComplementarios } from '../../core/models/datos-complementarios.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -12,6 +13,7 @@ export interface ValorYaState {
   tipoBusqueda?: TipoBusqueda;
   valorBusqueda?: string;
   predioData?: PredioData;
+  datosComplementarios?: DatosComplementarios;
   mostrarResultado: boolean;
 }
 
@@ -53,12 +55,20 @@ export class ValorYaStateService {
     this.updateState({ mostrarResultado: mostrar });
   }
 
+  setDatosComplementarios(datos: DatosComplementarios): void {
+    this.updateState({ datosComplementarios: datos });
+  }
+
   reset(): void {
     this.stateSubject.next(this.initialState);
   }
 
   hasPredioData(): boolean {
     return !!this.stateSubject.value.predioData;
+  }
+
+  hasDatosComplementarios(): boolean {
+    return !!this.stateSubject.value.datosComplementarios;
   }
 
   private updateState(partial: Partial<ValorYaState>): void {
