@@ -1,0 +1,44 @@
+.navbar {
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 1000;
+}
+
+/* Contenido interno del navbar */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Título centrado */
+.navbar-title {
+  font-family: var(--font-nunito);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Responsive - Móvil */
+@media (max-width: 768px) {
+  .navbar-container {
+    height: 60px;
+    padding: 0 1rem;
+  }
+
+  .navbar-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+}
