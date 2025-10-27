@@ -330,6 +330,13 @@ h6 {
 }
 
 /* ==================== LAYOUT COMÚN PARA STEPS ==================== */
+app-stepper {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .step-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -351,6 +358,10 @@ h6 {
 }
 
 @media (max-width: 768px) {
+  app-stepper {
+    padding: 0 1rem;
+  }
+
   .step-container {
     padding: 1rem;
   }
