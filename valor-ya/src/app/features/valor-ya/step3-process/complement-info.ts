@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,6 +13,8 @@ import {
   ValorYaStep,
 } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
+import { DatosComplementariosService } from '../../../shared/services/datos-complementarios.service';
+import { DatosComplementariosRequest } from '../../../core/models/datos-complementarios.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { InputComponent } from '../../../shared/components/input/input';
@@ -35,8 +37,12 @@ export class ComplementInfoComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
+  private datosComplementariosService = inject(DatosComplementariosService);
 
   complementForm!: FormGroup;
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
   tiposPredio: SelectOption[] = [
     { value: 'casa', label: 'Casa' },
@@ -82,17 +88,67 @@ export class ComplementInfoComponent implements OnInit {
   }
 
   onConsultar(): void {
-    if (this.complementForm.valid) {
-      this.stepperService.setStep(ValorYaStep.RESPUESTA);
-      this.router.navigate(['/valor-ya/respuesta']);
-    } else {
+    if (this.complementForm.invalid) {
       Object.keys(this.complementForm.controls).forEach((key) => {
         const control = this.complementForm.get(key);
         if (control?.invalid) {
           control.markAsTouched();
         }
       });
+      this.errorMessage.set('Por favor, complete todos los campos requeridos correctamente.');
+      return;
     }
+
+    // Obtener el lote_id del state
+    const state = this.stateService.getState();
+    const loteId = state.catastroResponse?.LOTEID;
+
+    if (!loteId) {
+      this.errorMessage.set('No se encontró información del lote. Por favor, vuelva a realizar la búsqueda.');
+      return;
+    }
+
+    // Preparar los datos para enviar
+    const formValues = this.complementForm.value;
+    const tipoPredio = formValues.tipoPredio === 'otro' 
+      ? formValues.otroTipoPredio 
+      : formValues.tipoPredio;
+
+    const datos: DatosComplementariosRequest = {
+      lote_id: loteId,
+      tipo_predio: tipoPredio,
+      num_habitaciones: Number(formValues.numeroHabitaciones),
+      num_banos: Number(formValues.numeroBanos),
+      area_construida: Number(formValues.areaConstruida),
+      edad: String(formValues.edad),
+      estrato: Number(formValues.estrato),
+      num_ascensores: Number(formValues.numeroAscensores),
+      num_parqueaderos: Number(formValues.numeroParqueaderos),
+      num_depositos: Number(formValues.numeroDepositos),
+    };
+
+    // Enviar datos al backend
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+
+    this.datosComplementariosService.registrarDatos(datos).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.successMessage.set('Datos complementarios guardados exitosamente.');
+        
+        // Navegar al siguiente paso después de guardar
+        setTimeout(() => {
+          this.stepperService.setStep(ValorYaStep.RESPUESTA);
+          this.router.navigate(['/valor-ya/respuesta']);
+        }, 1000);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(error.message || 'Error al guardar los datos complementarios.');
+        console.error('Error al guardar datos complementarios:', error);
+      },
+    });
   }
 
   get tipoPredioControl() {

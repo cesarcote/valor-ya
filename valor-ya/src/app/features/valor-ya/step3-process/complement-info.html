@@ -6,6 +6,21 @@
     <p class="subtitle">Ayúdanos a complementar la información de tu predio</p>
   </div>
 
+  <!-- Mensajes de error y éxito -->
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span class="alert-icon">⚠️</span>
+      <span class="alert-message">{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <span class="alert-icon">✓</span>
+      <span class="alert-message">{{ successMessage() }}</span>
+    </div>
+  }
+
   <form [formGroup]="complementForm" class="complement-form">
     <!-- Tipo de predio -->
     <div class="form-section">
@@ -114,9 +129,19 @@
     </div>
 
     <div class="action-buttons">
-      <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()">
+      <app-button 
+        text="Volver" 
+        variant="outline" 
+        type="button" 
+        [disabled]="isLoading()"
+        (clicked)="onVolver()">
       </app-button>
-      <app-button text="Consultar" variant="fill" type="button" (clicked)="onConsultar()">
+      <app-button 
+        [text]="isLoading() ? 'Guardando...' : 'Consultar'" 
+        variant="fill" 
+        type="button" 
+        [disabled]="isLoading()"
+        (clicked)="onConsultar()">
       </app-button>
     </div>
   </form>
