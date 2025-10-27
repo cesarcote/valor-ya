@@ -42,13 +42,17 @@
   position: relative;
   margin-bottom: 0.5rem;
   border: 1.5px solid #737373;
-  font-size: 16px;
+  font-size: 15px; /* Body text 1 - 15px */
   font-family: Verdana, sans-serif;
+  line-height: 22px; /* Body text 1 - 22px line-height */
   color: #4b4b4b;
 }
 
 .input-text-gov-container input::placeholder {
   color: #737373;
+  font-size: 15px; /* Body text 1 - 15px */
+  font-family: Verdana, sans-serif;
+  line-height: 22px; /* Body text 1 - 22px line-height */
 }
 
 /* Focus state */

@@ -17,7 +17,7 @@
 
 .tabs-govco button {
   white-space: normal;
-  color: #004884;
+  color: #333333;
   min-width: 216px;
   height: 4rem;
   font-size: 15px;
@@ -32,14 +32,14 @@
 }
 
 .tabs-govco button.active {
-  color: #004884 !important;
+  color: #333333 !important;
   background-color: white !important;
-  border-bottom: 4px solid #004884 !important;
+  border-bottom: 4px solid #feb400 !important;
 }
 
 .tabs-govco button:hover {
-  background-color: #004884 !important;
-  color: #ffffff !important;
+  background-color: #feb400 !important;
+  color: #333333 !important;
   cursor: pointer;
 }
 
