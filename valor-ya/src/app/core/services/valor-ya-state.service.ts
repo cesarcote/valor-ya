@@ -13,7 +13,9 @@ export enum TipoBusqueda {
 })
 export class ValorYaStateService {
   // State as individual signals
-  public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(undefined);
+  public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(
+    TipoBusqueda.DIRECCION
+  );
   public readonly valorBusqueda = signal<string | undefined>(undefined);
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly datosComplementarios = signal<DatosComplementarios | undefined>(undefined);

@@ -31,9 +31,7 @@ export class StepperComponent implements OnInit {
     @Optional() private avaluosStepperService: AvaluosStepperService
   ) {
     this.stepperService = this.avaluosStepperService || this.valorYaStepperService;
-  }
 
-  ngOnInit(): void {
     if (this.stepperService) {
       // Use effect to react to signal changes
       effect(() => {
@@ -45,8 +43,10 @@ export class StepperComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {}
+
   isStepActive(step: number): boolean {
-    return this.stepperService.isStepActive(step);
+    return this.currentStep() >= step;
   }
 
   isCurrentStep(step: number): boolean {

@@ -1,9 +1,4 @@
 <div class="stepper">
-  <!-- Debug: Stepper is rendering -->
-  <p style="color: red; font-weight: bold">
-    STEPPER DEBUG: Current step: {{ currentStep() }}, Progress: {{ progressPercentage() }}
-  </p>
-
   <div class="stepper__progress-bar">
     <div class="stepper__progress-fill" [style.width]="progressPercentage()"></div>
   </div>
@@ -12,8 +7,8 @@
     @for (stepConfig of stepperService?.steps; track stepConfig.step) {
     <div
       class="stepper__step"
-      [class.stepper__step--active]="isCurrentStep(stepConfig.step)"
-      [class.stepper__step--completed]="isPastStep(stepConfig.step)"
+      [class.stepper__step--active]="isStepActive(stepConfig.step)"
+      [class.stepper__step--completed]="isStepActive(stepConfig.step)"
     >
       <div class="stepper__indicator">{{ stepConfig.step }}</div>
       <span class="stepper__label">{{ stepConfig.label }}</span>
