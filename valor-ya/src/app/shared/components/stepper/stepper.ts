@@ -2,8 +2,6 @@ import {
   Component,
   inject,
   OnInit,
-  ElementRef,
-  Renderer2,
   Optional,
   signal,
   effect,
@@ -20,8 +18,6 @@ import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.se
 })
 export class StepperComponent implements OnInit {
   stepperService: any;
-  private el = inject(ElementRef);
-  private renderer = inject(Renderer2);
 
   currentStep = signal(1);
   progressPercentage = signal('15%');
@@ -38,12 +34,15 @@ export class StepperComponent implements OnInit {
         const step = this.stepperService.currentStep();
         this.currentStep.set(step);
         this.progressPercentage.set(this.stepperService.progressPercentage());
-        this.updateStepColors();
       });
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // ngOnInit is intentionally left empty.
+    // The logic that was here has been moved to the constructor
+    // to ensure it runs within the correct injection context.
+  }
 
   isStepActive(step: number): boolean {
     return this.currentStep() >= step;
@@ -55,20 +54,5 @@ export class StepperComponent implements OnInit {
 
   isPastStep(step: number): boolean {
     return step < this.currentStep();
-  }
-
-  private updateStepColors(): void {
-    const stepElements = this.el.nativeElement.querySelectorAll('.header-linea-avance-govco');
-
-    stepElements.forEach((item: any, index: number) => {
-      const circulo = item.querySelector('.indicator-linea-avance-govco');
-      const stepNumber = index + 1;
-
-      if (stepNumber <= this.currentStep()) {
-        this.renderer.setStyle(circulo, 'color', 'white');
-      } else {
-        this.renderer.setStyle(circulo, 'color', '#3366cc');
-      }
-    });
   }
 }

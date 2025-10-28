@@ -7,8 +7,8 @@
     @for (stepConfig of stepperService?.steps; track stepConfig.step) {
     <div
       class="stepper__step"
-      [class.stepper__step--active]="isStepActive(stepConfig.step)"
-      [class.stepper__step--completed]="isStepActive(stepConfig.step)"
+      [class.stepper__step--active]="isCurrentStep(stepConfig.step)"
+      [class.stepper__step--completed]="isPastStep(stepConfig.step)"
     >
       <div class="stepper__indicator">{{ stepConfig.step }}</div>
       <span class="stepper__label">{{ stepConfig.label }}</span>
