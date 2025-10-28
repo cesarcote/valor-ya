@@ -40,11 +40,6 @@ export class TestComponent {
       next: (response) => {
         this.responseForm1.set(response);
         this.loadingForm1.set(false);
-
-        const loteid = response.LOTEID || response.data?.infoConsultaPredio?.loteid;
-        if (loteid) {
-          this.mapComponent.ubicarLotePorCodigo(loteid);
-        }
       },
       error: (error) => {
         this.errorForm1.set(`Error: ${error.message}`);
@@ -62,11 +57,6 @@ export class TestComponent {
       next: (response) => {
         this.responseForm2.set(response);
         this.loadingForm2.set(false);
-
-        const loteid = response.LOTEID || response.data?.infoConsultaPredio?.loteid;
-        if (loteid) {
-          this.mapComponent.ubicarLotePorCodigo(loteid);
-        }
       },
       error: (error) => {
         this.errorForm2.set(`Error: ${error.message}`);
@@ -83,11 +73,6 @@ export class TestComponent {
       next: (response) => {
         this.mockResponse.set(response);
         this.loadingMock.set(false);
-
-        const loteid = response.data?.infoConsultaPredio?.loteid;
-        if (loteid) {
-          this.mapComponent.ubicarLotePorCodigo(loteid);
-        }
       },
       error: () => {
         this.loadingMock.set(false);
