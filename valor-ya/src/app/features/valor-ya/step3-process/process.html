@@ -6,74 +6,34 @@
     <p class="subtitle">Información del predio encontrado</p>
   </div>
 
-  @if (errorMessage()) {
-  <div class="error-section">
-    <p class="error-message">{{ errorMessage() }}</p>
-    <app-button text="Volver" variant="fill" type="button" (clicked)="onNoEsCorrecta()">
-    </app-button>
+  @if (errorMessage) {
+  <!-- Mensaje de error cuando no se encuentran datos -->
+  <div class="no-data-section">
+    <h3>No se encontró información</h3>
+    <p class="error-message">{{ errorMessage }}</p>
   </div>
-  } @else if (catastroData()) {
-  <!-- Mapa con ubicación -->
+
+  <div class="confirmation-section">
+    <p class="confirmation-question">
+      ¿La información que reposa en nuestro sistema de información es la correcta?
+    </p>
+    <div class="action-buttons">
+      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()">
+      </app-button>
+      <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
+      </app-button>
+    </div>
+  </div>
+  } @else if (predioData) {
+
   <div class="map-section">
     <h3>Ubicación del Predio</h3>
     <app-map></app-map>
   </div>
 
   <!-- Información del predio -->
-  <div class="info-section">
-    <h3>Información del Predio</h3>
-    <div class="info-grid">
-      <div class="info-item">
-        <label>CHIP:</label>
-        <span>{{
-          tipoBusqueda() === TipoBusqueda.CHIP
-            ? valorBusqueda()
-            : catastroData()!.CHIP || catastroData()!.data?.infoConsultaPredio?.chip || 'N/A'
-        }}</span>
-      </div>
-      <div class="info-item">
-        <label>LOTEID:</label>
-        <span>{{
-          catastroData()!.LOTEID || catastroData()!.data?.infoConsultaPredio?.loteid || 'N/A'
-        }}</span>
-      </div>
-      <div class="info-item">
-        <label>Dirección:</label>
-        <span>{{
-          catastroData()!.DIRECCION_REAL ||
-            (tipoBusqueda() === TipoBusqueda.DIRECCION ? valorBusqueda() : '') ||
-            catastroData()!.data?.infoAdicional?.direccion ||
-            'N/A'
-        }}</span>
-      </div>
-      @if (catastroData()!.data) {
-      <div class="info-item">
-        <label>Localidad:</label>
-        <span>{{ catastroData()!.data!.infoAdicional.localidad }}</span>
-      </div>
-      <div class="info-item">
-        <label>Barrio:</label>
-        <span>{{ catastroData()!.data!.infoAdicional.barrio }}</span>
-      </div>
-      <div class="info-item">
-        <label>Área Polígono:</label>
-        <span>{{ catastroData()!.data!.infoGeografica.areaPoligono.toFixed(2) }} m²</span>
-      </div>
-      <div class="info-item">
-        <label>Área Construida:</label>
-        <span>{{ catastroData()!.data!.infoAdicional.areaConstruidaPrivada }} m²</span>
-      </div>
-      <div class="info-item">
-        <label>Tipo de Predio:</label>
-        <span>{{ catastroData()!.data!.infoAdicional.tipoPredio }}</span>
-      </div>
-      <div class="info-item">
-        <label>Estrato:</label>
-        <span>{{ catastroData()!.data!.infoAdicional.estrato }}</span>
-      </div>
-      }
-    </div>
-  </div>
+  <app-predio-info-card [predioData]="predioData" [showMessage]="true" [showAllFields]="true">
+  </app-predio-info-card>
 
   <div class="confirmation-section">
     <p class="confirmation-question">

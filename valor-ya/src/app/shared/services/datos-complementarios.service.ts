@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import {
   DatosComplementarios,
   DatosComplementariosRequest,
-  DatosComplementariosResponse,
+  DatosComplementariosResponse
 } from '../../core/models/datos-complementarios.model';
 import { currentEnvironment } from '../../../environments/environment';
 
@@ -24,7 +24,7 @@ export class DatosComplementariosService {
    */
   registrarDatos(datos: DatosComplementariosRequest): Observable<DatosComplementarios> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     });
 
     return this.http.post<DatosComplementariosResponse>(this.apiUrl, datos, { headers }).pipe(
@@ -37,9 +37,7 @@ export class DatosComplementariosService {
       }),
       catchError((error: any) => {
         console.error('Error en registrarDatos:', error);
-        throw new Error(
-          `Error al registrar datos complementarios: ${error.message || 'Error desconocido'}`
-        );
+        throw new Error(`Error al registrar datos complementarios: ${error.message || 'Error desconocido'}`);
       })
     );
   }
@@ -60,9 +58,7 @@ export class DatosComplementariosService {
       }),
       catchError((error: any) => {
         console.error('Error en obtenerPorLoteId:', error);
-        throw new Error(
-          `Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`
-        );
+        throw new Error(`Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`);
       })
     );
   }
@@ -73,31 +69,24 @@ export class DatosComplementariosService {
    * @param datos Datos a actualizar
    * @returns Observable con los datos actualizados
    */
-  actualizarDatos(
-    id: number,
-    datos: Partial<DatosComplementariosRequest>
-  ): Observable<DatosComplementarios> {
+  actualizarDatos(id: number, datos: Partial<DatosComplementariosRequest>): Observable<DatosComplementarios> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     });
 
-    return this.http
-      .put<DatosComplementariosResponse>(`${this.apiUrl}/${id}`, datos, { headers })
-      .pipe(
-        map((response: DatosComplementariosResponse) => {
-          if (response.success && response.data) {
-            return response.data;
-          } else {
-            throw new Error(response.message || 'Error al actualizar los datos complementarios');
-          }
-        }),
-        catchError((error: any) => {
-          console.error('Error en actualizarDatos:', error);
-          throw new Error(
-            `Error al actualizar datos complementarios: ${error.message || 'Error desconocido'}`
-          );
-        })
-      );
+    return this.http.put<DatosComplementariosResponse>(`${this.apiUrl}/${id}`, datos, { headers }).pipe(
+      map((response: DatosComplementariosResponse) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al actualizar los datos complementarios');
+        }
+      }),
+      catchError((error: any) => {
+        console.error('Error en actualizarDatos:', error);
+        throw new Error(`Error al actualizar datos complementarios: ${error.message || 'Error desconocido'}`);
+      })
+    );
   }
 
   /**
@@ -116,9 +105,7 @@ export class DatosComplementariosService {
       }),
       catchError((error: any) => {
         console.error('Error en eliminarDatos:', error);
-        throw new Error(
-          `Error al eliminar datos complementarios: ${error.message || 'Error desconocido'}`
-        );
+        throw new Error(`Error al eliminar datos complementarios: ${error.message || 'Error desconocido'}`);
       })
     );
   }
@@ -140,22 +127,18 @@ export class DatosComplementariosService {
       url += `?${params.join('&')}`;
     }
 
-    return this.http
-      .get<{ success: boolean; data: DatosComplementarios[]; message?: string }>(url)
-      .pipe(
-        map((response) => {
-          if (response.success && response.data) {
-            return response.data;
-          } else {
-            throw new Error(response.message || 'Error al obtener los datos complementarios');
-          }
-        }),
-        catchError((error: any) => {
-          console.error('Error en obtenerTodos:', error);
-          throw new Error(
-            `Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`
-          );
-        })
-      );
+    return this.http.get<{success: boolean, data: DatosComplementarios[], message?: string}>(url).pipe(
+      map((response) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al obtener los datos complementarios');
+        }
+      }),
+      catchError((error: any) => {
+        console.error('Error en obtenerTodos:', error);
+        throw new Error(`Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`);
+      })
+    );
   }
 }

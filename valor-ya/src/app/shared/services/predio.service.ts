@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PredioData } from '../../core/models/predio-data.model';
 import { currentEnvironment } from '../../../environments/environment';
@@ -37,11 +37,43 @@ interface CatastroApiResponse {
   providedIn: 'root',
 })
 export class PredioService {
+  private readonly DEFAULT_COORDINATES = {
+    lat: 4.6482837,
+    lng: -74.0645468,
+  };
+
   constructor(private http: HttpClient) {}
 
-  consultarPorDireccion(direccion: string): Observable<PredioData> {
-    console.log('🔍 Consultando dirección:', direccion);
+  /**
+   * Transforma la respuesta del backend en el modelo de datos del frontend
+   */
+  private mapCatastroResponseToPredioData(
+    response: CatastroApiResponse,
+    valorBusqueda?: string,
+    tipoBusqueda?: 'chip' | 'direccion'
+  ): PredioData {
+    const { data, message } = response;
+    const { infoAdicional, infoConsultaPredio, infoGeografica } = data;
 
+    return {
+      mensaje: message || 'Consulta realizada exitosamente',
+      chip: infoConsultaPredio?.chip || (tipoBusqueda === 'chip' ? valorBusqueda : '') || '',
+      loteid: infoConsultaPredio?.loteid || '',
+      direccion:
+        infoAdicional.direccion || (tipoBusqueda === 'direccion' ? valorBusqueda : '') || '',
+      municipio: infoAdicional.municipio || '',
+      localidad: infoAdicional.localidad || '',
+      barrio: infoAdicional.barrio || '',
+      tipoPredio: infoAdicional.tipoPredio || '',
+      estrato: infoAdicional.estrato || '',
+      areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
+      edad: infoAdicional.edad || '',
+      coordenadas: this.DEFAULT_COORDINATES,
+      coordenadasPoligono: infoGeografica?.coordenadasPoligono,
+    };
+  }
+
+  consultarPorDireccion(direccion: string): Observable<PredioData> {
     const params = new HttpParams()
       .set('Opcion', '2')
       .set('Identificador', direccion)
@@ -52,28 +84,7 @@ export class PredioService {
     return this.http.get<CatastroApiResponse>(url, { params }).pipe(
       map((response: CatastroApiResponse) => {
         if (response.success && response.data && response.data.infoAdicional) {
-          const infoAdicional = response.data.infoAdicional;
-          const infoConsulta = response.data.infoConsultaPredio;
-
-          const predioData: PredioData = {
-            mensaje: response.message || 'Consulta realizada exitosamente',
-            chip: infoConsulta?.chip || '',
-            loteid: infoConsulta?.loteid || '',
-            direccion: infoAdicional.direccion || direccion,
-            municipio: infoAdicional.municipio || '',
-            localidad: infoAdicional.localidad || '',
-            barrio: infoAdicional.barrio || '',
-            tipoPredio: infoAdicional.tipoPredio || '',
-            estrato: infoAdicional.estrato || '',
-            areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
-            edad: infoAdicional.edad || '',
-            coordenadas: {
-              lat: 4.6482837,
-              lng: -74.0645468,
-            },
-          };
-
-          return predioData;
+          return this.mapCatastroResponseToPredioData(response, direccion, 'direccion');
         } else {
           throw new Error('La respuesta no contiene los datos esperados');
         }
@@ -85,7 +96,6 @@ export class PredioService {
   }
 
   consultarPorChip(chip: string): Observable<PredioData> {
-    console.log('🔍 Consultando CHIP:', chip);
 
     const params = new HttpParams().set('Opcion', '3').set('Identificador', chip).set('f', 'pjson');
 
@@ -96,29 +106,7 @@ export class PredioService {
         console.log('✅ Respuesta exitosa de la API');
 
         if (response.success && response.data && response.data.infoAdicional) {
-          const infoAdicional = response.data.infoAdicional;
-          const infoConsulta = response.data.infoConsultaPredio;
-
-          const predioData: PredioData = {
-            mensaje: response.message || 'Consulta realizada exitosamente',
-            chip: infoConsulta?.chip || chip,
-            loteid: infoConsulta?.loteid || '',
-            direccion: infoAdicional.direccion || '',
-            municipio: infoAdicional.municipio || '',
-            localidad: infoAdicional.localidad || '',
-            barrio: infoAdicional.barrio || '',
-            tipoPredio: infoAdicional.tipoPredio || '',
-            estrato: infoAdicional.estrato || '',
-            areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
-            edad: infoAdicional.edad || '',
-            coordenadas: {
-              lat: 4.6482837,
-              lng: -74.0645468,
-            },
-          };
-
-          console.log('🏠 Predio procesado exitosamente');
-          return predioData;
+          return this.mapCatastroResponseToPredioData(response, chip, 'chip');
         } else {
           console.error('❌ Estructura de respuesta inesperada');
           throw new Error('La respuesta no contiene los datos esperados');
@@ -131,48 +119,18 @@ export class PredioService {
     );
   }
 
-  consultarPorLoteId(loteId: string): Observable<PredioData> {
-    console.log('🔍 Consultando LOTEID:', loteId);
-
-    const url = `${currentEnvironment.baseUrl}/predio-info/${loteId}`;
-
-    return this.http.get<CatastroApiResponse>(url).pipe(
-      map((response: CatastroApiResponse) => {
-        console.log('✅ Respuesta exitosa de la API');
-
-        if (response.success && response.data && response.data.infoAdicional) {
-          const infoAdicional = response.data.infoAdicional;
-          const infoConsulta = response.data.infoConsultaPredio;
-
-          const predioData: PredioData = {
-            mensaje: response.message || 'Consulta realizada exitosamente',
-            chip: infoConsulta?.chip || '',
-            loteid: infoConsulta?.loteid || loteId,
-            direccion: infoAdicional.direccion || '',
-            municipio: infoAdicional.municipio || '',
-            localidad: infoAdicional.localidad || '',
-            barrio: infoAdicional.barrio || '',
-            tipoPredio: infoAdicional.tipoPredio || '',
-            estrato: infoAdicional.estrato || '',
-            areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
-            edad: infoAdicional.edad || '',
-            coordenadas: {
-              lat: 4.6482837,
-              lng: -74.0645468,
-            },
-          };
-
-          console.log('🏠 Predio procesado exitosamente');
-          return predioData;
-        } else {
-          console.error('❌ Estructura de respuesta inesperada');
-          throw new Error('La respuesta no contiene los datos esperados');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('🚨 Error en consulta:', error.status, error.message);
-        throw new Error(`No se encontraron datos para el LOTEID: ${loteId}`);
-      })
-    );
+  consultarPorFMI(zona: string, matricula: string): Observable<PredioData> {
+    return of({
+      mensaje: `Ya ubicamos tu predio para el cálculo de Valor Ya: ${zona} - ${matricula}`,
+      direccion: 'Carrera 15 #32-45',
+      municipio: 'Bogotá D.C.',
+      localidad: 'Engativá',
+      barrio: 'Código y nombre del sector catastral.',
+      tipoPredio: 'Agrupaciones de Uso2.',
+      estrato: 'código estrato.',
+      areaConstruida: 'área construida del predio.',
+      edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
+      coordenadas: { lat: 4.711, lng: -74.0721 },
+    });
   }
 }

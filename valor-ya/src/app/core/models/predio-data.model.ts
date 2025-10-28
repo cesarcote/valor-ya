@@ -1,7 +1,7 @@
 export interface PredioData {
   mensaje: string;
-  chip: string;
-  loteid: string;
+  chip?: string;
+  loteid?: string;
   direccion: string;
   municipio: string;
   localidad: string;
@@ -14,4 +14,5 @@ export interface PredioData {
     lat: number;
     lng: number;
   };
+  coordenadasPoligono?: number[][][];
 }

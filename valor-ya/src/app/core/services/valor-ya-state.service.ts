@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { PredioData } from '../models/predio-data.model';
+import { DatosComplementarios } from '../models/datos-complementarios.model';
 import { CatastroResponse } from '../models/catastro-response.model';
 
 export enum TipoBusqueda {
@@ -12,6 +14,8 @@ export interface ValorYaState {
   tipoBusqueda?: TipoBusqueda;
   valorBusqueda?: string;
   catastroResponse?: CatastroResponse;
+  predioData?: PredioData;
+  datosComplementarios?: DatosComplementarios;
   mostrarResultado: boolean;
 }
 
@@ -48,12 +52,24 @@ export class ValorYaStateService {
     this.updateState({ mostrarResultado: mostrar });
   }
 
+  setDatosComplementarios(datos: DatosComplementarios): void {
+    this.updateState({ datosComplementarios: datos });
+  }
+
+  setPredioData(predioData: PredioData, tipo: TipoBusqueda, valor: string): void {
+    this.updateState({ predioData, tipoBusqueda: tipo, valorBusqueda: valor });
+  }
+
   reset(): void {
     this.stateSubject.next(this.initialState);
   }
 
   hasCatastroResponse(): boolean {
     return !!this.stateSubject.value.catastroResponse;
+  }
+
+  hasDatosComplementarios(): boolean {
+    return !!this.stateSubject.value.datosComplementarios;
   }
 
   private updateState(partial: Partial<ValorYaState>): void {

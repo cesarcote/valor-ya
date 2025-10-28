@@ -62,11 +62,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     fillOpacity: 0.3,
   };
 
+  // Layer de mapa del catastro de Bogotá
   private readonly CATASTRO_TILE_URL =
     'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/Mapa_Referencia/mapa_base_3857/MapServer';
-
-  private readonly CATASTRO_QUERY_URL =
-    'https://sig.catastrobogota.gov.co/arcgis/rest/services/catastro/lote/MapServer/0/query';
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -116,34 +114,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
   }
 
-  ubicarLotePorCodigo(loteCodigo: string): void {
-    if (!this.map) {
-      console.warn('Mapa no inicializado, reintentando...');
-      setTimeout(() => this.ubicarLotePorCodigo(loteCodigo), 100);
+  ubicarLotePorCoordenadas(coordenadasPoligono: number[][][], loteId?: string): void {
+    if (!this.map || !coordenadasPoligono || coordenadasPoligono.length === 0) {
+      console.warn('Mapa no inicializado o coordenadas inválidas');
       return;
     }
 
-    this.isLoading.set(true);
+    // Convertir coordenadas del polígono al formato de Leaflet
+    const coordinates = this.parseRingsToLatLng(coordenadasPoligono);
 
-    const params = new URLSearchParams({
-      returnGeometry: 'true',
-      where: `LOTCODIGO = '${loteCodigo}'`,
-      outSR: '4326',
-      outFields: '*',
-      f: 'json',
-    });
+    // Agregar el polígono al mapa
+    this.addPolygon({ coordinates });
 
-    const url = `${this.CATASTRO_QUERY_URL}?${params.toString()}`;
+    // Agregar marcador en el centro del polígono
+    const bounds = this.currentPolygon!.getBounds();
+    const center = bounds.getCenter();
 
-    this.http.get<any>(url).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.handleLoteResponse(response, loteCodigo);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        console.error('Error al buscar lote:', error);
-      },
+    this.addMarker({
+      lat: center.lat,
+      lng: center.lng,
+      popupText: `<strong>LOTE:</strong> ${loteId || 'Sin código'}`,
     });
   }
 
