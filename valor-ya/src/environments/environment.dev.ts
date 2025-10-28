@@ -15,4 +15,4 @@ export const environment = {
 };
 
 // Configuración actual del entorno para desarrollo
-export const currentEnvironment = environment.dev;
+export const currentEnvironment = environment.local;
