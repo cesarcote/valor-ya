@@ -33,7 +33,6 @@ export class Process implements OnInit, AfterViewInit {
 
   @ViewChild(MapComponent) map!: MapComponent;
 
-  // State as Signals
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
@@ -66,7 +65,7 @@ export class Process implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // The map component is now available here.
+
   }
 
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {

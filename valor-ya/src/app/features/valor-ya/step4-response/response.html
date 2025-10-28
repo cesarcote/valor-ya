@@ -6,23 +6,9 @@
     <p>Estimación de valor comercial para el predio consultado</p>
   </div>
 
-  @if (predioData()) {
   <div class="results-container">
-    <div class="result-card">
-      <p class="result-label">Valor Comercial Estimado</p>
-      <p class="result-value">{{ valorEstimado() | currency:'USD':'symbol':'1.0-0' }}</p>
-      <p class="result-date">Fecha de consulta: {{ fechaConsulta() }}</p>
-    </div>
-
-    <app-predio-info-card [predioData]="predioData()!" [showMessage]="false" [showAllFields]="false">
-    </app-predio-info-card>
+    <p>aca va el resultado</p>
   </div>
-  } @else {
-  <div class="no-data-section">
-    <h3>No se pudo cargar el resultado</h3>
-    <p>No hay datos del predio para mostrar. Por favor, inicie una nueva consulta.</p>
-  </div>
-  }
 
   <div class="action-buttons">
     <app-button text="Nueva Consulta" variant="fill" type="button" (clicked)="onNuevaConsulta()">
