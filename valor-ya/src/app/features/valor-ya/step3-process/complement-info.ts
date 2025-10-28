@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -32,7 +32,7 @@ import { SelectComponent, SelectOption } from '../../../shared/components/select
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],
 })
-export class ComplementInfoComponent implements OnInit {
+export class ComplementInfo implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
@@ -40,8 +40,8 @@ export class ComplementInfoComponent implements OnInit {
   private datosComplementariosService = inject(DatosComplementariosService);
 
   complementForm!: FormGroup;
-  isLoading = false;
-  errorMessage = '';
+  isLoading = signal(false);
+  errorMessage = signal('');
 
   tiposPredio: SelectOption[] = [
     { value: 'casa', label: 'Casa' },
@@ -88,24 +88,28 @@ export class ComplementInfoComponent implements OnInit {
 
   onConsultarMCM(): void {
     if (this.complementForm.valid) {
-      this.isLoading = true;
-      this.errorMessage = '';
+      this.isLoading.set(true);
+      this.errorMessage.set('');
 
       // Obtener el estado actual con los datos del predio
-      const state = this.stateService.getState();
+      const predioData = this.stateService.predioData();
 
-      if (!state.predioData) {
-        this.errorMessage = 'No se encontraron datos del predio. Por favor, vuelva a realizar la consulta.';
-        this.isLoading = false;
+      if (!predioData) {
+        this.errorMessage.set(
+          'No se encontraron datos del predio. Por favor, vuelva a realizar la consulta.'
+        );
+        this.isLoading.set(false);
         return;
       }
 
       // Obtener el loteid real desde los datos del predio
-      const loteid = state.predioData.loteid;
+      const loteid = predioData.loteid;
 
       if (!loteid) {
-        this.errorMessage = 'No se encontró el identificador del lote (Lote ID). Por favor, vuelva a realizar la consulta.';
-        this.isLoading = false;
+        this.errorMessage.set(
+          'No se encontró el identificador del lote (Lote ID). Por favor, vuelva a realizar la consulta.'
+        );
+        this.isLoading.set(false);
         return;
       }
       debugger;
@@ -116,12 +120,13 @@ export class ComplementInfoComponent implements OnInit {
         area_construida: parseFloat(formValues.areaConstruida) || undefined,
         estrato: parseInt(formValues.estrato) || undefined,
         edad: formValues.edad?.toString() || undefined,
-        tipo_predio: formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio,
+        tipo_predio:
+          formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio,
         num_ascensores: parseInt(formValues.numeroAscensores) || 0,
         num_banos: parseInt(formValues.numeroBanos) || 0,
         num_depositos: parseInt(formValues.numeroDepositos) || 0,
         num_habitaciones: parseInt(formValues.numeroHabitaciones) || 0,
-        num_parqueaderos: parseInt(formValues.numeroParqueaderos) || 0
+        num_parqueaderos: parseInt(formValues.numeroParqueaderos) || 0,
       };
 
       console.log('Registrando datos complementarios:', datosComplementarios);
@@ -134,7 +139,7 @@ export class ComplementInfoComponent implements OnInit {
           // Guardar los datos complementarios en el estado
           this.stateService.setDatosComplementarios(datosGuardados);
 
-          this.isLoading = false;
+          this.isLoading.set(false);
 
           // Continuar con el flujo
           this.stepperService.setStep(ValorYaStep.RESPUESTA);
@@ -142,9 +147,9 @@ export class ComplementInfoComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al registrar datos complementarios:', error);
-          this.errorMessage = `Error al guardar los datos: ${error.message}`;
-          this.isLoading = false;
-        }
+          this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
+          this.isLoading.set(false);
+        },
       });
     } else {
       // Marcar campos como tocados para mostrar errores

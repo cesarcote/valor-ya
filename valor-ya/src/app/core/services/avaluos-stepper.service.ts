@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 
 export enum AvaluosStep {
   INICIO = 1,
@@ -17,8 +16,7 @@ export interface AvaluosStepConfig {
 
 @Injectable()
 export class AvaluosStepperService {
-  private currentStepSubject = new BehaviorSubject<AvaluosStep>(AvaluosStep.INICIO);
-  public currentStep$: Observable<AvaluosStep> = this.currentStepSubject.asObservable();
+  public readonly currentStep = signal<AvaluosStep>(AvaluosStep.INICIO);
 
   readonly steps: AvaluosStepConfig[] = [
     {
@@ -47,30 +45,29 @@ export class AvaluosStepperService {
     },
   ];
 
-  getCurrentStep(): AvaluosStep {
-    return this.currentStepSubject.value;
-  }
+  public readonly progressPercentage = computed(() => {
+    const config = this.getStepConfig(this.currentStep());
+    return config?.percentage || '0%';
+  });
 
   setStep(step: AvaluosStep): void {
-    this.currentStepSubject.next(step);
+    this.currentStep.set(step);
   }
 
   nextStep(): void {
-    const current = this.currentStepSubject.value;
-    if (current < AvaluosStep.RESPUESTA) {
-      this.currentStepSubject.next(current + 1);
-    }
+    this.currentStep.update((current) =>
+      current < AvaluosStep.RESPUESTA ? current + 1 : current
+    );
   }
 
   previousStep(): void {
-    const current = this.currentStepSubject.value;
-    if (current > AvaluosStep.INICIO) {
-      this.currentStepSubject.next(current - 1);
-    }
+    this.currentStep.update((current) =>
+      current > AvaluosStep.INICIO ? current - 1 : current
+    );
   }
 
   isStepActive(step: AvaluosStep): boolean {
-    return this.currentStepSubject.value >= step;
+    return this.currentStep() >= step;
   }
 
   getStepConfig(step: AvaluosStep): AvaluosStepConfig | undefined {
@@ -78,11 +75,6 @@ export class AvaluosStepperService {
   }
 
   reset(): void {
-    this.currentStepSubject.next(AvaluosStep.INICIO);
-  }
-
-  getProgressPercentage(): string {
-    const config = this.getStepConfig(this.currentStepSubject.value);
-    return config?.percentage || '0%';
+    this.currentStep.set(AvaluosStep.INICIO);
   }
 }

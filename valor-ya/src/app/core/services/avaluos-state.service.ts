@@ -1,36 +1,18 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-export interface AvaluosState {
-  currentStep: number;
-  formData: any;
-}
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AvaluosStateService {
-  private initialState: AvaluosState = {
-    currentStep: 1,
-    formData: {},
-  };
-
-  private stateSubject = new BehaviorSubject<AvaluosState>(this.initialState);
-  public state$ = this.stateSubject.asObservable();
-
-  getState(): AvaluosState {
-    return this.stateSubject.value;
-  }
+  public readonly currentStep = signal<number>(1);
+  public readonly formData = signal<any>({});
 
   setFormData(data: any): void {
-    const currentState = this.stateSubject.value;
-    this.stateSubject.next({
-      ...currentState,
-      formData: { ...currentState.formData, ...data },
-    });
+    this.formData.update((currentData) => ({ ...currentData, ...data }));
   }
 
   reset(): void {
-    this.stateSubject.next(this.initialState);
+    this.currentStep.set(1);
+    this.formData.set({});
   }
 }

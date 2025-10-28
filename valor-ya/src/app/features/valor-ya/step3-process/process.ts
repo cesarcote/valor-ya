@@ -2,17 +2,13 @@ import {
   Component,
   inject,
   OnInit,
-  AfterViewInit,
-  ViewChild,
-  ChangeDetectorRef,
+  signal,
+  effect,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
@@ -27,121 +23,83 @@ import { MapComponent } from '../../../shared/components/map';
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
-export class ProcessComponent implements OnInit, AfterViewInit {
-  @ViewChild(MapComponent) mapComponent!: MapComponent;
-
+export class Process implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
-  private cdr = inject(ChangeDetectorRef);
 
-  predioData?: PredioData;
-  errorMessage: string = '';
+  // State as Signals
+  public readonly predioData = signal<PredioData | undefined>(undefined);
+  public readonly errorMessage = signal<string>('');
+  public readonly isLoading = signal<boolean>(true);
+
+  private map!: MapComponent;
+
+  constructor() {
+    // Effect to update the map when predioData signal changes
+    effect(() => {
+      const data = this.predioData();
+      if (data?.coordenadasPoligono && this.map) {
+        this.map.ubicarLotePorCoordenadas(
+          data.coordenadasPoligono,
+          data.loteid
+        );
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
 
-    const state = this.stateService.getState();
+    const tipo = this.stateService.tipoBusqueda();
+    const valor = this.stateService.valorBusqueda();
 
-    if (!state.tipoBusqueda || !state.valorBusqueda) {
+    if (!tipo || !valor) {
       this.router.navigate(['/valor-ya/inicio']);
       return;
     }
 
-    this.realizarConsulta(state.tipoBusqueda, state.valorBusqueda);
+    this.realizarConsulta(tipo, valor);
+
+    this.map = new MapComponent();
   }
 
-  ngAfterViewInit(): void {
-    if (this.predioData?.coordenadasPoligono && this.mapComponent) {
-      this.mapComponent.ubicarLotePorCoordenadas(
-        this.predioData.coordenadasPoligono,
-        this.predioData.loteid
-      );
-    }
-  }
-
-  realizarConsulta(tipo: TipoBusqueda, valor: string): void {
-    console.log('🔍 Iniciando consulta:', { tipo, valor });
-    this.errorMessage = '';
-    this.predioData = undefined; // Limpiar datos anteriores
+  private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.predioData.set(undefined);
 
     let consulta$: Observable<PredioData>;
 
     switch (tipo) {
       case TipoBusqueda.CHIP:
-        console.log('📍 Consultando por CHIP:', valor);
         consulta$ = this.predioService.consultarPorChip(valor);
         break;
       case TipoBusqueda.DIRECCION:
-        console.log('📍 Consultando por DIRECCION:', valor);
         consulta$ = this.predioService.consultarPorDireccion(valor);
         break;
       case TipoBusqueda.FMI:
         const [zona, matricula] = valor.split('-');
-        console.log('📍 Consultando por FMI:', { zona, matricula });
         consulta$ = this.predioService.consultarPorFMI(zona, matricula);
         break;
       default:
-        console.log('❌ Tipo de búsqueda no válido:', tipo);
         this.router.navigate(['/valor-ya/solicitud']);
         return;
     }
 
-    console.log('🔄 Observable creado, ejecutando suscripción...');
-    console.log(
-      '🔄 Estado antes de suscripción - predioData:',
-      this.predioData,
-      'errorMessage:',
-      this.errorMessage
-    );
-
-    console.log('🔄 Observable creado, ejecutando suscripción...');
-    console.log(
-      '🔄 Estado antes de suscripción - predioData:',
-      this.predioData,
-      'errorMessage:',
-      this.errorMessage
-    );
     consulta$.subscribe({
-      next: (predioData: PredioData) => {
-        this.predioData = predioData;
-
-        this.stateService.setPredioData(predioData, tipo, valor);
-
-        // Forzar detección de cambios para asegurar que la vista se actualice
-        this.cdr.detectChanges();
-
-        // Ubicar el lote en el mapa si está disponible
-        if (predioData.coordenadasPoligono && this.mapComponent) {
-          console.log('🗺️ Ubicando lote en el mapa usando coordenadas del polígono');
-          this.mapComponent.ubicarLotePorCoordenadas(
-            predioData.coordenadasPoligono,
-            predioData.loteid
-          );
-        }
+      next: (data) => {
+        this.predioData.set(data);
+        this.stateService.setPredioData(data, tipo, valor);
+        this.isLoading.set(false);
       },
       error: (error: any) => {
-        console.error('❌ Error en suscripción:', error);
-        // Mostrar mensaje específico del error
-        if (error.message && error.message.includes('No se encontraron datos')) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage =
-            'Error al consultar el predio. Por favor, verifique los datos e intente nuevamente.';
-        }
-
-        this.cdr.detectChanges();
-        console.log('💥 Error manejado, errorMessage:', this.errorMessage);
-      },
-      complete: () => {
-        console.log('🏁 Suscripción completada');
-        console.log(
-          '🏁 Estado final - predioData:',
-          this.predioData,
-          'errorMessage:',
-          this.errorMessage
+        this.errorMessage.set(
+          error.message ||
+            'Error al consultar el predio. Por favor, verifique los datos e intente nuevamente.'
         );
+        this.isLoading.set(false);
       },
     });
   }

@@ -1,16 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, computed, effect } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
-import { CatastroService } from '../../../core/services/catastro.service';
-import { CatastroResponse } from '../../../core/models/catastro-response.model';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
-import { ButtonComponent } from '../../../shared/components/button/button';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
 import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
@@ -29,16 +23,24 @@ import { LoadingComponent } from '../../../shared/components/loading/loading';
   templateUrl: './application.html',
   styleUrls: ['./application.css'],
 })
-export class ApplicationComponent implements OnInit {
+export class ApplicationComponent {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
-  private stateService = inject(ValorYaStateService);
-  private catastroService = inject(CatastroService);
+  public stateService = inject(ValorYaStateService);
 
-  tipoBusquedaActual = signal<TipoBusqueda | undefined>(undefined);
-  selectedTabIndex = signal(0);
-  isLoading = signal(false);
-  errorMessage = signal('');
+  public selectedTabIndex = computed(() => {
+    const tipoBusqueda = this.stateService.tipoBusqueda();
+    switch (tipoBusqueda) {
+      case TipoBusqueda.DIRECCION:
+        return 0;
+      case TipoBusqueda.CHIP:
+        return 1;
+      case TipoBusqueda.FMI:
+        return 2;
+      default:
+        return 0;
+    }
+  });
 
   tabs: Tab[] = [
     { label: 'Dirección Catastral', disabled: false },
@@ -46,29 +48,14 @@ export class ApplicationComponent implements OnInit {
     { label: 'Folio Matrícula Inmobiliaria', disabled: false },
   ];
 
-  readonly TipoBusqueda = TipoBusqueda;
-
-  ngOnInit(): void {
+  constructor() {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
-    this.stateService.state$.subscribe((state) => {
-      this.tipoBusquedaActual.set(state.tipoBusqueda);
-      this.updateSelectedTabIndex();
+    effect(() => {
+      if (!this.stateService.tipoBusqueda()) {
+        this.router.navigate(['/valor-ya/inicio']);
+      }
     });
-
-    if (!this.tipoBusquedaActual()) {
-      this.router.navigate(['/valor-ya/inicio']);
-    }
-  }
-
-  updateSelectedTabIndex(): void {
-    if (this.tipoBusquedaActual() === TipoBusqueda.DIRECCION) {
-      this.selectedTabIndex.set(0);
-    } else if (this.tipoBusquedaActual() === TipoBusqueda.CHIP) {
-      this.selectedTabIndex.set(1);
-    } else if (this.tipoBusquedaActual() === TipoBusqueda.FMI) {
-      this.selectedTabIndex.set(2);
-    }
   }
 
   onTabChange(index: number): void {
@@ -77,59 +64,18 @@ export class ApplicationComponent implements OnInit {
   }
 
   onConsultarChip(chip: string): void {
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    this.catastroService.buscarPorChip(chip).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.stateService.setValorBusqueda(chip);
-        this.stateService.setCatastroResponse(response);
-        this.irAProceso();
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(`Error al consultar CHIP: ${error.message || 'Intente nuevamente'}`);
-      },
-    });
+    this.stateService.setValorBusqueda(chip);
+    this.irAProceso();
   }
 
   onConsultarDireccion(direccion: string): void {
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    this.catastroService.buscarPorDireccion(direccion).subscribe({
-      next: (response) => {
-        this.isLoading.set(false);
-        this.stateService.setValorBusqueda(direccion);
-        this.stateService.setCatastroResponse(response);
-        this.irAProceso();
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(
-          `Error al consultar dirección: ${error.message || 'Intente nuevamente'}`
-        );
-      },
-    });
+    this.stateService.setValorBusqueda(direccion);
+    this.irAProceso();
   }
 
   onConsultarFMI(data: FmiData): void {
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    this.catastroService.buscarPorDireccion(data.matricula).subscribe({
-      next: (response: CatastroResponse) => {
-        this.isLoading.set(false);
-        this.stateService.setValorBusqueda(`${data.matricula} - ${data.zona}`);
-        this.stateService.setCatastroResponse(response);
-        this.irAProceso();
-      },
-      error: (error: Error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(`Error al consultar FMI: ${error.message || 'Intente nuevamente'}`);
-      },
-    });
+    this.stateService.setValorBusqueda(`${data.matricula} - ${data.zona}`);
+    this.irAProceso();
   }
 
   irAProceso(): void {

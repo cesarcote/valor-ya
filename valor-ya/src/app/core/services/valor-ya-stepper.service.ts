@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 
 export enum ValorYaStep {
   INICIO = 1,
@@ -19,8 +18,7 @@ export interface StepConfig {
   providedIn: 'root',
 })
 export class ValorYaStepperService {
-  private currentStepSubject = new BehaviorSubject<ValorYaStep>(ValorYaStep.INICIO);
-  public currentStep$: Observable<ValorYaStep> = this.currentStepSubject.asObservable();
+  public readonly currentStep = signal<ValorYaStep>(ValorYaStep.INICIO);
 
   readonly steps: StepConfig[] = [
     {
@@ -49,32 +47,29 @@ export class ValorYaStepperService {
     },
   ];
 
-  constructor() {}
-
-  getCurrentStep(): ValorYaStep {
-    return this.currentStepSubject.value;
-  }
+  public readonly progressPercentage = computed(() => {
+    const config = this.getStepConfig(this.currentStep());
+    return config?.percentage || '0%';
+  });
 
   setStep(step: ValorYaStep): void {
-    this.currentStepSubject.next(step);
+    this.currentStep.set(step);
   }
 
   nextStep(): void {
-    const current = this.currentStepSubject.value;
-    if (current < ValorYaStep.RESPUESTA) {
-      this.currentStepSubject.next(current + 1);
-    }
+    this.currentStep.update((current) =>
+      current < ValorYaStep.RESPUESTA ? current + 1 : current
+    );
   }
 
   previousStep(): void {
-    const current = this.currentStepSubject.value;
-    if (current > ValorYaStep.INICIO) {
-      this.currentStepSubject.next(current - 1);
-    }
+    this.currentStep.update((current) =>
+      current > ValorYaStep.INICIO ? current - 1 : current
+    );
   }
 
   isStepActive(step: ValorYaStep): boolean {
-    return this.currentStepSubject.value >= step;
+    return this.currentStep() >= step;
   }
 
   getStepConfig(step: ValorYaStep): StepConfig | undefined {
@@ -82,11 +77,6 @@ export class ValorYaStepperService {
   }
 
   reset(): void {
-    this.currentStepSubject.next(ValorYaStep.INICIO);
-  }
-
-  getProgressPercentage(): string {
-    const config = this.getStepConfig(this.currentStepSubject.value);
-    return config?.percentage || '0%';
+    this.currentStep.set(ValorYaStep.INICIO);
   }
 }

@@ -6,11 +6,15 @@
     <p class="subtitle">Información del predio encontrado</p>
   </div>
 
-  @if (errorMessage) {
+  @if (isLoading()) {
+    <div class="loading-simple">
+      <p>Cargando información del predio...</p>
+    </div>
+  } @else if (errorMessage()) {
   <!-- Mensaje de error cuando no se encuentran datos -->
   <div class="no-data-section">
     <h3>No se encontró información</h3>
-    <p class="error-message">{{ errorMessage }}</p>
+    <p class="error-message">{{ errorMessage() }}</p>
   </div>
 
   <div class="confirmation-section">
@@ -24,7 +28,7 @@
       </app-button>
     </div>
   </div>
-  } @else if (predioData) {
+  } @else if (predioData()) {
 
   <div class="map-section">
     <h3>Ubicación del Predio</h3>
@@ -32,7 +36,7 @@
   </div>
 
   <!-- Información del predio -->
-  <app-predio-info-card [predioData]="predioData" [showMessage]="true" [showAllFields]="true">
+  <app-predio-info-card [predioData]="predioData()" [showMessage]="true" [showAllFields]="true">
   </app-predio-info-card>
 
   <div class="confirmation-section">
@@ -46,9 +50,6 @@
       </app-button>
     </div>
   </div>
-  } @else {
-  <div class="loading-simple">
-    <p>Cargando información del predio...</p>
-  </div>
   }
 </div>
+

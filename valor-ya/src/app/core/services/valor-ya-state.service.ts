@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 import { PredioData } from '../models/predio-data.model';
 import { DatosComplementarios } from '../models/datos-complementarios.model';
-import { CatastroResponse } from '../models/catastro-response.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -10,70 +8,47 @@ export enum TipoBusqueda {
   FMI = 'fmi',
 }
 
-export interface ValorYaState {
-  tipoBusqueda?: TipoBusqueda;
-  valorBusqueda?: string;
-  catastroResponse?: CatastroResponse;
-  predioData?: PredioData;
-  datosComplementarios?: DatosComplementarios;
-  mostrarResultado: boolean;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class ValorYaStateService {
-  private initialState: ValorYaState = {
-    mostrarResultado: false,
-  };
+  // State as individual signals
+  public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(undefined);
+  public readonly valorBusqueda = signal<string | undefined>(undefined);
+  public readonly predioData = signal<PredioData | undefined>(undefined);
+  public readonly datosComplementarios = signal<DatosComplementarios | undefined>(undefined);
+  public readonly mostrarResultado = signal<boolean>(false);
 
-  private stateSubject = new BehaviorSubject<ValorYaState>(this.initialState);
-  public state$: Observable<ValorYaState> = this.stateSubject.asObservable();
-
-  constructor() {}
-
-  getState(): ValorYaState {
-    return this.stateSubject.value;
-  }
+  // Computed signal for derived state
+  public readonly hasDatosComplementarios = computed(() => !!this.datosComplementarios());
 
   setTipoBusqueda(tipo: TipoBusqueda): void {
-    this.updateState({ tipoBusqueda: tipo });
+    this.tipoBusqueda.set(tipo);
   }
 
   setValorBusqueda(valor: string): void {
-    this.updateState({ valorBusqueda: valor });
-  }
-
-  setCatastroResponse(response: CatastroResponse): void {
-    this.updateState({ catastroResponse: response, mostrarResultado: true });
+    this.valorBusqueda.set(valor);
   }
 
   setMostrarResultado(mostrar: boolean): void {
-    this.updateState({ mostrarResultado: mostrar });
+    this.mostrarResultado.set(mostrar);
   }
 
   setDatosComplementarios(datos: DatosComplementarios): void {
-    this.updateState({ datosComplementarios: datos });
+    this.datosComplementarios.set(datos);
   }
 
   setPredioData(predioData: PredioData, tipo: TipoBusqueda, valor: string): void {
-    this.updateState({ predioData, tipoBusqueda: tipo, valorBusqueda: valor });
+    this.predioData.set(predioData);
+    this.tipoBusqueda.set(tipo);
+    this.valorBusqueda.set(valor);
   }
 
   reset(): void {
-    this.stateSubject.next(this.initialState);
-  }
-
-  hasCatastroResponse(): boolean {
-    return !!this.stateSubject.value.catastroResponse;
-  }
-
-  hasDatosComplementarios(): boolean {
-    return !!this.stateSubject.value.datosComplementarios;
-  }
-
-  private updateState(partial: Partial<ValorYaState>): void {
-    const currentState = this.stateSubject.value;
-    this.stateSubject.next({ ...currentState, ...partial });
+    this.tipoBusqueda.set(undefined);
+    this.valorBusqueda.set(undefined);
+    this.predioData.set(undefined);
+    this.datosComplementarios.set(undefined);
+    this.mostrarResultado.set(false);
   }
 }

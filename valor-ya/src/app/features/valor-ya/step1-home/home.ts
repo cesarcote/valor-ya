@@ -1,11 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 
 @Component({
@@ -19,31 +16,23 @@ export class HomeComponent implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
 
+  private readonly busquedaMap: { [key: string]: TipoBusqueda } = {
+    direccion: TipoBusqueda.DIRECCION,
+    chip: TipoBusqueda.CHIP,
+    fmi: TipoBusqueda.FMI,
+  };
+
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.INICIO);
   }
 
   onCardClick(type: string): void {
-    let tipoBusqueda: TipoBusqueda;
+    const tipoBusqueda = this.busquedaMap[type];
 
-    switch (type) {
-      case 'direccion':
-        tipoBusqueda = TipoBusqueda.DIRECCION;
-        break;
-      case 'chip':
-        tipoBusqueda = TipoBusqueda.CHIP;
-        break;
-      case 'fmi':
-        tipoBusqueda = TipoBusqueda.FMI;
-        break;
-      default:
-        return;
+    if (tipoBusqueda) {
+      this.stateService.setTipoBusqueda(tipoBusqueda);
+      this.stepperService.setStep(ValorYaStep.SOLICITUD);
+      this.router.navigate(['/valor-ya/solicitud']);
     }
-
-    this.stateService.setTipoBusqueda(tipoBusqueda);
-
-    this.stepperService.setStep(ValorYaStep.SOLICITUD);
-
-    this.router.navigate(['/valor-ya/solicitud']);
   }
 }

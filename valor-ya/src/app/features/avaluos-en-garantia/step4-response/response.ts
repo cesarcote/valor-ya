@@ -13,7 +13,7 @@ import { ButtonComponent } from '../../../shared/components/button/button';
   templateUrl: './response.html',
   styleUrls: ['./response.css'],
 })
-export class AvaluosResponseComponent implements OnInit {
+export class AvaluosResponse implements OnInit {
   private router = inject(Router);
   private stepperService = inject(AvaluosStepperService);
   private stateService = inject(AvaluosStateService);

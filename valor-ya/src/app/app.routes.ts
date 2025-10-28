@@ -27,15 +27,13 @@ export const routes: Routes = [
         path: 'proceso',
         title: 'Valor YA - Procesando Solicitud',
         loadComponent: () =>
-          import('./features/valor-ya/step3-process/process').then((m) => m.ProcessComponent),
+          import('./features/valor-ya/step3-process/process').then((m) => m.Process),
       },
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
         loadComponent: () =>
-          import('./features/valor-ya/step3-process/complement-info').then(
-            (m) => m.ComplementInfoComponent
-          ),
+          import('./features/valor-ya/step3-process/complement-info').then((m) => m.ComplementInfo),
       },
       {
         path: 'respuesta',
@@ -62,7 +60,7 @@ export const routes: Routes = [
         title: 'Avalúos en Garantía - Inicio',
         loadComponent: () =>
           import('./features/avaluos-en-garantia/step1-home/home').then(
-            (m) => m.AvaluosHomeComponent
+            (m) => m.AvaluosHome
           ),
       },
       {
@@ -70,7 +68,7 @@ export const routes: Routes = [
         title: 'Avalúos en Garantía - Solicitud',
         loadComponent: () =>
           import('./features/avaluos-en-garantia/step2-application/application').then(
-            (m) => m.AvaluosApplicationComponent
+            (m) => m.AvaluosApplication
           ),
       },
       {
@@ -78,7 +76,7 @@ export const routes: Routes = [
         title: 'Avalúos en Garantía - Proceso',
         loadComponent: () =>
           import('./features/avaluos-en-garantia/step3-process/process').then(
-            (m) => m.AvaluosProcessComponent
+            (m) => m.AvaluosProcess
           ),
       },
       {
@@ -86,7 +84,7 @@ export const routes: Routes = [
         title: 'Avalúos en Garantía - Respuesta',
         loadComponent: () =>
           import('./features/avaluos-en-garantia/step4-response/response').then(
-            (m) => m.AvaluosResponseComponent
+            (m) => m.AvaluosResponse
           ),
       },
       {
@@ -95,11 +93,7 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'tests',
-    title: 'Tests',
-    loadComponent: () => import('./features/test/test').then((m) => m.TestComponent),
-  },
+
   {
     path: '',
     redirectTo: 'valor-ya',

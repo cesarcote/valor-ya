@@ -4,34 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PredioData } from '../../core/models/predio-data.model';
 import { currentEnvironment } from '../../../environments/environment';
-
-// Interfaz para la respuesta de la API del catastro
-interface CatastroApiResponse {
-  success: boolean;
-  message: string;
-  data: {
-    infoConsultaPredio: {
-      chip: string;
-      loteid: string;
-    };
-    infoGeografica: {
-      areaPoligono: number;
-      longitudPoligono: number;
-      coordenadasPoligono: number[][][];
-    };
-    infoAdicional: {
-      municipio: string;
-      localidad: string;
-      barrio: string;
-      direccion: string;
-      tipoPredio: string;
-      estrato: string;
-      areaConstruidaPrivada: string;
-      edad: string;
-    };
-  };
-  error: any;
-}
+import { CatastroResponse } from '../../core/models/catastro-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -48,12 +21,12 @@ export class PredioService {
    * Transforma la respuesta del backend en el modelo de datos del frontend
    */
   private mapCatastroResponseToPredioData(
-    response: CatastroApiResponse,
+    response: CatastroResponse,
     valorBusqueda?: string,
     tipoBusqueda?: 'chip' | 'direccion'
   ): PredioData {
     const { data, message } = response;
-    const { infoAdicional, infoConsultaPredio, infoGeografica } = data;
+    const { infoAdicional, infoConsultaPredio, infoGeografica } = data!;
 
     return {
       mensaje: message || 'Consulta realizada exitosamente',
@@ -81,8 +54,8 @@ export class PredioService {
 
     const url = `${currentEnvironment.baseUrl}/catastro/consultar`;
 
-    return this.http.get<CatastroApiResponse>(url, { params }).pipe(
-      map((response: CatastroApiResponse) => {
+    return this.http.get<CatastroResponse>(url, { params }).pipe(
+      map((response: CatastroResponse) => {
         if (response.success && response.data && response.data.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, direccion, 'direccion');
         } else {
@@ -96,13 +69,12 @@ export class PredioService {
   }
 
   consultarPorChip(chip: string): Observable<PredioData> {
-
     const params = new HttpParams().set('Opcion', '3').set('Identificador', chip).set('f', 'pjson');
 
     const url = `${currentEnvironment.baseUrl}/catastro/consultar`;
 
-    return this.http.get<CatastroApiResponse>(url, { params }).pipe(
-      map((response: CatastroApiResponse) => {
+    return this.http.get<CatastroResponse>(url, { params }).pipe(
+      map((response: CatastroResponse) => {
         console.log('✅ Respuesta exitosa de la API');
 
         if (response.success && response.data && response.data.infoAdicional) {

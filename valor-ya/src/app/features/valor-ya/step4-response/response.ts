@@ -1,12 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
-import { CatastroResponse } from '../../../core/models/catastro-response.model';
+import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 
@@ -19,27 +16,33 @@ import { ButtonComponent } from '../../../shared/components/button/button';
 export class ResponseComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
-  private stateService = inject(ValorYaStateService);
+  public stateService = inject(ValorYaStateService);
 
-  catastroData?: CatastroResponse;
-  valorEstimado: number = 0;
-  fechaConsulta: string = '';
+  public readonly predioData = signal<PredioData | undefined>(undefined);
+  public readonly valorEstimado = signal<number>(0);
+  public readonly fechaConsulta = signal<string>('');
+
+  constructor() {
+    this.predioData.set(this.stateService.predioData());
+
+    effect(() => {
+      if (!this.predioData()) {
+        this.router.navigate(['/valor-ya/inicio']);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
-    const state = this.stateService.getState();
-    if (!state.catastroResponse) {
-      this.router.navigate(['/valor-ya/inicio']);
-      return;
-    }
+    this.fechaConsulta.set(
+      new Date().toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    );
 
-    this.catastroData = state.catastroResponse;
-    this.fechaConsulta = new Date().toLocaleDateString('es-CO', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
   }
 
   onNuevaConsulta(): void {
@@ -49,6 +52,6 @@ export class ResponseComponent implements OnInit {
   }
 
   onVolverInicio(): void {
-    this.router.navigate(['/valor-ya/inicio']);
+    this.onNuevaConsulta(); 
   }
 }
