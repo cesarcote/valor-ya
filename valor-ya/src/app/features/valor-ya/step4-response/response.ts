@@ -1,15 +1,17 @@
-import { Component, inject, OnInit, signal, effect } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
+import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 
 @Component({
   selector: 'app-response',
-  imports: [StepperComponent, ButtonComponent],
+  imports: [CommonModule, StepperComponent, ButtonComponent, PredioInfoCardComponent],
   templateUrl: './response.html',
   styleUrls: ['./response.css'],
 })
@@ -24,12 +26,6 @@ export class ResponseComponent implements OnInit {
 
   constructor() {
     this.predioData.set(this.stateService.predioData());
-
-    effect(() => {
-      if (!this.predioData()) {
-        this.router.navigate(['/valor-ya/inicio']);
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -43,6 +39,13 @@ export class ResponseComponent implements OnInit {
       })
     );
 
+    // Dummy calculation for estimated value
+    if (this.predioData()) {
+      const area = parseFloat(this.predioData()!.areaConstruida) || 100;
+      const estrato = parseInt(this.predioData()!.estrato) || 3;
+      const baseValue = 1500000;
+      this.valorEstimado.set(area * baseValue * (1 + (estrato - 1) * 0.1));
+    }
   }
 
   onNuevaConsulta(): void {

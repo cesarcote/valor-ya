@@ -4,6 +4,8 @@ import {
   OnInit,
   signal,
   effect,
+  ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -23,18 +25,18 @@ import { MapComponent } from '../../../shared/components/map';
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
-export class Process implements OnInit {
+export class Process implements OnInit, AfterViewInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
 
+  @ViewChild(MapComponent) map!: MapComponent;
+
   // State as Signals
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
-
-  private map!: MapComponent;
 
   constructor() {
     // Effect to update the map when predioData signal changes
@@ -61,8 +63,10 @@ export class Process implements OnInit {
     }
 
     this.realizarConsulta(tipo, valor);
+  }
 
-    this.map = new MapComponent();
+  ngAfterViewInit(): void {
+    // The map component is now available here.
   }
 
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
