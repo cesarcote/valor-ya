@@ -1,10 +1,13 @@
 <div class="stepper">
+  <!-- Debug: Stepper is rendering -->
+  <p style="color: red; font-weight: bold;">STEPPER DEBUG: Current step: {{ currentStep() }}, Progress: {{ progressPercentage() }}</p>
+
   <div class="stepper__progress-bar">
     <div class="stepper__progress-fill" [style.width]="progressPercentage()"></div>
   </div>
 
   <div class="stepper__steps">
-    @for (stepConfig of stepperService.steps; track stepConfig.step) {
+    @for (stepConfig of stepperService?.steps; track stepConfig.step) {
     <div
       class="stepper__step"
       [class.stepper__step--active]="isCurrentStep(stepConfig.step)"

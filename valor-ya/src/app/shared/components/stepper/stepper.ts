@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ElementRef, Renderer2, Optional, signal } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, Renderer2, Optional, signal, effect } from '@angular/core';
 
 import { ValorYaStepperService } from '../../../core/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
@@ -25,11 +25,15 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.stepperService.currentStep$.subscribe((step: number) => {
-      this.currentStep.set(step);
-      this.progressPercentage.set(this.stepperService.getProgressPercentage());
-      this.updateStepColors();
-    });
+    if (this.stepperService) {
+      // Use effect to react to signal changes
+      effect(() => {
+        const step = this.stepperService.currentStep();
+        this.currentStep.set(step);
+        this.progressPercentage.set(this.stepperService.progressPercentage());
+        this.updateStepColors();
+      });
+    }
   }
 
   isStepActive(step: number): boolean {

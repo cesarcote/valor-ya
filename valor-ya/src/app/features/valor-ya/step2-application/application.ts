@@ -8,7 +8,6 @@ import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { FormChipComponent } from './components/form-chip/form-chip';
 import { FormAddressComponent } from './components/form-address/form-address';
 import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
-import { LoadingComponent } from '../../../shared/components/loading/loading';
 
 @Component({
   selector: 'app-application',
@@ -18,7 +17,6 @@ import { LoadingComponent } from '../../../shared/components/loading/loading';
     FormChipComponent,
     FormAddressComponent,
     FormFmiComponent,
-    LoadingComponent,
   ],
   templateUrl: './application.html',
   styleUrls: ['./application.css'],

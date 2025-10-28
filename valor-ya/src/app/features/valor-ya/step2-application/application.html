@@ -6,14 +6,6 @@
     <p class="subtitle">Selecciona el método de búsqueda y completa la información requerida</p>
   </div>
 
-  @if (isLoading()) {
-  <app-loading></app-loading>
-  } @else { @if (errorMessage()) {
-  <div class="error-message-box">
-    <p>{{ errorMessage() }}</p>
-  </div>
-  }
-
   <app-tabs
     [tabs]="tabs"
     [selectedTabIndex]="selectedTabIndex()"
@@ -37,5 +29,4 @@
       }
     </div>
   </app-tabs>
-  }
 </div>
