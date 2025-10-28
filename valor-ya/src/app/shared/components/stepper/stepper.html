@@ -1,6 +1,8 @@
 <div class="stepper">
   <!-- Debug: Stepper is rendering -->
-  <p style="color: red; font-weight: bold;">STEPPER DEBUG: Current step: {{ currentStep() }}, Progress: {{ progressPercentage() }}</p>
+  <p style="color: red; font-weight: bold">
+    STEPPER DEBUG: Current step: {{ currentStep() }}, Progress: {{ progressPercentage() }}
+  </p>
 
   <div class="stepper__progress-bar">
     <div class="stepper__progress-fill" [style.width]="progressPercentage()"></div>
