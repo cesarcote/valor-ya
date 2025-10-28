@@ -1,16 +1,11 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  effect,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, inject, OnInit, signal, effect, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../shared/services/predio.service';
 import { PredioData } from '../../../core/models/predio-data.model';
@@ -31,21 +26,33 @@ export class Process implements OnInit, AfterViewInit {
   private stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
 
-  @ViewChild(MapComponent) map!: MapComponent;
+  private mapComponent?: MapComponent;
+
+  @ViewChild(MapComponent)
+  set mapSetter(map: MapComponent) {
+    this.mapComponent = map;
+    if (map) {
+      this.mapReady.set(true);
+      // If we already have data, update the map immediately
+      const data = this.predioData();
+      if (data?.coordenadasPoligono) {
+        this.updateMapWithData(data);
+      }
+    }
+  }
 
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
+  public readonly mapReady = signal<boolean>(false);
 
   constructor() {
-    // Effect to update the map when predioData signal changes
+    // Effect to update the map when predioData or mapReady changes
     effect(() => {
       const data = this.predioData();
-      if (data?.coordenadasPoligono && this.map) {
-        this.map.ubicarLotePorCoordenadas(
-          data.coordenadasPoligono,
-          data.loteid
-        );
+      const ready = this.mapReady();
+      if (data?.coordenadasPoligono && ready) {
+        this.updateMapWithData(data);
       }
     });
   }
@@ -65,9 +72,14 @@ export class Process implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
+    // Map ready is now set via the setter when the component is available
   }
 
+  private updateMapWithData(data: PredioData): void {
+    if (data.coordenadasPoligono) {
+      this.mapComponent!.ubicarLotePorCoordenadas(data.coordenadasPoligono, data.loteid);
+    }
+  }
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');

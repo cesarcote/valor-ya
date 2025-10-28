@@ -115,8 +115,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   ubicarLotePorCoordenadas(coordenadasPoligono: number[][][], loteId?: string): void {
-    if (!this.map || !coordenadasPoligono || coordenadasPoligono.length === 0) {
-      console.warn('Mapa no inicializado o coordenadas inválidas');
+    if (!this.map) {
+      console.error('Map not initialized!');
+      return;
+    }
+
+    if (!coordenadasPoligono || coordenadasPoligono.length === 0) {
+      console.warn('Invalid coordinates:', coordenadasPoligono);
       return;
     }
 
