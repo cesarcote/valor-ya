@@ -3,7 +3,7 @@
   background-color: #f8f9fa;
 }
 
-.govco-data-front {
+.footer-container {
   background-color: white;
   position: relative;
   top: -100px;
@@ -14,10 +14,15 @@
   margin-right: auto;
   border-radius: 1rem;
   border: #eaf2fb 1px solid;
+  padding: 40px;
+}
+
+.info p {
+  margin: 3px;
 }
 
 .govco-logo-entidad {
-  height: 64px;
+  height: 50px;
   display: inline-block;
   content: url('../../../../assets/images/logo.svg');
 }
@@ -67,7 +72,7 @@
 }
 
 .govco-logo-div-a {
-  text-align: center !important;
+  text-align: end !important;
 }
 
 .govco-link-container {
