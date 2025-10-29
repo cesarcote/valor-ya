@@ -1,0 +1,46 @@
+/* Footer Styles */
+.footer-bg-gray {
+  background-color: #f8f9fa;
+  margin-top: 100px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-card {
+  background-color: #ffffff;
+  border: 2px solid #E5EEFB;
+  position: relative;
+  top: -71px;
+  padding: 14px;
+  margin-bottom: -71px;
+}
+
+.footer-bottom-blue {
+  background-color: #0943B5;
+  height: 87px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+.govcobasefooter_contentinfo_contact p {
+  margin: 3px;
+}
+/* Logo in footer */
+.govcobasefooter_contentinfohead_logo .logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.govcobasefooter__container {
+  padding: 30px 30px 10px;
+}
+
+
+
+.govcobasefooter_contentinfohead_logo {
+  text-align: left;
+}
