@@ -1,4 +1,21 @@
 /*** MODAL 1 ***/
+.govco-footer {
+  background-color: #f8f9fa;
+}
+
+.govco-data-front {
+  background-color: white;
+  position: relative;
+  top: -100px;
+  max-width: 1200px;
+  margin-top: 150px;
+  margin-bottom: -80px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+  border: #EAF2FB 1px solid;
+}
+
 .govco-logo-entidad {
   height: 64px;
   display: inline-block;
@@ -39,39 +56,9 @@
   margin-left: 80px !important;
 }
 
-.govco-link-modal {
-  color: #0943b5;
-  margin-right: 30px !important;
-  text-decoration: underline;
-}
-
-.icon::before {
-  margin: 0 !important;
-  padding: 0 !important;
-  transform: scale(1.5, 1.5);
-  margin-right: 10px !important;
-  margin-left: 5px !important;
-  vertical-align: text-top !important;
-  color: #0943b5;
-}
-
 .govco-iconContainer {
   display: inline-block !important;
   width: auto !important;
-}
-
-.govco-links-container {
-  margin-bottom: 50px !important;
-  margin-top: 30px !important;
-}
-
-.govco-footer-text {
-  margin-top: 50px !important;
-  margin-left: 80px !important;
-}
-.govco-texto-sedes,
-.govco-network {
-  padding: unset !important;
 }
 
 .govco-network,
@@ -79,29 +66,13 @@
   margin-top: 30px !important;
 }
 
-.govco-sedes {
-  margin-top: 20px !important;
-}
-
 .govco-logo-div-a {
   text-align: center !important;
-}
-
-.govco-links-directorio {
-  margin-top: 20px !important;
 }
 
 .govco-link-container {
   display: inline-block;
   width: auto !important;
-}
-
-.govco-mostrar {
-  display: none !important;
-}
-
-.govco-nombre-entidad {
-  margin-bottom: 0px !important;
 }
 
 @media (max-width: 991px) {
