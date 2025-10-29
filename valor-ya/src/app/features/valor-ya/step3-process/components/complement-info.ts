@@ -68,8 +68,7 @@ export class ComplementInfo implements OnInit {
     });
 
     this.complementForm.get('tipoPredio')?.valueChanges.subscribe((value) => {
-      console.log('Opción seleccionada en tipoPredio:', value);
-      if (value === 'otro') {
+      if (value === 'ot') {
         this.complementForm.get('otroTipoPredio')?.setValidators([Validators.required]);
       } else {
         this.complementForm.get('otroTipoPredio')?.clearValidators();
@@ -79,18 +78,13 @@ export class ComplementInfo implements OnInit {
   }
 
   loadTiposPredio(): void {
-    console.log('Conectando al endpoint /parametricas/tipos-unidad...');
     this.parametricasService.consultarTiposUnidad().subscribe({
       next: (tipos) => {
-        console.log('Conexión exitosa, tipos de unidad obtenidos:', tipos);
         const options: SelectOption[] = tipos.map((tipo) => ({
           value: tipo.codigoUnidad.toLowerCase(),
           label: tipo.descripcionUnidad,
         }));
-        // Add 'otro' option
-        options.push({ value: 'otro', label: 'Otro' });
         this.tiposPredio.set(options);
-        console.log('Opciones del select actualizadas:', options);
       },
       error: (error) => {
         console.error('Error al conectar al endpoint /parametricas/tipos-unidad:', error);
@@ -104,7 +98,6 @@ export class ComplementInfo implements OnInit {
           { value: 'oficina', label: 'Oficina' },
           { value: 'otro', label: 'Otro' },
         ]);
-        console.log('Usando opciones por defecto debido al error');
       },
     });
   }
@@ -114,23 +107,18 @@ export class ComplementInfo implements OnInit {
   }
 
   onConsultarMCM(): void {
-    console.log('Botón Consultar presionado en complement-info');
     if (this.complementForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      // Obtener el estado actual con los datos del predio (opcional)
       const predioData = this.stateService.predioData();
-
-      // Obtener el loteid real desde los datos del predio (opcional)
       const loteid = predioData?.loteid || '';
-      //debugger;
-      // Preparar los datos para enviar con los nombres en camelCase (conformes al DTO)
+
       const formValues = this.complementForm.value;
       const datosComplementarios: DatosComplementariosRequest = {
         ...(loteid && { loteId: loteid }),
         tipoPredio:
-          formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio,
+          formValues.tipoPredio === 'ot' ? formValues.otroTipoPredio : formValues.tipoPredio,
         numeroHabitaciones:
           formValues.numeroHabitaciones !== ''
             ? parseInt(formValues.numeroHabitaciones)
@@ -150,32 +138,19 @@ export class ComplementInfo implements OnInit {
           formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
 
-      console.log('Registrando datos complementarios:', datosComplementarios);
-      console.log('JSON a enviar:', JSON.stringify(datosComplementarios, null, 2));
-
-      // Consumir el servicio para registrar los datos
       this.datosComplementariosService.registrarDatos(datosComplementarios).subscribe({
         next: (datosGuardados) => {
-          console.log('Datos complementarios registrados exitosamente:', datosGuardados);
-
-          // Guardar los datos complementarios en el estado
           this.stateService.setDatosComplementarios(datosGuardados);
-
           this.isLoading.set(false);
-
-          // Continuar con el flujo
           this.stepperService.setStep(ValorYaStep.RESPUESTA);
           this.router.navigate(['/valor-ya/respuesta']);
         },
         error: (error) => {
-          console.error('Error al registrar datos complementarios:', error);
           this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
           this.isLoading.set(false);
         },
       });
     } else {
-      console.log('Formulario no válido, marcando campos como touched');
-      // Marcar campos como tocados para mostrar errores
       Object.keys(this.complementForm.controls).forEach((key) => {
         const control = this.complementForm.get(key);
         if (control?.invalid) {
