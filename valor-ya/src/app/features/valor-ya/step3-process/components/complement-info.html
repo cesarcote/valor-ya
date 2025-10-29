@@ -15,7 +15,7 @@
         dataId="tipoPredio"
         label="Tipo de predio"
         [formCtr]="tipoPredioControl"
-        [options]="tiposPredio"
+        [options]="tiposPredio()"
         placeholder="Selecciona una opción"
       ></app-select>
 
@@ -61,11 +61,10 @@
         ></app-input>
 
         <app-input
-          type="number"
+          type="text"
           id="edad"
-          label="Edad"
+          label="Edad (ej: 2021 - 2027)"
           [formCtr]="edadControl"
-          [min]="0"
         ></app-input>
       </div>
 

@@ -33,7 +33,9 @@ export const routes: Routes = [
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
         loadComponent: () =>
-          import('./features/valor-ya/step3-process/complement-info').then((m) => m.ComplementInfo),
+          import('./features/valor-ya/step3-process/components/complement-info').then(
+            (m) => m.ComplementInfo
+          ),
       },
       {
         path: 'respuesta',
@@ -59,9 +61,7 @@ export const routes: Routes = [
         path: 'inicio',
         title: 'Avalúos en Garantía - Inicio',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step1-home/home').then(
-            (m) => m.AvaluosHome
-          ),
+          import('./features/avaluos-en-garantia/step1-home/home').then((m) => m.AvaluosHome),
       },
       {
         path: 'solicitud',

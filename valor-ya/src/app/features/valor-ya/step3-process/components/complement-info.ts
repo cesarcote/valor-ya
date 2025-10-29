@@ -11,14 +11,15 @@ import { Router } from '@angular/router';
 import {
   ValorYaStepperService,
   ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
-import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
-import { DatosComplementariosService } from '../../../shared/services/datos-complementarios.service';
-import { DatosComplementariosRequest } from '../../../core/models/datos-complementarios.model';
-import { StepperComponent } from '../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../shared/components/button/button';
-import { InputComponent } from '../../../shared/components/input/input';
-import { SelectComponent, SelectOption } from '../../../shared/components/select/select';
+} from '../../../../core/services/valor-ya-stepper.service';
+import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import { ParametricasService } from '../../../../shared/services/parametricas.service';
+import { DatosComplementariosService } from '../../../../shared/services/datos-complementarios.service';
+import { DatosComplementariosRequest } from '../../../../core/models/datos-complementarios.model';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/button/button';
+import { InputComponent } from '../../../../shared/components/input/input';
+import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
 
 @Component({
   selector: 'app-complement-info',
@@ -37,42 +38,37 @@ export class ComplementInfo implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   private stateService = inject(ValorYaStateService);
+  private parametricasService = inject(ParametricasService);
   private datosComplementariosService = inject(DatosComplementariosService);
 
   complementForm!: FormGroup;
   isLoading = signal(false);
   errorMessage = signal('');
 
-  tiposPredio: SelectOption[] = [
-    { value: 'casa', label: 'Casa' },
-    { value: 'apartamento', label: 'Apartamento' },
-    { value: 'local', label: 'Local Comercial' },
-    { value: 'bodega', label: 'Bodega' },
-    { value: 'lote', label: 'Lote' },
-    { value: 'oficina', label: 'Oficina' },
-    { value: 'otro', label: 'Otro' },
-  ];
+  tiposPredio = signal<SelectOption[]>([]);
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
     this.initForm();
+    this.loadTiposPredio();
   }
 
   initForm(): void {
     this.complementForm = this.fb.group({
-      tipoPredio: ['', Validators.required],
+      tipoPredio: [''],
       otroTipoPredio: [''],
-      numeroHabitaciones: ['', [Validators.required, Validators.min(0)]],
-      numeroBanos: ['', [Validators.required, Validators.min(0)]],
-      areaConstruida: ['', [Validators.required, Validators.min(1)]],
-      edad: ['', [Validators.required, Validators.min(0)]],
-      estrato: ['', [Validators.required, Validators.min(1), Validators.max(6)]],
-      numeroAscensores: ['', [Validators.required, Validators.min(0)]],
-      numeroParqueaderos: ['', [Validators.required, Validators.min(0)]],
-      numeroDepositos: ['', [Validators.required, Validators.min(0)]],
+      numeroHabitaciones: [''],
+      numeroBanos: [''],
+      areaConstruida: [''],
+      edad: [''],
+      estrato: [''],
+      numeroAscensores: [''],
+      numeroParqueaderos: [''],
+      numeroDepositos: [''],
     });
 
     this.complementForm.get('tipoPredio')?.valueChanges.subscribe((value) => {
+      console.log('Opción seleccionada en tipoPredio:', value);
       if (value === 'otro') {
         this.complementForm.get('otroTipoPredio')?.setValidators([Validators.required]);
       } else {
@@ -82,54 +78,80 @@ export class ComplementInfo implements OnInit {
     });
   }
 
+  loadTiposPredio(): void {
+    console.log('Conectando al endpoint /parametricas/tipos-unidad...');
+    this.parametricasService.consultarTiposUnidad().subscribe({
+      next: (tipos) => {
+        console.log('Conexión exitosa, tipos de unidad obtenidos:', tipos);
+        const options: SelectOption[] = tipos.map((tipo) => ({
+          value: tipo.codigoUnidad.toLowerCase(),
+          label: tipo.descripcionUnidad,
+        }));
+        // Add 'otro' option
+        options.push({ value: 'otro', label: 'Otro' });
+        this.tiposPredio.set(options);
+        console.log('Opciones del select actualizadas:', options);
+      },
+      error: (error) => {
+        console.error('Error al conectar al endpoint /parametricas/tipos-unidad:', error);
+        // Fallback to hardcoded
+        this.tiposPredio.set([
+          { value: 'casa', label: 'Casa' },
+          { value: 'apartamento', label: 'Apartamento' },
+          { value: 'local', label: 'Local Comercial' },
+          { value: 'bodega', label: 'Bodega' },
+          { value: 'lote', label: 'Lote' },
+          { value: 'oficina', label: 'Oficina' },
+          { value: 'otro', label: 'Otro' },
+        ]);
+        console.log('Usando opciones por defecto debido al error');
+      },
+    });
+  }
+
   onVolver(): void {
     this.router.navigate(['/valor-ya/proceso']);
   }
 
   onConsultarMCM(): void {
+    console.log('Botón Consultar presionado en complement-info');
     if (this.complementForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      // Obtener el estado actual con los datos del predio
+      // Obtener el estado actual con los datos del predio (opcional)
       const predioData = this.stateService.predioData();
 
-      if (!predioData) {
-        this.errorMessage.set(
-          'No se encontraron datos del predio. Por favor, vuelva a realizar la consulta.'
-        );
-        this.isLoading.set(false);
-        return;
-      }
-
-      // Obtener el loteid real desde los datos del predio
-      const loteid = predioData.loteid;
-
-      if (!loteid) {
-        this.errorMessage.set(
-          'No se encontró el identificador del lote (Lote ID). Por favor, vuelva a realizar la consulta.'
-        );
-        this.isLoading.set(false);
-        return;
-      }
-      debugger;
-      // Preparar los datos para enviar con los tipos correctos
+      // Obtener el loteid real desde los datos del predio (opcional)
+      const loteid = predioData?.loteid || '';
+      //debugger;
+      // Preparar los datos para enviar con los nombres en camelCase (conformes al DTO)
       const formValues = this.complementForm.value;
       const datosComplementarios: DatosComplementariosRequest = {
-        lote_id: loteid,
-        area_construida: parseFloat(formValues.areaConstruida) || undefined,
-        estrato: parseInt(formValues.estrato) || undefined,
-        edad: formValues.edad?.toString() || undefined,
-        tipo_predio:
+        ...(loteid && { loteId: loteid }),
+        tipoPredio:
           formValues.tipoPredio === 'otro' ? formValues.otroTipoPredio : formValues.tipoPredio,
-        num_ascensores: parseInt(formValues.numeroAscensores) || 0,
-        num_banos: parseInt(formValues.numeroBanos) || 0,
-        num_depositos: parseInt(formValues.numeroDepositos) || 0,
-        num_habitaciones: parseInt(formValues.numeroHabitaciones) || 0,
-        num_parqueaderos: parseInt(formValues.numeroParqueaderos) || 0,
+        numeroHabitaciones:
+          formValues.numeroHabitaciones !== ''
+            ? parseInt(formValues.numeroHabitaciones)
+            : undefined,
+        numeroBanos: formValues.numeroBanos !== '' ? parseInt(formValues.numeroBanos) : undefined,
+        areaConstruida:
+          formValues.areaConstruida !== '' ? parseFloat(formValues.areaConstruida) : undefined,
+        edad: formValues.edad?.toString() || undefined,
+        estrato: formValues.estrato !== '' ? parseInt(formValues.estrato) : undefined,
+        numeroAscensores:
+          formValues.numeroAscensores !== '' ? parseInt(formValues.numeroAscensores) : undefined,
+        numeroParqueaderos:
+          formValues.numeroParqueaderos !== ''
+            ? parseInt(formValues.numeroParqueaderos)
+            : undefined,
+        numeroDepositos:
+          formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
 
       console.log('Registrando datos complementarios:', datosComplementarios);
+      console.log('JSON a enviar:', JSON.stringify(datosComplementarios, null, 2));
 
       // Consumir el servicio para registrar los datos
       this.datosComplementariosService.registrarDatos(datosComplementarios).subscribe({
@@ -152,6 +174,7 @@ export class ComplementInfo implements OnInit {
         },
       });
     } else {
+      console.log('Formulario no válido, marcando campos como touched');
       // Marcar campos como tocados para mostrar errores
       Object.keys(this.complementForm.controls).forEach((key) => {
         const control = this.complementForm.get(key);

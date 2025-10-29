@@ -7,9 +7,9 @@
   </div>
 
   @if (isLoading()) {
-    <div class="loading-simple">
-      <p>Cargando información del predio...</p>
-    </div>
+  <div class="loading-simple">
+    <p>Cargando información del predio...</p>
+  </div>
   } @else if (errorMessage()) {
   <!-- Mensaje de error cuando no se encuentran datos -->
   <div class="no-data-section">
@@ -52,4 +52,3 @@
   </div>
   }
 </div>
-
