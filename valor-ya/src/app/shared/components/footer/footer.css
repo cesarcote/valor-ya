@@ -11,7 +11,7 @@
 
 .footer-card {
   background-color: #ffffff;
-  border: 2px solid #E5EEFB;
+  border: 2px solid #e5eefb;
   position: relative;
   top: -71px;
   padding: 14px;
@@ -19,7 +19,7 @@
 }
 
 .footer-bottom-blue {
-  background-color: #0943B5;
+  background-color: #0943b5;
   height: 87px;
   margin-top: 20px;
   display: flex;
@@ -38,8 +38,6 @@
 .govcobasefooter__container {
   padding: 30px 30px 10px;
 }
-
-
 
 .govcobasefooter_contentinfohead_logo {
   text-align: left;
