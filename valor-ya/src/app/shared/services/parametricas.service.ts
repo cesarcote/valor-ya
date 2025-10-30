@@ -30,7 +30,7 @@ export class ParametricasService {
       { codigoUnidad: 'GJ', descripcionUnidad: 'GARAJE' },
       { codigoUnidad: 'LC', descripcionUnidad: 'LOCAL' },
       { codigoUnidad: 'OF', descripcionUnidad: 'OFICINA' },
-      { codigoUnidad: 'OT', descripcionUnidad: 'Otro' },
+      { codigoUnidad: 'OT', descripcionUnidad: 'OTRO' },
     ];
 
     return this.http.get<TiposUnidadResponse>(`${this.apiUrl}/tipos-unidad`, { headers }).pipe(
@@ -39,6 +39,9 @@ export class ParametricasService {
           return response.data;
         } else {
           console.warn('API returned unsuccessful response, using fallback data');
+          if (response.error) {
+            console.warn('API Error details:', response.error);
+          }
           return fallbackData;
         }
       }),

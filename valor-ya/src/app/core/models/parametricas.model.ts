@@ -7,4 +7,5 @@ export interface TiposUnidadResponse {
   success: boolean;
   message: string;
   data: TipoUnidad[];
+  error: string | null;
 }
