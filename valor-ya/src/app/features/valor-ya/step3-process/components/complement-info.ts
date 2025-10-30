@@ -54,10 +54,10 @@ export class ComplementInfo implements OnInit {
   }
 
   loadTipoUnidadFromStorage(): void {
-    const tipoUnidadGuardada = this.stateService.tipoUnidadSeleccionada();
-    if (tipoUnidadGuardada) {
+    const tipoUnidadEnMemoria = this.stateService.tipoUnidadSeleccionada();
+    if (tipoUnidadEnMemoria) {
       this.complementForm.patchValue({
-        tipoPredio: tipoUnidadGuardada.codigoUnidad,
+        tipoPredio: tipoUnidadEnMemoria.codigoUnidad,
       });
       this.complementForm.get('tipoPredio')?.disable();
     }
@@ -106,10 +106,9 @@ export class ComplementInfo implements OnInit {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      const LOTEID_TEST = 'TEST';
+      const predioData = this.stateService.predioData()!;
 
       const tipoUnidadSeleccionada = this.stateService.tipoUnidadSeleccionada();
-      const predioData = this.stateService.predioData();
       const formValues = this.complementForm.getRawValue();
 
       let tipoPredioFinal = formValues.tipoPredio;
@@ -142,7 +141,7 @@ export class ComplementInfo implements OnInit {
 
       this.mcmService
         .consultarMCM({
-          loteId: LOTEID_TEST,
+          loteId: predioData.loteid!,
           datosEndpoint: predioData,
           datosUsuario,
           tipoUnidad: tipoPredioFinal,

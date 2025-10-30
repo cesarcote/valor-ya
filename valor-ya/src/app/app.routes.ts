@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { predioDataGuard } from './core/guards/predio-data.guard';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
+        canActivate: [predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step3-process/components/complement-info').then(
             (m) => m.ComplementInfo

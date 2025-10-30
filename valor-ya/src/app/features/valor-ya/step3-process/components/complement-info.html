@@ -12,12 +12,6 @@
     }
   </div>
 
-  @if (errorMessage()) {
-  <div class="error-alert">
-    <p>{{ errorMessage() }}</p>
-  </div>
-  }
-
   <form [formGroup]="complementForm" class="complement-form">
     <!-- Tipo de predio -->
     <div class="form-section">
@@ -124,10 +118,22 @@
       </div>
     </div>
 
+    @if (errorMessage()) {
+    <div class="error-alert">
+      <p>{{ errorMessage() }}</p>
+    </div>
+    }
+
     <div class="action-buttons">
       <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()">
       </app-button>
-      <app-button text="Consultar" variant="fill" type="button" (clicked)="onConsultarMCM()">
+      <app-button
+        [text]="isLoading() ? 'Enviando...' : 'Consultar'"
+        variant="fill"
+        type="button"
+        [disabled]="isLoading()"
+        (clicked)="onConsultarMCM()"
+      >
       </app-button>
     </div>
   </form>

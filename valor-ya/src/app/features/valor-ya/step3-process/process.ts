@@ -63,8 +63,6 @@ export class Process implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
 
-    this.stateService.recuperarTipoUnidadDeLocalStorage();
-
     const tipo = this.stateService.tipoBusqueda();
     const valor = this.stateService.valorBusqueda();
 
@@ -131,21 +129,19 @@ export class Process implements OnInit, AfterViewInit {
   onContinuar(): void {
     const predio = this.predioData();
 
-    if (!predio) {
-      this.errorMessage.set('No hay datos del predio para enviar');
+    if (!predio || !predio.loteid) {
+      this.errorMessage.set('No hay información del predio con loteId válido');
       return;
     }
 
     this.isProcessingMCM.set(true);
     this.errorMessage.set('');
 
-    const LOTEID_TEST = '008213033003';
-    const loteId = predio.loteid || LOTEID_TEST;
     const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
 
     this.mcmService
       .consultarMCM({
-        loteId: loteId,
+        loteId: predio.loteid,
         datosEndpoint: predio,
         tipoUnidad: tipoUnidad?.descripcionUnidad,
       })

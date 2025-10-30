@@ -1,8 +1,7 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { PredioData } from '../models/predio-data.model';
 import { DatosComplementarios } from '../models/datos-complementarios.model';
 import { TipoUnidad } from '../models/parametricas.model';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -14,9 +13,6 @@ export enum TipoBusqueda {
   providedIn: 'root',
 })
 export class ValorYaStateService {
-  private readonly STORAGE_KEY_TIPO_UNIDAD = 'valorya_tipo_unidad';
-  private localStorageService = inject(LocalStorageService);
-
   public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(TipoBusqueda.DIRECCION);
   public readonly valorBusqueda = signal<string | undefined>(undefined);
   public readonly predioData = signal<PredioData | undefined>(undefined);
@@ -55,16 +51,6 @@ export class ValorYaStateService {
 
   setTipoUnidad(tipoUnidad: TipoUnidad): void {
     this.tipoUnidadSeleccionada.set(tipoUnidad);
-    this.localStorageService.guardar(this.STORAGE_KEY_TIPO_UNIDAD, tipoUnidad);
-  }
-
-  recuperarTipoUnidadDeLocalStorage(): TipoUnidad | undefined {
-    const tipoUnidad = this.localStorageService.recuperar<TipoUnidad>(this.STORAGE_KEY_TIPO_UNIDAD);
-    if (tipoUnidad) {
-      this.tipoUnidadSeleccionada.set(tipoUnidad);
-      return tipoUnidad;
-    }
-    return undefined;
   }
 
   reset(): void {
