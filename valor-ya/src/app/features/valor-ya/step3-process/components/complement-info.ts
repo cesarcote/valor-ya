@@ -14,8 +14,7 @@ import {
 } from '../../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
-import { DatosComplementariosService } from '../../../../shared/services/datos-complementarios.service';
-import { DatosComplementariosRequest } from '../../../../core/models/datos-complementarios.model';
+import { McmService } from '../../../../shared/services/mcm.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
@@ -37,9 +36,9 @@ export class ComplementInfo implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
-  private stateService = inject(ValorYaStateService);
+  public stateService = inject(ValorYaStateService);
   private parametricasService = inject(ParametricasService);
-  private datosComplementariosService = inject(DatosComplementariosService);
+  private mcmService = inject(McmService);
 
   complementForm!: FormGroup;
   isLoading = signal(false);
@@ -51,6 +50,17 @@ export class ComplementInfo implements OnInit {
     this.stepperService.setStep(ValorYaStep.PROCESO);
     this.initForm();
     this.loadTiposPredio();
+    this.loadTipoUnidadFromStorage();
+  }
+
+  loadTipoUnidadFromStorage(): void {
+    const tipoUnidadGuardada = this.stateService.tipoUnidadSeleccionada();
+    if (tipoUnidadGuardada) {
+      this.complementForm.patchValue({
+        tipoPredio: tipoUnidadGuardada.codigoUnidad,
+      });
+      this.complementForm.get('tipoPredio')?.disable();
+    }
   }
 
   initForm(): void {
@@ -92,18 +102,25 @@ export class ComplementInfo implements OnInit {
   }
 
   onConsultarMCM(): void {
-    if (this.complementForm.valid) {
+    if (this.complementForm.valid || this.complementForm.get('tipoPredio')?.disabled) {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      const predioData = this.stateService.predioData();
-      const loteid = predioData?.loteid || '';
+      const LOTEID_TEST = '008213033003';
 
-      const formValues = this.complementForm.value;
-      const datosComplementarios: DatosComplementariosRequest = {
-        ...(loteid && { loteId: loteid }),
-        tipoPredio:
-          formValues.tipoPredio === 'ot' ? formValues.otroTipoPredio : formValues.tipoPredio,
+      const tipoUnidadSeleccionada = this.stateService.tipoUnidadSeleccionada();
+      const predioData = this.stateService.predioData();
+      const formValues = this.complementForm.getRawValue();
+
+      let tipoPredioFinal = formValues.tipoPredio;
+      if (tipoUnidadSeleccionada) {
+        tipoPredioFinal = tipoUnidadSeleccionada.descripcionUnidad;
+      } else if (formValues.tipoPredio === 'ot') {
+        tipoPredioFinal = formValues.otroTipoPredio;
+      }
+
+      const datosUsuario = {
+        tipoPredio: tipoPredioFinal,
         numeroHabitaciones:
           formValues.numeroHabitaciones !== ''
             ? parseInt(formValues.numeroHabitaciones)
@@ -123,18 +140,25 @@ export class ComplementInfo implements OnInit {
           formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
 
-      this.datosComplementariosService.registrarDatos(datosComplementarios).subscribe({
-        next: (datosGuardados) => {
-          this.stateService.setDatosComplementarios(datosGuardados);
-          this.isLoading.set(false);
-          this.stepperService.setStep(ValorYaStep.RESPUESTA);
-          this.router.navigate(['/valor-ya/respuesta']);
-        },
-        error: (error) => {
-          this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
-          this.isLoading.set(false);
-        },
-      });
+      this.mcmService
+        .consultarMCM({
+          loteId: LOTEID_TEST,
+          datosEndpoint: predioData,
+          datosUsuario,
+          tipoUnidad: tipoPredioFinal,
+        })
+        .subscribe({
+          next: (datosGuardados) => {
+            this.stateService.setDatosComplementarios(datosGuardados);
+            this.isLoading.set(false);
+            this.stepperService.setStep(ValorYaStep.RESPUESTA);
+            this.router.navigate(['/valor-ya/respuesta']);
+          },
+          error: (error) => {
+            this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
+            this.isLoading.set(false);
+          },
+        });
     } else {
       Object.keys(this.complementForm.controls).forEach((key) => {
         const control = this.complementForm.get(key);

@@ -15,7 +15,7 @@ export interface DatosComplementarios {
 }
 
 export interface DatosComplementariosRequest {
-  loteId?: string;
+  loteId: string;
   tipoPredio?: string;
   numeroHabitaciones?: number;
   numeroBanos?: number;

@@ -1,7 +1,8 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { PredioData } from '../models/predio-data.model';
 import { DatosComplementarios } from '../models/datos-complementarios.model';
 import { TipoUnidad } from '../models/parametricas.model';
+import { LocalStorageService } from '../../shared/services/local-storage.service';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -14,6 +15,7 @@ export enum TipoBusqueda {
 })
 export class ValorYaStateService {
   private readonly STORAGE_KEY_TIPO_UNIDAD = 'valorya_tipo_unidad';
+  private localStorageService = inject(LocalStorageService);
 
   public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(TipoBusqueda.DIRECCION);
   public readonly valorBusqueda = signal<string | undefined>(undefined);
@@ -53,27 +55,14 @@ export class ValorYaStateService {
 
   setTipoUnidad(tipoUnidad: TipoUnidad): void {
     this.tipoUnidadSeleccionada.set(tipoUnidad);
-    this.guardarTipoUnidadEnLocalStorage(tipoUnidad);
-  }
-
-  private guardarTipoUnidadEnLocalStorage(tipoUnidad: TipoUnidad): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY_TIPO_UNIDAD, JSON.stringify(tipoUnidad));
-    } catch (error) {
-      console.error('Error al guardar TipoUnidad en localStorage:', error);
-    }
+    this.localStorageService.guardar(this.STORAGE_KEY_TIPO_UNIDAD, tipoUnidad);
   }
 
   recuperarTipoUnidadDeLocalStorage(): TipoUnidad | undefined {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY_TIPO_UNIDAD);
-      if (stored) {
-        const tipoUnidad = JSON.parse(stored) as TipoUnidad;
-        this.tipoUnidadSeleccionada.set(tipoUnidad);
-        return tipoUnidad;
-      }
-    } catch (error) {
-      console.error('Error al recuperar TipoUnidad de localStorage:', error);
+    const tipoUnidad = this.localStorageService.recuperar<TipoUnidad>(this.STORAGE_KEY_TIPO_UNIDAD);
+    if (tipoUnidad) {
+      this.tipoUnidadSeleccionada.set(tipoUnidad);
+      return tipoUnidad;
     }
     return undefined;
   }
