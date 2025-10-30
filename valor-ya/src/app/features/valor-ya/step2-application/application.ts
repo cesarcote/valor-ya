@@ -8,8 +8,8 @@ import {
 } from '../../../core/services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
-import { FormChipComponent } from './components/form-chip/form-chip';
-import { FormAddressComponent } from './components/form-address/form-address';
+import { FormChipComponent, ChipData } from './components/form-chip/form-chip';
+import { FormAddressComponent, AddressData } from './components/form-address/form-address';
 import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
 
 @Component({
@@ -64,18 +64,21 @@ export class ApplicationComponent {
     this.stateService.setTipoBusqueda(tipos[index]);
   }
 
-  onConsultarChip(chip: string): void {
-    this.stateService.setValorBusqueda(chip);
+  onConsultarChip(data: ChipData): void {
+    this.stateService.setValorBusqueda(data.chip);
+    this.stateService.setTipoPredio(data.tipoPredio);
     this.irAProceso();
   }
 
-  onConsultarDireccion(direccion: string): void {
-    this.stateService.setValorBusqueda(direccion);
+  onConsultarDireccion(data: AddressData): void {
+    this.stateService.setValorBusqueda(data.direccion);
+    this.stateService.setTipoPredio(data.tipoPredio);
     this.irAProceso();
   }
 
   onConsultarFMI(data: FmiData): void {
     this.stateService.setValorBusqueda(`${data.matricula} - ${data.zona}`);
+    this.stateService.setTipoPredio(data.tipoPredio);
     this.irAProceso();
   }
 

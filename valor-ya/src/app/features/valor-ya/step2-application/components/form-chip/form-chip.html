@@ -9,6 +9,16 @@
   ></app-input>
 </div>
 
+<div class="form-group">
+  <app-select
+    dataId="tipoPredio"
+    label="Tipo de predio"
+    [formCtr]="tipoPredioControl"
+    [options]="tiposPredio()"
+    placeholder="Selecciona una opción"
+  ></app-select>
+</div>
+
 <div class="form-buttons">
   <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
   <app-button

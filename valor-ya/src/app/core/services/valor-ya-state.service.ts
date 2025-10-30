@@ -13,12 +13,11 @@ export enum TipoBusqueda {
 })
 export class ValorYaStateService {
   // State as individual signals
-  public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(
-    TipoBusqueda.DIRECCION
-  );
+  public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(TipoBusqueda.DIRECCION);
   public readonly valorBusqueda = signal<string | undefined>(undefined);
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly datosComplementarios = signal<DatosComplementarios | undefined>(undefined);
+  public readonly tipoPredio = signal<string | undefined>(undefined);
   public readonly mostrarResultado = signal<boolean>(false);
 
   // Computed signal for derived state
@@ -30,6 +29,10 @@ export class ValorYaStateService {
 
   setValorBusqueda(valor: string): void {
     this.valorBusqueda.set(valor);
+  }
+
+  setTipoPredio(tipo: string): void {
+    this.tipoPredio.set(tipo);
   }
 
   setMostrarResultado(mostrar: boolean): void {
@@ -51,6 +54,7 @@ export class ValorYaStateService {
     this.valorBusqueda.set(undefined);
     this.predioData.set(undefined);
     this.datosComplementarios.set(undefined);
+    this.tipoPredio.set(undefined);
     this.mostrarResultado.set(false);
   }
 }

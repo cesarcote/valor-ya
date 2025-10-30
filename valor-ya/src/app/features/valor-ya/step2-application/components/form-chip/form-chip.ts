@@ -1,32 +1,78 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, inject, OnInit, signal, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
+import { SelectComponent, SelectOption } from '../../../../../shared/components/select/select';
+import { ParametricasService } from '../../../../../shared/services/parametricas.service';
+
+export interface ChipData {
+  chip: string;
+  tipoPredio: string;
+}
 
 @Component({
   selector: 'app-form-chip',
-  imports: [ReactiveFormsModule, InputComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, SelectComponent],
   templateUrl: './form-chip.html',
   styleUrls: ['./form-chip.css'],
 })
-export class FormChipComponent {
-  @Output() consultar = new EventEmitter<string>();
+export class FormChipComponent implements OnInit {
+  @Output() consultar = new EventEmitter<ChipData>();
   @Output() volver = new EventEmitter<void>();
+
+  private parametricasService = inject(ParametricasService);
 
   chipControl = new FormControl('', [
     Validators.required,
     Validators.minLength(5),
     Validators.maxLength(30),
   ]);
+  tipoPredioControl = new FormControl('', [Validators.required]);
+
+  tiposPredio = signal<SelectOption[]>([]);
+
+  ngOnInit(): void {
+    this.loadTiposPredio();
+  }
+
+  loadTiposPredio(): void {
+    this.parametricasService.consultarTiposUnidad().subscribe({
+      next: (tipos) => {
+        const options: SelectOption[] = tipos.map((tipo) => ({
+          value: tipo.codigoUnidad.toLowerCase(),
+          label: tipo.descripcionUnidad,
+        }));
+        this.tiposPredio.set(options);
+      },
+      error: (error) => {
+        console.error('Error al conectar al endpoint /parametricas/tipos-unidad:', error);
+        // Fallback to hardcoded
+        this.tiposPredio.set([
+          { value: 'ap', label: 'APARTAMENTO' },
+          { value: 'bg', label: 'BODEGA' },
+          { value: 'ca', label: 'CASA' },
+          { value: 'dp', label: 'DEPÓSITO' },
+          { value: 'gj', label: 'GARAJE' },
+          { value: 'lc', label: 'LOCAL' },
+          { value: 'of', label: 'OFICINA' },
+          { value: 'ot', label: 'Otro' },
+        ]);
+      },
+    });
+  }
 
   onConsultar(): void {
-    if (this.chipControl.invalid) {
+    if (this.chipControl.invalid || this.tipoPredioControl.invalid) {
       this.chipControl.markAsTouched();
+      this.tipoPredioControl.markAsTouched();
       return;
     }
 
-    this.consultar.emit(this.chipControl.value!);
+    this.consultar.emit({
+      chip: this.chipControl.value!,
+      tipoPredio: this.tipoPredioControl.value!,
+    });
   }
 
   onVolver(): void {
