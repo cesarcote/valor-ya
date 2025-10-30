@@ -78,27 +78,12 @@ export class ComplementInfo implements OnInit {
   }
 
   loadTiposPredio(): void {
-    this.parametricasService.consultarTiposUnidad().subscribe({
-      next: (tipos) => {
-        const options: SelectOption[] = tipos.map((tipo) => ({
-          value: tipo.codigoUnidad.toLowerCase(),
-          label: tipo.descripcionUnidad,
-        }));
-        this.tiposPredio.set(options);
-      },
-      error: (error) => {
-        console.error('Error al conectar al endpoint /parametricas/tipos-unidad:', error);
-        // Fallback to hardcoded
-        this.tiposPredio.set([
-          { value: 'casa', label: 'Casa' },
-          { value: 'apartamento', label: 'Apartamento' },
-          { value: 'local', label: 'Local Comercial' },
-          { value: 'bodega', label: 'Bodega' },
-          { value: 'lote', label: 'Lote' },
-          { value: 'oficina', label: 'Oficina' },
-          { value: 'otro', label: 'Otro' },
-        ]);
-      },
+    this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
+      const options: SelectOption[] = tipos.map((tipo) => ({
+        value: tipo.codigoUnidad,
+        label: tipo.descripcionUnidad,
+      }));
+      this.tiposPredio.set(options);
     });
   }
 
