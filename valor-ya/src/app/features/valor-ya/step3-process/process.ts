@@ -23,7 +23,7 @@ import { MapComponent } from '../../../shared/components/map';
 export class Process implements OnInit, AfterViewInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
-  private stateService = inject(ValorYaStateService);
+  public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
 
   private mapComponent?: MapComponent;
@@ -59,6 +59,8 @@ export class Process implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
+
+    this.stateService.recuperarTipoUnidadDeLocalStorage();
 
     const tipo = this.stateService.tipoBusqueda();
     const valor = this.stateService.valorBusqueda();

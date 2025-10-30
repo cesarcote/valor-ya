@@ -5,10 +5,12 @@ import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
 import { SelectComponent, SelectOption } from '../../../../../shared/components/select/select';
 import { ParametricasService } from '../../../../../shared/services/parametricas.service';
+import { TipoUnidad } from '../../../../../core/models/parametricas.model';
 
 export interface AddressData {
   direccion: string;
   tipoPredio: string;
+  tipoUnidad: TipoUnidad;
 }
 
 @Component({
@@ -27,6 +29,7 @@ export class FormAddressComponent implements OnInit {
   tipoPredioControl = new FormControl('', [Validators.required]);
 
   tiposPredio = signal<SelectOption[]>([]);
+  tiposUnidadCompletos = signal<TipoUnidad[]>([]);
 
   ngOnInit(): void {
     this.loadTiposPredio();
@@ -34,6 +37,7 @@ export class FormAddressComponent implements OnInit {
 
   loadTiposPredio(): void {
     this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
+      this.tiposUnidadCompletos.set(tipos);
       const options: SelectOption[] = tipos.map((tipo) => ({
         value: tipo.codigoUnidad,
         label: tipo.descripcionUnidad,
@@ -49,9 +53,15 @@ export class FormAddressComponent implements OnInit {
       return;
     }
 
+    const codigoSeleccionado = this.tipoPredioControl.value!;
+    const tipoUnidadCompleto = this.tiposUnidadCompletos().find(
+      (t) => t.codigoUnidad === codigoSeleccionado
+    )!;
+
     this.consultar.emit({
       direccion: this.direccionControl.value!,
-      tipoPredio: this.tipoPredioControl.value!,
+      tipoPredio: codigoSeleccionado,
+      tipoUnidad: tipoUnidadCompleto,
     });
   }
 

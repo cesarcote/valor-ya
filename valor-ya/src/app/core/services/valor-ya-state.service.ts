@@ -1,6 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { PredioData } from '../models/predio-data.model';
 import { DatosComplementarios } from '../models/datos-complementarios.model';
+import { TipoUnidad } from '../models/parametricas.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -12,15 +13,16 @@ export enum TipoBusqueda {
   providedIn: 'root',
 })
 export class ValorYaStateService {
-  // State as individual signals
+  private readonly STORAGE_KEY_TIPO_UNIDAD = 'valorya_tipo_unidad';
+
   public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(TipoBusqueda.DIRECCION);
   public readonly valorBusqueda = signal<string | undefined>(undefined);
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly datosComplementarios = signal<DatosComplementarios | undefined>(undefined);
   public readonly tipoPredio = signal<string | undefined>(undefined);
   public readonly mostrarResultado = signal<boolean>(false);
+  public readonly tipoUnidadSeleccionada = signal<TipoUnidad | undefined>(undefined);
 
-  // Computed signal for derived state
   public readonly hasDatosComplementarios = computed(() => !!this.datosComplementarios());
 
   setTipoBusqueda(tipo: TipoBusqueda): void {
@@ -49,6 +51,33 @@ export class ValorYaStateService {
     this.valorBusqueda.set(valor);
   }
 
+  setTipoUnidad(tipoUnidad: TipoUnidad): void {
+    this.tipoUnidadSeleccionada.set(tipoUnidad);
+    this.guardarTipoUnidadEnLocalStorage(tipoUnidad);
+  }
+
+  private guardarTipoUnidadEnLocalStorage(tipoUnidad: TipoUnidad): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY_TIPO_UNIDAD, JSON.stringify(tipoUnidad));
+    } catch (error) {
+      console.error('Error al guardar TipoUnidad en localStorage:', error);
+    }
+  }
+
+  recuperarTipoUnidadDeLocalStorage(): TipoUnidad | undefined {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY_TIPO_UNIDAD);
+      if (stored) {
+        const tipoUnidad = JSON.parse(stored) as TipoUnidad;
+        this.tipoUnidadSeleccionada.set(tipoUnidad);
+        return tipoUnidad;
+      }
+    } catch (error) {
+      console.error('Error al recuperar TipoUnidad de localStorage:', error);
+    }
+    return undefined;
+  }
+
   reset(): void {
     this.tipoBusqueda.set(undefined);
     this.valorBusqueda.set(undefined);
@@ -56,5 +85,6 @@ export class ValorYaStateService {
     this.datosComplementarios.set(undefined);
     this.tipoPredio.set(undefined);
     this.mostrarResultado.set(false);
+    this.tipoUnidadSeleccionada.set(undefined);
   }
 }

@@ -4,6 +4,12 @@
   <div class="step-header">
     <h2>Resultado de la Búsqueda</h2>
     <p class="subtitle">Información del predio encontrado</p>
+    @if (stateService.tipoUnidadSeleccionada()) {
+    <p class="tipo-unidad-info">
+      Tipo de unidad:
+      <strong>{{ stateService.tipoUnidadSeleccionada()!.descripcionUnidad }}</strong>
+    </p>
+    }
   </div>
 
   @if (isLoading()) {
