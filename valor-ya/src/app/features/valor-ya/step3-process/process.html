@@ -17,7 +17,6 @@
     <p>Cargando información del predio...</p>
   </div>
   } @else if (errorMessage()) {
-  <!-- Mensaje de error cuando no se encuentran datos -->
   <div class="no-data-section">
     <h3>No se encontró información</h3>
     <p class="error-message">{{ errorMessage() }}</p>
@@ -28,9 +27,21 @@
       ¿La información que reposa en nuestro sistema de información es la correcta?
     </p>
     <div class="action-buttons">
-      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()">
+      <app-button
+        text="No"
+        variant="outline"
+        type="button"
+        [disabled]="isProcessingMCM()"
+        (clicked)="onNoEsCorrecta()"
+      >
       </app-button>
-      <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
+      <app-button
+        [text]="isProcessingMCM() ? 'Enviando...' : 'Continuar'"
+        variant="fill"
+        type="button"
+        [disabled]="isProcessingMCM()"
+        (clicked)="onContinuar()"
+      >
       </app-button>
     </div>
   </div>
@@ -41,7 +52,6 @@
     <app-map></app-map>
   </div>
 
-  <!-- Información del predio -->
   <app-predio-info-card [predioData]="predioData()" [showMessage]="true" [showAllFields]="true">
   </app-predio-info-card>
 
@@ -50,9 +60,21 @@
       ¿La información que reposa en nuestro sistema de información es la correcta?
     </p>
     <div class="action-buttons">
-      <app-button text="No" variant="outline" type="button" (clicked)="onNoEsCorrecta()">
+      <app-button
+        text="No"
+        variant="outline"
+        type="button"
+        [disabled]="isProcessingMCM()"
+        (clicked)="onNoEsCorrecta()"
+      >
       </app-button>
-      <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
+      <app-button
+        [text]="isProcessingMCM() ? 'Enviando...' : 'Continuar'"
+        variant="fill"
+        type="button"
+        [disabled]="isProcessingMCM()"
+        (clicked)="onContinuar()"
+      >
       </app-button>
     </div>
   </div>

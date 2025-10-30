@@ -8,6 +8,7 @@ import {
 } from '../../../core/services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../shared/services/predio.service';
+import { McmService } from '../../../shared/services/mcm.service';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -25,6 +26,7 @@ export class Process implements OnInit, AfterViewInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
+  private mcmService = inject(McmService);
 
   private mapComponent?: MapComponent;
 
@@ -45,6 +47,7 @@ export class Process implements OnInit, AfterViewInit {
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
   public readonly mapReady = signal<boolean>(false);
+  public readonly isProcessingMCM = signal<boolean>(false);
 
   constructor() {
     // Effect to update the map when predioData or mapReady changes
@@ -126,7 +129,37 @@ export class Process implements OnInit, AfterViewInit {
   }
 
   onContinuar(): void {
-    this.stepperService.setStep(ValorYaStep.RESPUESTA);
-    this.router.navigate(['/valor-ya/respuesta']);
+    const predio = this.predioData();
+
+    if (!predio) {
+      this.errorMessage.set('No hay datos del predio para enviar');
+      return;
+    }
+
+    this.isProcessingMCM.set(true);
+    this.errorMessage.set('');
+
+    const LOTEID_TEST = '008213033003';
+    const loteId = predio.loteid || LOTEID_TEST;
+    const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
+
+    this.mcmService
+      .consultarMCM({
+        loteId: loteId,
+        datosEndpoint: predio,
+        tipoUnidad: tipoUnidad?.descripcionUnidad,
+      })
+      .subscribe({
+        next: (datosGuardados) => {
+          this.stateService.setDatosComplementarios(datosGuardados);
+          this.isProcessingMCM.set(false);
+          this.stepperService.setStep(ValorYaStep.RESPUESTA);
+          this.router.navigate(['/valor-ya/respuesta']);
+        },
+        error: (error) => {
+          this.errorMessage.set(`Error al procesar los datos: ${error.message}`);
+          this.isProcessingMCM.set(false);
+        },
+      });
   }
 }
