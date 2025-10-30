@@ -106,7 +106,7 @@ export class ComplementInfo implements OnInit {
       this.isLoading.set(true);
       this.errorMessage.set('');
 
-      const LOTEID_TEST = '008213033003';
+      const LOTEID_TEST = 'TEST';
 
       const tipoUnidadSeleccionada = this.stateService.tipoUnidadSeleccionada();
       const predioData = this.stateService.predioData();
