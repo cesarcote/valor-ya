@@ -28,10 +28,9 @@
 }
 
 .govco-co {
-  height: 48px;
-  margin-top: 24px;
+  height: 40px;
   display: inline-block;
-  content: url(https://cdn.www.gov.co/v4/assets/images/logo-colombia.svg);
+  content: url('../../../../assets/images/logoGovCO.png');
 }
 
 .govco-separator {
@@ -44,9 +43,9 @@
 }
 
 .govco-logo {
-  height: 30px;
+  height: 40px;
   display: inline-block;
-  content: url(https://cdn.www.gov.co/v4/assets/images/logo.svg);
+  content: url('../../../../assets/images/footerFooterColombia.png');
   vertical-align: super;
 }
 
@@ -55,10 +54,18 @@
   background-color: #0943b5;
   width: 100%;
   margin-top: 20px !important;
+  display: flex;
+  align-items: center;
 }
 
 .govco-logo-container {
-  margin-left: 80px !important;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .govco-iconContainer {
