@@ -6,12 +6,93 @@
     <p>Estimación de valor comercial para el predio consultado</p>
   </div>
 
-  <div class="results-container">
-    <p>aca va el resultado</p>
-  </div>
+  <!-- Sección: Datos de Facturación -->
+  <div class="billing-section">
+    <h3>Datos de Facturación</h3>
+    <p class="section-subtitle">Complete la siguiente información para continuar</p>
 
-  <div class="action-buttons">
-    <app-button text="Nueva Consulta" variant="fill" type="button" (clicked)="onNuevaConsulta()">
-    </app-button>
+    <form [formGroup]="facturacionForm" class="billing-form">
+      <div class="form-row">
+        <app-select
+          dataId="tipoDocumento"
+          label="Tipo de Documento *"
+          [formCtr]="tipoDocumentoControl"
+          [options]="tiposDocumento"
+          placeholder="Seleccione tipo de documento"
+        ></app-select>
+
+        <app-input
+          type="text"
+          id="numeroDocumento"
+          label="Número de Documento *"
+          [formCtr]="numeroDocumentoControl"
+          placeholder="Ej: 1234567890"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="text"
+          id="nombreCompleto"
+          label="Nombre Completo / Razón Social *"
+          [formCtr]="nombreCompletoControl"
+          placeholder="Ej: Juan Pérez"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="text"
+          id="direccion"
+          label="Dirección *"
+          [formCtr]="direccionControl"
+          placeholder="Ej: CL 123 # 45-67"
+        ></app-input>
+
+        <app-input
+          type="text"
+          id="ciudad"
+          label="Ciudad *"
+          [formCtr]="ciudadControl"
+          placeholder="Ej: Bogotá"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          type="tel"
+          id="telefono"
+          label="Teléfono *"
+          [formCtr]="telefonoControl"
+          placeholder="Ej: 3001234567"
+        ></app-input>
+
+        <app-input
+          type="email"
+          id="email"
+          label="Email de Entrega *"
+          [formCtr]="emailControl"
+          placeholder="Ej: correo@ejemplo.com"
+        ></app-input>
+      </div>
+
+      <div class="form-actions">
+        <app-button
+          text="Nueva Consulta"
+          variant="outline"
+          type="button"
+          (clicked)="onNuevaConsulta()"
+        >
+        </app-button>
+        <app-button
+          [text]="isSubmitting() ? 'Procesando...' : 'Solicitar Avalúo'"
+          variant="fill"
+          type="button"
+          [disabled]="isSubmitting()"
+          (clicked)="onSubmitFacturacion()"
+        >
+        </app-button>
+      </div>
+    </form>
   </div>
 </div>
