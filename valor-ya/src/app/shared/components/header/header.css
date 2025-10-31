@@ -1,6 +1,7 @@
 /* Toolbar Styles */
 .toolbar {
   width: 100%;
+  margin-bottom: 2rem;
 }
 
 .menu--top {
