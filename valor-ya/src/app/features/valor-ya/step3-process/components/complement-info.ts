@@ -44,7 +44,8 @@ export class ComplementInfo implements OnInit {
   isLoading = signal(false);
   errorMessage = signal('');
 
-  tiposPredio = signal<SelectOption[]>([]);
+  // Opciones para el dropdown de tipo de predio
+  opcionesTipoUnidad = signal<SelectOption[]>([]);
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
@@ -89,11 +90,12 @@ export class ComplementInfo implements OnInit {
 
   loadTiposPredio(): void {
     this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
+      // Crear opciones para el dropdown
       const options: SelectOption[] = tipos.map((tipo) => ({
-        value: tipo.codigoUnidad,
-        label: tipo.descripcionUnidad,
+        value: tipo.codigoUnidad, // "AP"
+        label: tipo.descripcionUnidad, // "APARTAMENTO"
       }));
-      this.tiposPredio.set(options);
+      this.opcionesTipoUnidad.set(options);
     });
   }
 

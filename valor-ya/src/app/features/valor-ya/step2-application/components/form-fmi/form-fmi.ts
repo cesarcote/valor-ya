@@ -5,11 +5,13 @@ import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
 import { SelectComponent, SelectOption } from '../../../../../shared/components/select/select';
 import { ParametricasService } from '../../../../../shared/services/parametricas.service';
+import { TipoUnidad } from '../../../../../core/models/parametricas.model';
 
 export interface FmiData {
   zona: string;
   matricula: string;
   tipoPredio: string;
+  tipoUnidad: TipoUnidad;
 }
 
 @Component({
@@ -26,9 +28,15 @@ export class FormFmiComponent implements OnInit {
 
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
-  tipoPredioControl = new FormControl('', [Validators.required]);
 
-  tiposPredio = signal<SelectOption[]>([]);
+  // Control que guarda solo el CÓDIGO (ej: "AP", "CA")
+  codigoTipoUnidadControl = new FormControl('', [Validators.required]);
+
+  // Opciones para el dropdown del select
+  opcionesTipoUnidad = signal<SelectOption[]>([]);
+
+  // Lista completa de TipoUnidad con código y descripción
+  tiposUnidad = signal<TipoUnidad[]>([]);
 
   zonas: SelectOption[] = [
     { value: '50C', label: '50C-Bogota Zona Centro' },
@@ -42,11 +50,15 @@ export class FormFmiComponent implements OnInit {
 
   loadTiposPredio(): void {
     this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
+      // Guardar objetos completos
+      this.tiposUnidad.set(tipos);
+
+      // Crear opciones para el dropdown
       const options: SelectOption[] = tipos.map((tipo) => ({
-        value: tipo.codigoUnidad,
-        label: tipo.descripcionUnidad,
+        value: tipo.codigoUnidad, // "AP"
+        label: tipo.descripcionUnidad, // "APARTAMENTO"
       }));
-      this.tiposPredio.set(options);
+      this.opcionesTipoUnidad.set(options);
     });
   }
 
@@ -54,18 +66,27 @@ export class FormFmiComponent implements OnInit {
     if (
       this.zonaControl.invalid ||
       this.matriculaControl.invalid ||
-      this.tipoPredioControl.invalid
+      this.codigoTipoUnidadControl.invalid
     ) {
       this.zonaControl.markAsTouched();
       this.matriculaControl.markAsTouched();
-      this.tipoPredioControl.markAsTouched();
+      this.codigoTipoUnidadControl.markAsTouched();
       return;
     }
+
+    // El usuario seleccionó un código (ej: "AP")
+    const codigoSeleccionado = this.codigoTipoUnidadControl.value!;
+
+    // Buscar el objeto completo que corresponde a ese código
+    const tipoUnidadCompleto = this.tiposUnidad().find(
+      (tipo) => tipo.codigoUnidad === codigoSeleccionado
+    )!;
 
     this.consultar.emit({
       zona: this.zonaControl.value!,
       matricula: this.matriculaControl.value!,
-      tipoPredio: this.tipoPredioControl.value!,
+      tipoPredio: codigoSeleccionado, // Solo el código "AP"
+      tipoUnidad: tipoUnidadCompleto, // Objeto completo { codigoUnidad: "AP", descripcionUnidad: "APARTAMENTO" }
     });
   }
 
