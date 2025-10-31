@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PredioData } from '../../../core/models/predio-data.model';
+import { TipoUnidad } from '../../../core/models/parametricas.model';
 
 @Component({
   selector: 'app-predio-info-card',
@@ -11,4 +12,5 @@ export class PredioInfoCardComponent {
   @Input() predioData?: PredioData;
   @Input() showMessage: boolean = true;
   @Input() showAllFields: boolean = false;
+  @Input() tipoUnidadSeleccionada?: TipoUnidad;
 }
