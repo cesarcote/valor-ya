@@ -1,18 +1,20 @@
 <div class="stepper">
-  <div class="stepper__progress-bar">
-    <div class="stepper__progress-fill" [style.width]="progressPercentage()"></div>
-  </div>
-
-  <div class="stepper__steps">
-    @for (stepConfig of stepperService?.steps; track stepConfig.step) {
-    <div
-      class="stepper__step"
-      [class.stepper__step--active]="isCurrentStep(stepConfig.step)"
-      [class.stepper__step--completed]="isPastStep(stepConfig.step)"
-    >
-      <div class="stepper__indicator">{{ stepConfig.step }}</div>
-      <span class="stepper__label">{{ stepConfig.label }}</span>
+  @for (stepConfig of stepperService?.steps; track stepConfig.step) {
+  <div
+    class="step"
+    [class.active]="isCurrentStep(stepConfig.step)"
+    [class.completed]="isPastStep(stepConfig.step)"
+  >
+    <div class="step-circle">
+      <span class="step-number">{{ stepConfig.step }}</span>
+    </div>
+    <div class="step-label">{{ stepConfig.label }}</div>
+    @if (!$last) {
+    <div class="line-container">
+      <div class="line-base"></div>
+      <div class="line-progress"></div>
     </div>
     }
   </div>
+  }
 </div>

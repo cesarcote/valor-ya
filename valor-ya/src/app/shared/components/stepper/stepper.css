@@ -1,142 +1,125 @@
-/* ==================== STEPPER COMPONENT ==================== */
-
-/* Contenedor principal */
 .stepper {
-  width: 100%;
-  padding: 2rem 0;
-}
-
-/* ==================== PROGRESS BAR ==================== */
-
-.stepper__progress-bar {
-  height: 0.25rem;
-  background-color: #b5c7e9;
-  border-radius: 0.125rem;
-  position: relative;
-  margin-bottom: 2rem;
-  overflow: visible;
-}
-
-.stepper__progress-fill {
-  height: 100%;
-  background: #fecc2f;
-  border-radius: 0.125rem;
-  transition: width 0.4s ease-in-out;
-}
-
-/* ==================== STEPS CONTAINER ==================== */
-
-.stepper__steps {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 12.5rem;
-}
-
-/* ==================== STEP ITEM ==================== */
-
-.stepper__step {
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
+  position: relative;
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
   flex: 1;
-  transition: all 0.3s ease;
 }
 
-.stepper__step:hover .stepper__indicator {
-  transform: scale(1.05);
-}
-
-/* ==================== INDICATOR (Circle) ==================== */
-
-.stepper__indicator {
-  width: 1.5rem;
-  height: 1.5rem;
+.step-circle {
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
-  background-color: white;
-  color: #0943b5;
-  border: 0.125rem solid #0943b5;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 2;
+  background: #dcdcdc;
+}
+
+.step-number {
+  font-size: 1rem;
   font-weight: 700;
-  font-size: 0.9375rem;
-  font-family: 'Nunito Sans', Verdana, sans-serif;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
+  color: #481f00;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-/* Estado completado */
-.stepper__step--completed .stepper__indicator {
-  background-color: #4c4c4c;
-  color: white;
-  border-color: #4c4c4c;
+.step-label {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #606060;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-/* Estado activo */
-.stepper__step--active .stepper__indicator {
-  background-color: #004884;
-  color: white;
-  border-color: #004884;
-  box-shadow: 0 0.125rem 0.5rem rgba(0, 72, 132, 0.3);
-  animation: fadeInScale 0.3s ease-out;
+.step:not(:last-child) .line-container {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  width: calc(100%);
+  height: 0.125rem;
+  z-index: 1;
 }
 
-/* ==================== LABEL ==================== */
-
-.stepper__label {
-  font-size: 0.875rem;
-  color: #737373;
-  line-height: 1.3;
-  font-family: Verdana, sans-serif;
-  white-space: nowrap;
-  transition: all 0.3s ease;
+.step:not(:last-child) .line-base {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #dcdcdc;
 }
 
-.stepper__step--active .stepper__label {
-  color: #004884;
-  font-weight: 600;
-  font-family: 'Nunito Sans', Verdana, sans-serif;
+.step:not(:last-child) .line-progress {
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  background: #feb400;
+  transition: width 0.3s ease;
 }
 
-/* ==================== ANIMATIONS ==================== */
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.step.active .step-circle {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: white;
+  border: 0.1875rem solid #feb400;
+  position: relative;
 }
 
-/* ==================== RESPONSIVE ==================== */
-
-@media (max-width: 992px) {
-  .stepper__indicator {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1rem;
-  }
-
-  .stepper__label {
-    font-size: 0.75rem;
-    max-width: 6.25rem;
-  }
+.step.active .step-circle::after {
+  content: '';
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #feb400;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@media (max-width: 768px) {
-  .stepper__indicator {
-    width: 2.25rem;
-    height: 2.25rem;
-    font-size: 0.875rem;
-  }
+.step.active .step-number {
+  position: relative;
+  z-index: 3;
+  color: #481f00;
+}
 
-  .stepper__label {
-    font-size: 0.688rem;
-    max-width: 5rem;
-  }
+.step.active .step-label {
+  font-weight: 500;
+}
+
+.step.active:not(:last-child) .line-container {
+  top: 1.375rem;
+}
+
+.step.completed .step-circle {
+  background: #feb400;
+}
+
+.step.completed .step-number {
+  display: none;
+}
+
+.step.completed .step-circle::before {
+  content: '✓';
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #481f00;
+  position: relative;
+  z-index: 3;
+}
+
+.step.active:not(:last-child) .line-progress {
+  width: 50%;
+}
+
+.step.completed:not(:last-child) .line-progress {
+  width: 100%;
 }
