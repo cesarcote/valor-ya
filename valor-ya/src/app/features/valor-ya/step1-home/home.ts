@@ -2,12 +2,16 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
-import { ValorYaStepperService, ValorYaStep } from '../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../core/services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
+import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-home',
-  imports: [StepperComponent],
+  imports: [StepperComponent, ValoryaDescription],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })

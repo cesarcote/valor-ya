@@ -21,6 +21,7 @@
   border-radius: 0.3125rem;
   cursor: pointer;
   text-align: center;
+  justify-content: center;
 }
 
 .card:hover {
@@ -29,6 +30,7 @@
 
 .card h3 {
   margin: 0;
+  color: #481F00;
 }
 
 .card-disabled {

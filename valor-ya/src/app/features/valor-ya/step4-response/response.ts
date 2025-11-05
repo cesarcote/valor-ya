@@ -17,6 +17,7 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { InputComponent } from '../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../shared/components/select/select';
+import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-response',
@@ -26,6 +27,7 @@ import { SelectComponent, SelectOption } from '../../../shared/components/select
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
+    ValoryaDescription,
   ],
   templateUrl: './response.html',
   styleUrls: ['./response.css'],

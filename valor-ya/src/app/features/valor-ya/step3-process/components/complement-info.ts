@@ -19,6 +19,7 @@ import { StepperComponent } from '../../../../shared/components/stepper/stepper'
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-complement-info',
@@ -28,6 +29,7 @@ import { SelectComponent, SelectOption } from '../../../../shared/components/sel
     ButtonComponent,
     InputComponent,
     SelectComponent,
+    ValoryaDescription,
   ],
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],

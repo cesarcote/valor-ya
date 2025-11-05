@@ -1,0 +1,46 @@
+.valorya-description {
+  width: 100%;
+  margin: 4rem 0 3.5rem 0;
+}
+
+.valorya-description-content {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.valorya-description-title {
+  color: #2d2d2d;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.valorya-description-text {
+  color: #666666;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 48rem) {
+  .valorya-description {
+    padding: 1.5rem 0;
+  }
+
+  .valorya-description-content {
+    padding: 0 1rem;
+  }
+
+  .valorya-description-title {
+    font-size: 1.25rem;
+  }
+
+  .valorya-description-text {
+    font-size: 0.875rem;
+  }
+}

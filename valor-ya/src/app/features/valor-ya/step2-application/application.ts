@@ -11,6 +11,7 @@ import { TabsComponent, Tab } from '../../../shared/components/tabs/tabs';
 import { FormChipComponent, ChipData } from './components/form-chip/form-chip';
 import { FormAddressComponent, AddressData } from './components/form-address/form-address';
 import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
+import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-application',
@@ -20,6 +21,7 @@ import { FormFmiComponent, FmiData } from './components/form-fmi/form-fmi';
     FormChipComponent,
     FormAddressComponent,
     FormFmiComponent,
+    ValoryaDescription,
   ],
   templateUrl: './application.html',
   styleUrls: ['./application.css'],

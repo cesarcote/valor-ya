@@ -14,10 +14,17 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../shared/components/map';
+import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-process',
-  imports: [StepperComponent, ButtonComponent, PredioInfoCardComponent, MapComponent],
+  imports: [
+    StepperComponent,
+    ButtonComponent,
+    PredioInfoCardComponent,
+    MapComponent,
+    ValoryaDescription,
+  ],
   templateUrl: './process.html',
   styleUrls: ['./process.css'],
 })
