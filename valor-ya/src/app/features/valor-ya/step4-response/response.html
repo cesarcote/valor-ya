@@ -75,14 +75,14 @@
       <div class="form-actions">
         <app-button
           text="Nueva Consulta"
-          variant="outline"
+          variant="secondary"
           type="button"
           (clicked)="onNuevaConsulta()"
         >
         </app-button>
         <app-button
           [text]="isSubmitting() ? 'Procesando...' : 'Solicitar Avalúo'"
-          variant="fill"
+          variant="primary"
           type="button"
           [disabled]="isSubmitting()"
           (clicked)="onSubmitFacturacion()"

@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 /**
- * Button component following Gov.co design system
+ * Button component using Bootstrap custom styles
  *
  * @example
  * <app-button
  *   text="Consultar"
- *   variant="fill"
+ *   variant="primary"
  *   type="submit"
  *   [disabled]="form.invalid">
  * </app-button>
@@ -25,11 +25,27 @@ export class ButtonComponent {
   @Input() text: string = 'Button';
 
   /**
-   * Button variant style
-   * - 'fill': Solid button with background color
-   * - 'outline': Button with border and transparent background
+   * Button Bootstrap variant
+   * - 'primary': Main action button (#FEB400)
+   * - 'secondary': Secondary action button
+   * - 'success': Success/confirmation actions
+   * - 'danger': Critical/destructive actions
+   * - 'warning': Warning actions
+   * - 'info': Information actions
+   * - 'light': Light theme actions
+   * - 'dark': Dark theme actions
+   * - 'link': Link styled button
    */
-  @Input() variant: 'fill' | 'outline' = 'fill';
+  @Input() variant:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'danger'
+    | 'warning'
+    | 'info'
+    | 'light'
+    | 'dark'
+    | 'link' = 'primary';
 
   /**
    * Button HTML type attribute
@@ -47,6 +63,11 @@ export class ButtonComponent {
   @Input() fullWidth: boolean = false;
 
   /**
+   * Rounded pill style
+   */
+  @Input() rounded: boolean = true;
+
+  /**
    * Additional CSS classes
    */
   @Input() customClass: string = '';
@@ -60,12 +81,10 @@ export class ButtonComponent {
    * Get button CSS classes
    */
   get buttonClasses(): string {
-    const classes = ['btn-govco'];
+    const classes = ['btn', `btn-${this.variant}`];
 
-    if (this.variant === 'fill') {
-      classes.push('fill-btn-govco');
-    } else {
-      classes.push('outline-btn-govco');
+    if (this.rounded) {
+      classes.push('rounded-pill');
     }
 
     if (this.fullWidth) {

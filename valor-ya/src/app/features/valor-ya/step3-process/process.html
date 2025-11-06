@@ -19,7 +19,7 @@
     <div class="action-buttons">
       <app-button
         text="No"
-        variant="outline"
+        variant="secondary"
         type="button"
         [disabled]="isProcessingMCM()"
         (clicked)="onNoEsCorrecta()"
@@ -27,7 +27,7 @@
       </app-button>
       <app-button
         [text]="isProcessingMCM() ? 'Enviando...' : 'Continuar'"
-        variant="fill"
+        variant="primary"
         type="button"
         [disabled]="isProcessingMCM()"
         (clicked)="onContinuar()"
@@ -57,7 +57,7 @@
     <div class="action-buttons">
       <app-button
         text="No"
-        variant="outline"
+        variant="secondary"
         type="button"
         [disabled]="isProcessingMCM()"
         (clicked)="onNoEsCorrecta()"
@@ -65,7 +65,7 @@
       </app-button>
       <app-button
         [text]="isProcessingMCM() ? 'Enviando...' : 'Continuar'"
-        variant="fill"
+        variant="primary"
         type="button"
         [disabled]="isProcessingMCM()"
         (clicked)="onContinuar()"
