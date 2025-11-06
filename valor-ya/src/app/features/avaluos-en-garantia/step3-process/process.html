@@ -11,10 +11,16 @@
   </div>
 
   <div class="action-buttons">
-    <app-button text="Volver" variant="outline" type="button" (clicked)="onVolver()"> </app-button>
-    <app-button text="Nueva solicitud" variant="outline" type="button" (clicked)="onVolverInicio()">
+    <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()">
     </app-button>
-    <app-button text="Continuar" variant="fill" type="button" (clicked)="onContinuar()">
+    <app-button
+      text="Nueva solicitud"
+      variant="secondary"
+      type="button"
+      (clicked)="onVolverInicio()"
+    >
+    </app-button>
+    <app-button text="Continuar" variant="primary" type="button" (clicked)="onContinuar()">
     </app-button>
   </div>
 </div>
