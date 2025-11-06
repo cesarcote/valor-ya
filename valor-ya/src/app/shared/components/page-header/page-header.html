@@ -1,8 +1,14 @@
-<div class="page-header">
-  <div class="page-header-content">
-    <app-breadcrumb></app-breadcrumb>
-    @if (title()) {
-    <h1 class="page-title">{{ title() }}</h1>
-    }
+<div class="page-header bg-light py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="page-header-content d-flex flex-column gap-2">
+          <app-breadcrumb></app-breadcrumb>
+          @if (title()) {
+          <h1 class="page-title fs-2 fw-bold text-dark mb-0">{{ title() }}</h1>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </div>

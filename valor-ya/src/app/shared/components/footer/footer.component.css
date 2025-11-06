@@ -1,168 +1,31 @@
-/*** MODAL 1 ***/
-.govco-footer {
-  background-color: #f8f9fa;
-}
+/* Footer - Bootstrap enhanced with Gov.co classes */
 
+/* White floating container */
 .footer-container {
   background-color: white;
   position: relative;
   top: -100px;
-  max-width: 1200px;
-  margin-top: 150px;
-  margin-bottom: -80px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 150px auto -40px auto;
   border-radius: 1rem;
   border: #eaf2fb 1px solid;
-  padding: 40px;
+  padding: 48px 50px;
 }
-
-.info p {
-  margin: 3px;
+.govco-footer-logo{
+  background-color: #0943b5;
 }
-
+/* Gov.co specific logos - Design styles */
 .govco-logo-entidad {
   height: 50px;
   display: inline-block;
-  content: url('../../../../assets/images/logo.svg');
 }
 
 .govco-co {
   height: 40px;
-  display: inline-block;
-  content: url('../../../../assets/images/logoGovCO.png');
-}
-
-.govco-separator {
-  border-left: 1px solid #e5eefb;
-  opacity: 1px;
-  height: 44px;
-  margin-left: 10px;
-  margin-right: 5px;
   display: inline-block;
 }
 
 .govco-logo {
   height: 40px;
   display: inline-block;
-  content: url('../../../../assets/images/footerFooterColombia.png');
   vertical-align: super;
-}
-
-.govco-footer-logo {
-  height: 96px;
-  background-color: #0943b5;
-  width: 100%;
-  margin-top: 20px !important;
-  display: flex;
-  align-items: center;
-}
-
-.govco-logo-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-}
-
-.govco-iconContainer {
-  display: inline-block !important;
-  width: auto !important;
-}
-
-.govco-network,
-.govco-listado-sedes {
-  margin-top: 30px !important;
-}
-
-.govco-logo-div-a {
-  text-align: end !important;
-}
-
-.govco-link-container {
-  display: inline-block;
-  width: auto !important;
-}
-
-@media (max-width: 991px) {
-  .govco-sedes {
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 5px !important;
-  }
-
-  .govco-sede-info {
-    margin-left: 0 !important;
-  }
-
-  .govco-text-header-1 {
-    margin-left: 15px !important;
-  }
-
-  .govco-logo-entidad {
-    height: 65px;
-  }
-
-  .govco-footer-text {
-    margin: 0 !important;
-    margin-top: 50px !important;
-  }
-
-  .govco-nombre-entidad {
-    margin-left: 0px !important;
-    width: 100% !important;
-  }
-
-  .govco-logo-div-a {
-    margin-left: 0 !important;
-  }
-
-  .govco-texto-sedes,
-  .govco-links-directorio,
-  .govco-listado-sedes,
-  .govco-links-container {
-    margin-left: 15px !important;
-    margin-top: 20px !important;
-  }
-
-  .govco-texto-sedes,
-  .govco-network {
-    padding: unset !important;
-  }
-
-  .govco-iconContainer {
-    margin-top: 20px !important;
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .govco-network {
-    margin-left: 15px !important;
-    margin-top: 10px !important;
-  }
-
-  .govco-text-header-3 {
-    margin-top: 20px !important;
-  }
-
-  .govco-link-container {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .govco-mostrar {
-    display: unset !important;
-  }
-
-  .govco-logo-container {
-    text-align: center !important;
-    margin-left: unset !important;
-  }
-
-  .govco-texto-sedes {
-    padding-right: 20px !important;
-  }
 }

@@ -1,133 +1,161 @@
-<footer>
+<footer class="bg-light">
   <div class="govco-footer">
+    <!-- Main Footer Content -->
     <div class="govco-data-front">
-      <div class="footer-container">
+      <div class="container footer-container col-12">
         <div class="govco-footer-text">
-          <div class="row govco-nombre-entidad">
-            <div class="col-xs-12 col-lg-6">
-              <p class="govco-text-header-1">{{ nombre_entidad }}</p>
+          <!-- Entity Name and Logo Row -->
+          <div class="row align-items-center mb-4">
+            <div class="col-lg-6">
+              <p class="govco-text-header-1 mb-0">{{ nombre_entidad }}</p>
             </div>
-            <div class="col-xs-12 col-lg-5 govco-logo-div-a">
-              <span class="govco-logo-entidad"></span>
-            </div>
-          </div>
-
-          <div class="row col-xs-12 col-lg-7">
-            <div class="govco-text-header-2">
-              <p>Sede principal</p>
-            </div>
-            <div class="info">
-              <p>Dirección: {{ Direccion }}</p>
-              <p>Código postal: {{ Cod_postal }}</p>
-              <p>Horario de atención: {{ Hor_atencion }}</p>
-              <p>Teléfono conmutador: {{ Tel_conmutador }}</p>
-              <p>Línea de servicio a la ciudadanía: {{ Lin_gratuita }}</p>
-              <p>Radicación virtual de correspondencia: {{ Correo_institucional }}</p>
-              <p>Notificaciones judiciales: {{ Correo_not_judiciales }}</p>
-              <p>Información general: {{ Lin_general }}</p>
-              <p>
-                Portal Bogotá: <a href="{{ Portal_bogota }}">{{ Portal_bogota }}</a>
-              </p>
+            <div class="col-lg-6 text-lg-end">
+              <img class="govco-logo-entidad" src="../../../../assets/images/logo.svg" alt="Logo entidad">
             </div>
           </div>
 
-          <div class="row col-xs-12 col-lg-7 govco-network">
-            <div class="govco-iconContainer">
-              <a
-                href="{{ redes_sociales[0].url }}"
-                target="_blank"
-                title="{{ redes_sociales[0].title }}"
-              >
-                <span class="icon govco-instagram-square"></span>
-                <span class="govco-link-modal">{{ redes_sociales[0].nombre }}</span>
-              </a>
-            </div>
-            <div class="govco-iconContainer">
-              <a
-                href="{{ redes_sociales[1].url }}"
-                target="_blank"
-                title="{{ redes_sociales[1].title }}"
-              >
-                <span class="icon govco-facebook-square"></span>
-                <span class="govco-link-modal">{{ redes_sociales[1].nombre }}</span>
-              </a>
-            </div>
-            <div class="govco-iconContainer">
-              <a
-                href="{{ redes_sociales[2].url }}"
-                target="_blank"
-                title="{{ redes_sociales[2].title }}"
-              >
-                <span class="icon govco-twitter-square"></span>
-                <span class="govco-link-modal">{{ redes_sociales[2].nombre }}</span>
-              </a>
-            </div>
-            <div class="govco-iconContainer">
-              <a
-                href="{{ redes_sociales[3].url }}"
-                target="_blank"
-                title="{{ redes_sociales[3].title }}"
-              >
-                <span class="icon govco-youtube-square"></span>
-                <span class="govco-link-modal">{{ redes_sociales[3].nombre }}</span>
-              </a>
+          <!-- Contact Information -->
+          <div class="row mb-4">
+            <div class="col-lg-7">
+              <div class="govco-text-header-2 mb-3">
+                <p class="mb-2">Sede principal</p>
+              </div>
+              <div class="info">
+                <p class="mb-1">Dirección: {{ Direccion }}</p>
+                <p class="mb-1">Código postal: {{ Cod_postal }}</p>
+                <p class="mb-1">Horario de atención: {{ Hor_atencion }}</p>
+                <p class="mb-1">Teléfono conmutador: {{ Tel_conmutador }}</p>
+                <p class="mb-1">Línea de servicio a la ciudadanía: {{ Lin_gratuita }}</p>
+                <p class="mb-1">
+                  Radicación virtual de correspondencia: {{ Correo_institucional }}
+                </p>
+                <p class="mb-1">Notificaciones judiciales: {{ Correo_not_judiciales }}</p>
+                <p class="mb-1">Información general: {{ Lin_general }}</p>
+                <p class="mb-0">
+                  Portal Bogotá:
+                  <a href="{{ Portal_bogota }}" class="text-decoration-none">{{ Portal_bogota }}</a>
+                </p>
+              </div>
             </div>
           </div>
 
-          <div class="row govco-links-container">
-            <div class="govco-link-container mt-2">
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="https://www.catastrobogota.gov.co/contacto/politicas-de-seguridad-privacidad-condiciones-de-uso-y-proteccion-de-datos-personales"
-                >Políticas</a
-              >
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="https://www.catastrobogota.gov.co/mapa-del-sitio"
-                >Mapa del sitio</a
-              >
+          <!-- Social Networks -->
+          <div class="row mb-4">
+            <div class="col-lg-7">
+              <div class="govco-network d-flex gap-3 flex-wrap">
+                <div class="govco-iconContainer">
+                  <a
+                    href="{{ redes_sociales[0].url }}"
+                    target="_blank"
+                    title="{{ redes_sociales[0].title }}"
+                    class="d-flex align-items-center text-decoration-none"
+                  >
+                    <span class="icon govco-instagram-square me-2"></span>
+                    <span class="govco-link-modal">{{ redes_sociales[0].nombre }}</span>
+                  </a>
+                </div>
+                <div class="govco-iconContainer">
+                  <a
+                    href="{{ redes_sociales[1].url }}"
+                    target="_blank"
+                    title="{{ redes_sociales[1].title }}"
+                    class="d-flex align-items-center text-decoration-none"
+                  >
+                    <span class="icon govco-facebook-square me-2"></span>
+                    <span class="govco-link-modal">{{ redes_sociales[1].nombre }}</span>
+                  </a>
+                </div>
+                <div class="govco-iconContainer">
+                  <a
+                    href="{{ redes_sociales[2].url }}"
+                    target="_blank"
+                    title="{{ redes_sociales[2].title }}"
+                    class="d-flex align-items-center text-decoration-none"
+                  >
+                    <span class="icon govco-twitter-square me-2"></span>
+                    <span class="govco-link-modal">{{ redes_sociales[2].nombre }}</span>
+                  </a>
+                </div>
+                <div class="govco-iconContainer">
+                  <a
+                    href="{{ redes_sociales[3].url }}"
+                    target="_blank"
+                    title="{{ redes_sociales[3].title }}"
+                    class="d-flex align-items-center text-decoration-none"
+                  >
+                    <span class="icon govco-youtube-square me-2"></span>
+                    <span class="govco-link-modal">{{ redes_sociales[3].nombre }}</span>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="govco-link-container mt-2">
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="https://outlook.office.com/owa/"
-                target="_blank"
-                >Correo institucional</a
-              >
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="http://intranet.catastrobogota.gov.co/"
-                target="_blank"
-                >Intranet</a
-              >
-            </div>
-            <div class="govco-link-container mt-2">
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="https://mesadeservicio.catastrobogota.gov.co/CAisd/pdmweb.exe"
-                target="_blank"
-                >Mesa de servicio</a
-              >
-              <a
-                class="govco-link-modal govco-link-modal-bold"
-                href="https://www.catastrobogota.gov.co/declaracion-de-accesibilidad"
-                >Accesibilidad</a
-              >
+          </div>
+
+          <!-- Footer Links -->
+          <div class="row">
+            <div class="col-12">
+              <div class="govco-links-container d-flex flex-wrap gap-4">
+                <div class="govco-link-container">
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
+                    href="https://www.catastrobogota.gov.co/contacto/politicas-de-seguridad-privacidad-condiciones-de-uso-y-proteccion-de-datos-personales"
+                    >Políticas</a
+                  >
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
+                    href="https://www.catastrobogota.gov.co/mapa-del-sitio"
+                    >Mapa del sitio</a
+                  >
+                </div>
+                <div class="govco-link-container">
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
+                    href="https://outlook.office.com/owa/"
+                    target="_blank"
+                    >Correo institucional</a
+                  >
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
+                    href="http://intranet.catastrobogota.gov.co/"
+                    target="_blank"
+                    >Intranet</a
+                  >
+                </div>
+                <div class="govco-link-container">
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
+                    href="https://mesadeservicio.catastrobogota.gov.co/CAisd/pdmweb.exe"
+                    target="_blank"
+                    >Mesa de servicio</a
+                  >
+                  <a
+                    class="govco-link-modal govco-link-modal-bold d-block"
+                    href="https://www.catastrobogota.gov.co/declaracion-de-accesibilidad"
+                    >Accesibilidad</a
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="govco-footer-logo">
-      <div class="govco-logo-container">
-        <a href="https://colombia.co/" title="Ir al portal de Marca país"
-          ><span class="govco-co"></span
-        ></a>
-        <span class="govco-separator"></span>
-        <a href="https://www.gov.co/" title="Ir al portal del Estado Colombiano - GOV.CO"
-          ><span class="govco-logo"></span
-        ></a>
+    <!-- Footer Logos -->
+    <div class="govco-footer-logo py-3">
+      <div class="container col-12">
+        <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
+          <a href="https://colombia.co/" title="Ir al portal de Marca país" class="me-3">
+            <img class="govco-co" src="../../../../assets/images/logoGovCO.png" alt="Logo Colombia">
+          </a>
+          <span
+            class="govco-separator border-end border-light opacity-75 mx-3"
+            style="height: 44px"
+          ></span>
+          <a href="https://www.gov.co/" title="Ir al portal del Estado Colombiano - GOV.CO">
+            <img class="govco-logo" src="../../../../assets/images/footerFooterColombia.png" alt="Logo Gov.co">
+          </a>
+        </div>
       </div>
     </div>
   </div>

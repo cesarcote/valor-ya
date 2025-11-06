@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-valorya-description',
   imports: [],
-  templateUrl: './valorya-description.html',
-  styleUrl: './valorya-description.css',
+  templateUrl: './valorya-description.html'
 })
 export class ValoryaDescription {
   title = 'Conoce cuánto vale tu inmueble hoy con datos catastrales actualizados';

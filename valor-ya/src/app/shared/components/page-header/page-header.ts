@@ -6,8 +6,7 @@ import { Breadcrumb } from '../breadcrumb/breadcrumb';
 @Component({
   selector: 'app-page-header',
   imports: [Breadcrumb],
-  templateUrl: './page-header.html',
-  styleUrl: './page-header.css',
+  templateUrl: './page-header.html'
 })
 export class PageHeader {
   private router = inject(Router);
