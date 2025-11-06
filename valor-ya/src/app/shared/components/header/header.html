@@ -1,36 +1,75 @@
 <div class="toolbar">
-  <div class="menu--top">
+  <!-- Top Menu -->
+  <div class="menu--top bg-primary py-2">
     <div class="container">
       <div class="row">
-        <div class="col">
-          <div class="region region-menu-fixedtop">
-            <img alt="icono govco" class="gov" src="assets/images/logoGovCO.png" />
-          </div>
+        <div class="col-12">
+          <img alt="icono govco" class="gov" src="assets/images/logoGovCO.png" />
         </div>
       </div>
     </div>
   </div>
 
-  <nav class="navbar">
+  <!-- Main Navbar -->
+  <nav class="navbar navbar-expand-lg py-3">
     <div class="container">
       <a class="navbar-brand" href="/" rel="home" title="Inicio">
         <img alt="Inicio" class="logo" src="assets/images/logo.svg" />
       </a>
-      <div class="session-buttons-content"></div>
+
+      <!-- Mobile menu button -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Session buttons for desktop -->
+      <div class="session-buttons-content d-none d-lg-flex ms-auto">
+        <!-- Session buttons will be added here -->
+      </div>
     </div>
   </nav>
 
-  <nav class="main-menu">
+  <!-- Main Menu -->
+  <nav class="main-menu navbar navbar-expand-lg">
     <div class="container">
-      <ul>
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Transparencia y acceso a la información pública</a></li>
-        <li><a href="#">Atención y Servicios a la ciudadanía</a></li>
-        <li><a href="#">Participa</a></li>
-        <li><a href="#">Noticias</a></li>
-        <li><a href="#">¿Quiénes somos?</a></li>
-        <li><a href="#">Portafolio</a></li>
-      </ul>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav w-100">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Transparencia y acceso a la información pública</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Atención y Servicios a la ciudadanía</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Participa</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Noticias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">¿Quiénes somos?</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Portafolio</a>
+          </li>
+        </ul>
+
+        <!-- Session buttons for mobile -->
+        <div class="session-buttons-content d-lg-none mt-3">
+          <!-- Session buttons will be added here -->
+        </div>
+      </div>
     </div>
   </nav>
 </div>
