@@ -157,7 +157,7 @@ export class Process implements OnInit, AfterViewInit {
           this.stateService.setDatosComplementarios(datosGuardados);
           this.isProcessingMCM.set(false);
           this.stepperService.setStep(ValorYaStep.RESPUESTA);
-          this.router.navigate(['/valor-ya/respuesta']);
+          this.router.navigate(['/valor-ya/pago']);
         },
         error: (error) => {
           this.errorMessage.set(`Error al procesar los datos: ${error.message}`);

@@ -40,6 +40,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'pago',
+        title: 'Valor YA - Datos de Facturación y Pago',
+        loadComponent: () =>
+          import('./features/valor-ya/step4-response/payment/payment').then(
+            (m) => m.PaymentComponent
+          ),
+      },
+      {
         path: 'respuesta',
         title: 'Valor YA - Resultado de tu Consulta',
         loadComponent: () =>

@@ -155,7 +155,7 @@ export class ComplementInfo implements OnInit {
             this.stateService.setDatosComplementarios(datosGuardados);
             this.isLoading.set(false);
             this.stepperService.setStep(ValorYaStep.RESPUESTA);
-            this.router.navigate(['/valor-ya/respuesta']);
+            this.router.navigate(['/valor-ya/pago']);
           },
           error: (error) => {
             this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
