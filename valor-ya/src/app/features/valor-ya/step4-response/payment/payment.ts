@@ -19,6 +19,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-payment',
@@ -29,6 +30,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
     InputComponent,
     SelectComponent,
     ValoryaDescription,
+    ModalComponent,
   ],
   templateUrl: './payment.html',
   styleUrls: ['./payment.css'],
@@ -43,6 +45,11 @@ export class PaymentComponent implements OnInit {
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
+  showModal = signal(false);
+  modalMessage = signal('');
+  modalTitle = signal('Advertencia');
+  modalIconType = signal<'success' | 'warning' | 'error'>('warning');
+  modalButtonText = signal('Aceptar');
 
   tiposDocumento: SelectOption[] = [
     { value: 'CC', label: 'Cédula de Ciudadanía' },
@@ -53,6 +60,47 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
     this.initForm();
+
+    // Verificar disponibilidad del cálculo antes de mostrar el formulario
+    const predioData = this.stateService.predioData();
+    if (!predioData?.chip) {
+      this.showModal.set(true);
+      this.modalTitle.set('Advertencia');
+      this.modalMessage.set('No se encontró información del predio. Regrese al inicio.');
+      this.modalIconType.set('warning');
+      this.modalButtonText.set('Aceptar');
+      return;
+    }
+
+    this.apiService.procesarChip(predioData.chip).subscribe({
+      next: (response) => {
+        if (response.status !== 'success') {
+          this.showModal.set(true);
+          this.modalTitle.set('Advertencia');
+          this.modalMessage.set(
+            'El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
+          );
+          this.modalIconType.set('warning');
+          this.modalButtonText.set('Aceptar');
+        } else {
+          // Solo mostrar modal de éxito si todo está bien
+          this.showModal.set(true);
+          this.modalTitle.set('¡Avalúo Procesado Exitosamente!');
+          this.modalMessage.set('Complete los datos de facturación para continuar');
+          this.modalIconType.set('success');
+          this.modalButtonText.set('Continuar');
+        }
+      },
+      error: (error) => {
+        this.showModal.set(true);
+        this.modalTitle.set('Error');
+        this.modalMessage.set(
+          'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
+        );
+        this.modalIconType.set('error');
+        this.modalButtonText.set('Aceptar');
+      },
+    });
   }
 
   initForm(): void {
@@ -129,6 +177,16 @@ export class PaymentComponent implements OnInit {
 
   onVolverInicio(): void {
     this.onNuevaConsulta();
+  }
+
+  onCloseModal(): void {
+    // Si el modal es de error/warning, redirigir al inicio
+    if (this.modalIconType() !== 'success') {
+      this.router.navigate(['/valor-ya/inicio']);
+    } else {
+      // Si es de éxito, solo cerrar el modal
+      this.showModal.set(false);
+    }
   }
 
   // Getters para los controles del formulario

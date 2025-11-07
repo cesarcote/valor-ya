@@ -59,6 +59,8 @@
 
 .tab-content {
   margin-top: 1.5rem;
+  display: block;
+  width: 100%;
 }
 
 .tab-pane {
