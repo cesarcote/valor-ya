@@ -17,7 +17,7 @@ export class MCMValorYaService {
     const body = { chip };
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
-      timeout(5000), // Timeout de 5 segundos
+      timeout(10000), // Timeout de 10 segundos
       catchError((error) => {
         console.warn(
           'Error al llamar al API de ValorYA o timeout excedido, usando datos mock:',
