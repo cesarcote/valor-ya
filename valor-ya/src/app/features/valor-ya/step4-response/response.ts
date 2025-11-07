@@ -52,29 +52,14 @@ export class ResponseComponent implements OnInit {
     }
 
     this.isDownloading.set(true);
-    console.log('Descargando avalúo para chip:', predioData.chip);
+    console.log('Simulando descarga de avalúo para chip:', predioData.chip);
 
-    this.apiService.descargarAvaluo(predioData.chip).subscribe({
-      next: (blob) => {
-        // Crear URL del blob y descargar
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `avaluo-${predioData.chip}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-
-        this.isDownloading.set(false);
-        console.log('Avalúo descargado exitosamente');
-      },
-      error: (error) => {
-        console.error('Error al descargar el avalúo:', error);
-        this.isDownloading.set(false);
-        alert('Error al descargar el avalúo. Por favor, intente nuevamente.');
-      },
-    });
+    // Simular tiempo de descarga
+    setTimeout(() => {
+      this.isDownloading.set(false);
+      console.log('Descarga simulada completada exitosamente');
+      alert('¡Avalúo descargado exitosamente! (Simulación)');
+    }, 2000);
   }
 
   onNuevaConsulta(): void {
