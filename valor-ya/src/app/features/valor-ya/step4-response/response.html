@@ -51,18 +51,18 @@
     <!-- Botones de acción -->
     <div class="actions-section">
       <app-button
+        text="Nueva Consulta"
+        variant="secondary"
+        type="button"
+        (clicked)="onNuevaConsulta()"
+      >
+      </app-button>
+      <app-button
         [text]="isDownloading() ? 'Generando PDF...' : 'Descargar Avalúo'"
         variant="primary"
         type="button"
         [disabled]="isDownloading()"
         (clicked)="onDescargarAvaluo()"
-      >
-      </app-button>
-      <app-button
-        text="Nueva Consulta"
-        variant="secondary"
-        type="button"
-        (clicked)="onNuevaConsulta()"
       >
       </app-button>
     </div>
