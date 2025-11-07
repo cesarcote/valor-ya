@@ -16,9 +16,13 @@ export class MCMValorYaService {
     const url = `${this.API_BASE_URL}/api/procesar-chips/chip-unico`;
     const body = { chip };
 
+    console.log('🚀 [MCM Service] Llamando a:', url);
+    console.log('📦 [MCM Service] Body:', body);
+
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
       timeout(10000), // Timeout de 10 segundos
       catchError((error) => {
+        console.error('❌ [MCM Service] Error completo:', error);
         console.warn(
           'Error al llamar al API de ValorYA o timeout excedido, usando datos mock:',
           error
@@ -61,7 +65,7 @@ export class MCMValorYaService {
           AREA_CONSTRUIDA_PREDIO: 37.4,
           AREA_TERRENO_OFERTA: 9.7,
           EDAD_PREDIO: 42,
-          VALOR_AVALUO_PREDIO: 81345000.0,
+          VALOR_AVALUO_PREDIO: 80000000.0,
           CV: 1.65,
           LIM_INFERIOR: 2138045.92,
           LIM_SUPERIOR: 2210005.61,
