@@ -2,6 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { PredioData } from '../models/predio-data.model';
 import { DatosComplementarios } from '../models/datos-complementarios.model';
 import { TipoUnidad } from '../models/parametricas.model';
+import { MCMValorYAResultado } from '../models/mcm-valor-ya.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -20,6 +21,7 @@ export class ValorYaStateService {
   public readonly tipoPredio = signal<string | undefined>(undefined);
   public readonly mostrarResultado = signal<boolean>(false);
   public readonly tipoUnidadSeleccionada = signal<TipoUnidad | undefined>(undefined);
+  public readonly valorYaResponse = signal<MCMValorYAResultado | undefined>(undefined);
 
   public readonly hasDatosComplementarios = computed(() => !!this.datosComplementarios());
 
@@ -53,6 +55,10 @@ export class ValorYaStateService {
     this.tipoUnidadSeleccionada.set(tipoUnidad);
   }
 
+  setValorYaResponse(response: MCMValorYAResultado): void {
+    this.valorYaResponse.set(response);
+  }
+
   reset(): void {
     this.tipoBusqueda.set(undefined);
     this.valorBusqueda.set(undefined);
@@ -61,5 +67,6 @@ export class ValorYaStateService {
     this.tipoPredio.set(undefined);
     this.mostrarResultado.set(false);
     this.tipoUnidadSeleccionada.set(undefined);
+    this.valorYaResponse.set(undefined);
   }
 }

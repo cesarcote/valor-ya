@@ -1,0 +1,55 @@
+export interface MCMValorYAResultado {
+  mensaje: string;
+  metadatos: {
+    chips_procesados: number;
+    chips_solicitados: number;
+    ofertas_utilizadas: number;
+    tiempo_procesamiento_segundos: number;
+    timestamp: string;
+    vigencia_liquidacion: number;
+    vigencia_resolucion: number;
+  };
+  resultados: Array<{
+    AREA_CONSTRUIDA_OFERTA: number;
+    AREA_CONSTRUIDA_PREDIO: number;
+    AREA_TERRENO_OFERTA: number;
+    ASIMETRIA: number;
+    BARMANPRE_PREDIO: string;
+    CEDULA_CATASTRAL_PREDIO: string;
+    CHIP_OFERTA: string;
+    CHIP_PREDIO: string;
+    CLASE_PREDIO_PREDIO: string;
+    CODIGO_ESTRATO_OFERTA: number;
+    CODIGO_ESTRATO_PREDIO: number;
+    CODIGO_LOCALIDAD_PREDIO: string;
+    CODIGO_SECTOR_PREDIO: string;
+    CODIGO_USO_PREDIO: string;
+    CODIGO_ZONA_FISICA_PREDIO: string;
+    COMENTARIO: string;
+    CV: number;
+    DESVIACION: number;
+    DIRECCION_REAL_OFERTA: string;
+    DIRECCION_REAL_PREDIO: string;
+    EDAD_PREDIO: number;
+    GRUPO: string;
+    LIM_INFERIOR: number;
+    LIM_SUPERIOR: number;
+    MAXIMO: number;
+    MEDIA: number;
+    MEDIANA: number;
+    MINIMO: number;
+    OBSERVACION_ZONA: string;
+    POINT_X_OFERTA: number;
+    POINT_X_PREDIO: number;
+    POINT_Y_OFERTA: number;
+    POINT_Y_PREDIO: number;
+    PUNTAJE_OFERTA: number;
+    PUNTAJE_PREDIO: number;
+    VALOR_AVALUO_PREDIO: number;
+    VALOR_INTEGRAL_OFERTA: number;
+    VALOR_INTEGRAL_PREDIO: number;
+    VETUSTEZ_OFERTA: number;
+    [key: string]: any;
+  }>;
+  status: string;
+}

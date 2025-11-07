@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
+import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
 import {
   ValorYaStepperService,
   ValorYaStep,
@@ -10,40 +11,7 @@ import {
 import { StepperComponent } from '../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
-
-interface ValorYaApiResponse {
-  mensaje: string;
-  metadatos: {
-    chips_procesados: number;
-    chips_solicitados: number;
-    ofertas_utilizadas: number;
-    tiempo_procesamiento_segundos: number;
-    timestamp: string;
-    vigencia_liquidacion: number;
-    vigencia_resolucion: number;
-  };
-  resultados: Array<{
-    CHIP_PREDIO: string;
-    CEDULA_CATASTRAL_PREDIO: string;
-    DIRECCION_REAL_PREDIO: string;
-    CODIGO_LOCALIDAD_PREDIO: string;
-    CODIGO_SECTOR_PREDIO: string;
-    AREA_CONSTRUIDA_PREDIO: number;
-    AREA_TERRENO_OFERTA: number;
-    EDAD_PREDIO: number;
-    VALOR_AVALUO_PREDIO: number;
-    CV: number;
-    LIM_INFERIOR: number;
-    LIM_SUPERIOR: number;
-    MEDIA: number;
-    MEDIANA: number;
-    MINIMO: number;
-    MAXIMO: number;
-    COMENTARIO: string;
-    [key: string]: any;
-  }>;
-  status: string;
-}
+import { MCMValorYaService } from '../../../shared/services/mcm-valor-ya.service';
 
 @Component({
   selector: 'app-response',
@@ -55,69 +23,58 @@ export class ResponseComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
+  private apiService = inject(MCMValorYaService);
 
   isDownloading = signal(false);
 
   // Señal para almacenar la respuesta del API
-  apiResponse = signal<ValorYaApiResponse | null>(null);
+  apiResponse = signal<MCMValorYAResultado | null>(null);
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
-    // TODO: Obtener respuesta del API desde el servicio de estado
-    // Por ahora, usamos datos de ejemplo
-    this.loadMockData();
-  }
-
-  private loadMockData(): void {
-    // Datos de ejemplo - reemplazar con llamada real al API
-    const mockResponse: ValorYaApiResponse = {
-      mensaje: 'CHIPs procesados exitosamente',
-      metadatos: {
-        chips_procesados: 3,
-        chips_solicitados: 1,
-        ofertas_utilizadas: 62501,
-        tiempo_procesamiento_segundos: 0.33,
-        timestamp: '2025-11-06T20:29:32.854201',
-        vigencia_liquidacion: 2025,
-        vigencia_resolucion: 2025,
-      },
-      resultados: [
-        {
-          CHIP_PREDIO: 'AAA0036YERJ',
-          CEDULA_CATASTRAL_PREDIO: '8A 36 17 167',
-          DIRECCION_REAL_PREDIO: 'CL 9 37A 03 OF 305',
-          CODIGO_LOCALIDAD_PREDIO: '16',
-          CODIGO_SECTOR_PREDIO: '004208',
-          AREA_CONSTRUIDA_PREDIO: 37.4,
-          AREA_TERRENO_OFERTA: 9.7,
-          EDAD_PREDIO: 42,
-          VALOR_AVALUO_PREDIO: 81345000.0,
-          CV: 1.65,
-          LIM_INFERIOR: 2138045.92,
-          LIM_SUPERIOR: 2210005.61,
-          MEDIA: 2174025.76,
-          MEDIANA: 2165820.64,
-          MINIMO: 2142857.14,
-          MAXIMO: 2213399.5,
-          COMENTARIO: 'CV menor a 7.5%',
-        },
-      ],
-      status: 'success',
-    };
-
-    this.apiResponse.set(mockResponse);
+    // Obtener respuesta de la API desde el servicio de estado
+    const response = this.stateService.valorYaResponse();
+    if (response) {
+      this.apiResponse.set(response);
+    } else {
+      // Si no hay respuesta, mostrar mensaje de carga
+      console.warn('No se encontró respuesta de la API');
+    }
   }
 
   onDescargarAvaluo(): void {
-    this.isDownloading.set(true);
-    console.log('Descargando avalúo...');
+    const predioData = this.stateService.predioData();
+    if (!predioData?.chip) {
+      console.error('No se encontró el chip del predio');
+      alert('Error: No se puede descargar el avalúo sin información del predio.');
+      return;
+    }
 
-    // Aquí iría la lógica para descargar el PDF del avalúo
-    setTimeout(() => {
-      this.isDownloading.set(false);
-      alert('La descarga del avalúo comenzará en breve...');
-    }, 1500);
+    this.isDownloading.set(true);
+    console.log('Descargando avalúo para chip:', predioData.chip);
+
+    this.apiService.descargarAvaluo(predioData.chip).subscribe({
+      next: (blob) => {
+        // Crear URL del blob y descargar
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `avaluo-${predioData.chip}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        this.isDownloading.set(false);
+        console.log('Avalúo descargado exitosamente');
+      },
+      error: (error) => {
+        console.error('Error al descargar el avalúo:', error);
+        this.isDownloading.set(false);
+        alert('Error al descargar el avalúo. Por favor, intente nuevamente.');
+      },
+    });
   }
 
   onNuevaConsulta(): void {

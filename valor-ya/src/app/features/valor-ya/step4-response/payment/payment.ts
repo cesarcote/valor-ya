@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 
 import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import {
   ValorYaStepperService,
   ValorYaStep,
@@ -37,9 +38,11 @@ export class PaymentComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
+  private apiService = inject(MCMValorYaService);
 
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   tiposDocumento: SelectOption[] = [
     { value: 'CC', label: 'Cédula de Ciudadanía' },
@@ -67,20 +70,48 @@ export class PaymentComponent implements OnInit {
   onSubmitFacturacion(): void {
     if (this.facturacionForm.valid) {
       this.isSubmitting.set(true);
+      this.errorMessage.set(null); // Limpiar mensaje de error anterior
       console.log('Datos de facturación:', this.facturacionForm.value);
 
       // Guardar datos de facturación en el servicio de estado
       const facturacionData = this.facturacionForm.value;
 
-      // Aquí iría la lógica para procesar el pago
-      // Simulamos el proceso de pago
+      // Simular proceso de pago
       setTimeout(() => {
-        this.isSubmitting.set(false);
+        console.log('Pago procesado exitosamente');
 
-        // Redirigir a la pantalla de respuesta (resultado)
-        this.router.navigate(['/valor-ya/respuesta']);
+        // Obtener el chip del predioData
+        const predioData = this.stateService.predioData();
+        if (!predioData?.chip) {
+          console.error('No se encontró el chip del predio');
+          this.isSubmitting.set(false);
+          this.errorMessage.set(
+            'No se encontró información del predio. Por favor, regrese e intente nuevamente.'
+          );
+          return;
+        }
+
+        // Llamar a la API para procesar el chip
+        this.apiService.procesarChip(predioData.chip).subscribe({
+          next: (response) => {
+            console.log('Respuesta de la API:', response);
+            // Guardar la respuesta en el state service
+            this.stateService.setValorYaResponse(response);
+            this.isSubmitting.set(false);
+            // Redirigir a la pantalla de respuesta
+            this.router.navigate(['/valor-ya/respuesta']);
+          },
+          error: (error) => {
+            console.error('Error al procesar el chip:', error);
+            this.isSubmitting.set(false);
+            this.errorMessage.set(
+              'Error al procesar la solicitud. El servicio no está disponible en este momento. Por favor, intente nuevamente más tarde.'
+            );
+          },
+        });
       }, 2000);
     } else {
+      this.errorMessage.set('Por favor, complete todos los campos requeridos correctamente.');
       Object.keys(this.facturacionForm.controls).forEach((key) => {
         const control = this.facturacionForm.get(key);
         if (control?.invalid) {
