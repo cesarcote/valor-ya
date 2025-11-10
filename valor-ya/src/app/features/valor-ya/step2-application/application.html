@@ -19,7 +19,10 @@
             (volver)="onVolver()"
           ></app-form-address>
           } @case (1) {
-          <app-form-chip (consultar)="onConsultarChip($event)" (volver)="onVolver()"></app-form-chip>
+          <app-form-chip
+            (consultar)="onConsultarChip($event)"
+            (volver)="onVolver()"
+          ></app-form-chip>
           } @case (2) {
           <app-form-fmi (consultar)="onConsultarFMI($event)" (volver)="onVolver()"></app-form-fmi>
           } }

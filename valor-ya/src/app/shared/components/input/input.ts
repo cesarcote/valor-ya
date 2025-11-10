@@ -43,7 +43,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
   @Input() max?: number;
   @Input() maxLength?: number;
   @Input() minLength?: number;
-  @Input() formCtr: any; // ← Cambiado de formControl a formCtr
+  @Input() formCtr: any; 
 
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
@@ -80,7 +80,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
     isDisabled ? this.control.disable() : this.control.enable();
   }
 
-  get isRequired(): boolean {
+  isRequired(): boolean {
     return this.control.hasValidator(Validators.required);
   }
 

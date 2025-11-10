@@ -2,7 +2,7 @@
   @if (label.trim() !== '') {
   <label [for]="name || id" [ngClass]="{ disabled: control.disabled }">
     {{ label }}
-    @if (isRequired) {
+    @if (isRequired()) {
     <span>*</span>
     }
   </label>

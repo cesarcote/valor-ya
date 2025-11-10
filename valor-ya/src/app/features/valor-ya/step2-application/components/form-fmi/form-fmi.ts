@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, Output, EventEmitter } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
@@ -29,14 +29,19 @@ export class FormFmiComponent implements OnInit {
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  // Control que guarda solo el CÓDIGO (ej: "AP", "CA")
   codigoTipoUnidadControl = new FormControl('', [Validators.required]);
 
-  // Opciones para el dropdown del select
   opcionesTipoUnidad = signal<SelectOption[]>([]);
 
-  // Lista completa de TipoUnidad con código y descripción
   tiposUnidad = signal<TipoUnidad[]>([]);
+
+  isFormValid = computed(() => {
+    return (
+      this.zonaControl.valid &&
+      this.matriculaControl.valid &&
+      this.codigoTipoUnidadControl.valid
+    );
+  });
 
   zonas: SelectOption[] = [
     { value: '50C', label: '50C-Bogota Zona Centro' },

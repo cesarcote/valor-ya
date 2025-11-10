@@ -1,11 +1,11 @@
 <div class="form-group">
   <app-input
-    [formControl]="direccionControl"
+    [formCtr]="direccionControl"
     type="text"
     id="direccion"
-    label="Dirección Catastral"
+    label="Dirección principal del predio"
     placeholder="Ej: KR 119B 73B 15"
-    note="Ingrese la dirección completa del predio según el catastro"
+    helpText="Ingrese la dirección completa del predio según el catastro"
   ></app-input>
 </div>
 
@@ -25,7 +25,7 @@
     text="Consultar"
     variant="primary"
     type="button"
-    [disabled]="direccionControl.invalid"
+    [disabled]="!isFormValid()"
     (clicked)="onConsultar()"
   >
   </app-button>

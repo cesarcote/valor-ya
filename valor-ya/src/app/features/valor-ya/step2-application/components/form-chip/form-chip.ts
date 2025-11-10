@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, Output, EventEmitter } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
@@ -31,14 +31,15 @@ export class FormChipComponent implements OnInit {
     Validators.maxLength(30),
   ]);
 
-  // Control que guarda solo el CÓDIGO (ej: "AP", "CA")
   codigoTipoUnidadControl = new FormControl('', [Validators.required]);
 
-  // Opciones para el dropdown del select
   opcionesTipoUnidad = signal<SelectOption[]>([]);
 
-  // Lista completa de TipoUnidad con código y descripción
   tiposUnidad = signal<TipoUnidad[]>([]);
+
+  isFormValid = computed(() => {
+    return this.chipControl.valid && this.codigoTipoUnidadControl.valid;
+  });
 
   ngOnInit(): void {
     this.loadTiposPredio();

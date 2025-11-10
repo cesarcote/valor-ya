@@ -1,7 +1,7 @@
 <div class="form-group">
   <app-select
     dataId="zona"
-    label="Zona de Matrícula"
+    label="Seleccione la oficina de registro:"
     [formCtr]="zonaControl"
     [options]="zonas"
     placeholder="Seleccione una zona"
@@ -10,12 +10,12 @@
 
 <div class="form-group">
   <app-input
-    [formControl]="matriculaControl"
+    [formCtr]="matriculaControl"
     type="text"
     id="matricula"
-    label="Número de Matrícula Inmobiliaria"
+    label="Escriba el numero de matricula inmobiliaria:"
     placeholder="Ej: 123456"
-    note="El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro"
+    helpText="El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro"
   ></app-input>
 </div>
 
@@ -35,7 +35,7 @@
     text="Consultar"
     variant="primary"
     type="button"
-    [disabled]="true"
+    [disabled]="!isFormValid()"
     (clicked)="onConsultar()"
   >
   </app-button>
