@@ -37,9 +37,7 @@ export class FormFmiComponent implements OnInit {
 
   isFormValid = computed(() => {
     return (
-      this.zonaControl.valid &&
-      this.matriculaControl.valid &&
-      this.codigoTipoUnidadControl.valid
+      this.zonaControl.valid && this.matriculaControl.valid && this.codigoTipoUnidadControl.valid
     );
   });
 

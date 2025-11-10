@@ -43,7 +43,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, AfterViewIn
   @Input() max?: number;
   @Input() maxLength?: number;
   @Input() minLength?: number;
-  @Input() formCtr: any; 
+  @Input() formCtr: any;
 
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
