@@ -9,6 +9,7 @@
     description="Selecciona el método de búsqueda"
   >
     <div class="form-container">
+      <hr class="separator-line" />
       @switch (selectedTabIndex()) { @case (0) {
       <app-form-address
         (consultar)="onConsultarDireccion($event)"
