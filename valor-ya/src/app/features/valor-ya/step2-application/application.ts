@@ -51,6 +51,11 @@ export class ApplicationComponent {
     { label: 'Folio Matrícula Inmobiliaria', disabled: false },
   ];
 
+  public currentTitle = computed(() => {
+    const index = this.selectedTabIndex();
+    return this.tabs[index]?.label || '';
+  });
+
   constructor() {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
