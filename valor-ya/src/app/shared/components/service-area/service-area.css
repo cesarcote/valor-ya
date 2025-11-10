@@ -1,0 +1,48 @@
+.help-card{
+  max-width: 273px;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.help-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2D2D2D;
+  margin-bottom: 14px;
+  padding-bottom: 22px;
+  border-bottom: 0.0625rem solid #dee2e6;
+}
+
+.help-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.help-item {
+  display: block;
+  padding: 8px 15px;
+  border-radius: 2rem;
+  color: #2D2D2D;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.help-item:hover {
+  background: #FFF9C5;
+}
+
+@media (max-width: 768px) {
+  .help-card {
+    padding: 1.5rem;
+  }
+
+  .help-title {
+    font-size: 1.25rem;
+  }
+
+  .help-item {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+}
