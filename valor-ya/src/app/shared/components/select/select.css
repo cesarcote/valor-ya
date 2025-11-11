@@ -49,7 +49,6 @@
 .custom-dropdown-container select:focus,
 .custom-dropdown-container select:hover {
   border: 1.5px solid #3366cc;
-  box-shadow: 0 0.25rem 0 #3366cc24;
 }
 
 .custom-dropdown-container select:focus {
@@ -62,12 +61,11 @@
   border: 1.5px solid #a80521;
   color: #a80521;
   box-shadow: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a80521'%3e%3cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3e%3c/svg%3e");
 }
 
 .custom-dropdown-container select.success-border {
-  border: 1.5px solid #068460;
-  color: #068460;
+  border: 1.5px solid #158361;
+  color: #158361;
 }
 
 .custom-dropdown-container select:disabled {
@@ -77,6 +75,40 @@
   color: #bababa;
   cursor: not-allowed;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bababa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Contenedor del select con íconos */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Iconos de validación */
+.validator-icon {
+  position: absolute;
+  top: calc(50% - 3px);
+  right: 10px; /* Sobre la flecha del select */
+  font-size: 24px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 1; /* Sobre la flecha */
+}
+
+.success-icon {
+  color: #158361;
+  background-color: #e8f5f1;
+}
+
+.error-icon {
+  color: #a80521;
+  background-color: #fff5f5;
 }
 
 .custom-dropdown-container select option {

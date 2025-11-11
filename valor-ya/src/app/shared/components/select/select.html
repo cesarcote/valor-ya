@@ -8,35 +8,41 @@
   </label>
   }
 
-  <select
-    [attr.id]="name || dataId"
-    [name]="name"
-    [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
-    [formControl]="control"
-    [ngClass]="{
-      'error-border':
-        ({
-          errores: control.errors,
-          dirty: control.dirty,
-          valid: control.valid,
-          touched: control.touched,
-          status: control.status
-        } | validateStatusField) === 'error',
-      'success-border':
-        ({
-          errores: control.errors,
-          dirty: control.dirty,
-          valid: control.valid,
-          touched: control.touched,
-          status: control.status
-        } | validateStatusField) === 'success'
-    }"
-  >
-    <option selected disabled value="">{{ placeholder }}</option>
-    @for (option of options; track option.value) {
-    <option [value]="option.value">{{ option.label }}</option>
+  <div class="select-wrapper">
+    <select
+      [attr.id]="name || dataId"
+      [name]="name"
+      [attr.aria-invalid]="control.invalid ? 'true' : 'false'"
+      [formControl]="control"
+      [ngClass]="{
+        'error-border':
+          ({
+            errores: control.errors,
+            dirty: control.dirty,
+            valid: control.valid,
+            touched: control.touched,
+            status: control.status
+          } | validateStatusField) === 'error',
+        'success-border':
+          ({
+            errores: control.errors,
+            dirty: control.dirty,
+            valid: control.valid,
+            touched: control.touched,
+            status: control.status
+          } | validateStatusField) === 'success'
+      }"
+    >
+      <option selected disabled value="">{{ placeholder }}</option>
+      @for (option of options; track option.value) {
+      <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+
+    @if (showError) {
+    <span class="validator-icon error-icon" aria-label="error" aria-hidden="true">!</span>
     }
-  </select>
+  </div>
 
   @if (helpText && !control.invalid) {
   <p class="help-input-gov-text">{{ helpText }}</p>

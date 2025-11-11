@@ -82,4 +82,16 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
   isRequired(): boolean {
     return this.control ? this.control.hasValidator(Validators.required) : false;
   }
+
+  get showError(): boolean {
+    return !!(this.control.invalid && (this.control.touched || this.control.dirty));
+  }
+
+  get showSuccess(): boolean {
+    return !!(
+      this.control.valid &&
+      (this.control.touched || this.control.dirty) &&
+      this.control.value
+    );
+  }
 }
