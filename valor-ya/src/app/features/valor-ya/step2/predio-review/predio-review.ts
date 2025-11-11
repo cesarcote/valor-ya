@@ -12,6 +12,7 @@ import {
 } from '../../../../core/services/valor-ya-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
 import { McmService } from '../../../../shared/services/mcm.service';
+import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
@@ -37,6 +38,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
   private mcmService = inject(McmService);
+  private mcmValorYaService = inject(MCMValorYaService);
 
   private mapComponent?: MapComponent;
 
@@ -58,6 +60,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public readonly isLoading = signal<boolean>(true);
   public readonly mapReady = signal<boolean>(false);
   public readonly isProcessingMCM = signal<boolean>(false);
+  public readonly isValidatingAvailability = signal<boolean>(false);
 
   constructor() {
     // Effect to update the map when predioData or mapReady changes
@@ -139,11 +142,39 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   onContinuar(): void {
     const predio = this.predioData();
 
-    if (!predio || !predio.loteid) {
-      this.errorMessage.set('No hay información del predio con loteId válido');
+    if (!predio || !predio.loteid || !predio.chip) {
+      this.errorMessage.set('No hay información completa del predio');
       return;
     }
 
+    // Primero validar disponibilidad del cálculo
+    this.isValidatingAvailability.set(true);
+    this.errorMessage.set('');
+
+    this.mcmValorYaService.procesarChip(predio.chip).subscribe({
+      next: (response) => {
+        this.isValidatingAvailability.set(false);
+
+        if (response.status !== 'success') {
+          this.errorMessage.set(
+            'El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
+          );
+          return;
+        }
+
+        // Si la validación es exitosa, proceder con la consulta MCM
+        this.procesarMCM(predio);
+      },
+      error: (error) => {
+        this.isValidatingAvailability.set(false);
+        this.errorMessage.set(
+          'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
+        );
+      },
+    });
+  }
+
+  private procesarMCM(predio: PredioData): void {
     this.isProcessingMCM.set(true);
     this.errorMessage.set('');
 
@@ -151,7 +182,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
     this.mcmService
       .consultarMCM({
-        loteId: predio.loteid,
+        loteId: predio.loteid!,
         datosEndpoint: predio,
         tipoUnidad: tipoUnidad?.descripcionUnidad,
       })

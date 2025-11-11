@@ -59,7 +59,20 @@
         (clicked)="onNoEsCorrecta()"
       >
       </app-button>
-      <app-button text="Continuar" variant="primary" type="button" (clicked)="onContinuar()">
+      <app-button
+        text="Continuar"
+        variant="primary"
+        type="button"
+        [disabled]="isValidatingAvailability() || isProcessingMCM()"
+        (clicked)="onContinuar()"
+      >
+        @if (isValidatingAvailability()) {
+        <span>Validando disponibilidad...</span>
+        } @else if (isProcessingMCM()) {
+        <span>Procesando datos...</span>
+        } @else {
+        <span>Continuar</span>
+        }
       </app-button>
     </div>
   </div>

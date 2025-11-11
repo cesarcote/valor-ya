@@ -61,7 +61,6 @@ export class PaymentComponent implements OnInit {
     this.stepperService.setStep(ValorYaStep.PROCESO);
     this.initForm();
 
-    // Verificar disponibilidad del cálculo antes de mostrar el formulario
     const predioData = this.stateService.predioData();
     if (!predioData?.chip) {
       this.showModal.set(true);
@@ -71,36 +70,6 @@ export class PaymentComponent implements OnInit {
       this.modalButtonText.set('Aceptar');
       return;
     }
-
-    this.apiService.procesarChip(predioData.chip).subscribe({
-      next: (response) => {
-        if (response.status !== 'success') {
-          this.showModal.set(true);
-          this.modalTitle.set('Advertencia');
-          this.modalMessage.set(
-            'El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
-          );
-          this.modalIconType.set('warning');
-          this.modalButtonText.set('Aceptar');
-        } else {
-          // Solo mostrar modal de éxito si todo está bien
-          this.showModal.set(true);
-          this.modalTitle.set('¡Avalúo Procesado Exitosamente!');
-          this.modalMessage.set('Complete los datos de facturación para continuar');
-          this.modalIconType.set('success');
-          this.modalButtonText.set('Continuar');
-        }
-      },
-      error: (error) => {
-        this.showModal.set(true);
-        this.modalTitle.set('Error');
-        this.modalMessage.set(
-          'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
-        );
-        this.modalIconType.set('error');
-        this.modalButtonText.set('Aceptar');
-      },
-    });
   }
 
   initForm(): void {
@@ -139,24 +108,10 @@ export class PaymentComponent implements OnInit {
           return;
         }
 
-        // Llamar a la API para procesar el chip
-        this.apiService.procesarChip(predioData.chip).subscribe({
-          next: (response) => {
-            console.log('Respuesta de la API:', response);
-            // Guardar la respuesta en el state service
-            this.stateService.setValorYaResponse(response);
-            this.isSubmitting.set(false);
-            // Redirigir a la pantalla de respuesta
-            this.router.navigate(['/valor-ya/respuesta']);
-          },
-          error: (error) => {
-            console.error('Error al procesar el chip:', error);
-            this.isSubmitting.set(false);
-            this.errorMessage.set(
-              'Error al procesar la solicitud. El servicio no está disponible en este momento. Por favor, intente nuevamente más tarde.'
-            );
-          },
-        });
+        // La validación ya se hizo en step2, proceder directamente
+        this.isSubmitting.set(false);
+        // Redirigir a la pantalla de respuesta
+        this.router.navigate(['/valor-ya/respuesta']);
       }, 2000);
     } else {
       this.errorMessage.set('Por favor, complete todos los campos requeridos correctamente.');
