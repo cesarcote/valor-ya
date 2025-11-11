@@ -57,13 +57,11 @@
 
 .custom-dropdown-container select.error-border {
   border: 1.5px solid #a80521;
-  color: #a80521;
   box-shadow: none;
 }
 
 .custom-dropdown-container select.success-border {
   border: 1.5px solid #158361;
-  color: #158361;
 }
 
 .custom-dropdown-container select:disabled {
