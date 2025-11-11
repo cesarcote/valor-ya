@@ -2,32 +2,66 @@
 <app-stepper></app-stepper>
 
 <div class="step-container">
-  <app-tabs
-    [tabs]="tabs"
-    [selectedTabIndex]="selectedTabIndex()"
-    (tabChange)="onTabChange($event)"
-    description="Selecciona el método de búsqueda"
-  >
-    <div class="form-container">
-      <hr class="separator-line" />
-      <div class="row">
-        <div class="col-12 col-md-10 col-lg-8 mx-auto">
-          <h3 class="my-4 current-title">{{ currentTitle() }}</h3>
-          @switch (selectedTabIndex()) { @case (0) {
-          <app-form-address
-            (consultar)="onConsultarDireccion($event)"
-            (volver)="onVolver()"
-          ></app-form-address>
-          } @case (1) {
-          <app-form-chip
-            (consultar)="onConsultarChip($event)"
-            (volver)="onVolver()"
-          ></app-form-chip>
-          } @case (2) {
-          <app-form-fmi (consultar)="onConsultarFMI($event)" (volver)="onVolver()"></app-form-fmi>
-          } }
-        </div>
-      </div>
+  @if (isLoading()) {
+  <div class="loading-simple">
+    <p>Cargando información del predio...</p>
+  </div>
+  } @else if (errorMessage()) {
+  <div class="no-data-section">
+    <h3>No se encontró información</h3>
+    <p class="error-message">{{ errorMessage() }}</p>
+  </div>
+
+  <div class="confirmation-section">
+    <p class="confirmation-question">
+      ¿La información que reposa en nuestro sistema de información es la correcta?
+    </p>
+    <div class="action-buttons">
+      <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()">
+      </app-button>
+      <app-button
+        text="No es correcta"
+        variant="secondary"
+        type="button"
+        (clicked)="onNoEsCorrecta()"
+      >
+      </app-button>
+      <app-button text="Continuar" variant="primary" type="button" (clicked)="onContinuar()">
+      </app-button>
     </div>
-  </app-tabs>
+  </div>
+  } @else if (predioData()) {
+
+  <div class="map-section">
+    <h3>Ubicación del Predio</h3>
+    <app-map></app-map>
+  </div>
+
+  <app-predio-info-card
+    [predioData]="predioData()"
+    [showMessage]="true"
+    [showAllFields]="true"
+    [tipoUnidadSeleccionada]="stateService.tipoUnidadSeleccionada()"
+  >
+  </app-predio-info-card>
+
+  <div class="confirmation-section">
+    <p class="confirmation-question">
+      ¿La información que reposa en nuestro sistema de información es la correcta?
+    </p>
+    <div class="action-buttons">
+      <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()">
+      </app-button>
+      <app-button
+        text="No es correcta"
+        variant="secondary"
+        type="button"
+        (clicked)="onNoEsCorrecta()"
+      >
+      </app-button>
+      <app-button text="Continuar" variant="primary" type="button" (clicked)="onContinuar()">
+      </app-button>
+    </div>
+  </div>
+  }
 </div>

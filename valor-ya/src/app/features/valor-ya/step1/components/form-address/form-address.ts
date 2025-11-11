@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
@@ -7,29 +8,24 @@ import { SelectComponent, SelectOption } from '../../../../../shared/components/
 import { ParametricasService } from '../../../../../shared/services/parametricas.service';
 import { TipoUnidad } from '../../../../../core/models/parametricas.model';
 
-export interface ChipData {
-  chip: string;
+export interface AddressData {
+  direccion: string;
   tipoPredio: string;
   tipoUnidad: TipoUnidad;
 }
 
 @Component({
-  selector: 'app-form-chip',
+  selector: 'app-form-address',
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, SelectComponent],
-  templateUrl: './form-chip.html',
-  styleUrls: ['./form-chip.css'],
+  templateUrl: './form-address.html',
+  styleUrls: ['./form-address.css'],
 })
-export class FormChipComponent implements OnInit {
-  @Output() consultar = new EventEmitter<ChipData>();
-  @Output() volver = new EventEmitter<void>();
+export class FormAddressComponent implements OnInit {
+  @Output() consultar = new EventEmitter<AddressData>();
 
   private parametricasService = inject(ParametricasService);
 
-  chipControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5),
-    Validators.maxLength(30),
-  ]);
+  direccionControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
 
   codigoTipoUnidadControl = new FormControl('', [Validators.required]);
 
@@ -37,8 +33,16 @@ export class FormChipComponent implements OnInit {
 
   tiposUnidad = signal<TipoUnidad[]>([]);
 
+  // Convertir statusChanges a signals
+  private direccionStatus = toSignal(this.direccionControl.statusChanges, {
+    initialValue: 'INVALID',
+  });
+  private tipoUnidadStatus = toSignal(this.codigoTipoUnidadControl.statusChanges, {
+    initialValue: 'INVALID',
+  });
+
   isFormValid = computed(() => {
-    return this.chipControl.valid && this.codigoTipoUnidadControl.valid;
+    return this.direccionStatus() === 'VALID' && this.tipoUnidadStatus() === 'VALID';
   });
 
   ngOnInit(): void {
@@ -60,8 +64,8 @@ export class FormChipComponent implements OnInit {
   }
 
   onConsultar(): void {
-    if (this.chipControl.invalid || this.codigoTipoUnidadControl.invalid) {
-      this.chipControl.markAsTouched();
+    if (this.direccionControl.invalid || this.codigoTipoUnidadControl.invalid) {
+      this.direccionControl.markAsTouched();
       this.codigoTipoUnidadControl.markAsTouched();
       return;
     }
@@ -75,13 +79,9 @@ export class FormChipComponent implements OnInit {
     )!;
 
     this.consultar.emit({
-      chip: this.chipControl.value!,
-      tipoPredio: codigoSeleccionado, // Solo el código "AP"
-      tipoUnidad: tipoUnidadCompleto, // Objeto completo { codigoUnidad: "AP", descripcionUnidad: "APARTAMENTO" }
+      direccion: this.direccionControl.value!,
+      tipoPredio: codigoSeleccionado,
+      tipoUnidad: tipoUnidadCompleto,
     });
-  }
-
-  onVolver(): void {
-    this.volver.emit();
   }
 }

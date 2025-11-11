@@ -13,7 +13,10 @@ export const routes: Routes = [
       {
         path: 'seleccionar',
         title: 'Valor YA - Seleccionar',
-        loadComponent: () => import('./features/valor-ya/step1/home').then((m) => m.HomeComponent),
+        loadComponent: () =>
+          import('./features/valor-ya/step1/components/search-forms/search-forms').then(
+            (m) => m.SearchFormsComponent
+          ),
       },
       {
         path: 'solicitud',
@@ -31,7 +34,7 @@ export const routes: Routes = [
         title: 'Valor YA - Complementar Información',
         canActivate: [predioDataGuard],
         loadComponent: () =>
-          import('./features/valor-ya/step3/components/complement-info').then(
+          import('./features/valor-ya/step2/components/complement-info').then(
             (m) => m.ComplementInfo
           ),
       },

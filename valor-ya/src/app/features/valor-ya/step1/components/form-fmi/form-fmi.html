@@ -1,11 +1,21 @@
 <div class="form-group">
+  <app-select
+    dataId="zona"
+    label="Seleccione la oficina de registro:"
+    [formCtr]="zonaControl"
+    [options]="zonas"
+    placeholder="Seleccione una zona"
+  ></app-select>
+</div>
+
+<div class="form-group">
   <app-input
-    [formCtr]="chipControl"
+    [formCtr]="matriculaControl"
     type="text"
-    id="chip"
-    label="Ingrese el valor del CHIP catastral:"
-    placeholder="Ej: AAA0228WRAW"
-    helpText="El CHIP es un código único de 30 dígitos que identifica cada predio en Colombia"
+    id="matricula"
+    label="Escriba el numero de matricula inmobiliaria:"
+    placeholder="Ej: 123456"
+    helpText="El FMI (Folio de Matrícula Inmobiliaria) es el número asignado por la Oficina de Registro"
   ></app-input>
 </div>
 
@@ -20,7 +30,6 @@
 </div>
 
 <div class="form-buttons">
-  <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()"> </app-button>
   <app-button
     text="Consultar"
     variant="primary"
