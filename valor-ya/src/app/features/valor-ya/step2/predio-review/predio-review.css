@@ -1,15 +1,31 @@
 .map-section {
-  background: white;
-  padding: 2rem;
   border-radius: 0.75rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
 }
 
-.map-section h3 {
-  color: #004884;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+.confirmation-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.confirmation-question {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 1.5rem;
+}
+
+.action-buttons-extra {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.action-buttons-extra app-button {
+  min-width: 180px;
 }
 
 .info-section {

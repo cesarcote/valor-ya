@@ -2,8 +2,33 @@
 <app-stepper></app-stepper>
 
 <div class="step-container">
-  @if (resultadoPrincipal && metadatos) {
-  <div class="result-section">
+  @if (isLoadingResult()) {
+  <app-container-content
+    title="Resultado del Predio"
+    [showBackButton]="false"
+    [showContinueButton]="false"
+  >
+    <div class="loading-section">
+      <p class="loading-text">Cargando resultados del avalúo...</p>
+    </div>
+  </app-container-content>
+  } @else if (errorLoadingResult()) {
+  <app-container-content
+    title="Resultado del Predio"
+    [showContinueButton]="false"
+    backButtonText="Nueva Consulta"
+    (volver)="onNuevaConsulta()"
+  >
+    <div class="error-section">
+      <p class="error-text">{{ errorLoadingResult() }}</p>
+    </div>
+  </app-container-content>
+  } @else if (resultadoPrincipal && metadatos) {
+  <app-container-content
+    title="Resultado del Predio"
+    [showBackButton]="false"
+    [showContinueButton]="false"
+  >
     <!-- Resumen del Avalúo -->
     <div class="info-section">
       <h3 class="section-title">Resumen del Avalúo</h3>
@@ -47,7 +72,7 @@
       </div>
     </div>
 
-    <div class="actions-section">
+    <div class="actions-section-custom">
       <app-button
         text="Nueva Consulta"
         variant="secondary"
@@ -64,12 +89,6 @@
       >
       </app-button>
     </div>
-  </div>
-  } @else {
-  <div class="result-section">
-    <div class="success-header">
-      <p class="result-subtitle">Cargando resultados...</p>
-    </div>
-  </div>
+  </app-container-content>
   }
 </div>

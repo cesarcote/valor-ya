@@ -138,6 +138,36 @@
   min-width: 180px;
 }
 
+/* Custom actions section for container-content */
+.actions-section-custom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.actions-section-custom app-button {
+  min-width: 180px;
+}
+
+.loading-section,
+.error-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-text,
+.error-text {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.error-text {
+  color: #dc2626;
+}
+
 .error-message {
   display: flex;
   align-items: center;

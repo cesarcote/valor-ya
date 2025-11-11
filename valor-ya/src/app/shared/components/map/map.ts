@@ -54,6 +54,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   });
 
   isLoading = signal(false);
+  direccion = signal<string>('');
 
   private readonly DEFAULT_POLYGON_STYLE = {
     color: '#e3192f',
@@ -114,7 +115,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
   }
 
-  ubicarLotePorCoordenadas(coordenadasPoligono: number[][][], loteId?: string): void {
+  ubicarLotePorCoordenadas(
+    coordenadasPoligono: number[][][],
+    loteId?: string,
+    direccion?: string
+  ): void {
     if (!this.map) {
       console.error('Map not initialized!');
       return;
@@ -124,6 +129,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       console.warn('Invalid coordinates:', coordenadasPoligono);
       return;
     }
+
+    // Set the address for display
+    this.direccion.set(direccion || '');
 
     // Convertir coordenadas del polígono al formato de Leaflet
     const coordinates = this.parseRingsToLatLng(coordenadasPoligono);
@@ -138,7 +146,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.addMarker({
       lat: center.lat,
       lng: center.lng,
-      popupText: `<strong>LOTE:</strong> ${loteId || 'Sin código'}`,
+      popupText: `<strong>Dirección:</strong> ${direccion || 'Sin dirección'}`,
     });
   }
 

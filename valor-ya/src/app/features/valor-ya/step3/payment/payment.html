@@ -2,104 +2,100 @@
 <app-stepper></app-stepper>
 
 <div class="step-container">
-  @if (errorMessage()) {
-  <div class="error-message">
-    <div class="error-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          fill-rule="evenodd"
-          d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
+  <app-container-content
+    title="Pasarela de Pago"
+    [continueButtonDisabled]="isSubmitting()"
+    [isLoading]="isSubmitting()"
+    continueButtonText="Proceder al Pago"
+    (volver)="onVolver()"
+    (continuar)="onSubmitFacturacion()"
+  >
+    @if (errorMessage()) {
+    <div class="error-message">
+      <div class="error-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <p>{{ errorMessage() }}</p>
     </div>
-    <p>{{ errorMessage() }}</p>
-  </div>
-  }
+    }
 
-  <div class="billing-section">
-    <h3>Datos de Facturación</h3>
-    <p class="section-subtitle">Complete la siguiente información para continuar con el pago</p>
+    <div class="billing-section">
+      <h3>Datos de Facturación</h3>
+      <p class="section-subtitle">Complete la siguiente información para continuar con el pago</p>
 
-    <form [formGroup]="facturacionForm" class="billing-form">
-      <div class="form-row">
-        <app-select
-          dataId="tipoDocumento"
-          label="Tipo de Documento"
-          [formCtr]="tipoDocumentoControl"
-          [options]="tiposDocumento"
-          placeholder="Seleccione tipo de documento"
-        ></app-select>
+      <form [formGroup]="facturacionForm" class="billing-form">
+        <div class="form-row">
+          <app-select
+            dataId="tipoDocumento"
+            label="Tipo de Documento"
+            [formCtr]="tipoDocumentoControl"
+            [options]="tiposDocumento"
+            placeholder="Seleccione tipo de documento"
+          ></app-select>
 
-        <app-input
-          type="text"
-          id="numeroDocumento"
-          label="Número de Documento"
-          [formCtr]="numeroDocumentoControl"
-          placeholder="Ej: 1234567890"
-        ></app-input>
-      </div>
+          <app-input
+            type="text"
+            id="numeroDocumento"
+            label="Número de Documento"
+            [formCtr]="numeroDocumentoControl"
+            placeholder="Ej: 1234567890"
+          ></app-input>
+        </div>
 
-      <div class="form-row">
-        <app-input
-          type="text"
-          id="nombreCompleto"
-          label="Nombre Completo / Razón Social "
-          [formCtr]="nombreCompletoControl"
-          placeholder="Ej: Juan Pérez"
-        ></app-input>
-      </div>
+        <div class="form-row">
+          <app-input
+            type="text"
+            id="nombreCompleto"
+            label="Nombre Completo / Razón Social "
+            [formCtr]="nombreCompletoControl"
+            placeholder="Ej: Juan Pérez"
+          ></app-input>
+        </div>
 
-      <div class="form-row">
-        <app-input
-          type="text"
-          id="direccion"
-          label="Dirección"
-          [formCtr]="direccionControl"
-          placeholder="Ej: CL 123 # 45-67"
-        ></app-input>
+        <div class="form-row">
+          <app-input
+            type="text"
+            id="direccion"
+            label="Dirección"
+            [formCtr]="direccionControl"
+            placeholder="Ej: CL 123 # 45-67"
+          ></app-input>
 
-        <app-input
-          type="text"
-          id="ciudad"
-          label="Ciudad"
-          [formCtr]="ciudadControl"
-          placeholder="Ej: Bogotá"
-        ></app-input>
-      </div>
+          <app-input
+            type="text"
+            id="ciudad"
+            label="Ciudad"
+            [formCtr]="ciudadControl"
+            placeholder="Ej: Bogotá"
+          ></app-input>
+        </div>
 
-      <div class="form-row">
-        <app-input
-          type="tel"
-          id="telefono"
-          label="Teléfono"
-          [formCtr]="telefonoControl"
-          placeholder="Ej: 3001234567"
-        ></app-input>
+        <div class="form-row">
+          <app-input
+            type="tel"
+            id="telefono"
+            label="Teléfono"
+            [formCtr]="telefonoControl"
+            placeholder="Ej: 3001234567"
+          ></app-input>
 
-        <app-input
-          type="email"
-          id="email"
-          label="Email de Entrega "
-          [formCtr]="emailControl"
-          placeholder="Ej: correo@ejemplo.com"
-        ></app-input>
-      </div>
-
-      <div class="form-actions">
-        <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()">
-        </app-button>
-        <app-button
-          [text]="isSubmitting() ? 'Procesando Pago...' : 'Proceder al Pago'"
-          variant="primary"
-          type="button"
-          [disabled]="isSubmitting()"
-          (clicked)="onSubmitFacturacion()"
-        >
-        </app-button>
-      </div>
-    </form>
-  </div>
+          <app-input
+            type="email"
+            id="email"
+            label="Email de Entrega "
+            [formCtr]="emailControl"
+            placeholder="Ej: correo@ejemplo.com"
+          ></app-input>
+        </div>
+      </form>
+    </div>
+  </app-container-content>
 </div>
 
 @if (showModal()) {

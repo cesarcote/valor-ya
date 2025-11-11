@@ -15,22 +15,22 @@ import {
   ValorYaStep,
 } from '../../../../core/services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
   selector: 'app-payment',
   imports: [
     StepperComponent,
-    ButtonComponent,
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
     ValoryaDescription,
     ModalComponent,
+    ContainerContentComponent,
   ],
   templateUrl: './payment.html',
   styleUrls: ['./payment.css'],

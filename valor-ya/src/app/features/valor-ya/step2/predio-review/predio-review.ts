@@ -20,6 +20,7 @@ import { PredioInfoCardComponent } from '../../../../shared/components/predio-in
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
   selector: 'app-predio-review',
@@ -30,6 +31,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
     MapComponent,
     ValoryaDescription,
     ModalComponent,
+    ContainerContentComponent,
   ],
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
@@ -93,12 +95,15 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.realizarConsulta(tipo, valor);
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
-      this.mapComponent!.ubicarLotePorCoordenadas(data.coordenadasPoligono, data.loteid);
+      this.mapComponent!.ubicarLotePorCoordenadas(
+        data.coordenadasPoligono,
+        data.loteid,
+        data.direccion
+      );
     }
   }
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {

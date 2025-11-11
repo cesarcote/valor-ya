@@ -12,10 +12,17 @@ import { StepperComponent } from '../../../../shared/components/stepper/stepper'
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
   selector: 'app-result',
-  imports: [CommonModule, StepperComponent, ButtonComponent, ValoryaDescription],
+  imports: [
+    CommonModule,
+    StepperComponent,
+    ButtonComponent,
+    ValoryaDescription,
+    ContainerContentComponent,
+  ],
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
 })

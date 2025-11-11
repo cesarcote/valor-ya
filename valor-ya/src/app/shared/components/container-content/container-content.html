@@ -1,0 +1,37 @@
+<div class="container-content">
+  <!-- Header con título -->
+  <div class="container-header text-center">
+    <h3 class="container-title">{{ title }}</h3>
+  </div>
+
+  <!-- Línea separadora -->
+  <hr class="separator-line" />
+
+  <!-- Contenido proyectado -->
+  <div class="container-body">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="container-actions">
+    @if (showBackButton) {
+    <app-button
+      [text]="backButtonText"
+      variant="secondary"
+      type="button"
+      [disabled]="backButtonDisabled || isLoading"
+      (clicked)="onVolverClick()"
+    >
+    </app-button>
+    } @if (showContinueButton) {
+    <app-button
+      [text]="isLoading ? 'Procesando...' : continueButtonText"
+      variant="primary"
+      type="button"
+      [disabled]="continueButtonDisabled || isLoading"
+      (clicked)="onContinuarClick()"
+    >
+    </app-button>
+    }
+  </div>
+</div>
