@@ -1,5 +1,4 @@
 .custom-dropdown-container {
-  font: normal normal normal 15px/22px Verdana;
   color: #4c4c4c;
   margin-bottom: 1rem;
 }
@@ -7,7 +6,6 @@
 .custom-dropdown-container label {
   display: block;
   margin-bottom: 10px;
-  font: normal normal normal 15px/22px Verdana;
   letter-spacing: 0px;
   color: #4c4c4c;
   text-align: left;
@@ -119,9 +117,6 @@
   cursor: pointer;
   background-color: white;
   color: #4c4c4c;
-  font-size: 15px; /* Body text 1 - 15px */
-  font-family: Verdana, sans-serif;
-  line-height: 22px; /* Body text 1 - 22px line-height */
 }
 
 .custom-dropdown-container select option:hover {
@@ -132,14 +127,12 @@
   color: #a80521;
   font-size: 0.75rem;
   margin-top: 0.375rem;
-  font-family: Verdana, sans-serif;
 }
 
 .help-input-gov-text {
   color: #737373;
   font-size: 0.75rem;
   margin-bottom: 0.5rem;
-  font-family: Verdana, sans-serif;
 }
 
 @media (max-width: 768px) {

@@ -1,27 +1,28 @@
-.step-container {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* ERROR MESSAGE BOX */
+.error-message-box {
+  background: #fee;
+  border-left: 0.25rem solid #e3192f;
+  padding: 1rem 1.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
 }
 
+.error-message-box p {
+  color: #d32f2f;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* FORM CONTAINER */
 .form-container {
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin-top: 2rem;
+  padding: 0 2rem 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .current-title {
-  font-size: 1.75rem;
-  color: #004884;
-  font-weight: 600;
+  font-weight: 800;
+  font-size: 1.25rem;
   text-align: center;
-}
-
-.separator-line {
-  border: 0;
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 0 0 10px 0;
 }

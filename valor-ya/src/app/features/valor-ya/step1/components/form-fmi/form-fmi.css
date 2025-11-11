@@ -7,7 +7,7 @@
 
 .form-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -19,7 +19,6 @@
   max-width: 100%;
   padding: 0.75rem;
   font-size: var(--text-body2-size);
-  font-family: var(--font-verdana);
   color: var(--color-primary);
   background-color: #ffffff;
   border: 0.094rem solid var(--color-primary);
