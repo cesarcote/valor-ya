@@ -78,3 +78,14 @@
   </div>
   }
 </div>
+
+@if (showModal()) {
+<app-modal
+  [message]="modalMessage()"
+  [title]="modalTitle()"
+  [iconType]="modalIconType()"
+  [buttonText]="modalButtonText()"
+  (close)="onCloseModal()"
+>
+</app-modal>
+}

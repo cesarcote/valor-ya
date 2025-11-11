@@ -19,6 +19,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-predio-review',
@@ -28,6 +29,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
     PredioInfoCardComponent,
     MapComponent,
     ValoryaDescription,
+    ModalComponent,
   ],
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
@@ -61,6 +63,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public readonly mapReady = signal<boolean>(false);
   public readonly isProcessingMCM = signal<boolean>(false);
   public readonly isValidatingAvailability = signal<boolean>(false);
+  public readonly showModal = signal<boolean>(false);
+  public readonly modalMessage = signal<string>('');
+  public readonly modalTitle = signal<string>('Advertencia');
+  public readonly modalIconType = signal<'success' | 'warning' | 'error'>('warning');
+  public readonly modalButtonText = signal<string>('Aceptar');
 
   constructor() {
     // Effect to update the map when predioData or mapReady changes
@@ -156,9 +163,13 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
         this.isValidatingAvailability.set(false);
 
         if (response.status !== 'success') {
-          this.errorMessage.set(
-            'El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
+          this.showModal.set(true);
+          this.modalTitle.set('Error en verificación');
+          this.modalMessage.set(
+            'No se pudo verificar el status del predio. El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
           );
+          this.modalIconType.set('error');
+          this.modalButtonText.set('Aceptar');
           return;
         }
 
@@ -167,9 +178,13 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       },
       error: (error) => {
         this.isValidatingAvailability.set(false);
-        this.errorMessage.set(
+        this.showModal.set(true);
+        this.modalTitle.set('Error de conexión');
+        this.modalMessage.set(
           'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
         );
+        this.modalIconType.set('error');
+        this.modalButtonText.set('Aceptar');
       },
     });
   }
@@ -204,5 +219,9 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.stateService.reset();
     this.stepperService.setStep(ValorYaStep.INICIO);
     this.router.navigate(['/valor-ya/seleccionar']);
+  }
+
+  onCloseModal(): void {
+    this.showModal.set(false);
   }
 }
