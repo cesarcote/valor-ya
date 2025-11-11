@@ -14,7 +14,7 @@ export const routes: Routes = [
         path: 'seleccionar',
         title: 'Valor YA - Seleccionar',
         loadComponent: () =>
-          import('./features/valor-ya/step1/components/search-forms/search-forms').then(
+          import('./features/valor-ya/step1/search-forms/search-forms').then(
             (m) => m.SearchFormsComponent
           ),
       },

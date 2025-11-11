@@ -4,17 +4,17 @@ import { Router } from '@angular/router';
 import {
   ValorYaStateService,
   TipoBusqueda,
-} from '../../../../../core/services/valor-ya-state.service';
+} from '../../../../core/services/valor-ya-state.service';
 import {
   ValorYaStepperService,
   ValorYaStep,
-} from '../../../../../core/services/valor-ya-stepper.service';
-import { StepperComponent } from '../../../../../shared/components/stepper/stepper';
-import { TabsComponent, Tab } from '../../../../../shared/components/tabs/tabs';
-import { FormChipComponent, ChipData } from '../form-chip/form-chip';
-import { FormAddressComponent, AddressData } from '../form-address/form-address';
-import { FormFmiComponent, FmiData } from '../form-fmi/form-fmi';
-import { ValoryaDescription } from '../../../../../shared/components/valorya-description/valorya-description';
+} from '../../../../core/services/valor-ya-stepper.service';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { TabsComponent, Tab } from '../../../../shared/components/tabs/tabs';
+import { FormChipComponent, ChipData } from '../components/form-chip/form-chip';
+import { FormAddressComponent, AddressData } from '../components/form-address/form-address';
+import { FormFmiComponent, FmiData } from '../components/form-fmi/form-fmi';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-search-forms',
