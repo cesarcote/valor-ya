@@ -28,6 +28,6 @@ export class AvaluosResponse implements OnInit {
     this.isLoading.set(true);
     this.stateService.reset();
     this.stepperService.reset();
-    this.router.navigate(['/avaluos-en-garantia/inicio']);
+    this.router.navigate(['/avaluos-en-garantia/seleccionar']);
   }
 }

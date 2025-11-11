@@ -23,20 +23,20 @@ export class ValorYaStepperService {
   readonly steps: StepConfig[] = [
     {
       step: ValorYaStep.INICIO,
-      label: 'Inicio',
-      route: '/valor-ya/inicio',
+      label: 'Seleccionar',
+      route: '/valor-ya/seleccionar',
       percentage: '15%',
     },
     {
       step: ValorYaStep.SOLICITUD,
-      label: 'Hago mi solicitud',
+      label: 'Solicitud',
       route: '/valor-ya/solicitud',
       percentage: '50%',
     },
     {
       step: ValorYaStep.PROCESO,
-      label: 'Procesan mi solicitud',
-      route: '/valor-ya/proceso',
+      label: 'Pago',
+      route: '/valor-ya/pago',
       percentage: '80%',
     },
     {
@@ -57,15 +57,11 @@ export class ValorYaStepperService {
   }
 
   nextStep(): void {
-    this.currentStep.update((current) =>
-      current < ValorYaStep.RESPUESTA ? current + 1 : current
-    );
+    this.currentStep.update((current) => (current < ValorYaStep.RESPUESTA ? current + 1 : current));
   }
 
   previousStep(): void {
-    this.currentStep.update((current) =>
-      current > ValorYaStep.INICIO ? current - 1 : current
-    );
+    this.currentStep.update((current) => (current > ValorYaStep.INICIO ? current - 1 : current));
   }
 
   isStepActive(step: ValorYaStep): boolean {

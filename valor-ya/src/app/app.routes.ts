@@ -7,23 +7,23 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'inicio',
+        redirectTo: 'seleccionar',
         pathMatch: 'full',
       },
       {
-        path: 'inicio',
-        title: 'Valor YA - Inicio',
+        path: 'seleccionar',
+        title: 'Valor YA - Seleccionar',
         loadComponent: () => import('./features/valor-ya/step1/home').then((m) => m.HomeComponent),
       },
       {
         path: 'solicitud',
-        title: 'Valor YA - Consulta tu Predio',
+        title: 'Valor YA - Solicitud',
         loadComponent: () =>
           import('./features/valor-ya/step2/application').then((m) => m.ApplicationComponent),
       },
       {
-        path: 'proceso',
-        title: 'Valor YA - Procesando Solicitud',
+        path: 'pago',
+        title: 'Valor YA - Pago',
         loadComponent: () => import('./features/valor-ya/step3/process').then((m) => m.Process),
       },
       {
@@ -36,20 +36,14 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'pago',
-        title: 'Valor YA - Datos de Facturación y Pago',
-        loadComponent: () =>
-          import('./features/valor-ya/step4/payment/payment').then((m) => m.PaymentComponent),
-      },
-      {
         path: 'respuesta',
-        title: 'Valor YA - Resultado de tu Consulta',
+        title: 'Valor YA - Respuesta',
         loadComponent: () =>
           import('./features/valor-ya/step4/response').then((m) => m.ResponseComponent),
       },
       {
         path: '**',
-        redirectTo: 'inicio',
+        redirectTo: 'seleccionar',
       },
     ],
   },
@@ -58,14 +52,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'inicio',
+        redirectTo: 'seleccionar',
         pathMatch: 'full',
       },
       {
-        path: 'inicio',
-        title: 'Avalúos en Garantía - Inicio',
+        path: 'seleccionar',
+        title: 'Avalúos en Garantía - Seleccionar',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step1-home/home').then((m) => m.AvaluosHome),
+          import('./features/avaluos-en-garantia/step1/home').then((m) => m.AvaluosHome),
       },
       {
         path: 'solicitud',
@@ -76,24 +70,20 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'proceso',
-        title: 'Avalúos en Garantía - Proceso',
+        path: 'pago',
+        title: 'Avalúos en Garantía - Pago',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step3-process/process').then(
-            (m) => m.AvaluosProcess
-          ),
+          import('./features/avaluos-en-garantia/step3/process').then((m) => m.AvaluosProcess),
       },
       {
         path: 'respuesta',
         title: 'Avalúos en Garantía - Respuesta',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step4/response').then(
-            (m) => m.AvaluosResponse
-          ),
+          import('./features/avaluos-en-garantia/step4/response').then((m) => m.AvaluosResponse),
       },
       {
         path: '**',
-        redirectTo: 'inicio',
+        redirectTo: 'seleccionar',
       },
     ],
   },

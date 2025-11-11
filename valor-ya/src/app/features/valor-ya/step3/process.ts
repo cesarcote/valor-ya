@@ -74,7 +74,7 @@ export class Process implements OnInit, AfterViewInit {
     const valor = this.stateService.valorBusqueda();
 
     if (!tipo || !valor) {
-      this.router.navigate(['/valor-ya/inicio']);
+      this.router.navigate(['/valor-ya/seleccionar']);
       return;
     }
 

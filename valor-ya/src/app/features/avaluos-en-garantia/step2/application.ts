@@ -26,12 +26,12 @@ export class AvaluosApplication implements OnInit {
 
   onVolver(): void {
     this.stepperService.setStep(AvaluosStep.INICIO);
-    this.router.navigate(['/avaluos-en-garantia/inicio']);
+    this.router.navigate(['/avaluos-en-garantia/seleccionar']);
   }
 
   onContinuar(): void {
     this.isLoading.set(true);
     this.stepperService.setStep(AvaluosStep.PROCESO);
-    this.router.navigate(['/avaluos-en-garantia/proceso']);
+    this.router.navigate(['/avaluos-en-garantia/pago']);
   }
 }

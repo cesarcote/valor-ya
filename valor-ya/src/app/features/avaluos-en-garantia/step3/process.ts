@@ -32,7 +32,7 @@ export class AvaluosProcess implements OnInit {
   onVolverInicio(): void {
     this.stateService.reset();
     this.stepperService.setStep(AvaluosStep.INICIO);
-    this.router.navigate(['/avaluos-en-garantia/inicio']);
+    this.router.navigate(['/avaluos-en-garantia/seleccionar']);
   }
 
   onContinuar(): void {

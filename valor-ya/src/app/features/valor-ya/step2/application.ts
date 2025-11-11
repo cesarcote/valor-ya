@@ -61,7 +61,7 @@ export class ApplicationComponent {
 
     effect(() => {
       if (!this.stateService.tipoBusqueda()) {
-        this.router.navigate(['/valor-ya/inicio']);
+        this.router.navigate(['/valor-ya/seleccionar']);
       }
     });
   }
@@ -94,12 +94,12 @@ export class ApplicationComponent {
 
   irAProceso(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
-    this.router.navigate(['/valor-ya/proceso']);
+    this.router.navigate(['/valor-ya/pago']);
   }
 
   onVolver(): void {
     this.stateService.reset();
     this.stepperService.setStep(ValorYaStep.INICIO);
-    this.router.navigate(['/valor-ya/inicio']);
+    this.router.navigate(['/valor-ya/seleccionar']);
   }
 }

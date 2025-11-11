@@ -172,7 +172,7 @@ export class PaymentComponent implements OnInit {
   onNuevaConsulta(): void {
     this.stateService.reset();
     this.stepperService.reset();
-    this.router.navigate(['/valor-ya/inicio']);
+    this.router.navigate(['/valor-ya/seleccionar']);
   }
 
   onVolverInicio(): void {
@@ -182,7 +182,7 @@ export class PaymentComponent implements OnInit {
   onCloseModal(): void {
     // Si el modal es de error/warning, redirigir al inicio
     if (this.modalIconType() !== 'success') {
-      this.router.navigate(['/valor-ya/inicio']);
+      this.router.navigate(['/valor-ya/seleccionar']);
     } else {
       // Si es de éxito, solo cerrar el modal
       this.showModal.set(false);

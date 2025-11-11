@@ -65,7 +65,7 @@ export class ResponseComponent implements OnInit {
   onNuevaConsulta(): void {
     this.stateService.reset();
     this.stepperService.reset();
-    this.router.navigate(['/valor-ya/inicio']);
+    this.router.navigate(['/valor-ya/seleccionar']);
   }
 
   // Obtener primer resultado (el principal)

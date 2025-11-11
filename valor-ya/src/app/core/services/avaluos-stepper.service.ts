@@ -21,20 +21,20 @@ export class AvaluosStepperService {
   readonly steps: AvaluosStepConfig[] = [
     {
       step: AvaluosStep.INICIO,
-      label: 'Inicio',
-      route: '/avaluos-en-garantia/inicio',
+      label: 'Seleccionar',
+      route: '/avaluos-en-garantia/seleccionar',
       percentage: '15%',
     },
     {
       step: AvaluosStep.SOLICITUD,
-      label: 'Hago mi solicitud',
+      label: 'Solicitud',
       route: '/avaluos-en-garantia/solicitud',
       percentage: '50%',
     },
     {
       step: AvaluosStep.PROCESO,
-      label: 'Procesan mi solicitud',
-      route: '/avaluos-en-garantia/proceso',
+      label: 'Pago',
+      route: '/avaluos-en-garantia/pago',
       percentage: '80%',
     },
     {
@@ -55,15 +55,11 @@ export class AvaluosStepperService {
   }
 
   nextStep(): void {
-    this.currentStep.update((current) =>
-      current < AvaluosStep.RESPUESTA ? current + 1 : current
-    );
+    this.currentStep.update((current) => (current < AvaluosStep.RESPUESTA ? current + 1 : current));
   }
 
   previousStep(): void {
-    this.currentStep.update((current) =>
-      current > AvaluosStep.INICIO ? current - 1 : current
-    );
+    this.currentStep.update((current) => (current > AvaluosStep.INICIO ? current - 1 : current));
   }
 
   isStepActive(step: AvaluosStep): boolean {

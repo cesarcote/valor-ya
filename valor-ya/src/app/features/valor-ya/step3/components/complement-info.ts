@@ -102,7 +102,7 @@ export class ComplementInfo implements OnInit {
   }
 
   onVolver(): void {
-    this.router.navigate(['/valor-ya/proceso']);
+    this.router.navigate(['/valor-ya/pago']);
   }
 
   onConsultarMCM(): void {
