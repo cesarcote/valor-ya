@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
@@ -33,8 +35,24 @@ export class FormAddressComponent implements OnInit {
 
   tiposUnidad = signal<TipoUnidad[]>([]);
 
+  direccionValid = toSignal(
+    this.direccionControl.statusChanges.pipe(
+      startWith(this.direccionControl.status),
+      map(() => this.direccionControl.valid)
+    ),
+    { initialValue: false }
+  );
+
+  codigoTipoUnidadValid = toSignal(
+    this.codigoTipoUnidadControl.statusChanges.pipe(
+      startWith(this.codigoTipoUnidadControl.status),
+      map(() => this.codigoTipoUnidadControl.valid)
+    ),
+    { initialValue: false }
+  );
+
   isFormValid = computed(() => {
-    return this.direccionControl.valid && this.codigoTipoUnidadControl.valid;
+    return this.direccionValid() && this.codigoTipoUnidadValid();
   });
 
   ngOnInit(): void {

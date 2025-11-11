@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
@@ -37,8 +39,24 @@ export class FormChipComponent implements OnInit {
 
   tiposUnidad = signal<TipoUnidad[]>([]);
 
+  chipValid = toSignal(
+    this.chipControl.statusChanges.pipe(
+      startWith(this.chipControl.status),
+      map(() => this.chipControl.valid)
+    ),
+    { initialValue: false }
+  );
+
+  codigoTipoUnidadValid = toSignal(
+    this.codigoTipoUnidadControl.statusChanges.pipe(
+      startWith(this.codigoTipoUnidadControl.status),
+      map(() => this.codigoTipoUnidadControl.valid)
+    ),
+    { initialValue: false }
+  );
+
   isFormValid = computed(() => {
-    return this.chipControl.valid && this.codigoTipoUnidadControl.valid;
+    return this.chipValid() && this.codigoTipoUnidadValid();
   });
 
   ngOnInit(): void {

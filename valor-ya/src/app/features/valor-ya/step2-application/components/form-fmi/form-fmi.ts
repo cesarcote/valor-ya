@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs';
 
 import { InputComponent } from '../../../../../shared/components/input/input';
 import { ButtonComponent } from '../../../../../shared/components/button/button';
@@ -35,10 +37,32 @@ export class FormFmiComponent implements OnInit {
 
   tiposUnidad = signal<TipoUnidad[]>([]);
 
+  zonaValid = toSignal(
+    this.zonaControl.statusChanges.pipe(
+      startWith(this.zonaControl.status),
+      map(() => this.zonaControl.valid)
+    ),
+    { initialValue: false }
+  );
+
+  matriculaValid = toSignal(
+    this.matriculaControl.statusChanges.pipe(
+      startWith(this.matriculaControl.status),
+      map(() => this.matriculaControl.valid)
+    ),
+    { initialValue: false }
+  );
+
+  codigoTipoUnidadValid = toSignal(
+    this.codigoTipoUnidadControl.statusChanges.pipe(
+      startWith(this.codigoTipoUnidadControl.status),
+      map(() => this.codigoTipoUnidadControl.valid)
+    ),
+    { initialValue: false }
+  );
+
   isFormValid = computed(() => {
-    return (
-      this.zonaControl.valid && this.matriculaControl.valid && this.codigoTipoUnidadControl.valid
-    );
+    return this.zonaValid() && this.matriculaValid() && this.codigoTipoUnidadValid();
   });
 
   zonas: SelectOption[] = [
