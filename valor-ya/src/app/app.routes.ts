@@ -13,29 +13,25 @@ export const routes: Routes = [
       {
         path: 'inicio',
         title: 'Valor YA - Inicio',
-        loadComponent: () =>
-          import('./features/valor-ya/step1-home/home').then((m) => m.HomeComponent),
+        loadComponent: () => import('./features/valor-ya/step1/home').then((m) => m.HomeComponent),
       },
       {
         path: 'solicitud',
         title: 'Valor YA - Consulta tu Predio',
         loadComponent: () =>
-          import('./features/valor-ya/step2-application/application').then(
-            (m) => m.ApplicationComponent
-          ),
+          import('./features/valor-ya/step2/application').then((m) => m.ApplicationComponent),
       },
       {
         path: 'proceso',
         title: 'Valor YA - Procesando Solicitud',
-        loadComponent: () =>
-          import('./features/valor-ya/step3-process/process').then((m) => m.Process),
+        loadComponent: () => import('./features/valor-ya/step3/process').then((m) => m.Process),
       },
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
         canActivate: [predioDataGuard],
         loadComponent: () =>
-          import('./features/valor-ya/step3-process/components/complement-info').then(
+          import('./features/valor-ya/step3/components/complement-info').then(
             (m) => m.ComplementInfo
           ),
       },
@@ -43,15 +39,13 @@ export const routes: Routes = [
         path: 'pago',
         title: 'Valor YA - Datos de Facturación y Pago',
         loadComponent: () =>
-          import('./features/valor-ya/step4-response/payment/payment').then(
-            (m) => m.PaymentComponent
-          ),
+          import('./features/valor-ya/step4/payment/payment').then((m) => m.PaymentComponent),
       },
       {
         path: 'respuesta',
         title: 'Valor YA - Resultado de tu Consulta',
         loadComponent: () =>
-          import('./features/valor-ya/step4-response/response').then((m) => m.ResponseComponent),
+          import('./features/valor-ya/step4/response').then((m) => m.ResponseComponent),
       },
       {
         path: '**',
@@ -77,7 +71,7 @@ export const routes: Routes = [
         path: 'solicitud',
         title: 'Avalúos en Garantía - Solicitud',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step2-application/application').then(
+          import('./features/avaluos-en-garantia/step2/application').then(
             (m) => m.AvaluosApplication
           ),
       },
@@ -93,7 +87,7 @@ export const routes: Routes = [
         path: 'respuesta',
         title: 'Avalúos en Garantía - Respuesta',
         loadComponent: () =>
-          import('./features/avaluos-en-garantia/step4-response/response').then(
+          import('./features/avaluos-en-garantia/step4/response').then(
             (m) => m.AvaluosResponse
           ),
       },
