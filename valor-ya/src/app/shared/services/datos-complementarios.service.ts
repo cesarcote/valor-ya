@@ -26,19 +26,13 @@ export class DatosComplementariosService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-
-    // Loguear el payload tal cual se enviará para facilitar debugging en el navegador
     try {
-      // Evitar que el log rompa en entornos que no soporten JSON.stringify de ciertos objetos
-      // (aunque aquí es un objeto simple)
-      // eslint-disable-next-line no-console
       console.log(
         '[DatosComplementariosService] Enviando payload a',
         this.apiUrl,
         JSON.stringify(datos)
       );
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.log('[DatosComplementariosService] Enviando payload (no serializable)', datos);
     }
 
@@ -50,7 +44,6 @@ export class DatosComplementariosService {
       .pipe(
         map((response: DatosComplementariosResponse | DatosComplementarios) => {
           if (response && typeof response === 'object' && 'success' in response) {
-            // Response is DatosComplementariosResponse
             const resp = response as DatosComplementariosResponse;
             if (resp.success && resp.data) {
               return resp.data;
@@ -58,7 +51,6 @@ export class DatosComplementariosService {
               throw new Error(resp.message || 'Error al registrar los datos complementarios');
             }
           } else {
-            // Assume response is the DatosComplementarios entity directly
             return response as DatosComplementarios;
           }
         }),

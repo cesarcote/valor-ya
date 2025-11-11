@@ -1,4 +1,3 @@
-/* Solo estilos específicos de este formulario */
 .form-group {
   box-sizing: border-box;
   width: 100%;
@@ -12,26 +11,15 @@
   margin-top: 1.5rem;
 }
 
-/* Estilos para el select (pendiente crear componente) */
-
 .form-select {
   width: 100%;
   max-width: 100%;
   padding: 0.75rem;
-  font-size: var(--text-body2-size);
-  color: var(--color-primary);
   background-color: #ffffff;
-  border: 0.094rem solid var(--color-primary);
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-sizing: border-box;
-}
-
-.form-select:focus {
-  outline-offset: max(0.125rem, 0.15em);
-  outline: max(0.125rem, 0.15em) solid var(--color-text);
-  border-color: var(--color-primary);
 }
 
 .form-select:disabled {

@@ -17,9 +17,6 @@ export class PredioService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Transforma la respuesta del backend en el modelo de datos del frontend
-   */
   private mapCatastroResponseToPredioData(
     response: CatastroResponse,
     valorBusqueda?: string,

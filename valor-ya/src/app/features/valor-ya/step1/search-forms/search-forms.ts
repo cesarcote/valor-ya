@@ -62,7 +62,6 @@ export class SearchFormsComponent {
   constructor() {
     this.stepperService.setStep(ValorYaStep.INICIO);
 
-    // Establecer tipo de búsqueda por defecto si no hay ninguno
     if (!this.stateService.tipoBusqueda()) {
       this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);
     }

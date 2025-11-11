@@ -27,18 +27,15 @@ export class ResultComponent implements OnInit {
 
   isDownloading = signal(false);
 
-  // Señal para almacenar la respuesta del API
   apiResponse = signal<MCMValorYAResultado | null>(null);
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
-    // Obtener respuesta de la API desde el servicio de estado
     const response = this.stateService.valorYaResponse();
     if (response) {
       this.apiResponse.set(response);
     } else {
-      // Si no hay respuesta, mostrar mensaje de carga
       console.warn('No se encontró respuesta de la API');
     }
   }
@@ -54,7 +51,6 @@ export class ResultComponent implements OnInit {
     this.isDownloading.set(true);
     console.log('Simulando descarga de avalúo para chip:', predioData.chip);
 
-    // Simular tiempo de descarga
     setTimeout(() => {
       this.isDownloading.set(false);
       console.log('Descarga simulada completada exitosamente');
@@ -68,7 +64,6 @@ export class ResultComponent implements OnInit {
     this.router.navigate(['/valor-ya/seleccionar']);
   }
 
-  // Obtener primer resultado (el principal)
   get resultadoPrincipal() {
     const response = this.apiResponse();
     return response?.resultados?.[0] || null;
@@ -78,7 +73,6 @@ export class ResultComponent implements OnInit {
     return this.apiResponse()?.metadatos || null;
   }
 
-  // Formatear valores para mostrar
   formatCurrency(value: number | null | undefined): string {
     if (!value) return 'N/A';
     return new Intl.NumberFormat('es-CO', {

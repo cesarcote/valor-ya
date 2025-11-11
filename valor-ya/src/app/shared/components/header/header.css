@@ -1,4 +1,3 @@
-/* Top Menu */
 .menu--top {
   background-color: #0943b5 !important;
   padding: 0.5rem 0 !important;
@@ -16,7 +15,6 @@
   max-width: 257px;
 }
 
-/* Main Menu */
 .main-menu {
   background-color: #f9f9f9 !important;
   border-bottom: 4px solid #ea0a2a;
@@ -30,7 +28,7 @@
   display: block;
 }
 
-.nav-item{
+.nav-item {
   flex: 1 1 auto !important;
   text-align: center !important;
 }
@@ -38,5 +36,3 @@
 .main-menu .nav-link:hover {
   background-color: #e8e4e4;
 }
-
-

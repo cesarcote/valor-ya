@@ -64,7 +64,6 @@
   font-size: 0.875rem;
 }
 
-/* Sección destacada para valoración - Gris claro */
 .highlight-section {
   background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
   border: 1px solid #e5e7eb;
@@ -139,7 +138,6 @@
   min-width: 180px;
 }
 
-/* Error message styles */
 .error-message {
   display: flex;
   align-items: center;
@@ -165,7 +163,6 @@
   font-weight: 500;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .result-section {
     padding: 1.5rem;
@@ -199,7 +196,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .result-section {
     padding: 1.5rem;

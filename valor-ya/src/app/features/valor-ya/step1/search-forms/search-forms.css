@@ -1,4 +1,3 @@
-/* ERROR MESSAGE BOX */
 .error-message-box {
   background: #fee;
   border-left: 0.25rem solid #e3192f;
@@ -14,7 +13,6 @@
   font-weight: 500;
 }
 
-/* FORM CONTAINER */
 .form-container {
   padding: 0 2rem 2rem;
   margin-bottom: 2rem;

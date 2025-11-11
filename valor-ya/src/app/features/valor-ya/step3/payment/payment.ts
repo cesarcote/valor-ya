@@ -87,17 +87,14 @@ export class PaymentComponent implements OnInit {
   onSubmitFacturacion(): void {
     if (this.facturacionForm.valid) {
       this.isSubmitting.set(true);
-      this.errorMessage.set(null); // Limpiar mensaje de error anterior
+      this.errorMessage.set(null);
       console.log('Datos de facturación:', this.facturacionForm.value);
 
-      // Guardar datos de facturación en el servicio de estado
       const facturacionData = this.facturacionForm.value;
 
-      // Simular proceso de pago
       setTimeout(() => {
         console.log('Pago procesado exitosamente');
 
-        // Obtener el chip del predioData
         const predioData = this.stateService.predioData();
         if (!predioData?.chip) {
           console.error('No se encontró el chip del predio');
@@ -108,9 +105,7 @@ export class PaymentComponent implements OnInit {
           return;
         }
 
-        // La validación ya se hizo en step2, proceder directamente
         this.isSubmitting.set(false);
-        // Redirigir a la pantalla de respuesta
         this.router.navigate(['/valor-ya/respuesta']);
       }, 2000);
     } else {
@@ -139,16 +134,13 @@ export class PaymentComponent implements OnInit {
   }
 
   onCloseModal(): void {
-    // Si el modal es de error/warning, redirigir al inicio
     if (this.modalIconType() !== 'success') {
       this.router.navigate(['/valor-ya/seleccionar']);
     } else {
-      // Si es de éxito, solo cerrar el modal
       this.showModal.set(false);
     }
   }
 
-  // Getters para los controles del formulario
   get tipoDocumentoControl() {
     return this.facturacionForm.get('tipoDocumento') as FormControl;
   }

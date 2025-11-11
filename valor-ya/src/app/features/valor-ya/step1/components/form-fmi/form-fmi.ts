@@ -64,13 +64,12 @@ export class FormFmiComponent implements OnInit {
 
   loadTiposPredio(): void {
     this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
-      // Guardar objetos completos
       this.tiposUnidad.set(tipos);
 
-      // Crear opciones para el dropdown
+
       const options: SelectOption[] = tipos.map((tipo) => ({
-        value: tipo.codigoUnidad, // "AP"
-        label: tipo.descripcionUnidad, // "APARTAMENTO"
+        value: tipo.codigoUnidad,
+        label: tipo.descripcionUnidad,
       }));
       this.opcionesTipoUnidad.set(options);
     });
@@ -88,10 +87,8 @@ export class FormFmiComponent implements OnInit {
       return;
     }
 
-    // El usuario seleccionó un código (ej: "AP")
     const codigoSeleccionado = this.codigoTipoUnidadControl.value!;
 
-    // Buscar el objeto completo que corresponde a ese código
     const tipoUnidadCompleto = this.tiposUnidad().find(
       (tipo) => tipo.codigoUnidad === codigoSeleccionado
     )!;

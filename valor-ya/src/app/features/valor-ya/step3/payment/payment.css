@@ -1,4 +1,3 @@
-/* Success Header Styles */
 .success-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -40,7 +39,6 @@
   margin: 0;
 }
 
-/* Billing Section Styles */
 .billing-section {
   background: white;
   border-radius: 16px;
@@ -64,7 +62,6 @@
   margin-bottom: 2rem;
 }
 
-/* Form Styles */
 .billing-form {
   display: flex;
   flex-direction: column;
@@ -77,12 +74,10 @@
   gap: 1rem;
 }
 
-/* Single column for name field */
 .form-row:has(app-input[label='Nombre Completo / Razón Social ']) {
   grid-template-columns: 1fr;
 }
 
-/* Form Actions */
 .form-actions {
   display: flex;
   justify-content: center;
@@ -92,7 +87,6 @@
   border-top: 1px solid #e5e7eb;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .success-header {
     padding: 1.5rem;

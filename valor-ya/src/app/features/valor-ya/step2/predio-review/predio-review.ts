@@ -49,7 +49,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.mapComponent = map;
     if (map) {
       this.mapReady.set(true);
-      // If we already have data, update the map immediately
+
       const data = this.predioData();
       if (data?.coordenadasPoligono) {
         this.updateMapWithData(data);
@@ -70,7 +70,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public readonly modalButtonText = signal<string>('Aceptar');
 
   constructor() {
-    // Effect to update the map when predioData or mapReady changes
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
@@ -95,7 +94,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Map ready is now set via the setter when the component is available
   }
 
   private updateMapWithData(data: PredioData): void {
@@ -154,7 +152,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // Primero validar disponibilidad del cálculo
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 
@@ -173,7 +170,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
           return;
         }
 
-        // Si la validación es exitosa, proceder con la consulta MCM
         this.procesarMCM(predio);
       },
       error: (error) => {

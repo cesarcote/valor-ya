@@ -20,7 +20,7 @@ export class MCMValorYaService {
     console.log('📦 [MCM Service] Body:', body);
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
-      timeout(10000) // Timeout de 10 segundos
+      timeout(10000)
     );
   }
 
@@ -30,7 +30,7 @@ export class MCMValorYaService {
     return this.http.get(url, { responseType: 'blob' }).pipe(
       catchError((error) => {
         console.error('Error al descargar el avalúo:', error);
-        throw error; // Re-throw the error for component handling
+        throw error;
       })
     );
   }

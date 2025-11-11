@@ -38,7 +38,6 @@ export class Breadcrumb {
         baseBreadcrumb,
         {
           label: 'Valor ya',
-          // Sin URL para que sea el elemento final
         },
       ]);
     } else if (url.includes('/avaluos-en-garantia')) {
@@ -46,7 +45,6 @@ export class Breadcrumb {
         baseBreadcrumb,
         {
           label: 'Avalúos en Garantía',
-          // Sin URL para que sea el elemento final
         },
       ]);
     } else {
