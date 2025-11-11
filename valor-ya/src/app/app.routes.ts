@@ -29,6 +29,7 @@ export const routes: Routes = [
       {
         path: 'pago',
         title: 'Valor YA - Pago',
+        canActivate: [predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step3/payment/payment').then((m) => m.PaymentComponent),
       },
@@ -44,6 +45,7 @@ export const routes: Routes = [
       {
         path: 'respuesta',
         title: 'Valor YA - Respuesta',
+        canActivate: [predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step4/result/result').then((m) => m.ResultComponent),
       },

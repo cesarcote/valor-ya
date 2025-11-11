@@ -26,18 +26,34 @@ export class ResultComponent implements OnInit {
   private apiService = inject(MCMValorYaService);
 
   isDownloading = signal(false);
+  isLoadingResult = signal(false);
+  errorLoadingResult = signal('');
 
   apiResponse = signal<MCMValorYAResultado | null>(null);
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
 
-    const response = this.stateService.valorYaResponse();
-    if (response) {
-      this.apiResponse.set(response);
-    } else {
-      console.warn('No se encontró respuesta de la API');
+    const chip = this.stateService.predioData()?.chip;
+    if (!chip) {
+      console.error('No se encontró el CHIP del predio para consultar resultados');
+      this.errorLoadingResult.set('No se encontró información del predio');
+      return;
     }
+
+    this.isLoadingResult.set(true);
+    this.apiService.procesarChip(chip).subscribe({
+      next: (resp) => {
+        this.apiResponse.set(resp);
+        this.stateService.setValorYaResponse(resp);
+        this.isLoadingResult.set(false);
+      },
+      error: (err) => {
+        console.error('Error al obtener resultados del avalúo:', err);
+        this.errorLoadingResult.set('No se pudieron cargar los resultados del avalúo');
+        this.isLoadingResult.set(false);
+      },
+    });
   }
 
   onDescargarAvaluo(): void {
