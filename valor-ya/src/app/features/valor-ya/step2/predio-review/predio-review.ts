@@ -15,7 +15,7 @@ import { McmService } from '../../../../shared/services/mcm.service';
 import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
+// import { ButtonComponent } from '../../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
@@ -26,7 +26,7 @@ import { ContainerContentComponent } from '../../../../shared/components/contain
   selector: 'app-predio-review',
   imports: [
     StepperComponent,
-    ButtonComponent,
+    // ButtonComponent,
     PredioInfoCardComponent,
     MapComponent,
     ValoryaDescription,
@@ -145,6 +145,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Informacion complementaria a discusion
   onNoEsCorrecta(): void {
     this.router.navigate(['/valor-ya/complementar']);
   }
