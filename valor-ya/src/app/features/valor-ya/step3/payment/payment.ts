@@ -8,21 +8,21 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ValorYaStateService } from '../../../core/services/valor-ya-state.service';
-import { MCMValorYaService } from '../../../shared/services/mcm-valor-ya.service';
+import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import {
   ValorYaStepperService,
   ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
-import { StepperComponent } from '../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../shared/components/button/button';
-import { InputComponent } from '../../../shared/components/input/input';
-import { SelectComponent, SelectOption } from '../../../shared/components/select/select';
-import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
-import { ModalComponent } from '../../../shared/components/modal/modal.component';
+} from '../../../../core/services/valor-ya-stepper.service';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/button/button';
+import { InputComponent } from '../../../../shared/components/input/input';
+import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
-  selector: 'app-process',
+  selector: 'app-payment',
   imports: [
     StepperComponent,
     ButtonComponent,
@@ -32,10 +32,10 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
     ValoryaDescription,
     ModalComponent,
   ],
-  templateUrl: './process.html',
-  styleUrls: ['./process.css'],
+  templateUrl: './payment.html',
+  styleUrls: ['./payment.css'],
 })
-export class Process implements OnInit {
+export class PaymentComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);

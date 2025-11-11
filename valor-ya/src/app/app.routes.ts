@@ -22,19 +22,22 @@ export const routes: Routes = [
         path: 'solicitud',
         title: 'Valor YA - Solicitud',
         loadComponent: () =>
-          import('./features/valor-ya/step2/application').then((m) => m.ApplicationComponent),
+          import('./features/valor-ya/step2/predio-review/predio-review').then(
+            (m) => m.PredioReviewComponent
+          ),
       },
       {
         path: 'pago',
         title: 'Valor YA - Pago',
-        loadComponent: () => import('./features/valor-ya/step3/process').then((m) => m.Process),
+        loadComponent: () =>
+          import('./features/valor-ya/step3/payment/payment').then((m) => m.PaymentComponent),
       },
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
         canActivate: [predioDataGuard],
         loadComponent: () =>
-          import('./features/valor-ya/step2/components/complement-info').then(
+          import('./features/valor-ya/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo
           ),
       },
@@ -42,7 +45,7 @@ export const routes: Routes = [
         path: 'respuesta',
         title: 'Valor YA - Respuesta',
         loadComponent: () =>
-          import('./features/valor-ya/step4/response').then((m) => m.ResponseComponent),
+          import('./features/valor-ya/step4/result/result').then((m) => m.ResultComponent),
       },
       {
         path: '**',

@@ -5,19 +5,22 @@ import { Observable } from 'rxjs';
 import {
   ValorYaStepperService,
   ValorYaStep,
-} from '../../../core/services/valor-ya-stepper.service';
-import { ValorYaStateService, TipoBusqueda } from '../../../core/services/valor-ya-state.service';
-import { PredioService } from '../../../shared/services/predio.service';
-import { McmService } from '../../../shared/services/mcm.service';
-import { PredioData } from '../../../core/models/predio-data.model';
-import { StepperComponent } from '../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../shared/components/button/button';
-import { PredioInfoCardComponent } from '../../../shared/components/predio-info-card/predio-info-card';
-import { MapComponent } from '../../../shared/components/map';
-import { ValoryaDescription } from '../../../shared/components/valorya-description/valorya-description';
+} from '../../../../core/services/valor-ya-stepper.service';
+import {
+  ValorYaStateService,
+  TipoBusqueda,
+} from '../../../../core/services/valor-ya-state.service';
+import { PredioService } from '../../../../shared/services/predio.service';
+import { McmService } from '../../../../shared/services/mcm.service';
+import { PredioData } from '../../../../core/models/predio-data.model';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/button/button';
+import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
+import { MapComponent } from '../../../../shared/components/map';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 @Component({
-  selector: 'app-application',
+  selector: 'app-predio-review',
   imports: [
     StepperComponent,
     ButtonComponent,
@@ -25,10 +28,10 @@ import { ValoryaDescription } from '../../../shared/components/valorya-descripti
     MapComponent,
     ValoryaDescription,
   ],
-  templateUrl: './application.html',
-  styleUrls: ['./application.css'],
+  templateUrl: './predio-review.html',
+  styleUrls: ['./predio-review.css'],
 })
-export class ApplicationComponent implements OnInit, AfterViewInit {
+export class PredioReviewComponent implements OnInit, AfterViewInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
