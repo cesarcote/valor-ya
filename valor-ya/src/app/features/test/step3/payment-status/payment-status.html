@@ -1,0 +1,120 @@
+<app-container-content>
+  <div class="payment-status-container">
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="loading-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Verificando estado del pago...</p>
+      </div>
+    }
+
+    <!-- Status Content -->
+    @if (!isLoading()) {
+      <div class="status-card" [ngClass]="currentConfig().bgColor">
+        <!-- Icon -->
+        <div class="status-icon-container">
+          <div class="status-icon" [ngClass]="currentConfig().iconColor">
+            {{ currentConfig().icon }}
+          </div>
+        </div>
+
+        <!-- Title and Message -->
+        <h1 class="status-title">{{ currentConfig().title }}</h1>
+        <p class="status-message">{{ currentConfig().message }}</p>
+
+        <!-- Transaction ID (si existe) -->
+        @if (transactionId()) {
+          <div class="transaction-info">
+            <span class="transaction-label">ID de Transacción:</span>
+            <span class="transaction-id">{{ transactionId() }}</span>
+          </div>
+        }
+
+        <!-- Details Section (opcional) -->
+        @if (currentConfig().showDetails && paymentData()) {
+          <div class="payment-details">
+            <h3 class="details-title">Detalles del pago</h3>
+            <div class="details-grid">
+              @if (paymentData()['referenceCode']) {
+                <div class="detail-item">
+                  <span class="detail-label">Referencia:</span>
+                  <span class="detail-value">{{ paymentData()['referenceCode'] }}</span>
+                </div>
+              }
+              @if (paymentData()['amount']) {
+                <div class="detail-item">
+                  <span class="detail-label">Monto:</span>
+                  <span class="detail-value">
+                    {{ paymentData()['currency'] || 'COP' }} ${{ paymentData()['amount'] | number:'1.0-0' }}
+                  </span>
+                </div>
+              }
+              @if (paymentData()['authorizationCode']) {
+                <div class="detail-item">
+                  <span class="detail-label">Código de Autorización:</span>
+                  <span class="detail-value">{{ paymentData()['authorizationCode'] }}</span>
+                </div>
+              }
+              @if (paymentData()['transactionDate']) {
+                <div class="detail-item">
+                  <span class="detail-label">Fecha:</span>
+                  <span class="detail-value">{{ paymentData()['transactionDate'] }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Predio Information (solo para éxito) -->
+        @if (status() === 'success' && getPredioInfo()) {
+          <div class="predio-summary">
+            <h3 class="details-title">Información del Predio</h3>
+            <div class="details-grid">
+              @if (getPredioInfo()?.chip) {
+                <div class="detail-item">
+                  <span class="detail-label">CHIP:</span>
+                  <span class="detail-value">{{ getPredioInfo()?.chip }}</span>
+                </div>
+              }
+              @if (getPredioInfo()?.direccion) {
+                <div class="detail-item">
+                  <span class="detail-label">Dirección:</span>
+                  <span class="detail-value">{{ getPredioInfo()?.direccion }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Action Buttons -->
+        <div class="actions-container">
+          <button
+            class="btn btn-primary"
+            (click)="onPrimaryAction()"
+            type="button">
+            {{ currentConfig().primaryAction.label }}
+          </button>
+
+          @if (currentConfig().secondaryAction) {
+            <button
+              class="btn btn-secondary"
+              (click)="onSecondaryAction()"
+              type="button">
+              {{ currentConfig().secondaryAction!.label }}
+            </button>
+          }
+        </div>
+
+        <!-- Help Text -->
+        <div class="help-text">
+          <p>
+            Si tienes alguna pregunta sobre tu pago,
+            <a href="mailto:soporte@catastrobogota.gov.co" class="help-link">
+              contáctanos
+            </a>
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+</app-container-content>

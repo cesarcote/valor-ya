@@ -1,0 +1,27 @@
+<app-valorya-description></app-valorya-description>
+<app-stepper></app-stepper>
+
+<div class="step-container">
+  <app-tabs
+    [tabs]="tabs"
+    [selectedTabIndex]="selectedTabIndex()"
+    (tabChange)="onTabChange($event)"
+    description="Selecciona el método de búsqueda"
+  >
+    <div class="form-container">
+      <hr class="separator-line" />
+      <div class="row">
+        <div class="col-12 col-md-10 col-lg-8 mx-auto">
+          <h3 class="my-4 current-title">{{ currentTitle() }}</h3>
+          @switch (selectedTabIndex()) { @case (0) {
+          <app-form-address (consultar)="onConsultarDireccion($event)"></app-form-address>
+          } @case (1) {
+          <app-form-chip (consultar)="onConsultarChip($event)"></app-form-chip>
+          } @case (2) {
+          <app-form-fmi (consultar)="onConsultarFMI($event)"></app-form-fmi>
+          } }
+        </div>
+      </div>
+    </div>
+  </app-tabs>
+</div>
