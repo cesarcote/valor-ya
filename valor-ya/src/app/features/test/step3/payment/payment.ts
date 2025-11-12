@@ -103,7 +103,7 @@ export class PaymentComponent implements OnInit {
         }
 
         this.isSubmitting.set(false);
-        
+
         this.router.navigate(['/test/pago-status/success']);
       }, 2000);
     } else {

@@ -48,7 +48,8 @@ export class PaymentStatusComponent implements OnInit {
   private statusConfigs: Record<PaymentStatus, StatusConfig> = {
     success: {
       title: '¡Pago Exitoso!',
-      message: 'Tu pago ha sido procesado correctamente. Recibirás un correo electrónico con los detalles de tu transacción.',
+      message:
+        'Tu pago ha sido procesado correctamente. Recibirás un correo electrónico con los detalles de tu transacción.',
       icon: '✓',
       iconColor: 'text-green-600',
       bgColor: 'bg-green-50',
@@ -58,7 +59,8 @@ export class PaymentStatusComponent implements OnInit {
     },
     failure: {
       title: 'Pago Rechazado',
-      message: 'Tu pago no pudo ser procesado. Por favor verifica tus datos de pago e intenta nuevamente.',
+      message:
+        'Tu pago no pudo ser procesado. Por favor verifica tus datos de pago e intenta nuevamente.',
       icon: '✕',
       iconColor: 'text-red-600',
       bgColor: 'bg-red-50',
@@ -68,7 +70,8 @@ export class PaymentStatusComponent implements OnInit {
     },
     pending: {
       title: 'Pago Pendiente',
-      message: 'Tu pago está siendo procesado. Esto puede tomar algunos minutos. Te notificaremos por correo electrónico cuando se complete.',
+      message:
+        'Tu pago está siendo procesado. Esto puede tomar algunos minutos. Te notificaremos por correo electrónico cuando se complete.',
       icon: '⏳',
       iconColor: 'text-yellow-600',
       bgColor: 'bg-yellow-50',
@@ -77,7 +80,8 @@ export class PaymentStatusComponent implements OnInit {
     },
     review: {
       title: 'Pago en Revisión',
-      message: 'Tu pago está siendo revisado por nuestro equipo. Te contactaremos pronto con el resultado.',
+      message:
+        'Tu pago está siendo revisado por nuestro equipo. Te contactaremos pronto con el resultado.',
       icon: '🔍',
       iconColor: 'text-blue-600',
       bgColor: 'bg-blue-50',
