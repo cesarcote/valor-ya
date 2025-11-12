@@ -34,6 +34,14 @@ export const routes: Routes = [
           import('./features/valor-ya/step3/payment/payment').then((m) => m.PaymentComponent),
       },
       {
+        path: 'pago-status/:status',
+        title: 'Valor YA - Estado del Pago',
+        loadComponent: () =>
+          import('./features/valor-ya/step3/payment-status/payment-status').then(
+            (m) => m.PaymentStatusComponent
+          ),
+      },
+      {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
         canActivate: [predioDataGuard],
