@@ -103,7 +103,8 @@ export class PaymentComponent implements OnInit {
         }
 
         this.isSubmitting.set(false);
-        this.router.navigate(['/test/respuesta']);
+        
+        this.router.navigate(['/test/pago-status/success']);
       }, 2000);
     } else {
       this.errorMessage.set('Por favor, complete todos los campos requeridos correctamente.');

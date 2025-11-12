@@ -45,7 +45,6 @@ export class PaymentStatusComponent implements OnInit {
   transactionId = signal<string | null>(null);
   isLoading = signal(true);
 
-  // Configuraciones por cada estado
   private statusConfigs: Record<PaymentStatus, StatusConfig> = {
     success: {
       title: '¡Pago Exitoso!',
@@ -87,10 +86,8 @@ export class PaymentStatusComponent implements OnInit {
     },
   };
 
-  // Computed para obtener la configuración actual
   currentConfig = computed(() => this.statusConfigs[this.status()]);
 
-  // Datos adicionales que vienen de PayU (query params)
   paymentData = signal<PaymentData>({});
 
   ngOnInit(): void {
@@ -98,13 +95,11 @@ export class PaymentStatusComponent implements OnInit {
   }
 
   private loadPaymentStatus(): void {
-    // Obtener el estado de la URL
     this.route.params.subscribe((params) => {
       const status = params['status'] as PaymentStatus;
       if (this.isValidStatus(status)) {
         this.status.set(status);
       } else {
-        // Si el status no es válido, redirigir al inicio
         this.router.navigate(['/test/seleccionar']);
         return;
       }
@@ -114,7 +109,6 @@ export class PaymentStatusComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.transactionId.set(params['transaction_id'] || params['x_transaction_id'] || null);
 
-      // Capturar todos los parámetros que envía PayU
       const payuParams = {
         referenceCode: params['reference_code'] || params['x_ref_payco'],
         transactionId: params['transaction_id'] || params['x_transaction_id'],
@@ -129,7 +123,6 @@ export class PaymentStatusComponent implements OnInit {
 
       this.paymentData.set(payuParams);
 
-      // Simular carga
       setTimeout(() => {
         this.isLoading.set(false);
       }, 1000);
@@ -140,12 +133,12 @@ export class PaymentStatusComponent implements OnInit {
     return ['success', 'failure', 'pending', 'review'].includes(status);
   }
 
+  // Métodos dinámicos para los botones del container-content
   onPrimaryAction(): void {
     const config = this.currentConfig();
 
-    // Si es éxito, guardar datos antes de navegar
+    // Si es éxito, puedes guardar datos adicionales antes de navegar
     if (this.status() === 'success') {
-      // Aquí puedes guardar información adicional en el state service
       // this.stateService.setPaymentData(this.paymentData());
     }
 

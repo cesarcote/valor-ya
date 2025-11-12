@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, Input, output, HostBinding } from '@angular/core';
 import { ButtonComponent } from '../button/button';
 
 @Component({
@@ -21,8 +21,8 @@ export class ContainerContentComponent {
     return '';
   }
 
-  @Output() volver = new EventEmitter<void>();
-  @Output() continuar = new EventEmitter<void>();
+  volver = output<void>();
+  continuar = output<void>();
 
   onVolverClick(): void {
     this.volver.emit();
