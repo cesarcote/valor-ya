@@ -152,6 +152,10 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // For test feature, skip validation and go directly to procesarMCM
+    this.procesarMCM(predio);
+
+    /* Comentado para test - validación original de endpoint
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 
@@ -183,6 +187,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
         this.modalButtonText.set('Aceptar');
       },
     });
+    */
   }
 
   private procesarMCM(predio: PredioData): void {
