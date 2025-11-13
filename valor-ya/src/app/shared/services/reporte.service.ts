@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
 import {
   ReporteValorYaRequest,
-  ReporteValorYaResponse,
 } from '../../core/models/reporte-valor-ya.model';
 import { currentEnvironment } from '../../../environments/environment.qa';
 
@@ -15,13 +14,13 @@ export class ReporteService {
   private http = inject(HttpClient);
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
-  generarReporteValorYa(data: ReporteValorYaRequest): Observable<ReporteValorYaResponse> {
+  generarReporteValorYa(data: ReporteValorYaRequest): Observable<Blob> {
     const url = `${this.API_BASE_URL}/api/reportes/valorya-completo/pdf`;
 
     console.log('🚀 [Reporte Service] Generando reporte ValorYa completo');
     console.log('📦 [Reporte Service] Datos:', data);
 
-    return this.http.post<ReporteValorYaResponse>(url, data).pipe(
+    return this.http.post(url, data, { responseType: 'blob' }).pipe(
       timeout(60000), // 1 minuto para generación de PDF
       catchError((error) => {
         console.error('❌ [Reporte Service] Error generando reporte:', error);
@@ -66,11 +65,14 @@ export class ReporteService {
    *     const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
    *
    *     this.reporteService.generarReporteValorYa(datos).subscribe({
-   *       next: (response) => {
-   *         if (response.success) {
-   *           console.log('Reporte generado exitosamente');
-   *           // El PDF se descarga automáticamente
-   *         }
+   *       next: (blob) => {
+   *         // Descargar el PDF directamente
+   *         const url = window.URL.createObjectURL(blob);
+   *         const a = document.createElement('a');
+   *         a.href = url;
+   *         a.download = 'avaluo.pdf';
+   *         a.click();
+   *         window.URL.revokeObjectURL(url);
    *       },
    *       error: (error) => {
    *         console.error('Error generando reporte:', error);

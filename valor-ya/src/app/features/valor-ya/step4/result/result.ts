@@ -86,18 +86,20 @@ export class ResultComponent implements OnInit {
     console.log('Generando reporte de avalúo para chip:', predioData.chip);
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
-      next: (resp) => {
+      next: (blob) => {
         this.isDownloading.set(false);
-        if (resp.success) {
-          console.log('Reporte generado exitosamente');
-          if (resp.reportUrl) {
-            window.open(resp.reportUrl, '_blank');
-          } else {
-            alert('Reporte generado, pero no se pudo descargar automáticamente.');
-          }
-        } else {
-          alert('Error generando reporte: ' + resp.message);
-        }
+        console.log('Reporte generado exitosamente');
+        
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `avaluo-${predioData.chip}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        alert('¡Avalúo descargado exitosamente!');
       },
       error: (error) => {
         this.isDownloading.set(false);
