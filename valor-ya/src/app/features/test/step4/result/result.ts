@@ -10,6 +10,8 @@ import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ReporteService } from '../../../../shared/services/reporte.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-result',
@@ -28,6 +30,8 @@ export class ResultComponent implements OnInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private apiService = inject(MCMValorYaService);
+  private reporteService = inject(ReporteService);
+  private notificationService = inject(NotificationService);
 
   isDownloading = signal(false);
   isLoadingResult = signal(false);
@@ -136,14 +140,40 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    this.isDownloading.set(true);
-    console.log('Simulando descarga de avalúo para chip:', predioData.chip);
+    const tipoPredio = this.stateService.tipoUnidadSeleccionada()?.descripcionUnidad;
+    if (!tipoPredio) {
+      console.error('No se encontró el tipo de predio');
+      alert('Error: No se puede descargar el avalúo sin tipo de predio.');
+      return;
+    }
 
-    setTimeout(() => {
-      this.isDownloading.set(false);
-      console.log('Descarga simulada completada exitosamente');
-      alert('¡Avalúo descargado exitosamente! (Simulación)');
-    }, 2000);
+    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
+
+    this.isDownloading.set(true);
+    console.log('Generando reporte de avalúo para chip:', predioData.chip);
+
+    this.reporteService.generarReporteValorYa(datos).subscribe({
+      next: (blob) => {
+        this.isDownloading.set(false);
+        console.log('Reporte generado exitosamente');
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ValorYa-${predioData.chip}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        this.notificationService.success('¡Avalúo descargado exitosamente!');
+      },
+      error: (error) => {
+        this.isDownloading.set(false);
+        console.error('Error generando reporte:', error);
+        this.notificationService.error('Error generando reporte');
+      },
+    });
   }
 
   onNuevaConsulta(): void {

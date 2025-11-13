@@ -14,6 +14,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
 import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ReporteService } from '../../../../shared/services/reporte.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-result',
@@ -33,6 +34,7 @@ export class ResultComponent implements OnInit {
   public stateService = inject(ValorYaStateService);
   private apiService = inject(MCMValorYaService);
   private reporteService = inject(ReporteService);
+  private notificationService = inject(NotificationService);
 
   isDownloading = signal(false);
   isLoadingResult = signal(false);
@@ -93,18 +95,18 @@ export class ResultComponent implements OnInit {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `avaluo-${predioData.chip}.pdf`;
+        a.download = `ValorYa-${predioData.chip}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        alert('¡Avalúo descargado exitosamente!');
+        this.notificationService.success('¡Avalúo descargado exitosamente!');
       },
       error: (error) => {
         this.isDownloading.set(false);
         console.error('Error generando reporte:', error);
-        alert('Error generando reporte');
+        this.notificationService.error('Error generando reporte');
       },
     });
   }
