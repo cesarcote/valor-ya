@@ -13,6 +13,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ReporteService } from '../../../../shared/services/reporte.service';
 
 @Component({
   selector: 'app-result',
@@ -31,6 +32,7 @@ export class ResultComponent implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private apiService = inject(MCMValorYaService);
+  private reporteService = inject(ReporteService);
 
   isDownloading = signal(false);
   isLoadingResult = signal(false);
@@ -71,14 +73,38 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    this.isDownloading.set(true);
-    console.log('Simulando descarga de avalúo para chip:', predioData.chip);
+    const tipoPredio = this.stateService.tipoUnidadSeleccionada()?.descripcionUnidad;
+    if (!tipoPredio) {
+      console.error('No se encontró el tipo de predio');
+      alert('Error: No se puede descargar el avalúo sin tipo de predio.');
+      return;
+    }
 
-    setTimeout(() => {
-      this.isDownloading.set(false);
-      console.log('Descarga simulada completada exitosamente');
-      alert('¡Avalúo descargado exitosamente! (Simulación)');
-    }, 2000);
+    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
+
+    this.isDownloading.set(true);
+    console.log('Generando reporte de avalúo para chip:', predioData.chip);
+
+    this.reporteService.generarReporteValorYa(datos).subscribe({
+      next: (resp) => {
+        this.isDownloading.set(false);
+        if (resp.success) {
+          console.log('Reporte generado exitosamente');
+          if (resp.reportUrl) {
+            window.open(resp.reportUrl, '_blank');
+          } else {
+            alert('Reporte generado, pero no se pudo descargar automáticamente.');
+          }
+        } else {
+          alert('Error generando reporte: ' + resp.message);
+        }
+      },
+      error: (error) => {
+        this.isDownloading.set(false);
+        console.error('Error generando reporte:', error);
+        alert('Error generando reporte');
+      },
+    });
   }
 
   onNuevaConsulta(): void {
