@@ -89,7 +89,7 @@ export class ResultComponent implements OnInit {
       next: (blob) => {
         this.isDownloading.set(false);
         console.log('Reporte generado exitosamente');
-        
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
