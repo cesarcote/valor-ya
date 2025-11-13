@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Optional, signal, effect } from '@angular/core';
+import { Component, inject, Optional, signal, effect } from '@angular/core';
 
 import { ValorYaStepperService } from '../../../core/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
@@ -10,7 +10,7 @@ import { TestStepperService } from '../../../core/services/test-stepper.service'
   templateUrl: './stepper.html',
   styleUrls: ['./stepper.css'],
 })
-export class StepperComponent implements OnInit {
+export class StepperComponent {
   stepperService: any;
 
   currentStep = signal(1);
@@ -28,16 +28,11 @@ export class StepperComponent implements OnInit {
       // Use effect to react to signal changes
       effect(() => {
         const step = this.stepperService.currentStep();
+        const percentage = this.stepperService.progressPercentage();
         this.currentStep.set(step);
-        this.progressPercentage.set(this.stepperService.progressPercentage());
+        this.progressPercentage.set(percentage);
       });
     }
-  }
-
-  ngOnInit(): void {
-    // ngOnInit is intentionally left empty.
-    // The logic that was here has been moved to the constructor
-    // to ensure it runs within the correct injection context.
   }
 
   isStepActive(step: number): boolean {

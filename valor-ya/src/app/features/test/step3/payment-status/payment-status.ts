@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { TestStateService } from '../../../../core/services/test-state.service';
+import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 
@@ -32,13 +35,14 @@ interface StatusConfig {
 @Component({
   selector: 'app-payment-status',
   standalone: true,
-  imports: [CommonModule, ContainerContentComponent],
+  imports: [CommonModule, StepperComponent, ValoryaDescription, ContainerContentComponent],
   templateUrl: './payment-status.html',
   styleUrls: ['./payment-status.css'],
 })
 export class PaymentStatusComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
 
   status = signal<PaymentStatus>('pending');
@@ -95,6 +99,7 @@ export class PaymentStatusComponent implements OnInit {
   paymentData = signal<PaymentData>({});
 
   ngOnInit(): void {
+    this.stepperService.setStep(TestStep.PROCESO);
     this.loadPaymentStatus();
   }
 

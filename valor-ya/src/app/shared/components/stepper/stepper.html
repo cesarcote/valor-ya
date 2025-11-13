@@ -1,5 +1,5 @@
 <div class="stepper">
-  @for (stepConfig of stepperService?.steps; track stepConfig.step) {
+  @if (stepperService?.steps) { @for (stepConfig of stepperService.steps; track stepConfig.step) {
   <div
     class="step"
     [class.active]="isCurrentStep(stepConfig.step)"
@@ -18,5 +18,5 @@
     </div>
     }
   </div>
-  }
+  } }
 </div>
