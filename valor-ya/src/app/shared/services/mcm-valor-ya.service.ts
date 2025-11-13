@@ -13,14 +13,19 @@ export class MCMValorYaService {
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   procesarChip(chip: string): Observable<MCMValorYAResultado> {
-    const url = `${this.API_BASE_URL}/api/procesar-chips/chip-unico`;
+    // Usar URL relativa para que el proxy la intercepté en desarrollo
+    const url = `/api/procesar-chips/chip-unico`;
     const body = { chip };
 
     console.log('🚀 [MCM Service] Llamando a:', url);
     console.log('📦 [MCM Service] Body:', body);
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
-      timeout(10000)
+      timeout(3000), // Aumentar timeout a 2 minutos para peticiones muy pesadas
+      catchError((error) => {
+        console.error('❌ [MCM Service] Error en procesarChip:', error);
+        throw error;
+      })
     );
   }
 

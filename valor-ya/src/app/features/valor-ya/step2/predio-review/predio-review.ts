@@ -161,7 +161,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 
-    this.mcmValorYaService.procesarChip(predio.chip).subscribe({
+    this.mcmValorYaService.procesarChip(predio.chip!).subscribe({
       next: (response) => {
         this.isValidatingAvailability.set(false);
 
