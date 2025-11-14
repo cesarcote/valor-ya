@@ -64,7 +64,7 @@ export class Breadcrumb {
         this.breadcrumbs.set([
           baseBreadcrumb,
           {
-            label: 'Test',
+            label: 'Valor ya',
           },
         ]);
         break;

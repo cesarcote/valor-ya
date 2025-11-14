@@ -116,8 +116,7 @@ export class PaymentComponent implements OnInit {
             console.log('URL de pago generada:', paymentUrl);
 
             if (paymentUrl) {
-              // Redirigir a la pasarela de pago externa
-              //window.location.href = paymentUrl;
+              window.open(paymentUrl, '_blank');
               this.router.navigate(['/test/pago-status/success']);
             }
           }
