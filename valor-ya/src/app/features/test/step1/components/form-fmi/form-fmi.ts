@@ -16,12 +16,12 @@ export interface FmiData {
 }
 
 @Component({
-  selector: 'app-form-fmi',
+  selector: 'app-test-form-fmi',
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, SelectComponent],
   templateUrl: './form-fmi.html',
   styleUrls: ['./form-fmi.css'],
 })
-export class FormFmiComponent implements OnInit {
+export class TestFormFmiComponent implements OnInit {
   @Output() consultar = new EventEmitter<FmiData>();
 
   private parametricasService = inject(ParametricasService);

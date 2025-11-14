@@ -15,12 +15,12 @@ export interface AddressData {
 }
 
 @Component({
-  selector: 'app-form-address',
+  selector: 'app-test-form-address',
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, SelectComponent],
   templateUrl: './form-address.html',
   styleUrls: ['./form-address.css'],
 })
-export class FormAddressComponent implements OnInit {
+export class TestFormAddressComponent implements OnInit {
   @Output() consultar = new EventEmitter<AddressData>();
 
   private parametricasService = inject(ParametricasService);

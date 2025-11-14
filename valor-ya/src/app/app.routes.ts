@@ -77,7 +77,7 @@ export const routes: Routes = [
         title: 'Test - Seleccionar',
         loadComponent: () =>
           import('./features/test/step1/search-forms/search-forms').then(
-            (m) => m.SearchFormsComponent
+            (m) => m.TestSearchFormsComponent
           ),
       },
       {

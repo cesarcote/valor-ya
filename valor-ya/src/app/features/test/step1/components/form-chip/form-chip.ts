@@ -15,12 +15,12 @@ export interface ChipData {
 }
 
 @Component({
-  selector: 'app-form-chip',
+  selector: 'app-test-form-chip',
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, SelectComponent],
   templateUrl: './form-chip.html',
   styleUrls: ['./form-chip.css'],
 })
-export class FormChipComponent implements OnInit {
+export class TestFormChipComponent implements OnInit {
   @Output() consultar = new EventEmitter<ChipData>();
 
   private parametricasService = inject(ParametricasService);

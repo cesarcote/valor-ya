@@ -5,25 +5,25 @@ import { TestStateService, TipoBusqueda } from '../../../../core/services/test-s
 import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/tabs/tabs';
-import { FormChipComponent, ChipData } from '../components/form-chip/form-chip';
-import { FormAddressComponent, AddressData } from '../components/form-address/form-address';
-import { FormFmiComponent, FmiData } from '../components/form-fmi/form-fmi';
+import { TestFormChipComponent, ChipData } from '../components/form-chip/form-chip';
+import { TestFormAddressComponent, AddressData } from '../components/form-address/form-address';
+import { TestFormFmiComponent, FmiData } from '../components/form-fmi/form-fmi';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 @Component({
-  selector: 'app-search-forms',
+  selector: 'app-test-search-forms',
   imports: [
     StepperComponent,
     TabsComponent,
-    FormChipComponent,
-    FormAddressComponent,
-    FormFmiComponent,
+    TestFormChipComponent,
+    TestFormAddressComponent,
+    TestFormFmiComponent,
     ValoryaDescription,
   ],
   templateUrl: './search-forms.html',
   styleUrls: ['./search-forms.css'],
 })
-export class SearchFormsComponent {
+export class TestSearchFormsComponent {
   private router = inject(Router);
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
