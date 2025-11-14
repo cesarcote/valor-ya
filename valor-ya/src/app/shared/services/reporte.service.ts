@@ -15,9 +15,6 @@ export class ReporteService {
   generarReporteValorYa(data: ReporteValorYaRequest): Observable<Blob> {
     const url = `${this.API_BASE_URL}/api/reportes/valorya-completo/pdf`;
 
-    console.log('🚀 [Reporte Service] Generando reporte ValorYa completo');
-    console.log('📦 [Reporte Service] Datos:', data);
-
     return this.http.post(url, data, { responseType: 'blob' }).pipe(
       timeout(60000), // 1 minuto para generación de PDF
       catchError((error) => {

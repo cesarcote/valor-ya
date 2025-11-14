@@ -17,9 +17,6 @@ export class MCMValorYaService {
     const url = `/api/procesar-chips/chip-unico`;
     const body = { chip };
 
-    console.log('🚀 [MCM Service] Llamando a:', url);
-    console.log('📦 [MCM Service] Body:', body);
-
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
       timeout(3000), // Aumentar timeout a 2 minutos para peticiones muy pesadas
       catchError((error) => {

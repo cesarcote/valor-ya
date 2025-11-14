@@ -66,7 +66,6 @@ export class TestFormFmiComponent implements OnInit {
     this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
       this.tiposUnidad.set(tipos);
 
-
       const options: SelectOption[] = tipos.map((tipo) => ({
         value: tipo.codigoUnidad,
         label: tipo.descripcionUnidad,
