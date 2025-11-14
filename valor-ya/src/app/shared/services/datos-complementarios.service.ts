@@ -26,15 +26,6 @@ export class DatosComplementariosService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    try {
-      console.log(
-        '[DatosComplementariosService] Enviando payload a',
-        this.apiUrl,
-        JSON.stringify(datos)
-      );
-    } catch (e) {
-      console.log('[DatosComplementariosService] Enviando payload (no serializable)', datos);
-    }
 
     return this.http
       .post<DatosComplementariosResponse | DatosComplementarios>(this.apiUrl, datos, {

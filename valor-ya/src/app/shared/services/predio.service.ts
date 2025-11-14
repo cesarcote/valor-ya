@@ -72,7 +72,6 @@ export class PredioService {
 
     return this.http.get<CatastroResponse>(url, { params }).pipe(
       map((response: CatastroResponse) => {
-        console.log('✅ Respuesta exitosa de la API');
 
         if (response.success && response.data && response.data.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, chip, 'chip');

@@ -51,10 +51,18 @@
         <div class="form-row">
           <app-input
             type="text"
-            id="nombreCompleto"
-            label="Nombre Completo / Razón Social "
-            [formCtr]="nombreCompletoControl"
-            placeholder="Ej: Juan Pérez"
+            id="nombre"
+            label="Nombre"
+            [formCtr]="nombreControl"
+            placeholder="Ej: Juan"
+          ></app-input>
+
+          <app-input
+            type="text"
+            id="apellidos"
+            label="Apellidos"
+            [formCtr]="apellidosControl"
+            placeholder="Ej: Pérez García"
           ></app-input>
         </div>
 
