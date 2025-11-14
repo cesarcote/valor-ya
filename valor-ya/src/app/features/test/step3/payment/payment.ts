@@ -101,7 +101,7 @@ export class PaymentComponent implements OnInit {
         order: {
           dev_reference: this.paymentService.generateReference('TEST'),
           description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD',
-          amount: 81345000,
+          amount: 81308563,
           installments_type: 0,
           currency: 'COP',
         },

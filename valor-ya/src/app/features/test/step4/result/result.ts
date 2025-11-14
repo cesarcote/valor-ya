@@ -102,7 +102,7 @@ export class ResultComponent implements OnInit {
             POINT_Y_PREDIO: 3.71021333,
             PUNTAJE_OFERTA: 73,
             PUNTAJE_PREDIO: 49,
-            VALOR_AVALUO_PREDIO: 81345000,
+            VALOR_AVALUO_PREDIO: 81308563,
             VALOR_INTEGRAL_OFERTA: 2213399.5,
             VALOR_INTEGRAL_PREDIO: 5095842.5,
             VETUSTEZ_OFERTA: 1999,
