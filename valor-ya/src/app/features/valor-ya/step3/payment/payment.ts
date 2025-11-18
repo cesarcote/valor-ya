@@ -14,6 +14,8 @@ import {
   ValorYaStepperService,
   ValorYaStep,
 } from '../../../../core/services/valor-ya-stepper.service';
+import { PaymentService } from '../../../../core/services/payment.service';
+import { PaymentUser, PaymentOrder } from '../../../../core/models/payment.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -41,6 +43,7 @@ export class PaymentComponent implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private apiService = inject(MCMValorYaService);
+  private paymentService = inject(PaymentService);
 
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
@@ -76,7 +79,8 @@ export class PaymentComponent implements OnInit {
     this.facturacionForm = this.fb.group({
       tipoDocumento: ['', Validators.required],
       numeroDocumento: ['', [Validators.required, Validators.minLength(5)]],
-      nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      apellidos: ['', [Validators.required, Validators.minLength(2)]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       ciudad: ['', [Validators.required, Validators.minLength(3)]],
       telefono: ['', [Validators.required, Validators.minLength(7)]],
@@ -88,26 +92,46 @@ export class PaymentComponent implements OnInit {
     if (this.facturacionForm.valid) {
       this.isSubmitting.set(true);
       this.errorMessage.set(null);
-      console.log('Datos de facturación:', this.facturacionForm.value);
 
-      const facturacionData = this.facturacionForm.value;
+      const formData = this.facturacionForm.value;
 
-      setTimeout(() => {
-        console.log('Pago procesado exitosamente');
+      const paymentData: { user: PaymentUser; order: PaymentOrder } = {
+        user: {
+          id: formData.numeroDocumento,
+          email: formData.email,
+          name: formData.nombre,
+          last_name: formData.apellidos,
+        },
+        order: {
+          dev_reference: this.paymentService.generateReference('VALOR_YA'),
+          description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD',
+          amount: 30000,
+          installments_type: 0,
+          currency: 'COP',
+        },
+      };
 
-        const predioData = this.stateService.predioData();
-        if (!predioData?.chip) {
-          console.error('No se encontró el chip del predio');
+      this.paymentService.initiatePayment(paymentData, 'valor-ya').subscribe({
+        next: (response) => {
+          console.log('Respuesta del pago:', response);
+
+          if (response.success) {
+            const paymentUrl = this.paymentService.getPaymentUrl(response);
+
+            if (paymentUrl) {
+              window.open(paymentUrl, '_blank');
+              this.router.navigate(['/valor-ya/pago-status/success']);
+            }
+          }
+
           this.isSubmitting.set(false);
-          this.errorMessage.set(
-            'No se encontró información del predio. Por favor, regrese e intente nuevamente.'
-          );
-          return;
-        }
-
-        this.isSubmitting.set(false);
-        this.router.navigate(['/valor-ya/respuesta']);
-      }, 2000);
+        },
+        error: (error) => {
+          console.error('Error al procesar el pago:', error);
+          this.errorMessage.set('Error al procesar el pago. Intente nuevamente.');
+          this.isSubmitting.set(false);
+        },
+      });
     } else {
       this.errorMessage.set('Por favor, complete todos los campos requeridos correctamente.');
       Object.keys(this.facturacionForm.controls).forEach((key) => {
@@ -149,8 +173,12 @@ export class PaymentComponent implements OnInit {
     return this.facturacionForm.get('numeroDocumento') as FormControl;
   }
 
-  get nombreCompletoControl() {
-    return this.facturacionForm.get('nombreCompleto') as FormControl;
+  get nombreControl() {
+    return this.facturacionForm.get('nombre') as FormControl;
+  }
+
+  get apellidosControl() {
+    return this.facturacionForm.get('apellidos') as FormControl;
   }
 
   get direccionControl() {

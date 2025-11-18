@@ -125,31 +125,12 @@
   color: #feb400;
 }
 
-.actions-section {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-.actions-section app-button {
-  min-width: 180px;
-}
-
 /* Custom actions section for container-content */
 .actions-section-custom {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-.actions-section-custom app-button {
-  min-width: 180px;
+  margin-top: 2.5rem;
 }
 
 .loading-section,

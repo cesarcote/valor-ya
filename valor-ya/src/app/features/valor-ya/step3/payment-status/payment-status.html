@@ -1,4 +1,15 @@
-<app-container-content>
+<app-valorya-description></app-valorya-description>
+<app-stepper></app-stepper>
+
+<app-container-content
+  [title]="'Estado del Pago'"
+  [showContinueButton]="!!currentConfig().primaryAction"
+  [showBackButton]="!!currentConfig().secondaryAction"
+  [continueButtonText]="currentConfig().primaryAction.label"
+  [backButtonText]="currentConfig().secondaryAction?.label || ''"
+  (continuar)="onPrimaryAction()"
+  (volver)="onSecondaryAction()"
+>
   <div class="payment-status-container">
     <!-- Loading State -->
     @if (isLoading()) {
@@ -63,39 +74,6 @@
         </div>
       </div>
       }
-
-      <!-- Predio Information (solo para éxito) -->
-      @if (status() === 'success' && getPredioInfo()) {
-      <div class="predio-summary">
-        <h3 class="details-title">Información del Predio</h3>
-        <div class="details-grid">
-          @if (getPredioInfo()?.chip) {
-          <div class="detail-item">
-            <span class="detail-label">CHIP:</span>
-            <span class="detail-value">{{ getPredioInfo()?.chip }}</span>
-          </div>
-          } @if (getPredioInfo()?.direccion) {
-          <div class="detail-item">
-            <span class="detail-label">Dirección:</span>
-            <span class="detail-value">{{ getPredioInfo()?.direccion }}</span>
-          </div>
-          }
-        </div>
-      </div>
-      }
-
-      <!-- Action Buttons -->
-      <div class="actions-container">
-        <button class="btn btn-primary" (click)="onPrimaryAction()" type="button">
-          {{ currentConfig().primaryAction.label }}
-        </button>
-
-        @if (currentConfig().secondaryAction) {
-        <button class="btn btn-secondary" (click)="onSecondaryAction()" type="button">
-          {{ currentConfig().secondaryAction!.label }}
-        </button>
-        }
-      </div>
 
       <!-- Help Text -->
       <div class="help-text">

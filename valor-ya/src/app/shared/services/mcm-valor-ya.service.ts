@@ -18,7 +18,7 @@ export class MCMValorYaService {
     const body = { chip };
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
-      timeout(3000), // Aumentar timeout a 2 minutos para peticiones muy pesadas
+      timeout(3000),
       catchError((error) => {
         console.error('❌ [MCM Service] Error en procesarChip:', error);
         throw error;

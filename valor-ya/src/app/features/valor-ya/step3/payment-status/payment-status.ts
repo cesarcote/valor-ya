@@ -3,7 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import {
+  ValorYaStepperService,
+  ValorYaStep,
+} from '../../../../core/services/valor-ya-stepper.service';
+import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 
 type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 
@@ -32,13 +38,14 @@ interface StatusConfig {
 @Component({
   selector: 'app-payment-status',
   standalone: true,
-  imports: [CommonModule, ContainerContentComponent],
+  imports: [CommonModule, StepperComponent, ValoryaDescription, ContainerContentComponent],
   templateUrl: './payment-status.html',
   styleUrls: ['./payment-status.css'],
 })
 export class PaymentStatusComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
 
   status = signal<PaymentStatus>('pending');
@@ -98,6 +105,7 @@ export class PaymentStatusComponent implements OnInit {
   paymentData = signal<PaymentData>({});
 
   ngOnInit(): void {
+    this.stepperService.setStep(ValorYaStep.PROCESO);
     this.loadPaymentStatus();
   }
 
