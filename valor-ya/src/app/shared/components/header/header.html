@@ -9,10 +9,10 @@
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-lg py-3">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="/" rel="home" title="Inicio">
-        <img alt="Inicio" class="logo" src="assets/images/logo.svg" />
+        <img alt="Inicio" class="logo" src="assets/images/logo.png" />
       </a>
 
       <button
@@ -39,22 +39,202 @@
             <a class="nav-link" href="#">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Transparencia y acceso a la información pública</a>
+            <a
+              class="nav-link"
+              href="{{ baseUrl }}transparencia-y-acceso-a-la-informacion-publica"
+              target="_blank"
+              >Transparencia y acceso a la información pública</a
+            >
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="atencionDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Atención y Servicios a la ciudadanía <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="atencionDropdown">
+              <li><a class="dropdown-item" href="{{ baseUrl }}Catia">Catia</a></li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}tramites-y-servicios"
+                  >Trámites & Servicios</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}agenda-a-un-clic">Agenda a un clic</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sedes-y-horarios">Sedes y horarios</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}canal/catastro-en-linea"
+                  >Catastro en línea</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}canal/tienda-virtual">Tienda Virtual</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}canal/tienda-catastral-planoteca"
+                  >Tienda Catastral & Planoteca</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}canal/canal-telefonico"
+                  >Canal Telefónico</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}canal/canal-escrito">Canal Escrito</a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}solicitudes-peticiones-quejas-reclamos-y-denuncias"
+                  >Peticiones, Quejas, Reclamos, Solicitudes</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}canal/ventanilla-unica-de-la-construccion"
+                  >VUC - Ventanilla Única de Construcción</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{
+                    baseUrl
+                  }}contacto/derechos-de-los-ciudadanos-y-medios-para-garantizarles-o-carta-de-trato-digno"
+                  >Carta de Trato Digno a la Ciudadanía</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}atencion-y-servicios-a-la-ciudadania/defensor-del-ciudadano"
+                  >Defensor del Ciudadano</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}medicion-de-satisfaccion"
+                  target="_blank"
+                  >Medición de satisfacción</a
+                >
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Atención y Servicios a la ciudadanía</a>
+            <a class="nav-link" href="{{ baseUrl }}participa" target="_blank">Participa</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Participa</a>
+            <a class="nav-link" href="{{ baseUrl }}prensa" target="_blank">Noticias</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Noticias</a>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="quienesSomosDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              ¿Quiénes somos? <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="quienesSomosDropdown">
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sobre-catastro/mision-y-vision"
+                  >Misión y visión</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}sobre-catastro/organigrama-y-equipo-directivo"
+                  >Organigrama y equipo directivo</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sobre-catastro/direccion">Dirección</a>
+              </li>
+              <li><a class="dropdown-item" href="{{ baseUrl }}planeacion">Planeación</a></li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sobre-catastro/historia">Historia</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sobre-catastro/gestion-por-procesos"
+                  >Gestión por procesos</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}sobre-catastro/gestion-ambiental"
+                  >Gestión ambiental</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}presupuesto"
+                  >Información financiera y contable</a
+                >
+              </li>
+              <li><a class="dropdown-item" href="{{ baseUrl }}contratacion">Contratación</a></li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}control/informes-pormenorizados"
+                  >Informes de gestión</a
+                >
+              </li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">¿Quiénes somos?</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Portafolio</a>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="portafolioDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Portafolio <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="portafolioDropdown">
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}Portafolio_Productos_Servicios"
+                  >Portafolio Productos y Servicios</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://gocatastral.catastrobogota.gov.co/"
+                  target="_blank"
+                  >Go Catastral</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="https://www.ideca.gov.co/" target="_blank">IDECA</a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{ baseUrl }}observatorio-catastral/observatorio-tecnico-catastral"
+                  >Observatorio Técnico Catastral</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}recurso/censo-inmobiliario"
+                  >Censo Inmobiliario</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ baseUrl }}recurso/nomenclatura">Nomenclatura</a>
+              </li>
+            </ul>
           </li>
         </ul>
 

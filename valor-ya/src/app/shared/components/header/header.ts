@@ -9,4 +9,5 @@ import { PageHeader } from '../page-header/page-header';
 })
 export class Header {
   title = 'ValorYa';
+  baseUrl = 'https://www.catastrobogota.gov.co/';
 }
