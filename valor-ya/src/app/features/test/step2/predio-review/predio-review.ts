@@ -33,6 +33,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
+  private mcmMapService = inject(McmMapService);
 
   private mapComponent?: MapComponent;
 
