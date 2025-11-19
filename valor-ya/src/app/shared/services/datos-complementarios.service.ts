@@ -13,159 +13,96 @@ import { currentEnvironment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class DatosComplementariosService {
-  private readonly apiUrl = `${currentEnvironment.baseUrl}/datos-complementarios`;
+  private readonly apiUrl = `${currentEnvironment.baseUrl}/emails/html`;
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Registra nuevos datos complementarios para un predio
-   * @param datos Datos complementarios a registrar
-   * @returns Observable con la respuesta del servidor
+   * Envía los datos complementarios por correo electrónico para simular el registro
+   * @param datos Datos complementarios a enviar
+   * @returns Observable con los datos "guardados" (mock)
    */
-  registrarDatos(datos: DatosComplementariosRequest): Observable<DatosComplementarios> {
+  enviarDatosPorCorreo(datos: DatosComplementariosRequest): Observable<DatosComplementarios> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
+    const contenidoHtml = this.generarContenidoHtml(datos);
+
+    const emailRequest = {
+      para: 'ccote@catastrobogota.gov.co',
+      asunto: `Nuevos Datos Complementarios - Lote: ${datos.loteId}`,
+      contenidoHtml: contenidoHtml,
+    };
+
     return this.http
-      .post<DatosComplementariosResponse | DatosComplementarios>(this.apiUrl, datos, {
+      .post<any>(this.apiUrl, emailRequest, {
         headers,
         timeout: 60000,
       })
       .pipe(
-        map((response: DatosComplementariosResponse | DatosComplementarios) => {
-          if (response && typeof response === 'object' && 'success' in response) {
-            const resp = response as DatosComplementariosResponse;
-            if (resp.success && resp.data) {
-              return resp.data;
-            } else {
-              throw new Error(resp.message || 'Error al registrar los datos complementarios');
-            }
+        map((response) => {
+          if (response && response.success) {
+            return {
+              ...datos,
+              id: Math.floor(Math.random() * 1000),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            } as DatosComplementarios;
           } else {
-            return response as DatosComplementarios;
+            throw new Error(response.message || 'Error al enviar el correo');
           }
         }),
         catchError((error: any) => {
-          console.error('Error en registrarDatos:', error);
+          console.error('Error en enviarDatosPorCorreo:', error);
           throw new Error(
-            `Error al registrar datos complementarios: ${error.message || 'Error desconocido'}`
+            `Error al enviar datos por correo: ${error.message || 'Error desconocido'}`
           );
         })
       );
   }
 
-  /**
-   * Obtiene datos complementarios por Lote ID
-   * @param loteId Lote ID del predio
-   * @returns Observable con los datos complementarios
-   */
-  obtenerPorLoteId(loteId: string): Observable<DatosComplementarios> {
-    return this.http.get<DatosComplementariosResponse>(`${this.apiUrl}/${loteId}`).pipe(
-      map((response: DatosComplementariosResponse) => {
-        if (response.success && response.data) {
-          return response.data;
-        } else {
-          throw new Error(response.message || 'No se encontraron datos complementarios');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('Error en obtenerPorLoteId:', error);
-        throw new Error(
-          `Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`
-        );
-      })
-    );
-  }
+  private generarContenidoHtml(datos: DatosComplementariosRequest): string {
+    let html = `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #0056b3;">Nuevos Datos Complementarios Registrados</h2>
+        <p>Se han recibido los siguientes datos para el predio con Lote ID: <strong>${datos.loteId}</strong></p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <tr style="background-color: #f2f2f2;">
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Campo</th>
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Valor</th>
+          </tr>
+    `;
 
-  /**
-   * Actualiza datos complementarios existentes
-   * @param id ID del registro a actualizar
-   * @param datos Datos a actualizar
-   * @returns Observable con los datos actualizados
-   */
-  actualizarDatos(
-    id: number,
-    datos: Partial<DatosComplementariosRequest>
-  ): Observable<DatosComplementarios> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
+    const campos: { [key: string]: any } = {
+      'Tipo de Predio': datos.tipoPredio,
+      'Número de Habitaciones': datos.numeroHabitaciones,
+      'Número de Baños': datos.numeroBanos,
+      'Área Construida': datos.areaConstruida,
+      Edad: datos.edad,
+      Estrato: datos.estrato,
+      'Número de Ascensores': datos.numeroAscensores,
+      'Número de Parqueaderos': datos.numeroParqueaderos,
+      'Número de Depósitos': datos.numeroDepositos,
+    };
 
-    return this.http
-      .put<DatosComplementariosResponse>(`${this.apiUrl}/${id}`, datos, { headers })
-      .pipe(
-        map((response: DatosComplementariosResponse) => {
-          if (response.success && response.data) {
-            return response.data;
-          } else {
-            throw new Error(response.message || 'Error al actualizar los datos complementarios');
-          }
-        }),
-        catchError((error: any) => {
-          console.error('Error en actualizarDatos:', error);
-          throw new Error(
-            `Error al actualizar datos complementarios: ${error.message || 'Error desconocido'}`
-          );
-        })
-      );
-  }
-
-  /**
-   * Elimina datos complementarios por ID
-   * @param id ID del registro a eliminar
-   * @returns Observable con la confirmación
-   */
-  eliminarDatos(id: number): Observable<boolean> {
-    return this.http.delete<DatosComplementariosResponse>(`${this.apiUrl}/${id}`).pipe(
-      map((response: DatosComplementariosResponse) => {
-        if (response.success) {
-          return true;
-        } else {
-          throw new Error(response.message || 'Error al eliminar los datos complementarios');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('Error en eliminarDatos:', error);
-        throw new Error(
-          `Error al eliminar datos complementarios: ${error.message || 'Error desconocido'}`
-        );
-      })
-    );
-  }
-
-  /**
-   * Obtiene todos los datos complementarios (con paginación opcional)
-   * @param page Página (opcional)
-   * @param limit Límite por página (opcional)
-   * @returns Observable con la lista de datos complementarios
-   */
-  obtenerTodos(page?: number, limit?: number): Observable<DatosComplementarios[]> {
-    let url = this.apiUrl;
-    const params: string[] = [];
-
-    if (page) params.push(`page=${page}`);
-    if (limit) params.push(`limit=${limit}`);
-
-    if (params.length > 0) {
-      url += `?${params.join('&')}`;
+    for (const [key, value] of Object.entries(campos)) {
+      if (value !== undefined && value !== null) {
+        html += `
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">${key}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${value}</td>
+          </tr>
+        `;
+      }
     }
 
-    return this.http
-      .get<{ success: boolean; data: DatosComplementarios[]; message?: string }>(url)
-      .pipe(
-        map((response) => {
-          if (response.success && response.data) {
-            return response.data;
-          } else {
-            throw new Error(response.message || 'Error al obtener los datos complementarios');
-          }
-        }),
-        catchError((error: any) => {
-          console.error('Error en obtenerTodos:', error);
-          throw new Error(
-            `Error al obtener datos complementarios: ${error.message || 'Error desconocido'}`
-          );
-        })
-      );
+    html += `
+        </table>
+        <p style="margin-top: 20px; font-size: 12px; color: #777;">Este es un correo generado automáticamente por el sistema Valor Ya.</p>
+      </div>
+    `;
+
+    return html;
   }
 }

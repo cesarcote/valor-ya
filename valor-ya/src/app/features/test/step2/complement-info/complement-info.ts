@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService } from '../../services/test-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
-import { McmService } from '../../../../shared/services/mcm.service';
+import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
@@ -37,7 +37,7 @@ export class ComplementInfo implements OnInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private parametricasService = inject(ParametricasService);
-  private mcmService = inject(McmService);
+  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
 
   complementForm!: FormGroup;
   isLoading = signal(false);
@@ -138,8 +138,8 @@ export class ComplementInfo implements OnInit {
           formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
 
-      this.mcmService
-        .consultarMCM({
+      this.solicitudDatosService
+        .enviarSolicitudDatos({
           loteId: predioData.loteid!,
           datosEndpoint: predioData,
           datosUsuario,

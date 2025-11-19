@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
-import { McmService } from '../../../../shared/services/mcm.service';
+import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
@@ -35,7 +35,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
-  private mcmService = inject(McmService);
+  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
   private mcmValorYaService = inject(MCMValorYaService);
 
   private mapComponent?: MapComponent;
@@ -190,8 +190,8 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
     const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
 
-    this.mcmService
-      .consultarMCM({
+    this.solicitudDatosService
+      .enviarSolicitudDatos({
         loteId: predio.loteid!,
         datosEndpoint: predio,
         tipoUnidad: tipoUnidad?.descripcionUnidad,

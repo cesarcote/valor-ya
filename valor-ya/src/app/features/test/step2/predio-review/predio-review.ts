@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
-import { McmService } from '../../../../shared/services/mcm.service';
+import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
@@ -35,7 +35,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
-  private mcmService = inject(McmService);
+  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
   private mcmTestService = inject(MCMValorYaService);
 
   private mapComponent?: MapComponent;
@@ -196,24 +196,30 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
     const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
 
-    this.mcmService
-      .consultarMCM({
-        loteId: predio.loteid!,
-        datosEndpoint: predio,
-        tipoUnidad: tipoUnidad?.descripcionUnidad,
-      })
-      .subscribe({
-        next: (datosGuardados) => {
-          this.stateService.setDatosComplementarios(datosGuardados);
-          this.isProcessingMCM.set(false);
-          this.stepperService.setStep(TestStep.PROCESO);
-          this.router.navigate(['/test/pago']);
-        },
-        error: (error) => {
-          this.errorMessage.set(`Error al procesar los datos: ${error.message}`);
-          this.isProcessingMCM.set(false);
-        },
-      });
+    // En test, no enviamos correo - solo guardamos datos mock en el estado
+    const datosMock = {
+      id: Date.now(),
+      loteId: predio.loteid!,
+      tipoPredio: tipoUnidad?.descripcionUnidad || 'No especificado',
+      numeroHabitaciones: undefined,
+      numeroBanos: undefined,
+      areaConstruida: undefined,
+      edad: undefined,
+      estrato: undefined,
+      numeroAscensores: undefined,
+      numeroParqueaderos: undefined,
+      numeroDepositos: undefined,
+      fechaCreacion: new Date().toISOString(),
+      fechaActualizacion: new Date().toISOString(),
+    };
+
+    // Simulamos un pequeño delay para mantener la UX consistente
+    setTimeout(() => {
+      this.stateService.setDatosComplementarios(datosMock);
+      this.isProcessingMCM.set(false);
+      this.stepperService.setStep(TestStep.PROCESO);
+      this.router.navigate(['/test/pago']);
+    }, 300);
   }
 
   onVolver(): void {
