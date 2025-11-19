@@ -11,22 +11,23 @@ import { Router } from '@angular/router';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
-import { McmService } from '../../../../shared/services/mcm.service';
+import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
   selector: 'app-complement-info',
   imports: [
     ReactiveFormsModule,
     StepperComponent,
-    ButtonComponent,
     InputComponent,
     SelectComponent,
     ValoryaDescription,
+    ContainerContentComponent,
   ],
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],
@@ -37,7 +38,8 @@ export class ComplementInfo implements OnInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private parametricasService = inject(ParametricasService);
-  private mcmService = inject(McmService);
+  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
+  private notificationService = inject(NotificationService);
 
   complementForm!: FormGroup;
   isLoading = signal(false);
@@ -46,7 +48,7 @@ export class ComplementInfo implements OnInit {
   opcionesTipoUnidad = signal<SelectOption[]>([]);
 
   ngOnInit(): void {
-    this.stepperService.setStep(ValorYaStep.PROCESO);
+    this.stepperService.setStep(ValorYaStep.SOLICITUD);
     this.initForm();
     this.loadTiposPredio();
     this.loadTipoUnidadFromStorage();
@@ -58,7 +60,6 @@ export class ComplementInfo implements OnInit {
       this.complementForm.patchValue({
         tipoPredio: tipoUnidadEnMemoria.codigoUnidad,
       });
-      this.complementForm.get('tipoPredio')?.disable();
     }
   }
 
@@ -97,7 +98,7 @@ export class ComplementInfo implements OnInit {
   }
 
   onVolver(): void {
-    this.router.navigate(['/valor-ya/pago']);
+    this.router.navigate(['/valor-ya/seleccionar']);
   }
 
   onConsultarMCM(): void {
@@ -138,8 +139,8 @@ export class ComplementInfo implements OnInit {
           formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
 
-      this.mcmService
-        .consultarMCM({
+      this.solicitudDatosService
+        .enviarSolicitudDatos({
           loteId: predioData.loteid!,
           datosEndpoint: predioData,
           datosUsuario,
@@ -149,11 +150,12 @@ export class ComplementInfo implements OnInit {
           next: (datosGuardados) => {
             this.stateService.setDatosComplementarios(datosGuardados);
             this.isLoading.set(false);
+            this.notificationService.success('Datos enviados correctamente por correo electrónico');
             this.stepperService.setStep(ValorYaStep.RESPUESTA);
-            this.router.navigate(['/valor-ya/pago']);
+            this.router.navigate(['/valor-ya/seleccionar']);
           },
           error: (error) => {
-            this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
+            this.notificationService.error(`Error al enviar correo: ${error.message}`);
             this.isLoading.set(false);
           },
         });

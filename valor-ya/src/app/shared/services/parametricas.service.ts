@@ -14,7 +14,7 @@ export class ParametricasService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Consulta los tipos de unidad disponibles
+   * Consulta para tipos de predios
    * @returns Observable con la lista de tipos de unidad
    */
   consultarTiposUnidad(): Observable<TipoUnidad[]> {

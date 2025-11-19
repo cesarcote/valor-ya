@@ -19,7 +19,7 @@ export interface DatosUsuario {
   numeroDepositos?: number;
 }
 
-export interface McmConsultaOptions {
+export interface SolicitudDatosOptions {
   loteId: string;
   datosEndpoint?: PredioData;
   datosUsuario?: DatosUsuario;
@@ -29,15 +29,15 @@ export interface McmConsultaOptions {
 @Injectable({
   providedIn: 'root',
 })
-export class McmService {
+export class SolicitudDatosComplementariosService {
   private datosComplementariosService = inject(DatosComplementariosService);
 
-  consultarMCM(options: McmConsultaOptions): Observable<DatosComplementarios> {
+  enviarSolicitudDatos(options: SolicitudDatosOptions): Observable<DatosComplementarios> {
     const payload = this.construirPayload(options);
-    return this.datosComplementariosService.registrarDatos(payload);
+    return this.datosComplementariosService.enviarDatosPorCorreo(payload);
   }
 
-  private construirPayload(options: McmConsultaOptions): DatosComplementariosRequest {
+  private construirPayload(options: SolicitudDatosOptions): DatosComplementariosRequest {
     const { loteId, datosEndpoint, datosUsuario, tipoUnidad } = options;
 
     const datosDesdeEndpoint = datosEndpoint ? this.extraerDatosDePredio(datosEndpoint) : {};

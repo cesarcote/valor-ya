@@ -1,4 +1,5 @@
 import { Component, inject, Optional, signal, effect } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ValorYaStepperService } from '../../../features/valor-ya/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../features/avaluos-en-garantia/services/avaluos-stepper.service';
@@ -17,15 +18,30 @@ export class StepperComponent {
   progressPercentage = signal('15%');
 
   constructor(
+    private router: Router,
     @Optional() private valorYaStepperService: ValorYaStepperService,
     @Optional() private avaluosStepperService: AvaluosStepperService,
     @Optional() private testStepperService: TestStepperService
   ) {
-    this.stepperService =
-      this.testStepperService || this.avaluosStepperService || this.valorYaStepperService;
+    const url = this.router.url;
+
+    switch (true) {
+      case url.includes('/valor-ya'):
+        this.stepperService = this.valorYaStepperService;
+        break;
+      case url.includes('/avaluos'):
+        this.stepperService = this.avaluosStepperService;
+        break;
+      case url.includes('/test'):
+        this.stepperService = this.testStepperService;
+        break;
+      default:
+        this.stepperService =
+          this.valorYaStepperService || this.avaluosStepperService || this.testStepperService;
+        break;
+    }
 
     if (this.stepperService) {
-      // Use effect to react to signal changes
       effect(() => {
         const step = this.stepperService.currentStep();
         const percentage = this.stepperService.progressPercentage();
