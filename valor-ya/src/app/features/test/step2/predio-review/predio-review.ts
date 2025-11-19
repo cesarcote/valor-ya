@@ -2,11 +2,11 @@ import { Component, inject, OnInit, signal, effect, ViewChild, AfterViewInit } f
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
-import { TestStateService, TipoBusqueda } from '../../../../core/services/test-state.service';
+import { TestStepperService, TestStep } from '../../services/test-stepper.service';
+import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
 import { McmService } from '../../../../shared/services/mcm.service';
-import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
+import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 // import { ButtonComponent } from '../../../../shared/components/button/button';

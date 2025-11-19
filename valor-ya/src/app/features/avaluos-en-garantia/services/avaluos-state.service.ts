@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { TipoUnidad } from '../models/parametricas.model';
+import { TipoUnidad } from '../../../core/models/parametricas.model';
 
 @Injectable({
   providedIn: 'root',

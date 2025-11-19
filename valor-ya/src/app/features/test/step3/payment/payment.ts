@@ -8,9 +8,9 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { TestStateService } from '../../../../core/services/test-state.service';
-import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
-import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
+import { TestStateService } from '../../services/test-state.service';
+import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
+import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';

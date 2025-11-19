@@ -1,8 +1,8 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { PredioData } from '../models/predio-data.model';
-import { DatosComplementarios } from '../models/datos-complementarios.model';
-import { TipoUnidad } from '../models/parametricas.model';
-import { MCMValorYAResultado } from '../models/mcm-valor-ya.model';
+import { PredioData } from '../../../core/models/predio-data.model';
+import { DatosComplementarios } from '../../../core/models/datos-complementarios.model';
+import { TipoUnidad } from '../../../core/models/parametricas.model';
+import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
@@ -13,7 +13,7 @@ export enum TipoBusqueda {
 @Injectable({
   providedIn: 'root',
 })
-export class TestStateService {
+export class ValorYaStateService {
   public readonly tipoBusqueda = signal<TipoBusqueda | undefined>(TipoBusqueda.DIRECCION);
   public readonly valorBusqueda = signal<string | undefined>(undefined);
   public readonly predioData = signal<PredioData | undefined>(undefined);

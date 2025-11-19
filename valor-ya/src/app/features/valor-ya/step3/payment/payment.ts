@@ -8,12 +8,9 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
-import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../../core/services/valor-ya-stepper.service';
+import { ValorYaStateService } from '../../services/valor-ya-state.service';
+import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { PaymentUser, PaymentOrder } from '../../../../core/models/payment.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
