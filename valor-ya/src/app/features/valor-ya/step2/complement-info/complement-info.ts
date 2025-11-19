@@ -12,6 +12,7 @@ import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-step
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
 import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -38,6 +39,7 @@ export class ComplementInfo implements OnInit {
   public stateService = inject(ValorYaStateService);
   private parametricasService = inject(ParametricasService);
   private solicitudDatosService = inject(SolicitudDatosComplementariosService);
+  private notificationService = inject(NotificationService);
 
   complementForm!: FormGroup;
   isLoading = signal(false);
@@ -96,7 +98,7 @@ export class ComplementInfo implements OnInit {
   }
 
   onVolver(): void {
-    this.router.navigate(['/valor-ya/pago']);
+    this.router.navigate(['/valor-ya/seleccionar']);
   }
 
   onConsultarMCM(): void {
@@ -148,11 +150,12 @@ export class ComplementInfo implements OnInit {
           next: (datosGuardados) => {
             this.stateService.setDatosComplementarios(datosGuardados);
             this.isLoading.set(false);
+            this.notificationService.success('Datos enviados correctamente por correo electrónico');
             this.stepperService.setStep(ValorYaStep.RESPUESTA);
-            this.router.navigate(['/valor-ya/pago']);
+            this.router.navigate(['/valor-ya/seleccionar']);
           },
           error: (error) => {
-            this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
+            this.notificationService.error(`Error al enviar correo: ${error.message}`);
             this.isLoading.set(false);
           },
         });

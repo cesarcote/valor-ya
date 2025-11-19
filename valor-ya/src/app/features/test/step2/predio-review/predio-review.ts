@@ -5,11 +5,8 @@ import { Observable } from 'rxjs';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
-import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
-import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-// import { ButtonComponent } from '../../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
@@ -20,7 +17,6 @@ import { ContainerContentComponent } from '../../../../shared/components/contain
   selector: 'app-predio-review',
   imports: [
     StepperComponent,
-    // ButtonComponent,
     PredioInfoCardComponent,
     MapComponent,
     ValoryaDescription,
@@ -35,8 +31,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
-  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
-  private mcmTestService = inject(MCMValorYaService);
 
   private mapComponent?: MapComponent;
 
@@ -139,7 +133,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Informacion complementaria a discusion
   onNoEsCorrecta(): void {
     this.router.navigate(['/test/complementar']);
   }
@@ -152,42 +145,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // For test feature, skip validation and go directly to procesarMCM
     this.procesarMCM(predio);
-
-    /* Comentado para test - validación original de endpoint
-    this.isValidatingAvailability.set(true);
-    this.errorMessage.set('');
-
-    this.mcmTestService.procesarChip(predio.chip).subscribe({
-      next: (response) => {
-        this.isValidatingAvailability.set(false);
-
-        if (response.status !== 'success') {
-          this.showModal.set(true);
-          this.modalTitle.set('Error en verificación');
-          this.modalMessage.set(
-            'No se pudo verificar el status del predio. El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
-          );
-          this.modalIconType.set('error');
-          this.modalButtonText.set('Aceptar');
-          return;
-        }
-
-        this.procesarMCM(predio);
-      },
-      error: (error) => {
-        this.isValidatingAvailability.set(false);
-        this.showModal.set(true);
-        this.modalTitle.set('Error de conexión');
-        this.modalMessage.set(
-          'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
-        );
-        this.modalIconType.set('error');
-        this.modalButtonText.set('Aceptar');
-      },
-    });
-    */
   }
 
   private procesarMCM(predio: PredioData): void {
@@ -196,7 +154,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
     const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
 
-    // En test, no enviamos correo - solo guardamos datos mock en el estado
     const datosMock = {
       id: Date.now(),
       loteId: predio.loteid!,
@@ -213,7 +170,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       fechaActualizacion: new Date().toISOString(),
     };
 
-    // Simulamos un pequeño delay para mantener la UX consistente
     setTimeout(() => {
       this.stateService.setDatosComplementarios(datosMock);
       this.isProcessingMCM.set(false);
