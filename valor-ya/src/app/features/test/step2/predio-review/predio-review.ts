@@ -15,6 +15,8 @@ import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { McmMapService } from '../../services/mcm-map.service';
+import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
 
 @Component({
   selector: 'app-predio-review',
@@ -35,6 +37,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
+  private mcmMapService = inject(McmMapService);
   private mcmService = inject(McmService);
   private mcmTestService = inject(MCMValorYaService);
 
@@ -50,6 +53,9 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       if (data?.coordenadasPoligono) {
         this.updateMapWithData(data);
       }
+
+      // Visualizar MCM Mock inmediatamente (según requerimiento)
+      this.visualizarMcmMock();
     }
   }
 
@@ -224,5 +230,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
   onCloseModal(): void {
     this.showModal.set(false);
+  }
+
+  private visualizarMcmMock(): void {
+    if (this.mapComponent) {
+      this.mcmMapService.visualizarMCM(this.mapComponent, MCM_MOCK_RESPONSE);
+    }
   }
 }

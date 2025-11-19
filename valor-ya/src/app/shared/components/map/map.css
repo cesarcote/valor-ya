@@ -59,3 +59,44 @@
   font-size: 14px;
   color: var(--color-tertiary, #606060);
 }
+
+/* Custom Marker Styles */
+.custom-marker-container {
+  background: transparent;
+  border: none;
+}
+
+.custom-div-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: #e3192f; /* Default color */
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.custom-div-icon::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin: 8px 0 0 8px;
+  background: #fff;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.marker-label {
+  transform: rotate(45deg);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  z-index: 2;
+  margin-bottom: 2px; /* Adjust for visual centering */
+}
