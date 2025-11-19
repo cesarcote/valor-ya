@@ -8,11 +8,8 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../../core/services/valor-ya-stepper.service';
-import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
+import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
 import { McmService } from '../../../../shared/services/mcm.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';

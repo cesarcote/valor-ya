@@ -2,11 +2,8 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../../core/services/valor-ya-stepper.service';
+import { ValorYaStateService } from '../../services/valor-ya-state.service';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';

@@ -2,19 +2,16 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { ValorYaStateService } from '../../../../core/services/valor-ya-state.service';
+import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../../core/services/valor-ya-stepper.service';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { MCMValorYaService } from '../../../../shared/services/mcm-valor-ya.service';
+import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ReporteService } from '../../../../shared/services/reporte.service';
-import { NotificationService } from '../../../../shared/services/notification.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-result',

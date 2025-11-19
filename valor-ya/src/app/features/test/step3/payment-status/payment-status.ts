@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { TestStateService } from '../../../../core/services/test-state.service';
-import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
+import { TestStateService } from '../../services/test-state.service';
+import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';

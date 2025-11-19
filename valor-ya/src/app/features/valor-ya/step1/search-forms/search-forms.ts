@@ -1,14 +1,8 @@
 import { Component, inject, computed } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  ValorYaStateService,
-  TipoBusqueda,
-} from '../../../../core/services/valor-ya-state.service';
-import {
-  ValorYaStepperService,
-  ValorYaStep,
-} from '../../../../core/services/valor-ya-stepper.service';
+import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/tabs/tabs';
 import { FormChipComponent, ChipData } from '../components/form-chip/form-chip';

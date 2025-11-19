@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { TestStepperService, TestStep } from '../../../../core/services/test-stepper.service';
-import { TestStateService } from '../../../../core/services/test-state.service';
+import { TestStepperService, TestStep } from '../../services/test-stepper.service';
+import { TestStateService } from '../../services/test-state.service';
 import { ParametricasService } from '../../../../shared/services/parametricas.service';
 import { McmService } from '../../../../shared/services/mcm.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
