@@ -201,9 +201,15 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
         backgroundColor: '#ffffff',
       });
 
+      const dataUrl = canvas.toDataURL('image/png');
+
+      console.log('=== MAPA EN BASE64 ===');
+      console.log(dataUrl);
+      console.log('======================');
+
       const link = document.createElement('a');
       link.download = `mapa-valoracion-${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
