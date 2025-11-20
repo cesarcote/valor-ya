@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, effect, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -39,22 +39,15 @@ export class PredioReviewComponent implements OnInit {
 
   @ViewChild(TestMapComponent)
   set mapSetter(map: TestMapComponent) {
-    console.log('=== Map Component Setter Called ===', map);
     this.mapComponent = map;
     if (map) {
-      // El mapa acaba de aparecer en el DOM
-      setTimeout(() => {
-        console.log('=== Map is ready, visualizing MCM ===');
-        this.mapReady.set(true);
-        this.visualizarMcmMock();
-      }, 500); // Pequeño delay para asegurar inicialización interna del mapa
+      setTimeout(() => this.visualizarMcmMock(), 300);
     }
   }
 
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
-  public readonly mapReady = signal<boolean>(false);
   public readonly isProcessingMCM = signal<boolean>(false);
   public readonly isValidatingAvailability = signal<boolean>(false);
   public readonly showModal = signal<boolean>(false);
@@ -63,19 +56,7 @@ export class PredioReviewComponent implements OnInit {
   public readonly modalIconType = signal<'success' | 'warning' | 'error'>('warning');
   public readonly modalButtonText = signal<string>('Aceptar');
 
-  constructor() {
-    console.log('=== PredioReviewComponent CONSTRUCTOR ===');
-    effect(() => {
-      const data = this.predioData();
-      const ready = this.mapReady();
-      if (data?.coordenadasPoligono && ready) {
-        console.log('Map ready and data available for polygon');
-      }
-    });
-  }
-
   ngOnInit(): void {
-    console.log('=== PredioReviewComponent ngOnInit ===');
     this.stepperService.setStep(TestStep.SOLICITUD);
 
     const tipo = this.stateService.tipoBusqueda();
@@ -135,7 +116,7 @@ export class PredioReviewComponent implements OnInit {
   onContinuar(): void {
     const predio = this.predioData();
 
-    if (!predio || !predio.loteid || !predio.chip) {
+    if (!predio?.loteid || !predio?.chip) {
       this.errorMessage.set('No hay información completa del predio');
       return;
     }
@@ -184,11 +165,8 @@ export class PredioReviewComponent implements OnInit {
   }
 
   private visualizarMcmMock(): void {
-    console.log('visualizarMcmMock EXECUTING');
     if (this.mapComponent) {
       this.mcmMapService.visualizarMCM(this.mapComponent, MCM_MOCK_RESPONSE);
-    } else {
-      console.error('Map component not found in visualizarMcmMock');
     }
   }
 }

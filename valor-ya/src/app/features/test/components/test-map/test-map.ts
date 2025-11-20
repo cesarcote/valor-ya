@@ -23,9 +23,9 @@ export interface TestMarkerConfig {
   lat: number;
   lng: number;
   popupText?: string;
-  color?: string;
-  number?: number;
   isMain?: boolean;
+  color?: string;
+  markerType?: 'pin' | 'circle';
 }
 
 @Component({
@@ -39,7 +39,7 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
 
   private http = inject(HttpClient);
   private map!: L.Map;
-  private currentMarker?: L.Marker;
+  private markers: L.Marker[] = [];
 
   config = input<TestMapConfig>({
     center: [4.6097, -74.0817],
@@ -64,56 +64,75 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  isMapReady(): boolean {
-    return this.map !== undefined && this.map !== null;
-  }
-
   setView(lat: number, lng: number, zoom?: number): void {
     if (!this.map) return;
 
-    // Forzar redibujado del mapa para asegurar que las tiles se carguen
     this.map.invalidateSize();
-
     const zoomLevel = zoom ?? this.config().zoom ?? 14;
     this.map.setView([lat, lng], zoomLevel);
   }
 
-  invalidateSize(): void {
-    if (this.map) {
-      this.map.invalidateSize();
-    }
-  }
-
   addMarker(config: TestMarkerConfig): void {
-    console.log('TestMapComponent: addMarker called with config:', config);
+    if (!this.map) return;
 
-    if (!this.map) {
-      console.error('TestMapComponent: Map not initialized');
-      return;
+    const { lat, lng, popupText, isMain, color, markerType = 'pin' } = config;
+
+    let marker: L.Marker;
+
+    if (color) {
+      let iconHtml: string;
+      let iconSize: [number, number];
+      let iconAnchor: [number, number];
+      let popupAnchor: [number, number];
+
+      if (markerType === 'circle') {
+        iconHtml = `
+          <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="8" fill="${color}" stroke="#fff" stroke-width="2"/>
+          </svg>
+        `;
+        iconSize = [20, 20];
+        iconAnchor = [10, 10];
+        popupAnchor = [0, -10];
+      } else {
+        iconHtml = `
+          <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+            <path fill="${color}" stroke="#fff" stroke-width="2"
+              d="M12.5 0C5.6 0 0 5.6 0 12.5c0 1.9 0.4 3.7 1.2 5.3L12.5 41l11.3-23.2c0.8-1.6 1.2-3.4 1.2-5.3C25 5.6 19.4 0 12.5 0z"/>
+            <circle cx="12.5" cy="12.5" r="6" fill="#fff"/>
+          </svg>
+        `;
+        iconSize = [25, 41];
+        iconAnchor = [12, 41];
+        popupAnchor = [1, -34];
+      }
+
+      const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: iconHtml,
+        iconSize: iconSize,
+        iconAnchor: iconAnchor,
+        popupAnchor: popupAnchor,
+      });
+      marker = L.marker([lat, lng], { icon: customIcon }).addTo(this.map);
+    } else {
+      marker = L.marker([lat, lng]).addTo(this.map);
     }
 
-    this.clearMarkers();
-
-    const { lat, lng, popupText, isMain } = config;
-
-    console.log(`TestMapComponent: Creating marker at [${lat}, ${lng}]`);
-
-    this.currentMarker = L.marker([lat, lng]).addTo(this.map);
-
-    console.log(`TestMapComponent: Marker added.`);
+    this.markers.push(marker);
 
     if (popupText) {
-      this.currentMarker.bindPopup(popupText);
+      marker.bindPopup(popupText);
       if (isMain) {
-        this.currentMarker.openPopup();
+        marker.openPopup();
       }
     }
   }
 
   clearMarkers(): void {
-    if (this.currentMarker && this.map) {
-      this.map.removeLayer(this.currentMarker);
-      this.currentMarker = undefined;
+    if (this.markers.length > 0 && this.map) {
+      this.markers.forEach((marker) => this.map.removeLayer(marker));
+      this.markers = [];
     }
   }
 
@@ -133,11 +152,6 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
     this.initMarkerIcons();
     this.addCatastroTileLayer();
     this.mapReady.set(true);
-
-    // Asegurar que el mapa se ajuste al contenedor después de un momento
-    setTimeout(() => {
-      this.map.invalidateSize();
-    }, 100);
   }
 
   private initMarkerIcons(): void {
