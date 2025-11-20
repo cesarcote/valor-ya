@@ -1,9 +1,17 @@
 <div class="map-container">
-  @if (isLoading()) {
-  <div class="map-loading">
-    <div class="spinner"></div>
-    <p>Cargando mapa...</p>
-  </div>
-  }
   <div #map class="map"></div>
+
+  <button
+    class="download-btn"
+    (click)="downloadMap()"
+    [disabled]="isLoading()"
+    title="Descargar mapa como imagen">
+    <i class="fas fa-camera"></i>
+  </button>
+
+  @if (isLoading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+  }
 </div>

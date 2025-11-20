@@ -4,6 +4,7 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
+  ViewEncapsulation,
   signal,
   input,
   inject,
@@ -33,6 +34,7 @@ export interface TestMarkerConfig {
   standalone: true,
   templateUrl: './test-map.html',
   styleUrls: ['./test-map.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TestMapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
@@ -182,5 +184,75 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
     this.map.on('zoomend', () => catastroLayer.setOpacity(0.8));
 
     catastroLayer.addTo(this.map);
+  }
+
+  async downloadMap(): Promise<void> {
+    if (!this.mapContainer) return;
+
+    try {
+      this.isLoading.set(true);
+
+      const html2canvas = (await import('html2canvas')).default;
+
+      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      const link = document.createElement('a');
+      link.download = `mapa-valoracion-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error('Error al descargar el mapa:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async captureMapAsBase64(): Promise<string | null> {
+    if (!this.mapContainer) return null;
+
+    try {
+      this.isLoading.set(true);
+
+      const html2canvas = (await import('html2canvas')).default;
+
+      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      return canvas.toDataURL('image/png');
+
+    } catch (error) {
+      console.error('Error al capturar el mapa:', error);
+      return null;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async sendMapToBackend(endpoint: string): Promise<void> {
+    const base64Image = await this.captureMapAsBase64();
+
+    if (!base64Image) {
+      console.error('No se pudo capturar el mapa');
+      return;
+    }
+
+    try {
+      await this.http.post(endpoint, { image: base64Image }).toPromise();
+    } catch (error) {
+      console.error('Error al enviar el mapa al backend:', error);
+      throw error;
+    }
   }
 }
