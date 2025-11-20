@@ -1,0 +1,9 @@
+<div class="map-container">
+  @if (isLoading()) {
+  <div class="map-loading">
+    <div class="spinner"></div>
+    <p>Cargando mapa...</p>
+  </div>
+  }
+  <div #map class="map"></div>
+</div>

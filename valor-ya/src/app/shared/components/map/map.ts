@@ -23,9 +23,6 @@ export interface MarkerConfig {
   lat: number;
   lng: number;
   popupText?: string;
-  color?: string;
-  number?: number;
-  isMain?: boolean;
 }
 
 export interface PolygonConfig {
@@ -46,7 +43,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private http = inject(HttpClient);
   private map!: L.Map;
-  private markers: L.Marker[] = [];
+  private currentMarker?: L.Marker;
   private currentPolygon?: L.Polygon;
 
   config = input<MapConfig>({
@@ -90,51 +87,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   addMarker(markerConfig: MarkerConfig): void {
     if (!this.map) return;
 
-    // Si es un marcador simple, lo tratamos como antes (limpiando el anterior si se desea comportamiento único)
-    // Pero para soportar múltiples, vamos a cambiar la lógica ligeramente.
-    // Si se usa este método genérico, asumimos que es un marcador "principal" o único si no se especifica lo contrario.
-    // Para mantener compatibilidad, si se llama a addMarker, limpiamos los anteriores (comportamiento original)
-    // A MENOS que usemos el nuevo método addColoredMarker.
-
-    this.clearMarkers();
+    this.clearMarker();
 
     const { lat, lng, popupText } = markerConfig;
-    const marker = L.marker([lat, lng]).addTo(this.map);
-    this.markers.push(marker);
+    this.currentMarker = L.marker([lat, lng]).addTo(this.map);
 
     if (popupText) {
-      marker.bindPopup(popupText).openPopup();
-    }
-  }
-
-  addColoredMarker(config: MarkerConfig): void {
-    if (!this.map) return;
-
-    const { lat, lng, popupText, color, number, isMain } = config;
-
-    const markerHtml = `
-      <div class="custom-div-icon" style="background-color: ${color};">
-        <div class="marker-pin"></div>
-        <span class="marker-label">${number !== undefined && number > 0 ? number : ''}</span>
-      </div>
-    `;
-
-    const icon = L.divIcon({
-      className: 'custom-marker-container',
-      html: markerHtml,
-      iconSize: [30, 42],
-      iconAnchor: [15, 42],
-      popupAnchor: [0, -42],
-    });
-
-    const marker = L.marker([lat, lng], { icon }).addTo(this.map);
-    this.markers.push(marker);
-
-    if (popupText) {
-      marker.bindPopup(popupText);
-      if (isMain) {
-        marker.openPopup();
-      }
+      this.currentMarker.bindPopup(popupText).openPopup();
     }
   }
 
@@ -191,10 +150,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  clearMarkers(): void {
-    if (this.markers.length > 0 && this.map) {
-      this.markers.forEach((marker) => this.map.removeLayer(marker));
-      this.markers = [];
+  clearMarker(): void {
+    if (this.currentMarker && this.map) {
+      this.map.removeLayer(this.currentMarker);
+      this.currentMarker = undefined;
     }
   }
 
@@ -206,7 +165,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   clearAll(): void {
-    this.clearMarkers();
+    this.clearMarker();
     this.clearPolygon();
   }
 

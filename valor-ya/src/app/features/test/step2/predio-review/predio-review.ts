@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, effect, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, inject, OnInit, signal, effect, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { PredioService } from '../../../../shared/services/predio.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
-import { MapComponent } from '../../../../shared/components/map';
+import { TestMapComponent } from '../../components/test-map/test-map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
@@ -20,7 +20,7 @@ import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
   imports: [
     StepperComponent,
     PredioInfoCardComponent,
-    MapComponent,
+    TestMapComponent,
     ValoryaDescription,
     ModalComponent,
     ContainerContentComponent,
@@ -28,28 +28,26 @@ import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
 })
-export class PredioReviewComponent implements OnInit, AfterViewInit {
+export class PredioReviewComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
   private mcmMapService = inject(McmMapService);
 
-  private mapComponent?: MapComponent;
+  private mapComponent?: TestMapComponent;
 
-  @ViewChild(MapComponent)
-  set mapSetter(map: MapComponent) {
+  @ViewChild(TestMapComponent)
+  set mapSetter(map: TestMapComponent) {
+    console.log('=== Map Component Setter Called ===', map);
     this.mapComponent = map;
     if (map) {
-      this.mapReady.set(true);
-
-      const data = this.predioData();
-      if (data?.coordenadasPoligono) {
-        this.updateMapWithData(data);
-      }
-
-      // Visualizar MCM Mock inmediatamente (según requerimiento)
-      this.visualizarMcmMock();
+      // El mapa acaba de aparecer en el DOM
+      setTimeout(() => {
+        console.log('=== Map is ready, visualizing MCM ===');
+        this.mapReady.set(true);
+        this.visualizarMcmMock();
+      }, 500); // Pequeño delay para asegurar inicialización interna del mapa
     }
   }
 
@@ -66,16 +64,18 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public readonly modalButtonText = signal<string>('Aceptar');
 
   constructor() {
+    console.log('=== PredioReviewComponent CONSTRUCTOR ===');
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
       if (data?.coordenadasPoligono && ready) {
-        this.updateMapWithData(data);
+        console.log('Map ready and data available for polygon');
       }
     });
   }
 
   ngOnInit(): void {
+    console.log('=== PredioReviewComponent ngOnInit ===');
     this.stepperService.setStep(TestStep.SOLICITUD);
 
     const tipo = this.stateService.tipoBusqueda();
@@ -89,17 +89,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.realizarConsulta(tipo, valor);
   }
 
-  ngAfterViewInit(): void {}
-
-  private updateMapWithData(data: PredioData): void {
-    if (data.coordenadasPoligono) {
-      this.mapComponent!.ubicarLotePorCoordenadas(
-        data.coordenadasPoligono,
-        data.loteid,
-        data.direccion
-      );
-    }
-  }
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -195,8 +184,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   }
 
   private visualizarMcmMock(): void {
+    console.log('visualizarMcmMock EXECUTING');
     if (this.mapComponent) {
       this.mcmMapService.visualizarMCM(this.mapComponent, MCM_MOCK_RESPONSE);
+    } else {
+      console.error('Map component not found in visualizarMcmMock');
     }
   }
 }
