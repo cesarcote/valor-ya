@@ -49,17 +49,8 @@ export class ComplementInfo implements OnInit {
     this.stepperService.setStep(TestStep.PROCESO);
     this.initForm();
     this.loadTiposPredio();
-    this.loadTipoUnidadFromStorage();
-  }
-
-  loadTipoUnidadFromStorage(): void {
-    const tipoUnidadEnMemoria = this.stateService.tipoUnidadSeleccionada();
-    if (tipoUnidadEnMemoria) {
-      this.complementForm.patchValue({
-        tipoPredio: tipoUnidadEnMemoria.codigoUnidad,
-      });
-      this.complementForm.get('tipoPredio')?.disable();
-    }
+    this.initForm();
+    this.loadTiposPredio();
   }
 
   initForm(): void {
@@ -107,13 +98,10 @@ export class ComplementInfo implements OnInit {
 
       const predioData = this.stateService.predioData()!;
 
-      const tipoUnidadSeleccionada = this.stateService.tipoUnidadSeleccionada();
       const formValues = this.complementForm.getRawValue();
 
       let tipoPredioFinal = formValues.tipoPredio;
-      if (tipoUnidadSeleccionada) {
-        tipoPredioFinal = tipoUnidadSeleccionada.descripcionUnidad;
-      } else if (formValues.tipoPredio === 'ot') {
+      if (formValues.tipoPredio === 'ot') {
         tipoPredioFinal = formValues.otroTipoPredio;
       }
 

@@ -19,16 +19,6 @@
   ></app-input>
 </div>
 
-<div class="form-group">
-  <app-select
-    dataId="tipoPredio"
-    label="Tipo de predio"
-    [formCtr]="codigoTipoUnidadControl"
-    [options]="opcionesTipoUnidad()"
-    placeholder="Selecciona una opción"
-  ></app-select>
-</div>
-
 <div class="form-buttons">
   <app-button text="Consultar" variant="primary" type="button" (clicked)="onConsultar()">
   </app-button>

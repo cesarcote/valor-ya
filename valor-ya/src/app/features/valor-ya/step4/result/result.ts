@@ -72,7 +72,7 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    const tipoPredio = this.stateService.tipoUnidadSeleccionada()?.descripcionUnidad;
+    const tipoPredio = predioData.tipoPredio || 'OTRO';
     if (!tipoPredio) {
       console.error('No se encontró el tipo de predio');
       alert('Error: No se puede descargar el avalúo sin tipo de predio.');

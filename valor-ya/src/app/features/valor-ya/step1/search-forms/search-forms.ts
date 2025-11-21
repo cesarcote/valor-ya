@@ -68,22 +68,16 @@ export class SearchFormsComponent {
 
   onConsultarChip(data: ChipData): void {
     this.stateService.setValorBusqueda(data.chip);
-    this.stateService.setTipoPredio(data.tipoPredio);
-    this.stateService.setTipoUnidad(data.tipoUnidad);
     this.irAProceso();
   }
 
   onConsultarDireccion(data: AddressData): void {
     this.stateService.setValorBusqueda(data.direccion);
-    this.stateService.setTipoPredio(data.tipoPredio);
-    this.stateService.setTipoUnidad(data.tipoUnidad);
     this.irAProceso();
   }
 
   onConsultarFMI(data: FmiData): void {
     this.stateService.setValorBusqueda(`${data.zona}-${data.matricula}`);
-    this.stateService.setTipoPredio(data.tipoPredio);
-    this.stateService.setTipoUnidad(data.tipoUnidad);
     this.irAProceso();
   }
 

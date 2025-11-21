@@ -188,13 +188,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.isProcessingMCM.set(true);
     this.errorMessage.set('');
 
-    const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
-
     this.solicitudDatosService
       .enviarSolicitudDatos({
         loteId: predio.loteid!,
         datosEndpoint: predio,
-        tipoUnidad: tipoUnidad?.descripcionUnidad,
+        tipoUnidad: predio.tipoPredio || 'OTRO',
       })
       .subscribe({
         next: (datosGuardados) => {

@@ -5,12 +5,6 @@
   <div class="step-header">
     <h2>Completa la información de tu predio</h2>
     <p class="subtitle">Ayúdanos a complementar la información de tu predio</p>
-    @if (stateService.tipoUnidadSeleccionada()) {
-    <div class="info-badge">
-      <span class="badge-label">Tipo de unidad seleccionado:</span>
-      <strong>{{ stateService.tipoUnidadSeleccionada()!.descripcionUnidad }}</strong>
-    </div>
-    }
   </div>
 
   <form [formGroup]="complementForm" class="complement-form">

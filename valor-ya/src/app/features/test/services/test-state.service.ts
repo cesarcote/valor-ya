@@ -20,7 +20,6 @@ export class TestStateService {
   public readonly datosComplementarios = signal<DatosComplementarios | undefined>(undefined);
   public readonly tipoPredio = signal<string | undefined>(undefined);
   public readonly mostrarResultado = signal<boolean>(false);
-  public readonly tipoUnidadSeleccionada = signal<TipoUnidad | undefined>(undefined);
   public readonly valorYaResponse = signal<MCMValorYAResultado | undefined>(undefined);
 
   public readonly hasDatosComplementarios = computed(() => !!this.datosComplementarios());
@@ -51,10 +50,6 @@ export class TestStateService {
     this.valorBusqueda.set(valor);
   }
 
-  setTipoUnidad(tipoUnidad: TipoUnidad): void {
-    this.tipoUnidadSeleccionada.set(tipoUnidad);
-  }
-
   setValorYaResponse(response: MCMValorYAResultado): void {
     this.valorYaResponse.set(response);
   }
@@ -66,7 +61,6 @@ export class TestStateService {
     this.datosComplementarios.set(undefined);
     this.tipoPredio.set(undefined);
     this.mostrarResultado.set(false);
-    this.tipoUnidadSeleccionada.set(undefined);
     this.valorYaResponse.set(undefined);
   }
 }

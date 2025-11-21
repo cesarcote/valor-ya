@@ -128,12 +128,10 @@ export class PredioReviewComponent implements OnInit {
     this.isProcessingMCM.set(true);
     this.errorMessage.set('');
 
-    const tipoUnidad = this.stateService.tipoUnidadSeleccionada();
-
     const datosMock = {
       id: Date.now(),
       loteId: predio.loteid!,
-      tipoPredio: tipoUnidad?.descripcionUnidad || 'No especificado',
+      tipoPredio: predio?.tipoPredio || 'OTRO',
       numeroHabitaciones: undefined,
       numeroBanos: undefined,
       areaConstruida: undefined,

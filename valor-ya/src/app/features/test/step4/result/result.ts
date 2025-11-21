@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +13,8 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ReporteService } from '../../../../shared/services/reporte.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { TestMapComponent } from '../../components/test-map/test-map';
+import { McmMapService } from '../../services/mcm-map.service';
 
 @Component({
   selector: 'app-result',
@@ -22,6 +24,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
     ButtonComponent,
     ValoryaDescription,
     ContainerContentComponent,
+    TestMapComponent,
   ],
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
@@ -33,6 +36,17 @@ export class ResultComponent implements OnInit {
   private apiService = inject(MCMValorYaService);
   private reporteService = inject(ReporteService);
   private notificationService = inject(NotificationService);
+  private mcmMapService = inject(McmMapService);
+
+  private mapComponent?: TestMapComponent;
+
+  @ViewChild(TestMapComponent)
+  set mapSetter(map: TestMapComponent) {
+    this.mapComponent = map;
+    if (map && this.apiResponse()) {
+      setTimeout(() => this.visualizarMcmMock(), 300);
+    }
+  }
 
   isDownloading = signal(false);
   isLoadingResult = signal(false);
@@ -115,6 +129,10 @@ export class ResultComponent implements OnInit {
       this.apiResponse.set(mockResponse);
       this.stateService.setValorYaResponse(mockResponse);
       this.isLoadingResult.set(false);
+
+      if (this.mapComponent) {
+        setTimeout(() => this.visualizarMcmMock(), 300);
+      }
     }, 1000);
 
     /* Código original comentado - descomentar para usar endpoint real
@@ -141,7 +159,7 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    const tipoPredio = this.stateService.tipoUnidadSeleccionada()?.descripcionUnidad;
+    const tipoPredio = predioData.tipoPredio || 'OTRO';
     if (!tipoPredio) {
       console.error('No se encontró el tipo de predio');
       alert('Error: No se puede descargar el avalúo sin tipo de predio.');
@@ -218,5 +236,11 @@ export class ResultComponent implements OnInit {
   formatInteger(value: number | null | undefined): string {
     if (!value) return 'N/A';
     return new Intl.NumberFormat('es-CO').format(value);
+  }
+
+  private visualizarMcmMock(): void {
+    if (this.mapComponent && this.apiResponse()) {
+      this.mcmMapService.visualizarMCM(this.mapComponent, this.apiResponse());
+    }
   }
 }
