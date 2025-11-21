@@ -25,15 +25,4 @@ export class McmService {
       })
     );
   }
-
-  descargarAvaluo(chip: string): Observable<Blob> {
-    const url = `${this.API_BASE_URL}/descargar-avaluo/${chip}`;
-
-    return this.http.get(url, { responseType: 'blob' }).pipe(
-      catchError((error) => {
-        console.error('Error al descargar el avalúo:', error);
-        throw error;
-      })
-    );
-  }
 }
