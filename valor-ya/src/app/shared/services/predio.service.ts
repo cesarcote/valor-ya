@@ -36,7 +36,7 @@ export class PredioService {
       barrio: infoAdicional.barrio || '',
       tipoPredio: infoAdicional.tipoPredio || '',
       estrato: infoAdicional.estrato || '',
-      areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
+      areaConstruida: infoAdicional.areaConstruidaPrivada || '0',
       edad: infoAdicional.edad || '',
       coordenadas: this.DEFAULT_COORDINATES,
       coordenadasPoligono: infoGeografica?.coordenadasPoligono,
@@ -72,7 +72,6 @@ export class PredioService {
 
     return this.http.get<CatastroResponse>(url, { params }).pipe(
       map((response: CatastroResponse) => {
-
         if (response.success && response.data && response.data.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, chip, 'chip');
         } else {

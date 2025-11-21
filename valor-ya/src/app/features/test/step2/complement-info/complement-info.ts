@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService } from '../../services/test-state.service';
 
-import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
+import {
+  SolicitudDatosComplementariosService,
+  DatosUsuario,
+} from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
@@ -129,35 +132,35 @@ export class ComplementInfo implements OnInit {
         tipoPredioFinal = formValues.otroTipoPredio;
       }
 
-      const datosUsuario = {
+      const datosUsuario: DatosUsuario = {
         tipoPredio: tipoPredioFinal,
-        numeroHabitaciones:
-          formValues.numeroHabitaciones !== ''
-            ? parseInt(formValues.numeroHabitaciones)
-            : undefined,
-        numeroBanos: formValues.numeroBanos !== '' ? parseInt(formValues.numeroBanos) : undefined,
-        areaConstruida:
-          formValues.areaConstruida !== ''
-            ? parseFloat(formValues.areaConstruida)
-            : predioData.areaConstruida
-            ? parseFloat(String(predioData.areaConstruida))
-            : undefined,
-        edad: formValues.edad || predioData.edad || undefined,
-        estrato:
-          formValues.estrato !== ''
-            ? parseInt(formValues.estrato)
-            : predioData.estrato
-            ? parseInt(String(predioData.estrato))
-            : undefined,
-        numeroAscensores:
-          formValues.numeroAscensores !== '' ? parseInt(formValues.numeroAscensores) : undefined,
-        numeroParqueaderos:
-          formValues.numeroParqueaderos !== ''
-            ? parseInt(formValues.numeroParqueaderos)
-            : undefined,
-        numeroDepositos:
-          formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
+
+      // Solo agregar campos que el usuario realmente completó
+      if (formValues.numeroHabitaciones !== '') {
+        datosUsuario.numeroHabitaciones = parseInt(formValues.numeroHabitaciones);
+      }
+      if (formValues.numeroBanos !== '') {
+        datosUsuario.numeroBanos = parseInt(formValues.numeroBanos);
+      }
+      if (formValues.areaConstruida !== '') {
+        datosUsuario.areaConstruida = parseFloat(formValues.areaConstruida);
+      }
+      if (formValues.edad) {
+        datosUsuario.edad = formValues.edad;
+      }
+      if (formValues.estrato !== '') {
+        datosUsuario.estrato = parseInt(formValues.estrato);
+      }
+      if (formValues.numeroAscensores !== '') {
+        datosUsuario.numeroAscensores = parseInt(formValues.numeroAscensores);
+      }
+      if (formValues.numeroParqueaderos !== '') {
+        datosUsuario.numeroParqueaderos = parseInt(formValues.numeroParqueaderos);
+      }
+      if (formValues.numeroDepositos !== '') {
+        datosUsuario.numeroDepositos = parseInt(formValues.numeroDepositos);
+      }
 
       this.solicitudDatosService
         .enviarSolicitudDatos({

@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 
-import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
+import {
+  SolicitudDatosComplementariosService,
+  DatosUsuario,
+} from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
@@ -86,12 +89,29 @@ export class ComplementInfo implements OnInit {
 
   loadPredioData(): void {
     const predioData = this.stateService.predioData();
+    console.log('🏠 [ComplementInfo] loadPredioData - predioData:', predioData);
+
     if (predioData) {
+      console.log('📊 [ComplementInfo] Valores a cargar:', {
+        areaConstruida: predioData.areaConstruida,
+        edad: predioData.edad,
+        estrato: predioData.estrato,
+        tipoPredio: predioData.tipoPredio,
+      });
+
+      // Asegurarse de que el formulario existe
+      if (!this.complementForm) {
+        console.error('❌ [ComplementInfo] Form not initialized yet!');
+        return;
+      }
+
       this.complementForm.patchValue({
         areaConstruida: predioData.areaConstruida || '',
         edad: predioData.edad || '',
         estrato: predioData.estrato || '',
       });
+
+      console.log('✅ [ComplementInfo] Form patched. Current values:', this.complementForm.value);
 
       if (predioData.tipoPredio) {
         const tipoPredioLower = predioData.tipoPredio.toLowerCase();
@@ -110,6 +130,8 @@ export class ComplementInfo implements OnInit {
           });
         }
       }
+    } else {
+      console.warn('⚠️ [ComplementInfo] No predioData available');
     }
   }
 
@@ -131,35 +153,35 @@ export class ComplementInfo implements OnInit {
         tipoPredioFinal = formValues.otroTipoPredio;
       }
 
-      const datosUsuario = {
+      const datosUsuario: DatosUsuario = {
         tipoPredio: tipoPredioFinal,
-        numeroHabitaciones:
-          formValues.numeroHabitaciones !== ''
-            ? parseInt(formValues.numeroHabitaciones)
-            : undefined,
-        numeroBanos: formValues.numeroBanos !== '' ? parseInt(formValues.numeroBanos) : undefined,
-        areaConstruida:
-          formValues.areaConstruida !== ''
-            ? parseFloat(formValues.areaConstruida)
-            : predioData.areaConstruida
-            ? parseFloat(String(predioData.areaConstruida))
-            : undefined,
-        edad: formValues.edad || predioData.edad || undefined,
-        estrato:
-          formValues.estrato !== ''
-            ? parseInt(formValues.estrato)
-            : predioData.estrato
-            ? parseInt(String(predioData.estrato))
-            : undefined,
-        numeroAscensores:
-          formValues.numeroAscensores !== '' ? parseInt(formValues.numeroAscensores) : undefined,
-        numeroParqueaderos:
-          formValues.numeroParqueaderos !== ''
-            ? parseInt(formValues.numeroParqueaderos)
-            : undefined,
-        numeroDepositos:
-          formValues.numeroDepositos !== '' ? parseInt(formValues.numeroDepositos) : undefined,
       };
+
+      // Solo agregar campos que el usuario realmente completó
+      if (formValues.numeroHabitaciones !== '') {
+        datosUsuario.numeroHabitaciones = parseInt(formValues.numeroHabitaciones);
+      }
+      if (formValues.numeroBanos !== '') {
+        datosUsuario.numeroBanos = parseInt(formValues.numeroBanos);
+      }
+      if (formValues.areaConstruida !== '') {
+        datosUsuario.areaConstruida = parseFloat(formValues.areaConstruida);
+      }
+      if (formValues.edad) {
+        datosUsuario.edad = formValues.edad;
+      }
+      if (formValues.estrato !== '') {
+        datosUsuario.estrato = parseInt(formValues.estrato);
+      }
+      if (formValues.numeroAscensores !== '') {
+        datosUsuario.numeroAscensores = parseInt(formValues.numeroAscensores);
+      }
+      if (formValues.numeroParqueaderos !== '') {
+        datosUsuario.numeroParqueaderos = parseInt(formValues.numeroParqueaderos);
+      }
+      if (formValues.numeroDepositos !== '') {
+        datosUsuario.numeroDepositos = parseInt(formValues.numeroDepositos);
+      }
 
       this.solicitudDatosService
         .enviarSolicitudDatos({
