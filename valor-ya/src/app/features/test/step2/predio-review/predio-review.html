@@ -27,7 +27,7 @@
     (continuar)="onContinuar()"
   >
     <div class="map-section">
-      <app-test-map></app-test-map>
+      <app-map [config]="{ zoom: 13 }"></app-map>
     </div>
 
     <app-predio-info-card [predioData]="predioData()" [showMessage]="true" [showAllFields]="true">

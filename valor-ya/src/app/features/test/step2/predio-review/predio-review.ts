@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal, effect, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -8,19 +8,17 @@ import { PredioService } from '../../../../shared/services/predio.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
-import { TestMapComponent } from '../../components/test-map/test-map';
+import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
-import { McmMapService } from '../../services/mcm-map.service';
-import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
 
 @Component({
   selector: 'app-predio-review',
   imports: [
     StepperComponent,
     PredioInfoCardComponent,
-    TestMapComponent,
+    MapComponent,
     ValoryaDescription,
     ModalComponent,
     ContainerContentComponent,
@@ -28,26 +26,30 @@ import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
 })
-export class PredioReviewComponent implements OnInit {
+export class PredioReviewComponent implements OnInit, AfterViewInit {
   private router = inject(Router);
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
-  private mcmMapService = inject(McmMapService);
+  private mapComponent?: MapComponent;
 
-  private mapComponent?: TestMapComponent;
-
-  @ViewChild(TestMapComponent)
-  set mapSetter(map: TestMapComponent) {
+  @ViewChild(MapComponent)
+  set mapSetter(map: MapComponent) {
     this.mapComponent = map;
     if (map) {
-      setTimeout(() => this.visualizarMcmMock(), 300);
+      this.mapReady.set(true);
+
+      const data = this.predioData();
+      if (data?.coordenadasPoligono) {
+        this.updateMapWithData(data);
+      }
     }
   }
 
   public readonly predioData = signal<PredioData | undefined>(undefined);
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
+  public readonly mapReady = signal<boolean>(false);
   public readonly isProcessingMCM = signal<boolean>(false);
   public readonly isValidatingAvailability = signal<boolean>(false);
   public readonly showModal = signal<boolean>(false);
@@ -55,6 +57,16 @@ export class PredioReviewComponent implements OnInit {
   public readonly modalTitle = signal<string>('Advertencia');
   public readonly modalIconType = signal<'success' | 'warning' | 'error'>('warning');
   public readonly modalButtonText = signal<string>('Aceptar');
+
+  constructor() {
+    effect(() => {
+      const data = this.predioData();
+      const ready = this.mapReady();
+      if (data?.coordenadasPoligono && ready) {
+        this.updateMapWithData(data);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.stepperService.setStep(TestStep.SOLICITUD);
@@ -68,6 +80,10 @@ export class PredioReviewComponent implements OnInit {
     }
 
     this.realizarConsulta(tipo, valor);
+  }
+
+  ngAfterViewInit(): void {
+    // Lifecycle hook for AfterViewInit interface
   }
 
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
@@ -162,9 +178,13 @@ export class PredioReviewComponent implements OnInit {
     this.showModal.set(false);
   }
 
-  private visualizarMcmMock(): void {
-    if (this.mapComponent) {
-      this.mcmMapService.visualizarMCM(this.mapComponent, MCM_MOCK_RESPONSE);
+  private updateMapWithData(data: PredioData): void {
+    if (data.coordenadasPoligono) {
+      this.mapComponent!.ubicarLotePorCoordenadas(
+        data.coordenadasPoligono,
+        data.loteid,
+        data.direccion
+      );
     }
   }
 }
