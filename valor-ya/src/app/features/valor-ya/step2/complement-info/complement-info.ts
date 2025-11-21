@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
-import { ParametricasService } from '../../../../shared/services/parametricas.service';
+
 import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
@@ -37,22 +37,27 @@ export class ComplementInfo implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
-  private parametricasService = inject(ParametricasService);
   private solicitudDatosService = inject(SolicitudDatosComplementariosService);
   private notificationService = inject(NotificationService);
+
+  readonly TIPO_PREDIO_OPTIONS: SelectOption[] = [
+    { value: 'ap', label: 'Apartamento' },
+    { value: 'ca', label: 'Casa' },
+    { value: 'of', label: 'Oficina' },
+    { value: 'lo', label: 'Local' },
+    { value: 'bo', label: 'Bodega' },
+    { value: 'te', label: 'Terreno' },
+    { value: 'ot', label: 'Otro' },
+  ];
 
   complementForm!: FormGroup;
   isLoading = signal(false);
   errorMessage = signal('');
 
-  opcionesTipoUnidad = signal<SelectOption[]>([]);
-
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
     this.initForm();
-    this.loadTiposPredio();
-    this.initForm();
-    this.loadTiposPredio();
+    this.loadPredioData();
   }
 
   initForm(): void {
@@ -79,14 +84,33 @@ export class ComplementInfo implements OnInit {
     });
   }
 
-  loadTiposPredio(): void {
-    this.parametricasService.consultarTiposUnidad().subscribe((tipos) => {
-      const options: SelectOption[] = tipos.map((tipo) => ({
-        value: tipo.codigoUnidad,
-        label: tipo.descripcionUnidad,
-      }));
-      this.opcionesTipoUnidad.set(options);
-    });
+  loadPredioData(): void {
+    const predioData = this.stateService.predioData();
+    if (predioData) {
+      this.complementForm.patchValue({
+        areaConstruida: predioData.areaConstruida || '',
+        edad: predioData.edad || '',
+        estrato: predioData.estrato || '',
+      });
+
+      if (predioData.tipoPredio) {
+        const tipoPredioLower = predioData.tipoPredio.toLowerCase();
+        const opcionEncontrada = this.TIPO_PREDIO_OPTIONS.find(
+          (opt) =>
+            opt.label.toLowerCase().includes(tipoPredioLower) ||
+            tipoPredioLower.includes(opt.label.toLowerCase())
+        );
+
+        if (opcionEncontrada) {
+          this.complementForm.patchValue({ tipoPredio: opcionEncontrada.value });
+        } else {
+          this.complementForm.patchValue({
+            tipoPredio: 'ot',
+            otroTipoPredio: predioData.tipoPredio,
+          });
+        }
+      }
+    }
   }
 
   onVolver(): void {
@@ -115,9 +139,18 @@ export class ComplementInfo implements OnInit {
             : undefined,
         numeroBanos: formValues.numeroBanos !== '' ? parseInt(formValues.numeroBanos) : undefined,
         areaConstruida:
-          formValues.areaConstruida !== '' ? parseFloat(formValues.areaConstruida) : undefined,
-        edad: formValues.edad?.toString() || undefined,
-        estrato: formValues.estrato !== '' ? parseInt(formValues.estrato) : undefined,
+          formValues.areaConstruida !== ''
+            ? parseFloat(formValues.areaConstruida)
+            : predioData.areaConstruida
+            ? parseFloat(String(predioData.areaConstruida))
+            : undefined,
+        edad: formValues.edad || predioData.edad || undefined,
+        estrato:
+          formValues.estrato !== ''
+            ? parseInt(formValues.estrato)
+            : predioData.estrato
+            ? parseInt(String(predioData.estrato))
+            : undefined,
         numeroAscensores:
           formValues.numeroAscensores !== '' ? parseInt(formValues.numeroAscensores) : undefined,
         numeroParqueaderos:
