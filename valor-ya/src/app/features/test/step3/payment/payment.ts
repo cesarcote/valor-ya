@@ -106,8 +106,7 @@ export class PaymentComponent implements OnInit {
       const valor = 50000;
       const productoId = 1;
       const currentYear = new Date().getFullYear();
-      const radNum = Math.floor(Math.random() * 90000) + 10000; // Número aleatorio entre 10000-99999
-
+      const radNum = Math.floor(Math.random() * 90000) + 10000;
       const compraRequest = {
         usuarioId: 40,
         fechaCompra,
@@ -137,7 +136,6 @@ export class PaymentComponent implements OnInit {
         next: (compraResponse) => {
           console.log('[Payment] Compra creada:', compraResponse);
 
-          // Guardar compraId y uuid en el state
           this.stateService.setCompraInfo(compraResponse.compraId, uuid);
 
           // PASO 2: Crear el pago asociado a la compra
@@ -166,7 +164,6 @@ export class PaymentComponent implements OnInit {
             next: (pagoResponse) => {
               console.log('[Payment] Pago creado:', pagoResponse);
 
-              // Guardar pagoId en el state
               this.stateService.setPagoId(pagoResponse.pagoId);
 
               // PASO 3: Crear link de pago con Paymentez
