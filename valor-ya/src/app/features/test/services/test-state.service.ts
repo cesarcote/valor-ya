@@ -22,6 +22,10 @@ export class TestStateService {
   public readonly mostrarResultado = signal<boolean>(false);
   public readonly valorYaResponse = signal<MCMValorYAResultado | undefined>(undefined);
 
+  public readonly compraId = signal<number | undefined>(undefined);
+  public readonly pagoId = signal<number | undefined>(undefined);
+  public readonly uuid = signal<string | undefined>(undefined);
+
   public readonly hasDatosComplementarios = computed(() => !!this.datosComplementarios());
 
   setTipoBusqueda(tipo: TipoBusqueda): void {
@@ -54,6 +58,15 @@ export class TestStateService {
     this.valorYaResponse.set(response);
   }
 
+  setCompraInfo(compraId: number, uuid: string): void {
+    this.compraId.set(compraId);
+    this.uuid.set(uuid);
+  }
+
+  setPagoId(pagoId: number): void {
+    this.pagoId.set(pagoId);
+  }
+
   reset(): void {
     this.tipoBusqueda.set(undefined);
     this.valorBusqueda.set(undefined);
@@ -62,5 +75,8 @@ export class TestStateService {
     this.tipoPredio.set(undefined);
     this.mostrarResultado.set(false);
     this.valorYaResponse.set(undefined);
+    this.compraId.set(undefined);
+    this.pagoId.set(undefined);
+    this.uuid.set(undefined);
   }
 }

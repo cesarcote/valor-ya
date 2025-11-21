@@ -12,6 +12,7 @@ import { TestStateService } from '../../services/test-state.service';
 import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
+import { ComprasService } from '../../../../shared/services/compras.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -40,6 +41,7 @@ export class PaymentComponent implements OnInit {
   public stateService = inject(TestStateService);
   private apiService = inject(MCMValorYaService);
   private paymentService = inject(PaymentService);
+  private comprasService = inject(ComprasService);
 
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
@@ -90,42 +92,135 @@ export class PaymentComponent implements OnInit {
       this.errorMessage.set(null);
 
       const formData = this.facturacionForm.value;
+      const predioData = this.stateService.predioData();
 
-      const paymentData = {
-        user: {
-          id: formData.numeroDocumento,
-          email: formData.email,
-          name: formData.nombre,
-          last_name: formData.apellidos,
-        },
-        order: {
-          dev_reference: this.paymentService.generateReference('TEST'),
-          description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD',
-          amount: 81308563,
-          installments_type: 0,
-          currency: 'COP',
-        },
+      if (!predioData?.chip) {
+        this.errorMessage.set('No se encontró información del predio.');
+        this.isSubmitting.set(false);
+        return;
+      }
+
+      // PASO 1: Crear la compra
+      const uuid = `UUID-${Date.now()}`;
+      const fechaCompra = new Date().toISOString().split('T')[0];
+      const valor = 50000;
+      const productoId = 1;
+      const currentYear = new Date().getFullYear();
+      const radNum = Math.floor(Math.random() * 90000) + 10000; // Número aleatorio entre 10000-99999
+
+      const compraRequest = {
+        usuarioId: 40,
+        fechaCompra,
+        estado: 'PENDIENTE' as const,
+        uuid,
+        pagoId: null,
+        facturaId: null,
+        enviada: 0,
+        fechaEnvio: null,
+        valor,
+        version: 1,
+        productoId,
+        cantidad: 2,
+        valorUnitario: 50000,
+        tipoFiltroProdId: null,
+        valorFiltro: null,
+        prodDetId1: predioData.chip,
+        prodDetId2: null,
+        archivoPrev: null,
+        radAgno: currentYear,
+        radNum: radNum,
       };
 
-      this.paymentService.initiatePayment(paymentData, 'test').subscribe({
-        next: (response) => {
-          console.log('Respuesta del pago:', response);
+      console.log('[Payment] Paso 1: Creando compra...', compraRequest);
 
-          if (response.success) {
-            const paymentUrl = this.paymentService.getPaymentUrl(response);
-            console.log('URL de pago generada:', paymentUrl);
+      this.comprasService.crearCompra(compraRequest).subscribe({
+        next: (compraResponse) => {
+          console.log('[Payment] Compra creada:', compraResponse);
 
-            if (paymentUrl) {
-              window.open(paymentUrl, '_blank');
-              this.router.navigate(['/test/pago-status/success']);
-            }
-          }
+          // Guardar compraId y uuid en el state
+          this.stateService.setCompraInfo(compraResponse.compraId, uuid);
 
-          this.isSubmitting.set(false);
+          // PASO 2: Crear el pago asociado a la compra
+          const numeroTx = `TX-${currentYear}-${Date.now()}`;
+
+          const pagoRequest = {
+            compraId: compraResponse.compraId,
+            estado: 'PENDIENTE' as const,
+            fechaInicioTx: null,
+            fechaFinTx: null,
+            numeroTx,
+            numeroConfTx: null,
+            fechaConfTx: null,
+            tipoPersona: 'NATURAL',
+            banco: 'BANCOLOMBIA',
+            version: 1,
+            numPago: 1,
+            estadoPagoProveedor: null,
+            formaPagoProveedor: 'credit_card',
+            codigoTxProveedor: null,
+          };
+
+          console.log('[Payment] Paso 2: Creando pago...', pagoRequest);
+
+          this.comprasService.crearPago(pagoRequest).subscribe({
+            next: (pagoResponse) => {
+              console.log('[Payment] Pago creado:', pagoResponse);
+
+              // Guardar pagoId en el state
+              this.stateService.setPagoId(pagoResponse.pagoId);
+
+              // PASO 3: Crear link de pago con Paymentez
+              const paymentData = {
+                user: {
+                  id: formData.numeroDocumento,
+                  email: formData.email,
+                  name: formData.nombre,
+                  last_name: formData.apellidos,
+                },
+                order: {
+                  dev_reference: this.paymentService.generateReference('TEST'),
+                  description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD',
+                  amount: valor,
+                  installments_type: 0,
+                  currency: 'COP',
+                },
+              };
+
+              console.log('[Payment] Paso 3: Generando link de pago...', paymentData);
+
+              this.paymentService.initiatePayment(paymentData, 'test').subscribe({
+                next: (response) => {
+                  console.log('[Payment] Link de pago generado:', response);
+
+                  if (response.success) {
+                    const paymentUrl = this.paymentService.getPaymentUrl(response);
+                    console.log('[Payment] URL de pago:', paymentUrl);
+
+                    if (paymentUrl) {
+                      window.open(paymentUrl, '_blank');
+                      this.router.navigate(['/test/pago-status/success']);
+                    }
+                  }
+
+                  this.isSubmitting.set(false);
+                },
+                error: (error) => {
+                  console.error('❌ [Payment] Error al generar link de pago:', error);
+                  this.errorMessage.set('Error al generar el link de pago. Intente nuevamente.');
+                  this.isSubmitting.set(false);
+                },
+              });
+            },
+            error: (error) => {
+              console.error('❌ [Payment] Error al crear pago:', error);
+              this.errorMessage.set('Error al registrar el pago. Intente nuevamente.');
+              this.isSubmitting.set(false);
+            },
+          });
         },
         error: (error) => {
-          console.error('Error al procesar el pago:', error);
-          this.errorMessage.set('Error al procesar el pago. Intente nuevamente.');
+          console.error('❌ [Payment] Error al crear compra:', error);
+          this.errorMessage.set('Error al crear la compra. Intente nuevamente.');
           this.isSubmitting.set(false);
         },
       });
