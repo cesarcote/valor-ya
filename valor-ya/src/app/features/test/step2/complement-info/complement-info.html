@@ -1,134 +1,126 @@
-<app-stepper></app-stepper>
 <app-valorya-description></app-valorya-description>
+<app-stepper></app-stepper>
 
 <div class="step-container">
-  <div class="step-header">
-    <h2>Completa la información de tu predio</h2>
+  <app-container-content
+    title="Completa la información de tu predio"
+    [continueButtonText]="isLoading() ? 'Enviando...' : 'Consultar'"
+    [continueButtonDisabled]="isLoading()"
+    (volver)="onVolver()"
+    (continuar)="onConsultarMCM()"
+  >
     <p class="subtitle">Ayúdanos a complementar la información de tu predio</p>
-  </div>
 
-  <form [formGroup]="complementForm" class="complement-form">
-    <!-- Tipo de predio -->
-    <div class="form-section">
-      <h3>Tipo de predio</h3>
+    <form [formGroup]="complementForm" class="complement-form">
+      <!-- Tipo de predio -->
+      <div class="form-section">
+        <h3>Tipo de predio</h3>
 
-      <app-select
-        dataId="tipoPredio"
-        label="Tipo de predio"
-        [formCtr]="tipoPredioControl"
-        [options]="TIPO_PREDIO_OPTIONS"
-        placeholder="Selecciona una opción"
-      ></app-select>
+        <app-select
+          dataId="tipoPredio"
+          label="Tipo de predio"
+          [formCtr]="tipoPredioControl"
+          [options]="TIPO_PREDIO_OPTIONS"
+          placeholder="Selecciona una opción"
+        ></app-select>
 
-      @if (tipoPredioControl.value === 'otro') {
-      <app-input
-        type="text"
-        id="otroTipoPredio"
-        label="Otro tipo de predio"
-        [formCtr]="otroTipoPredioControl"
-        placeholder="Especifique el tipo de predio"
-      ></app-input>
-      }
-    </div>
-
-    <div class="form-section">
-      <h3>Características del predio</h3>
-      <div class="form-row">
-        <app-input
-          type="number"
-          id="numeroHabitaciones"
-          label="Número de habitaciones"
-          [formCtr]="numeroHabitacionesControl"
-          [min]="0"
-        ></app-input>
-
-        <app-input
-          type="number"
-          id="numeroBanos"
-          label="Número de baños"
-          [formCtr]="numeroBanosControl"
-          [min]="0"
-        ></app-input>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          type="number"
-          id="areaConstruida"
-          label="Área construida en m²"
-          [formCtr]="areaConstruidaControl"
-          [min]="1"
-        ></app-input>
-
+        @if (tipoPredioControl.value === 'otro') {
         <app-input
           type="text"
-          id="edad"
-          label="Edad (ej: 2021 - 2027)"
-          [formCtr]="edadControl"
+          id="otroTipoPredio"
+          label="Otro tipo de predio"
+          [formCtr]="otroTipoPredioControl"
+          placeholder="Especifique el tipo de predio"
         ></app-input>
+        }
       </div>
 
-      <div class="form-row">
-        <app-input
-          type="number"
-          id="estrato"
-          label="Estrato"
-          [formCtr]="estratoControl"
-          [min]="1"
-          [max]="6"
-        ></app-input>
+      <div class="form-section">
+        <h3>Características del predio</h3>
+        <div class="form-row">
+          <app-input
+            type="number"
+            id="numeroHabitaciones"
+            label="Número de habitaciones"
+            [formCtr]="numeroHabitacionesControl"
+            [min]="0"
+          ></app-input>
+
+          <app-input
+            type="number"
+            id="numeroBanos"
+            label="Número de baños"
+            [formCtr]="numeroBanosControl"
+            [min]="0"
+          ></app-input>
+        </div>
+
+        <div class="form-row">
+          <app-input
+            type="number"
+            id="areaConstruida"
+            label="Área construida en m²"
+            [formCtr]="areaConstruidaControl"
+            [min]="1"
+          ></app-input>
+
+          <app-input
+            type="text"
+            id="edad"
+            label="Edad (ej: 2021 - 2027)"
+            [formCtr]="edadControl"
+          ></app-input>
+        </div>
+
+        <div class="form-row">
+          <app-input
+            type="number"
+            id="estrato"
+            label="Estrato"
+            [formCtr]="estratoControl"
+            [min]="1"
+            [max]="6"
+          ></app-input>
+        </div>
       </div>
-    </div>
 
-    <!-- Equipamientos y garajes -->
-    <div class="form-section">
-      <h3>Equipamientos y garajes</h3>
-      <div class="form-row">
-        <app-input
-          type="number"
-          id="numeroAscensores"
-          label="Número de ascensores"
-          [formCtr]="numeroAscensoresControl"
-          [min]="0"
-        ></app-input>
+      <!-- Equipamientos y garajes -->
+      <div class="form-section">
+        <h3>Equipamientos y garajes</h3>
+        <div class="form-row">
+          <app-input
+            type="number"
+            id="numeroAscensores"
+            label="Número de ascensores"
+            [formCtr]="numeroAscensoresControl"
+            [min]="0"
+          ></app-input>
 
-        <app-input
-          type="number"
-          id="numeroParqueaderos"
-          label="Número de parqueaderos"
-          [formCtr]="numeroParqueaderosControl"
-          [min]="0"
-        ></app-input>
+          <app-input
+            type="number"
+            id="numeroParqueaderos"
+            label="Número de parqueaderos"
+            [formCtr]="numeroParqueaderosControl"
+            [min]="0"
+          ></app-input>
+        </div>
+
+        <div class="form-row">
+          <app-input
+            type="number"
+            id="numeroDepositos"
+            label="Número de depósitos"
+            [formCtr]="numeroDepositosControl"
+            [min]="0"
+          ></app-input>
+        </div>
       </div>
 
-      <div class="form-row">
-        <app-input
-          type="number"
-          id="numeroDepositos"
-          label="Número de depósitos"
-          [formCtr]="numeroDepositosControl"
-          [min]="0"
-        ></app-input>
+      @if (errorMessage()) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage() }}
       </div>
-    </div>
-
-    @if (errorMessage()) {
-    <div class="error-alert">
-      <p>{{ errorMessage() }}</p>
-    </div>
-    }
-
-    <div class="action-buttons">
-      <app-button text="Volver" variant="secondary" type="button" (clicked)="onVolver()">
-      </app-button>
-      <app-button
-        [text]="isLoading() ? 'Enviando...' : 'Consultar'"
-        variant="primary"
-        type="button"
-        [disabled]="isLoading()"
-        (clicked)="onConsultarMCM()"
-      >
-      </app-button>
-    </div>
-  </form>
+      }
+    </form>
+  </app-container-content>
 </div>

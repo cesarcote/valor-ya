@@ -7,6 +7,7 @@ import { TestStateService, TipoBusqueda } from '../../services/test-state.servic
 import { PredioService } from '../../../../shared/services/predio.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/button/button';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
@@ -17,6 +18,7 @@ import { ContainerContentComponent } from '../../../../shared/components/contain
   selector: 'app-predio-review',
   imports: [
     StepperComponent,
+    ButtonComponent,
     PredioInfoCardComponent,
     MapComponent,
     ValoryaDescription,

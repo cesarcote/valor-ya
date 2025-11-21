@@ -16,20 +16,20 @@ import {
   DatosUsuario,
 } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
   selector: 'app-complement-info',
   imports: [
     ReactiveFormsModule,
     StepperComponent,
-    ButtonComponent,
     InputComponent,
     SelectComponent,
     ValoryaDescription,
+    ContainerContentComponent,
   ],
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],
@@ -115,7 +115,7 @@ export class ComplementInfo implements OnInit {
   }
 
   onVolver(): void {
-    this.router.navigate(['/test/pago']);
+    this.router.navigate(['/test/solicitud']);
   }
 
   onConsultarMCM(): void {
