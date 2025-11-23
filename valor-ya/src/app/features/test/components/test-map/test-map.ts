@@ -192,20 +192,41 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
     try {
       this.isLoading.set(true);
 
+      const container = this.mapContainer.nativeElement;
+
+      const originalWidth = container.style.width;
+      const originalHeight = container.style.height;
+      const originalAspectRatio = container.style.aspectRatio;
+
+      container.style.width = '767px';
+      container.style.height = '432px';
+      container.style.aspectRatio = 'unset';
+
+      this.map.invalidateSize();
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       const html2canvas = (await import('html2canvas')).default;
 
-      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+      const canvas = await html2canvas(container, {
         useCORS: true,
         allowTaint: true,
         logging: false,
         backgroundColor: '#ffffff',
+        width: 767,
+        height: 432,
       });
+
+      container.style.width = originalWidth;
+      container.style.height = originalHeight;
+      container.style.aspectRatio = originalAspectRatio;
+      this.map.invalidateSize();
 
       const dataUrl = canvas.toDataURL('image/png');
 
-      console.log('=== MAPA EN BASE64 ===');
+      console.log('=== MAPA EN BASE64 (1200x800px) ===');
       console.log(dataUrl);
-      console.log('======================');
+      console.log('====================================');
 
       const link = document.createElement('a');
       link.download = `mapa-valoracion-${Date.now()}.png`;
@@ -213,7 +234,6 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
     } catch (error) {
       console.error('Error al descargar el mapa:', error);
     } finally {
@@ -237,7 +257,6 @@ export class TestMapComponent implements AfterViewInit, OnDestroy {
       });
 
       return canvas.toDataURL('image/png');
-
     } catch (error) {
       console.error('Error al capturar el mapa:', error);
       return null;
