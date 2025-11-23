@@ -53,3 +53,28 @@ export interface MCMValorYAResultado {
   }>;
   status: string;
 }
+
+export interface ValidacionMinimoOfertasResponse {
+  valido: boolean;
+  chips_procesados: number;
+  minimo_requerido: number;
+  mensaje: string;
+  metadatos_completos: {
+    chips_procesados: number;
+    chips_solicitados: number;
+    ofertas_utilizadas: number;
+    tiempo_procesamiento_segundos: number;
+    timestamp: string;
+    vigencia_liquidacion: number;
+    vigencia_resolucion: number;
+  };
+  status: string;
+}
+
+export interface TestConexionResponse {
+  estado: string;
+  api_externa: string;
+  status_code: number;
+  mensaje: string;
+  chip_prueba: string;
+}

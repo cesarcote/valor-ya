@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { PredioService } from '../../../../shared/services/predio.service';
-import { SolicitudDatosComplementariosService } from '../../../../shared/services/solicitud-datos-complementarios.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
@@ -35,7 +34,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
-  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
   private mcmValorYaService = inject(MCMValorYaService);
 
   private mapComponent?: MapComponent;
@@ -57,7 +55,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public readonly errorMessage = signal<string>('');
   public readonly isLoading = signal<boolean>(true);
   public readonly mapReady = signal<boolean>(false);
-  public readonly isProcessingMCM = signal<boolean>(false);
   public readonly isValidatingAvailability = signal<boolean>(false);
   public readonly showModal = signal<boolean>(false);
   public readonly modalMessage = signal<string>('');
@@ -154,58 +151,79 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 
-    this.mcmValorYaService.procesarChip(predio.chip!).subscribe({
-      next: (response) => {
-        this.isValidatingAvailability.set(false);
-
-        if (response.status !== 'success') {
+    // Paso 1: Verificar conexión con la API
+    this.mcmValorYaService.testConexion().subscribe({
+      next: (conexionResponse) => {
+        if (conexionResponse.estado !== 'CONECTADO') {
+          // Error: servicio caído
+          this.isValidatingAvailability.set(false);
           this.showModal.set(true);
-          this.modalTitle.set('Error en verificación');
+          this.modalTitle.set('Servicio no disponible');
           this.modalMessage.set(
-            'No se pudo verificar el status del predio. El cálculo del avalúo no está disponible en este momento. Por favor, intente más tarde.'
+            'El sistema de valoración no está disponible en este momento. Por favor, intente más tarde.'
           );
           this.modalIconType.set('error');
           this.modalButtonText.set('Aceptar');
           return;
         }
 
-        this.procesarMCM(predio);
+        // Paso 2: Validar mínimo de ofertas
+        this.mcmValorYaService.validarMinimoOfertas([predio.chip!]).subscribe({
+          next: (validacionResponse) => {
+            this.isValidatingAvailability.set(false);
+
+            if (validacionResponse.status !== 'success') {
+              // Error en el servicio
+              this.showModal.set(true);
+              this.modalTitle.set('Error al verificar información');
+              this.modalMessage.set(
+                'No pudimos verificar la información del predio en nuestra base de datos. Por favor, intente más tarde.'
+              );
+              this.modalIconType.set('error');
+              this.modalButtonText.set('Aceptar');
+              return;
+            }
+
+            if (validacionResponse.valido) {
+              // Correcto: >= 3 ofertas - Continuar al pago SIN mostrar modal
+              this.stepperService.setStep(ValorYaStep.PROCESO);
+              this.router.navigate(['/valor-ya/pago']);
+            } else {
+              // Incorrecto: < 3 ofertas - Mostrar advertencia
+              this.showModal.set(true);
+              this.modalTitle.set('Propiedades similares insuficientes');
+              this.modalMessage.set(
+                `No encontramos suficientes propiedades similares en nuestra base de datos (encontramos ${validacionResponse.chips_procesados} de ${validacionResponse.minimo_requerido} necesarias). La valoración podría no ser completamente precisa.`
+              );
+              this.modalIconType.set('warning');
+              this.modalButtonText.set('Aceptar');
+            }
+          },
+          error: (error) => {
+            // Error al validar ofertas
+            this.isValidatingAvailability.set(false);
+            this.showModal.set(true);
+            this.modalTitle.set('Información no disponible');
+            this.modalMessage.set(
+              'No podemos calcular el valor de tu predio en este momento. Contáctanos: 123-456-7890 o soporte@valorya.com'
+            );
+            this.modalIconType.set('error');
+            this.modalButtonText.set('Aceptar');
+          },
+        });
       },
       error: (error) => {
+        // Error de conexión inicial
         this.isValidatingAvailability.set(false);
         this.showModal.set(true);
         this.modalTitle.set('Error de conexión');
         this.modalMessage.set(
-          'Error al verificar la disponibilidad del cálculo. El servicio no está disponible.'
+          'No pudimos conectar con el sistema de valoración. Por favor, verifique su conexión a internet e intente nuevamente.'
         );
         this.modalIconType.set('error');
         this.modalButtonText.set('Aceptar');
       },
     });
-  }
-
-  private procesarMCM(predio: PredioData): void {
-    this.isProcessingMCM.set(true);
-    this.errorMessage.set('');
-
-    this.solicitudDatosService
-      .enviarSolicitudDatos({
-        loteId: predio.loteid!,
-        datosEndpoint: predio,
-        tipoUnidad: predio.tipoPredio || 'OTRO',
-      })
-      .subscribe({
-        next: (datosGuardados) => {
-          this.stateService.setDatosComplementarios(datosGuardados);
-          this.isProcessingMCM.set(false);
-          this.stepperService.setStep(ValorYaStep.PROCESO);
-          this.router.navigate(['/valor-ya/pago']);
-        },
-        error: (error) => {
-          this.errorMessage.set(`Error al procesar los datos: ${error.message}`);
-          this.isProcessingMCM.set(false);
-        },
-      });
   }
 
   onVolver(): void {
