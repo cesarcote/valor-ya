@@ -152,10 +152,35 @@ export class PaymentStatusComponent implements OnInit {
   onPrimaryAction(): void {
     const config = this.currentConfig();
 
-    // Si es éxito, guardar datos antes de navegar
+    // Si es éxito, validar contexto de pago
     if (this.status() === 'success') {
-      // Aquí puedes guardar información adicional en el state service
-      // this.stateService.setPaymentData(this.paymentData());
+      const paymentContextStr = localStorage.getItem('valor-ya-payment-context');
+
+      if (!paymentContextStr) {
+        // No hay contexto de pago, redirigir al inicio
+        console.warn('No se encontró contexto de pago en localStorage');
+        this.router.navigate(['/valor-ya/seleccionar']);
+        return;
+      }
+
+      const paymentContext = JSON.parse(paymentContextStr);
+
+      if (!paymentContext.chip || !paymentContext.dev_reference) {
+        // Datos incompletos, redirigir al inicio
+        console.warn('Datos incompletos en contexto de pago:', paymentContext);
+        this.router.navigate(['/valor-ya/seleccionar']);
+        return;
+      }
+
+      // TODO: Aquí procesarías el MCM con paymentContext.chip
+      console.log('Contexto de pago válido:', paymentContext);
+
+      // Limpiar localStorage
+      localStorage.removeItem('valor-ya-payment-context');
+
+      // Navegar a result
+      this.router.navigate([config.primaryAction.route]);
+      return;
     }
 
     this.router.navigate([config.primaryAction.route]);

@@ -116,6 +116,13 @@ export class PaymentComponent implements OnInit {
             const paymentUrl = this.paymentService.getPaymentUrl(response);
 
             if (paymentUrl) {
+              // Guardar contexto de pago en localStorage
+              const paymentContext = {
+                chip: this.stateService.predioData()?.chip,
+                dev_reference: paymentData.order.dev_reference,
+              };
+              localStorage.setItem('valor-ya-payment-context', JSON.stringify(paymentContext));
+
               window.open(paymentUrl, '_blank');
               this.router.navigate(['/valor-ya/pago-status/success']);
             }
