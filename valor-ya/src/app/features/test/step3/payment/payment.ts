@@ -194,6 +194,13 @@ export class PaymentComponent implements OnInit {
                     console.log('[Payment] URL de pago:', paymentUrl);
 
                     if (paymentUrl) {
+                      // Guardar contexto de pago en localStorage
+                      const paymentContext = {
+                        chip: predioData.chip,
+                        dev_reference: paymentData.order.dev_reference,
+                      };
+                      localStorage.setItem('test-payment-context', JSON.stringify(paymentContext));
+
                       window.open(paymentUrl, '_blank');
                       this.router.navigate(['/test/pago-status/success']);
                     }
