@@ -155,7 +155,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.mcmValorYaService.testConexion().subscribe({
       next: (conexionResponse) => {
         if (conexionResponse.estado !== 'CONECTADO') {
-          // Error: servicio caído
           this.isValidatingAvailability.set(false);
           this.showModal.set(true);
           this.modalTitle.set('Servicio no disponible');
@@ -171,36 +170,10 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
         this.mcmValorYaService.validarMinimoOfertas([predio.chip!]).subscribe({
           next: (validacionResponse) => {
             this.isValidatingAvailability.set(false);
-
-            if (validacionResponse.status !== 'success') {
-              // Error en el servicio
-              this.showModal.set(true);
-              this.modalTitle.set('Error al verificar información');
-              this.modalMessage.set(
-                'No pudimos verificar la información del predio en nuestra base de datos. Por favor, intente más tarde.'
-              );
-              this.modalIconType.set('error');
-              this.modalButtonText.set('Aceptar');
-              return;
-            }
-
-            if (validacionResponse.valido) {
-              // Correcto: >= 3 ofertas - Continuar al pago SIN mostrar modal
-              this.stepperService.setStep(ValorYaStep.PROCESO);
-              this.router.navigate(['/valor-ya/pago']);
-            } else {
-              // Incorrecto: < 3 ofertas - Mostrar advertencia
-              this.showModal.set(true);
-              this.modalTitle.set('Propiedades similares insuficientes');
-              this.modalMessage.set(
-                `No encontramos suficientes propiedades similares en nuestra base de datos (encontramos ${validacionResponse.chips_procesados} de ${validacionResponse.minimo_requerido} necesarias). La valoración podría no ser completamente precisa.`
-              );
-              this.modalIconType.set('warning');
-              this.modalButtonText.set('Aceptar');
-            }
+            this.stepperService.setStep(ValorYaStep.PROCESO);
+            this.router.navigate(['/valor-ya/pago']);
           },
           error: (error) => {
-            // Error al validar ofertas
             this.isValidatingAvailability.set(false);
             this.showModal.set(true);
             this.modalTitle.set('Información no disponible');
@@ -213,7 +186,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
         });
       },
       error: (error) => {
-        // Error de conexión inicial
         this.isValidatingAvailability.set(false);
         this.showModal.set(true);
         this.modalTitle.set('Error de conexión');
