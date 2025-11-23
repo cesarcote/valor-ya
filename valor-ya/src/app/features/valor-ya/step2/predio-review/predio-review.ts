@@ -178,7 +178,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
             this.showModal.set(true);
             this.modalTitle.set('Información no disponible');
             this.modalMessage.set(
-              'No podemos calcular el valor de tu predio en este momento. Contáctanos: 123-456-7890 o soporte@valorya.com'
+              'No podemos calcular el valor de tu predio. Contáctanos al +57 601 234 7600 ext. 7600 o escríbenos a buzon-correspondencia@catastrobogota.gov.co'
             );
             this.modalIconType.set('error');
             this.modalButtonText.set('Aceptar');
