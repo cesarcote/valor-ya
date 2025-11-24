@@ -10,6 +10,7 @@ export interface ReporteValorYaRequest {
   limiteSuperiorM2: string;
   ofertasUtilizadas: string;
   coeficienteVariacion: string;
+  imagenBase64?: string;
 }
 
 export interface ReporteValorYaResponse {

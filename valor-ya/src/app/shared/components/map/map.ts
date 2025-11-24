@@ -169,6 +169,30 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.clearPolygon();
   }
 
+  async captureMapAsBase64(): Promise<string | null> {
+    if (!this.mapContainer) return null;
+
+    try {
+      this.isLoading.set(true);
+
+      const html2canvas = (await import('html2canvas')).default;
+
+      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+      console.error('Error al capturar el mapa:', error);
+      return null;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
   private handleLoteResponse(response: any, loteCodigo: string): void {
     if (!response.features || response.features.length === 0) {
       console.warn(`No se encontró el lote con código: ${loteCodigo}`);

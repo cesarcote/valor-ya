@@ -106,7 +106,7 @@ export class ResultComponent implements OnInit {
     */
   }
 
-  onDescargarAvaluo(): void {
+  async onDescargarAvaluo(): Promise<void> {
     const predioData = this.stateService.predioData();
     if (!predioData?.chip) {
       console.error('No se encontró el chip del predio');
@@ -121,10 +121,27 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
-
     this.isDownloading.set(true);
     console.log('Generando reporte de avalúo para chip:', predioData.chip);
+
+    // Capturar imagen del mapa
+    let imagenBase64: string | undefined;
+    if (this.mapComponent) {
+      try {
+        const base64 = await this.mapComponent.captureMapAsBase64();
+        if (base64) {
+          imagenBase64 = base64;
+        }
+      } catch (error) {
+        console.warn('No se pudo capturar la imagen del mapa, continuando sin ella:', error);
+      }
+    }
+
+    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
+
+    if (imagenBase64) {
+      datos.imagenBase64 = imagenBase64;
+    }
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
       next: (blob) => {
