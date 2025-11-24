@@ -1,11 +1,13 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DatosComplementariosService } from './datos-complementarios.service';
+import { map, catchError } from 'rxjs/operators';
 import {
   DatosComplementarios,
   DatosComplementariosRequest,
 } from '../../core/models/datos-complementarios.model';
 import { PredioData } from '../../core/models/predio-data.model';
+import { currentEnvironment } from '../../../environments/environment';
 
 export interface DatosUsuario {
   tipoPredio?: string;
@@ -30,11 +32,54 @@ export interface SolicitudDatosOptions {
   providedIn: 'root',
 })
 export class SolicitudDatosComplementariosService {
-  private datosComplementariosService = inject(DatosComplementariosService);
+  private http = inject(HttpClient);
 
   enviarSolicitudDatos(options: SolicitudDatosOptions): Observable<DatosComplementarios> {
     const payload = this.construirPayload(options);
-    return this.datosComplementariosService.enviarDatosPorCorreo(payload);
+    return this.enviarEmailConPlantilla(payload);
+  }
+
+  private enviarEmailConPlantilla(
+    payload: DatosComplementariosRequest
+  ): Observable<DatosComplementarios> {
+    const emailRequest = {
+      destinatario: 'test.valorya@yopmail.com',
+      asunto: 'Información de Predio - ValorYa',
+      template: 'datos-predio',
+      datos: {
+        tipoPredio: payload.tipoPredio || 'N/A',
+        numHabitaciones: payload.numeroHabitaciones?.toString() || 'N/A',
+        numBanos: payload.numeroBanos?.toString() || 'N/A',
+        areaConstruida: payload.areaConstruida?.toString() || 'N/A',
+        edadPredio: payload.edad || 'N/A',
+        estrato: payload.estrato?.toString() || 'N/A',
+        numAscensores: payload.numeroAscensores?.toString() || 'N/A',
+        numParqueaderos: payload.numeroParqueaderos?.toString() || 'N/A',
+        numDepositos: payload.numeroDepositos?.toString() || 'N/A',
+      },
+    };
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const apiUrl = `${currentEnvironment.baseUrl}/emails/test-plantilla-personalizada`;
+
+    return this.http.post<any>(apiUrl, emailRequest, { headers, timeout: 60000 }).pipe(
+      map((response) => {
+        if (response && response.success) {
+          return {
+            ...payload,
+            id: Math.floor(Math.random() * 1000),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          } as DatosComplementarios;
+        } else {
+          throw new Error(response.message || 'Error al enviar el correo');
+        }
+      }),
+      catchError((error: any) => {
+        console.error('Error en enviarEmailConPlantilla:', error);
+        throw new Error(`Error al enviar email: ${error.message || 'Error desconocido'}`);
+      })
+    );
   }
 
   private construirPayload(options: SolicitudDatosOptions): DatosComplementariosRequest {

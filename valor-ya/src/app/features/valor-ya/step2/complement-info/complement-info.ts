@@ -44,13 +44,13 @@ export class ComplementInfo implements OnInit {
   private notificationService = inject(NotificationService);
 
   readonly TIPO_PREDIO_OPTIONS: SelectOption[] = [
-    { value: 'ap', label: 'Apartamento' },
-    { value: 'ca', label: 'Casa' },
-    { value: 'of', label: 'Oficina' },
-    { value: 'lo', label: 'Local' },
-    { value: 'bo', label: 'Bodega' },
-    { value: 'te', label: 'Terreno' },
-    { value: 'ot', label: 'Otro' },
+    { value: 'Apartamento', label: 'Apartamento' },
+    { value: 'Casa', label: 'Casa' },
+    { value: 'Oficina', label: 'Oficina' },
+    { value: 'Local', label: 'Local' },
+    { value: 'Bodega', label: 'Bodega' },
+    { value: 'Terreno', label: 'Terreno' },
+    { value: 'Otro', label: 'Otro' },
   ];
 
   complementForm!: FormGroup;
@@ -78,7 +78,7 @@ export class ComplementInfo implements OnInit {
     });
 
     this.complementForm.get('tipoPredio')?.valueChanges.subscribe((value) => {
-      if (value === 'ot') {
+      if (value === 'Otro') {
         this.complementForm.get('otroTipoPredio')?.setValidators([Validators.required]);
       } else {
         this.complementForm.get('otroTipoPredio')?.clearValidators();
@@ -89,19 +89,10 @@ export class ComplementInfo implements OnInit {
 
   loadPredioData(): void {
     const predioData = this.stateService.predioData();
-    console.log('🏠 [ComplementInfo] loadPredioData - predioData:', predioData);
 
     if (predioData) {
-      console.log('📊 [ComplementInfo] Valores a cargar:', {
-        areaConstruida: predioData.areaConstruida,
-        edad: predioData.edad,
-        estrato: predioData.estrato,
-        tipoPredio: predioData.tipoPredio,
-      });
-
       // Asegurarse de que el formulario existe
       if (!this.complementForm) {
-        console.error('❌ [ComplementInfo] Form not initialized yet!');
         return;
       }
 
@@ -110,8 +101,6 @@ export class ComplementInfo implements OnInit {
         edad: predioData.edad || '',
         estrato: predioData.estrato || '',
       });
-
-      console.log('✅ [ComplementInfo] Form patched. Current values:', this.complementForm.value);
 
       if (predioData.tipoPredio) {
         const tipoPredioLower = predioData.tipoPredio.toLowerCase();
@@ -125,13 +114,11 @@ export class ComplementInfo implements OnInit {
           this.complementForm.patchValue({ tipoPredio: opcionEncontrada.value });
         } else {
           this.complementForm.patchValue({
-            tipoPredio: 'ot',
+            tipoPredio: 'Otro',
             otroTipoPredio: predioData.tipoPredio,
           });
         }
       }
-    } else {
-      console.warn('⚠️ [ComplementInfo] No predioData available');
     }
   }
 
@@ -149,7 +136,7 @@ export class ComplementInfo implements OnInit {
       const formValues = this.complementForm.getRawValue();
 
       let tipoPredioFinal = formValues.tipoPredio;
-      if (formValues.tipoPredio === 'ot') {
+      if (formValues.tipoPredio === 'Otro') {
         tipoPredioFinal = formValues.otroTipoPredio;
       }
 
