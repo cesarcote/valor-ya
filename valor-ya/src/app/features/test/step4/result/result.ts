@@ -57,6 +57,8 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
     this.stepperService.setStep(TestStep.RESPUESTA);
 
+    //localStorage.removeItem('test-payment-context');
+
     const chip = this.stateService.predioData()?.chip;
     if (!chip) {
       console.error('No se encontró el CHIP del predio para consultar resultados');

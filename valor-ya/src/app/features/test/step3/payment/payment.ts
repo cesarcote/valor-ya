@@ -201,8 +201,7 @@ export class PaymentComponent implements OnInit {
                       };
                       localStorage.setItem('test-payment-context', JSON.stringify(paymentContext));
 
-                      window.open(paymentUrl, '_blank');
-                      this.router.navigate(['/test/pago-status/success']);
+                      window.location.href = paymentUrl;
                     }
                   }
 

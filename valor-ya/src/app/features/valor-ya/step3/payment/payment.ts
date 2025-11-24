@@ -124,7 +124,6 @@ export class PaymentComponent implements OnInit {
               localStorage.setItem('valor-ya-payment-context', JSON.stringify(paymentContext));
 
               window.open(paymentUrl, '_blank');
-              this.router.navigate(['/valor-ya/pago-status/success']);
             }
           }
 

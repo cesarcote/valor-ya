@@ -172,7 +172,6 @@ export class PaymentStatusComponent implements OnInit {
         return;
       }
 
-      // TODO: Aquí procesarías el MCM con paymentContext.chip
       console.log('Contexto de pago válido:', paymentContext);
 
       // Limpiar localStorage

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { TestStateService } from '../../services/test-state.service';
+import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
@@ -165,11 +165,14 @@ export class PaymentStatusComponent implements OnInit {
         return;
       }
 
-      // TODO: Aquí procesarías el MCM con paymentContext.chip
       console.log('[Test] Contexto de pago válido:', paymentContext);
 
-      // Limpiar localStorage
-      localStorage.removeItem('test-payment-context');
+      // Restaurar datos mínimos al state service para que el guard permita acceso
+      this.stateService.setPredioData(
+        { chip: paymentContext.chip } as any,
+        TipoBusqueda.CHIP,
+        paymentContext.chip
+      );
 
       // Navegar a result
       this.router.navigate([config.primaryAction.route]);

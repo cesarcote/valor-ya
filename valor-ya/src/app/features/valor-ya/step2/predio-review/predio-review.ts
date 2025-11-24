@@ -188,9 +188,9 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       error: (error) => {
         this.isValidatingAvailability.set(false);
         this.showModal.set(true);
-        this.modalTitle.set('Error de conexión');
+        this.modalTitle.set('Servicio no disponible');
         this.modalMessage.set(
-          'No pudimos conectar con el sistema de valoración. Por favor, verifique su conexión a internet e intente nuevamente.'
+          'El sistema de valoración no está disponible en este momento. Por favor, intente más tarde.'
         );
         this.modalIconType.set('error');
         this.modalButtonText.set('Aceptar');

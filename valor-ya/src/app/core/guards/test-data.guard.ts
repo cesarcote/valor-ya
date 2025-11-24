@@ -8,7 +8,7 @@ export const testDataGuard: CanActivateFn = () => {
 
   const predioData = stateService.predioData();
 
-  if (!predioData || !predioData.loteid) {
+  if (!predioData || !predioData.chip) {
     router.navigate(['/test/solicitud']);
     return false;
   }
