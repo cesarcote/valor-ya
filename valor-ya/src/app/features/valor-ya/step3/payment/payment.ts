@@ -123,7 +123,7 @@ export class PaymentComponent implements OnInit {
               };
               localStorage.setItem('valor-ya-payment-context', JSON.stringify(paymentContext));
 
-              window.open(paymentUrl, '_blank');
+              window.location.href = paymentUrl;
             }
           }
 

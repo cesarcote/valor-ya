@@ -174,8 +174,7 @@ export class PaymentStatusComponent implements OnInit {
 
       console.log('Contexto de pago válido:', paymentContext);
 
-      // Limpiar localStorage
-      localStorage.removeItem('valor-ya-payment-context');
+      this.stateService.restoreFromPayment(paymentContext.chip);
 
       // Navegar a result
       this.router.navigate([config.primaryAction.route]);

@@ -54,6 +54,10 @@ export class ValorYaStateService {
     this.valorYaResponse.set(response);
   }
 
+  restoreFromPayment(chip: string): void {
+    this.predioData.set({ chip } as PredioData);
+  }
+
   reset(): void {
     this.tipoBusqueda.set(undefined);
     this.valorBusqueda.set(undefined);

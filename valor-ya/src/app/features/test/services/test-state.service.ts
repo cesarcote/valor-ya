@@ -58,6 +58,10 @@ export class TestStateService {
     this.valorYaResponse.set(response);
   }
 
+  restoreFromPayment(chip: string): void {
+    this.predioData.set({ chip } as PredioData);
+  }
+
   setCompraInfo(compraId: number, uuid: string): void {
     this.compraId.set(compraId);
     this.uuid.set(uuid);
