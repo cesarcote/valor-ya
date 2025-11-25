@@ -11,17 +11,6 @@ import { ComprasService } from '../../../../shared/services/compras.service';
 
 type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 
-interface PaymentData {
-  referenceCode?: string;
-  transactionId?: string;
-  amount?: number;
-  currency?: string;
-  signature?: string;
-  responseCode?: string;
-  authorizationCode?: string;
-  transactionDate?: string;
-}
-
 interface StatusConfig {
   title: string;
   message: string;
@@ -30,7 +19,6 @@ interface StatusConfig {
   bgColor: string;
   primaryAction: { label: string; route: string };
   secondaryAction?: { label: string; route: string };
-  showDetails: boolean;
 }
 
 @Component({
@@ -61,7 +49,6 @@ export class PaymentStatusComponent implements OnInit {
       bgColor: 'bg-green-50',
       primaryAction: { label: 'Ver Documento', route: '/test/respuesta' },
       secondaryAction: { label: 'Nueva Consulta', route: '/test/seleccionar' },
-      showDetails: true,
     },
     failure: {
       title: 'Pago Rechazado',
@@ -72,7 +59,6 @@ export class PaymentStatusComponent implements OnInit {
       bgColor: 'bg-red-50',
       primaryAction: { label: 'Intentar Nuevamente', route: '/test/pago' },
       secondaryAction: { label: 'Volver al Inicio', route: '/test/seleccionar' },
-      showDetails: true,
     },
     pending: {
       title: 'Pago Pendiente',
@@ -82,7 +68,6 @@ export class PaymentStatusComponent implements OnInit {
       iconColor: 'text-yellow-600',
       bgColor: 'bg-yellow-50',
       primaryAction: { label: 'Volver al Inicio', route: '/test/seleccionar' },
-      showDetails: true,
     },
     review: {
       title: 'Pago en Revisión',
@@ -92,12 +77,10 @@ export class PaymentStatusComponent implements OnInit {
       iconColor: 'text-blue-600',
       bgColor: 'bg-blue-50',
       primaryAction: { label: 'Volver al Inicio', route: '/test/seleccionar' },
-      showDetails: true,
     },
   };
 
   currentConfig = computed(() => this.statusConfigs[this.status()]);
-  paymentData = signal<PaymentData>({});
 
   ngOnInit(): void {
     this.stepperService.setStep(TestStep.PROCESO);
@@ -117,19 +100,6 @@ export class PaymentStatusComponent implements OnInit {
 
     this.route.queryParams.subscribe((params) => {
       this.transactionId.set(params['transaction_id'] || params['x_transaction_id'] || null);
-
-      const payuParams = {
-        referenceCode: params['reference_code'] || params['x_ref_payco'],
-        transactionId: params['transaction_id'] || params['x_transaction_id'],
-        amount: params['amount'] || params['x_amount'],
-        currency: params['currency'] || params['x_currency_code'],
-        signature: params['signature'] || params['x_signature'],
-        responseCode: params['response_code'] || params['x_cod_response'],
-        authorizationCode: params['authorization_code'] || params['x_approval_code'],
-        transactionDate: params['transaction_date'] || params['x_transaction_date'],
-      };
-
-      this.paymentData.set(payuParams);
       setTimeout(() => this.isLoading.set(false), 1000);
     });
   }
