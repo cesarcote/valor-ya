@@ -108,7 +108,7 @@ export class PaymentComponent implements OnInit {
       const currentYear = new Date().getFullYear();
       const radNum = Math.floor(Math.random() * 90000) + 10000;
       const compraRequest = {
-        usuarioId: 40,
+        usuarioId: 50,
         fechaCompra,
         estado: 'PENDIENTE' as const,
         uuid,
@@ -119,8 +119,8 @@ export class PaymentComponent implements OnInit {
         valor,
         version: 1,
         productoId,
-        cantidad: 2,
-        valorUnitario: 50000,
+        cantidad: 1,
+        valorUnitario: valor,
         tipoFiltroProdId: null,
         valorFiltro: null,
         prodDetId1: predioData.chip,
@@ -150,7 +150,7 @@ export class PaymentComponent implements OnInit {
             numeroConfTx: null,
             fechaConfTx: null,
             tipoPersona: 'NATURAL',
-            banco: 'BANCOLOMBIA',
+            banco: 'BANCO UNION COLOMBIANO',
             version: 1,
             numPago: 1,
             estadoPagoProveedor: null,

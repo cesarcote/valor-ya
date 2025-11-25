@@ -105,13 +105,13 @@ export class PaymentComponent implements OnInit {
       // PASO 1: Crear la compra
       const uuid = `UUID-${Date.now()}`;
       const fechaCompra = new Date().toISOString().split('T')[0];
-      const valor = 30000;
+      const valor = 50000;
       const productoId = 1;
       const currentYear = new Date().getFullYear();
       const radNum = Math.floor(Math.random() * 90000) + 10000;
 
       const compraRequest = {
-        usuarioId: 40,
+        usuarioId: 50,
         fechaCompra,
         estado: 'PENDIENTE' as const,
         uuid,
@@ -149,7 +149,7 @@ export class PaymentComponent implements OnInit {
             numeroConfTx: null,
             fechaConfTx: null,
             tipoPersona: 'NATURAL',
-            banco: 'BANCOLOMBIA',
+            banco: 'BANCO UNION COLOMBIANO',
             version: 1,
             numPago: 1,
             estadoPagoProveedor: null,
