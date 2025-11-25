@@ -6,7 +6,7 @@ export interface PaymentUser {
 }
 
 export interface PaymentOrder {
-  dev_reference: string;
+  dev_reference: number;
   description: string;
   amount: number;
   installments_type: number;
@@ -37,7 +37,7 @@ export interface PaymentInfo {
 export interface PaymentOrderResponse {
   id: string;
   status: string;
-  dev_reference: string;
+  dev_reference: number;
   description: string;
   currency: string;
   amount: number;

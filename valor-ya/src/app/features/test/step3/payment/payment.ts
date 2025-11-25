@@ -175,7 +175,7 @@ export class PaymentComponent implements OnInit {
                   last_name: formData.apellidos,
                 },
                 order: {
-                  dev_reference: this.paymentService.generateReference('TEST'),
+                  dev_reference: compraResponse.compraId,
                   description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD',
                   amount: valor,
                   installments_type: 0,
