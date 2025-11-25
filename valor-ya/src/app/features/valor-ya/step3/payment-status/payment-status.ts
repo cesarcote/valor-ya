@@ -7,6 +7,7 @@ import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-step
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ComprasService } from '../../../../shared/services/compras.service';
 
 type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 
@@ -44,12 +45,12 @@ export class PaymentStatusComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
+  private comprasService = inject(ComprasService);
 
   status = signal<PaymentStatus>('pending');
   transactionId = signal<string | null>(null);
   isLoading = signal(true);
 
-  // Configuraciones por cada estado
   private statusConfigs: Record<PaymentStatus, StatusConfig> = {
     success: {
       title: '¡Pago Exitoso!',
@@ -95,10 +96,7 @@ export class PaymentStatusComponent implements OnInit {
     },
   };
 
-  // Computed para obtener la configuración actual
   currentConfig = computed(() => this.statusConfigs[this.status()]);
-
-  // Datos adicionales que vienen de PayU (query params)
   paymentData = signal<PaymentData>({});
 
   ngOnInit(): void {
@@ -107,23 +105,19 @@ export class PaymentStatusComponent implements OnInit {
   }
 
   private loadPaymentStatus(): void {
-    // Obtener el estado de la URL
     this.route.params.subscribe((params) => {
       const status = params['status'] as PaymentStatus;
       if (this.isValidStatus(status)) {
         this.status.set(status);
       } else {
-        // Si el status no es válido, redirigir al inicio
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
       }
     });
 
-    // Obtener parámetros adicionales de PayU
     this.route.queryParams.subscribe((params) => {
       this.transactionId.set(params['transaction_id'] || params['x_transaction_id'] || null);
 
-      // Capturar todos los parámetros que envía PayU
       const payuParams = {
         referenceCode: params['reference_code'] || params['x_ref_payco'],
         transactionId: params['transaction_id'] || params['x_transaction_id'],
@@ -133,15 +127,10 @@ export class PaymentStatusComponent implements OnInit {
         responseCode: params['response_code'] || params['x_cod_response'],
         authorizationCode: params['authorization_code'] || params['x_approval_code'],
         transactionDate: params['transaction_date'] || params['x_transaction_date'],
-        // Agregar más campos según la documentación de PayU
       };
 
       this.paymentData.set(payuParams);
-
-      // Simular carga
-      setTimeout(() => {
-        this.isLoading.set(false);
-      }, 1000);
+      setTimeout(() => this.isLoading.set(false), 1000);
     });
   }
 
@@ -149,15 +138,42 @@ export class PaymentStatusComponent implements OnInit {
     return ['success', 'failure', 'pending', 'review'].includes(status);
   }
 
+  private updatePaymentStatus(): void {
+    const pagoId = this.stateService.pagoId();
+
+    if (!pagoId) {
+      console.warn('No se encontró pagoId para actualizar');
+      return;
+    }
+
+    const statusMap = {
+      success: { estadoPago: 'EXITOSO' as const, estadoCompra: 'COMPRADO_CON_PAGO' },
+      failure: { estadoPago: 'RECHAZADO' as const, estadoCompra: 'PENDIENTE' },
+      pending: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'PENDIENTE' },
+      review: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'PENDIENTE' },
+    };
+
+    const mapping = statusMap[this.status()];
+
+    this.comprasService
+      .actualizarCompraPago({
+        pagoId,
+        estadoPago: mapping.estadoPago,
+        estadoCompra: mapping.estadoCompra,
+      })
+      .subscribe({
+        next: (response) => console.log('✅ Estado de pago actualizado:', response),
+        error: (error) => console.error('❌ Error al actualizar estado de pago:', error),
+      });
+  }
+
   onPrimaryAction(): void {
     const config = this.currentConfig();
 
-    // Si es éxito, validar contexto de pago
     if (this.status() === 'success') {
       const paymentContextStr = localStorage.getItem('valor-ya-payment-context');
 
       if (!paymentContextStr) {
-        // No hay contexto de pago, redirigir al inicio
         console.warn('No se encontró contexto de pago en localStorage');
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
@@ -166,28 +182,25 @@ export class PaymentStatusComponent implements OnInit {
       const paymentContext = JSON.parse(paymentContextStr);
 
       if (!paymentContext.chip || !paymentContext.dev_reference) {
-        // Datos incompletos, redirigir al inicio
         console.warn('Datos incompletos en contexto de pago:', paymentContext);
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
       }
 
-      console.log('Contexto de pago válido:', paymentContext);
-
       this.stateService.restoreFromPayment(paymentContext.chip);
-
-      // Navegar a result
+      this.updatePaymentStatus();
+      localStorage.removeItem('valor-ya-payment-context');
       this.router.navigate([config.primaryAction.route]);
       return;
     }
 
+    this.updatePaymentStatus();
     this.router.navigate([config.primaryAction.route]);
   }
 
   onSecondaryAction(): void {
     const config = this.currentConfig();
     if (config.secondaryAction) {
-      // Reset state si vuelve al inicio
       if (config.secondaryAction.route === '/valor-ya/seleccionar') {
         this.stateService.reset();
       }
@@ -195,7 +208,6 @@ export class PaymentStatusComponent implements OnInit {
     }
   }
 
-  // Helper para mostrar información del predio
   getPredioInfo() {
     return this.stateService.predioData();
   }

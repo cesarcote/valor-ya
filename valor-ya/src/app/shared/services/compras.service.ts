@@ -58,6 +58,17 @@ export interface PagoResponse {
   status: 'success' | 'error';
 }
 
+export interface ActualizarCompraPagoRequest {
+  pagoId: number;
+  estadoPago: 'EXITOSO' | 'RECHAZADO' | 'PENDIENTE' | 'SIN_PAGO' | 'APROBADO';
+  estadoCompra: string;
+}
+
+export interface ActualizarCompraPagoResponse {
+  mensaje: string;
+  status: 'success' | 'error';
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -89,6 +100,23 @@ export class ComprasService {
     return this.http.post<PagoResponse>(url, pagoData).pipe(
       catchError((error) => {
         console.error('❌ [ComprasService] Error al crear pago:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Actualiza el estado de una compra y su pago asociado
+   * usando el stored procedure SP_ACTUALIZAR_COMPRA_PAGO
+   */
+  actualizarCompraPago(
+    data: ActualizarCompraPagoRequest
+  ): Observable<ActualizarCompraPagoResponse> {
+    const url = `/api/compras/pagos/actualizar`;
+
+    return this.http.put<ActualizarCompraPagoResponse>(url, data).pipe(
+      catchError((error) => {
+        console.error('❌ [ComprasService] Error al actualizar compra y pago:', error);
         throw error;
       })
     );
