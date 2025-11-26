@@ -210,7 +210,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
       this.mapComponent!.ubicarLotePorCoordenadas(
         data.coordenadasPoligono,
-        data.loteid,
         data.direccion,
         popupContent
       );

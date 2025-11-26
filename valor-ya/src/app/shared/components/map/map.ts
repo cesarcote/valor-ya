@@ -124,7 +124,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   ubicarLotePorCoordenadas(
     coordenadasPoligono: number[][][],
-    loteId?: string,
     direccion?: string,
     popupContent?: string | HTMLElement
   ): void {

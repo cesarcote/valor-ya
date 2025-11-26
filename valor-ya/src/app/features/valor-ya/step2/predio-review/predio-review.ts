@@ -78,7 +78,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
-      const valorYa = this.stateService.valorYaResponse();
 
       if (data?.coordenadasPoligono && ready) {
         this.updateMapWithData(data);
@@ -118,7 +117,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
       this.mapComponent!.ubicarLotePorCoordenadas(
         data.coordenadasPoligono,
-        data.loteid,
         data.direccion,
         popupContent
       );
