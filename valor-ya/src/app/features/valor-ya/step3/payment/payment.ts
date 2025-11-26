@@ -9,10 +9,8 @@ import {
 import { Router } from '@angular/router';
 
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
-import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
-import { PaymentUser, PaymentOrder } from '../../../../core/models/payment.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -41,7 +39,6 @@ export class PaymentComponent implements OnInit {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
-  private apiService = inject(MCMValorYaService);
   private paymentService = inject(PaymentService);
   private comprasService = inject(ComprasService);
 
@@ -170,7 +167,7 @@ export class PaymentComponent implements OnInit {
                   last_name: formData.apellidos,
                 },
                 order: {
-                  dev_reference: compraResponse.compraId,
+                  dev_reference: pagoResponse.pagoId,
                   description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD - VALOR YA',
                   amount: valor,
                   installments_type: 0,

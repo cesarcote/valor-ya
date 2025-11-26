@@ -108,14 +108,7 @@ export class PaymentStatusComponent implements OnInit {
     return ['success', 'failure', 'pending', 'review'].includes(status);
   }
 
-  private updatePaymentStatus(): void {
-    const pagoId = this.stateService.pagoId();
-
-    if (!pagoId) {
-      console.warn('[Test] No se encontró pagoId para actualizar');
-      return;
-    }
-
+  private updatePaymentStatus(pagoId: number): void {
     const statusMap = {
       success: { estadoPago: 'EXITOSO' as const, estadoCompra: 'COMPRADO_CON_PAGO' as const },
       failure: { estadoPago: 'RECHAZADO' as const, estadoCompra: 'COMPRADA_SIN_PAGO' as const },
@@ -158,13 +151,24 @@ export class PaymentStatusComponent implements OnInit {
       }
 
       this.stateService.restoreFromPayment(paymentContext.chip);
-      this.updatePaymentStatus();
+
+      const pagoId = Number(paymentContext.dev_reference);
+      this.updatePaymentStatus(pagoId);
+
       localStorage.removeItem('test-payment-context');
       this.router.navigate([config.primaryAction.route]);
       return;
     }
 
-    this.updatePaymentStatus();
+    const paymentContextStr = localStorage.getItem('test-payment-context');
+    if (paymentContextStr) {
+      const paymentContext = JSON.parse(paymentContextStr);
+      if (paymentContext.dev_reference) {
+        const pagoId = Number(paymentContext.dev_reference);
+        this.updatePaymentStatus(pagoId);
+      }
+    }
+
     this.router.navigate([config.primaryAction.route]);
   }
 
