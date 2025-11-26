@@ -53,9 +53,6 @@ export class SolicitudDatosComplementariosService {
         areaConstruida: payload.areaConstruida?.toString() || 'N/A',
         edadPredio: payload.edad || 'N/A',
         estrato: payload.estrato?.toString() || 'N/A',
-        numAscensores: payload.numeroAscensores?.toString() || 'N/A',
-        numParqueaderos: payload.numeroParqueaderos?.toString() || 'N/A',
-        numDepositos: payload.numeroDepositos?.toString() || 'N/A',
       },
     };
 

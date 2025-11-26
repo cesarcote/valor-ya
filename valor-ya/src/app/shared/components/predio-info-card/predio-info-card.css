@@ -5,6 +5,11 @@
   margin-bottom: 2rem;
 }
 
+.codigo-barrio {
+  font-size: 0.7rem !important;
+  position: absolute;
+}
+
 .result-info h4 {
   font-weight: 800;
   font-size: 1.125rem;
@@ -27,13 +32,12 @@
 
 .info-item .label {
   font-weight: 700;
-  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .info-item .value {
-  font-size: 1rem;
+  font-size: 15px;
   color: var(--color-secondary);
 }
 

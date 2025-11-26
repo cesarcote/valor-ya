@@ -40,6 +40,13 @@ export class PredioService {
       edad: infoAdicional.edad || '',
       coordenadas: this.DEFAULT_COORDINATES,
       coordenadasPoligono: infoGeografica?.coordenadasPoligono,
+      areaPoligono: infoGeografica?.areaPoligono,
+      longitudPoligono: infoGeografica?.longitudPoligono,
+      ph: infoAdicional.ph,
+      nph: infoAdicional.nph,
+      codigoManzana: infoAdicional.codigoManzana,
+      codigoPredio: infoAdicional.codigoPredio,
+      codigoBarrio: infoAdicional.codigoBarrio,
     };
   }
 
@@ -95,7 +102,7 @@ export class PredioService {
       barrio: 'Código y nombre del sector catastral.',
       tipoPredio: 'Agrupaciones de Uso2.',
       estrato: 'código estrato.',
-      areaConstruida: 'área construida del predio.',
+      areaConstruida: 'área construida privada del predio.',
       edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
       coordenadas: { lat: 4.711, lng: -74.0721 },
     });

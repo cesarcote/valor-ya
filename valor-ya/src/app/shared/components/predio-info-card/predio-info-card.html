@@ -20,6 +20,7 @@
     <div class="info-item">
       <span class="label">Barrio</span>
       <span class="value">{{ predioData.barrio }}</span>
+      <span class="value codigo-barrio">CÓDIGO: {{ predioData.codigoBarrio || 'N/A' }}</span>
     </div>
     <div class="info-item">
       <span class="label">Tipo de Predio</span>
@@ -32,7 +33,7 @@
       <span class="value">{{ predioData.estrato }}</span>
     </div>
     <div class="info-item">
-      <span class="label">Área Construida</span>
+      <span class="label">Área Construida Privada</span>
       <span class="value">{{ predioData.areaConstruida }} m²</span>
     </div>
     <div class="info-item">

@@ -59,7 +59,7 @@
           <app-input
             type="number"
             id="areaConstruida"
-            label="Área construida en m²"
+            label="Área construida privada en m²"
             [formCtr]="areaConstruidaControl"
             [min]="1"
           ></app-input>
@@ -80,38 +80,6 @@
             [formCtr]="estratoControl"
             [min]="1"
             [max]="6"
-          ></app-input>
-        </div>
-      </div>
-
-      <!-- Equipamientos y garajes -->
-      <div class="form-section">
-        <h3>Equipamientos y garajes</h3>
-        <div class="form-row">
-          <app-input
-            type="number"
-            id="numeroAscensores"
-            label="Número de ascensores"
-            [formCtr]="numeroAscensoresControl"
-            [min]="0"
-          ></app-input>
-
-          <app-input
-            type="number"
-            id="numeroParqueaderos"
-            label="Número de parqueaderos"
-            [formCtr]="numeroParqueaderosControl"
-            [min]="0"
-          ></app-input>
-        </div>
-
-        <div class="form-row">
-          <app-input
-            type="number"
-            id="numeroDepositos"
-            label="Número de depósitos"
-            [formCtr]="numeroDepositosControl"
-            [min]="0"
           ></app-input>
         </div>
       </div>

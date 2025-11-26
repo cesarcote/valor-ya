@@ -20,6 +20,11 @@ export interface CatastroResponse {
       estrato: string;
       areaConstruidaPrivada: string;
       edad: string;
+      ph?: string;
+      nph?: string;
+      codigoManzana?: string;
+      codigoPredio?: string;
+      codigoBarrio?: string;
     };
   };
   error?: string | null;
