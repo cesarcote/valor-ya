@@ -29,37 +29,21 @@
     [showBackButton]="false"
     [showContinueButton]="false"
   >
-    <div
-      class="maps-grid"
-      style="display: flex; flex-direction: column; gap: 2rem; margin-bottom: 2rem"
-    >
-      <!-- Mapa del Predio -->
-      <div class="map-container">
-        <h4 style="margin-bottom: 0.5rem; color: var(--text-secondary)">Ubicación del Predio</h4>
-        <div
-          style="
-            height: 400px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-          "
-        >
-          <app-map #mapPredio></app-map>
+    <!-- Mapas -->
+    <div class="maps-container">
+      <!-- Mapa 1: Ubicación del Predio -->
+      <div class="map-section">
+        <h3 class="section-title">Ubicación del Predio</h3>
+        <div class="map-wrapper">
+          <app-map #mapPredio [config]="{ zoom: 16 }"></app-map>
         </div>
       </div>
 
-      <!-- Mapa de Ofertas -->
-      <div class="map-container">
-        <h4 style="margin-bottom: 0.5rem; color: var(--text-secondary)">Ofertas de Referencia</h4>
-        <div
-          style="
-            height: 400px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-          "
-        >
-          <app-map #mapOfertas></app-map>
+      <!-- Mapa 2: Ofertas de Referencia -->
+      <div class="map-section">
+        <h3 class="section-title">Ofertas de Referencia</h3>
+        <div class="map-wrapper">
+          <app-map #mapOfertas [config]="{ zoom: 15 }"></app-map>
         </div>
       </div>
     </div>

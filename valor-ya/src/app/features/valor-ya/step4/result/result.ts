@@ -1,4 +1,14 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+  EnvironmentInjector,
+  createComponent,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -12,6 +22,10 @@ import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ReporteService } from '../../../../shared/services/reporte.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { MapComponent } from '../../../../shared/components/map';
+import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
+import { PredioService } from '../../../../shared/services/predio.service';
+import { PredioData } from '../../../../core/models/predio-data.model';
 
 @Component({
   selector: 'app-result',
@@ -21,17 +35,35 @@ import { NotificationService } from '../../../../core/services/notification.serv
     ButtonComponent,
     ValoryaDescription,
     ContainerContentComponent,
+    MapComponent,
   ],
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
 })
-export class ResultComponent implements OnInit {
+export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private apiService = inject(MCMValorYaService);
   private reporteService = inject(ReporteService);
   private notificationService = inject(NotificationService);
+  private injector = inject(EnvironmentInjector);
+  private predioService = inject(PredioService);
+
+  @ViewChild('mapPredio')
+  set mapPredioSetter(map: MapComponent) {
+    this.mapPredio = map;
+    this.tryRenderMapPredio();
+  }
+
+  @ViewChild('mapOfertas')
+  set mapOfertasSetter(map: MapComponent) {
+    this.mapOfertas = map;
+    this.tryRenderMapOfertas();
+  }
+
+  private mapPredio?: MapComponent;
+  private mapOfertas?: MapComponent;
 
   isDownloading = signal(false);
   isLoadingResult = signal(false);
@@ -50,11 +82,53 @@ export class ResultComponent implements OnInit {
     }
 
     this.isLoadingResult.set(true);
+
+    // 1. Intentar cargar desde localStorage primero (Optimización)
+    const storedData = localStorage.getItem('valorya-predio-data');
+    if (storedData) {
+      try {
+        const predioData: PredioData = JSON.parse(storedData);
+        if (predioData.chip === chip) {
+          this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
+          this.loadValorYaResults(chip);
+          return;
+        }
+      } catch (e) {
+        console.warn('Error parsing stored predio data', e);
+      }
+    }
+
+    // 2. Si no hay datos en local, consultar API (Fallback)
+    this.predioService.consultarPorChip(chip).subscribe({
+      next: (predioData) => {
+        this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
+        this.loadValorYaResults(chip);
+      },
+      error: (err) => {
+        console.error('Error al consultar datos del predio:', err);
+        this.errorLoadingResult.set('Error al cargar la información del predio.');
+        this.isLoadingResult.set(false);
+      },
+    });
+  }
+
+  ngAfterViewInit(): void {}
+
+  ngOnDestroy(): void {
+    // Limpiar datos temporales al salir del paso de resultados
+    localStorage.removeItem('valorya-predio-data');
+  }
+
+  private loadValorYaResults(chip: string): void {
     this.apiService.procesarChip(chip).subscribe({
       next: (resp) => {
         this.apiResponse.set(resp);
         this.stateService.setValorYaResponse(resp);
         this.isLoadingResult.set(false);
+
+        // Intentar renderizar mapas
+        this.tryRenderMapPredio();
+        this.tryRenderMapOfertas();
       },
       error: (err) => {
         console.error('Error al obtener resultados del avalúo:', err);
@@ -64,7 +138,82 @@ export class ResultComponent implements OnInit {
     });
   }
 
-  onDescargarAvaluo(): void {
+  private tryRenderMapPredio(): void {
+    if (
+      this.mapPredio &&
+      this.stateService.predioData()?.coordenadasPoligono &&
+      this.apiResponse()
+    ) {
+      this.renderizarMapaPredio(this.mapPredio, this.stateService.predioData()!);
+    }
+  }
+
+  private tryRenderMapOfertas(): void {
+    if (this.mapOfertas && this.apiResponse()) {
+      this.renderizarMapaOfertas(this.mapOfertas, this.apiResponse()!);
+    }
+  }
+
+  private renderizarMapaPredio(map: MapComponent, data: PredioData): void {
+    // Crear tarjeta dinámica
+    const componentRef = createComponent(MapCardComponent, {
+      environmentInjector: this.injector,
+    });
+
+    componentRef.setInput('predioData', data);
+    componentRef.setInput('valorYaData', this.apiResponse());
+
+    componentRef.instance.close.subscribe(() => {
+      map.closeTooltip();
+    });
+
+    componentRef.changeDetectorRef.detectChanges();
+    const popupContent = componentRef.location.nativeElement;
+
+    map.ubicarLotePorCoordenadas(data.coordenadasPoligono!, data.direccion, popupContent);
+  }
+
+  private renderizarMapaOfertas(map: MapComponent, response: MCMValorYAResultado): void {
+    if (!response.resultados || response.resultados.length === 0) return;
+
+    const predioBase = response.resultados[0];
+    const coloresOfertas = ['#2563eb', '#10b981', '#f9bc16ff'];
+
+    // 1. Marcador del Predio a Valorar (Pin Rojo)
+    map.addMarker({
+      lat: predioBase.POINT_Y_PREDIO,
+      lng: predioBase.POINT_X_PREDIO,
+      tooltipContent: '<strong>Predio a Valorar</strong>',
+      tooltipOptions: {
+        permanent: true,
+        direction: 'top',
+        offset: [0, -35],
+      },
+      color: '#e3192f',
+      markerType: 'pin',
+    });
+
+    // 2. Marcadores de las Ofertas (Círculos de colores)
+    response.resultados.forEach((oferta, index) => {
+      map.addMarker({
+        lat: oferta.POINT_Y_OFERTA,
+        lng: oferta.POINT_X_OFERTA,
+        tooltipContent: `<strong>Oferta ${index + 1}</strong>`,
+        tooltipOptions: {
+          permanent: true,
+          direction: 'top',
+          className: 'offer-tooltip',
+        },
+        color: coloresOfertas[index % coloresOfertas.length],
+        markerType: 'circle',
+      });
+    });
+
+    // 3. Centrar el mapa en el predio
+    map.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 16);
+  }
+
+  async onDescargarAvaluo(): Promise<void> {
     const predioData = this.stateService.predioData();
     if (!predioData?.chip) {
       console.error('No se encontró el chip del predio');
@@ -79,9 +228,27 @@ export class ResultComponent implements OnInit {
       return;
     }
 
+    this.isDownloading.set(true);
+
+    let imagenBase64: string | undefined;
+    let imagenBase64Ofertas: string | undefined;
+
+    try {
+      if (this.mapPredio) {
+        imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || undefined;
+      }
+      if (this.mapOfertas) {
+        imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || undefined;
+      }
+    } catch (error) {
+      console.warn('Error capturando mapas:', error);
+    }
+
     const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
 
-    this.isDownloading.set(true);
+    if (imagenBase64) datos.imagenBase64 = imagenBase64;
+    if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
+
     console.log('Generando reporte de avalúo para chip:', predioData.chip);
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
@@ -107,7 +274,6 @@ export class ResultComponent implements OnInit {
       },
     });
   }
-
   onNuevaConsulta(): void {
     this.stateService.reset();
     this.stepperService.reset();

@@ -177,6 +177,8 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    localStorage.setItem('valorya-predio-data', JSON.stringify(predio));
+
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 

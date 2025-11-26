@@ -4,6 +4,18 @@
   padding: 2rem 1rem;
 }
 
+.maps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.map-section {
+  display: flex;
+  flex-direction: column;
+}
+
 .result-section {
   background: white;
   border-radius: 16px;

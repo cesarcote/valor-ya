@@ -29,6 +29,24 @@
     [showBackButton]="false"
     [showContinueButton]="false"
   >
+  <!-- Mapas -->
+    <div class="maps-container">
+      <!-- Mapa 1: Ubicación del Predio -->
+      <div class="map-section">
+        <h3 class="section-title">Ubicación del Predio</h3>
+        <div class="map-wrapper">
+          <app-map #mapPredio [config]="{ zoom: 16 }"></app-map>
+        </div>
+      </div>
+
+      <!-- Mapa 2: Ofertas de Referencia -->
+      <div class="map-section">
+        <h3 class="section-title">Ofertas de Referencia</h3>
+        <div class="map-wrapper">
+          <app-map #mapOfertas [config]="{ zoom: 15 }"></app-map>
+        </div>
+      </div>
+    </div>
     <!-- Resumen del Avalúo -->
     <div class="info-section">
       <h3 class="section-title">Resumen del Avalúo</h3>

@@ -165,7 +165,7 @@ export class PaymentStatusComponent implements OnInit {
       const compraId = Number(paymentContext.compraId);
       this.updatePaymentStatus(pagoId, compraId);
 
-      localStorage.removeItem('valor-ya-payment-context');
+      //localStorage.removeItem('valor-ya-payment-context');
       this.router.navigate([config.primaryAction.route]);
       return;
     }
