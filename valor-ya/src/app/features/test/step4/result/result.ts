@@ -153,19 +153,35 @@ export class ResultComponent implements OnInit, AfterViewInit {
   }
 
   private renderizarMapaOfertas(map: MapComponent, response: MCMValorYAResultado): void {
-    // Aquí deberíamos pintar las ofertas.
-    // Como no tenemos coordenadas exactas de las ofertas en el mock actual (solo POINT_X/Y que podrían ser planas),
-    // por ahora centraremos en el predio y quizás añadiremos marcadores dummy si tuviéramos lat/lng.
-    // Asumiremos que POINT_X_OFERTA y POINT_Y_OFERTA son coordenadas que podríamos convertir,
-    // pero para este ejemplo usaremos el centro del predio como referencia visual.
+    if (!response.resultados || response.resultados.length === 0) return;
 
-    const predioData = this.stateService.predioData();
-    if (predioData?.coordenadasPoligono) {
-      // Pintar el polígono del predio como referencia (quizás con otro color)
-      map.ubicarLotePorCoordenadas(predioData.coordenadasPoligono, predioData.direccion);
-    }
+    const predioBase = response.resultados[0];
+    const coloresOfertas = ['#2563eb', '#10b981', '#f9bc16ff'];
 
-    // TODO: Iterar sobre response.resultados y pintar ofertas si tuviéramos lat/lng válidas.
+    // 1. Marcador del Predio a Valorar (Pin Rojo)
+    map.addMarker({
+      lat: predioBase.POINT_Y_PREDIO,
+      lng: predioBase.POINT_X_PREDIO,
+      popupText: '<strong>Predio a Valorar</strong>',
+      color: '#e3192f',
+      markerType: 'pin',
+    });
+
+    // 2. Marcadores de las Ofertas (Círculos de colores)
+    response.resultados.forEach((oferta, index) => {
+      map.addMarker({
+        lat: oferta.POINT_Y_OFERTA,
+        lng: oferta.POINT_X_OFERTA,
+        popupText: `<strong>Oferta ${index + 1}</strong><br>Valor: $${this.formatCurrency(
+          oferta.VALOR_INTEGRAL_OFERTA
+        )}`,
+        color: coloresOfertas[index % coloresOfertas.length],
+        markerType: 'circle',
+      });
+    });
+
+    // 3. Centrar el mapa en el predio
+    map.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 15);
   }
 
   async onDescargarAvaluo(): Promise<void> {

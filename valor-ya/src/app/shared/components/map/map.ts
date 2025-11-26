@@ -26,6 +26,8 @@ export interface MarkerConfig {
   popupOptions?: L.PopupOptions;
   tooltipContent?: string | HTMLElement;
   tooltipOptions?: L.TooltipOptions;
+  color?: string;
+  markerType?: 'pin' | 'circle';
 }
 
 export interface PolygonConfig {
@@ -90,20 +92,66 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   addMarker(markerConfig: MarkerConfig): void {
     if (!this.map) return;
 
-    this.clearMarker();
+    // Si no se quiere acumular marcadores, descomentar la siguiente línea
+    // this.clearMarker();
 
-    const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions } = markerConfig;
-    this.currentMarker = L.marker([lat, lng]).addTo(this.map);
+    const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions, color, markerType } =
+      markerConfig;
+
+    let marker: L.Marker;
+
+    if (color) {
+      let iconHtml: string;
+      let iconSize: [number, number];
+      let iconAnchor: [number, number];
+      let popupAnchor: [number, number];
+
+      if (markerType === 'circle') {
+        iconHtml = `
+          <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="8" fill="${color}" stroke="#fff" stroke-width="2"/>
+          </svg>
+        `;
+        iconSize = [20, 20];
+        iconAnchor = [10, 10];
+        popupAnchor = [0, -10];
+      } else {
+        iconHtml = `
+          <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+            <path fill="${color}" stroke="#fff" stroke-width="2"
+              d="M12.5 0C5.6 0 0 5.6 0 12.5c0 1.9 0.4 3.7 1.2 5.3L12.5 41l11.3-23.2c0.8-1.6 1.2-3.4 1.2-5.3C25 5.6 19.4 0 12.5 0z"/>
+            <circle cx="12.5" cy="12.5" r="6" fill="#fff"/>
+          </svg>
+        `;
+        iconSize = [25, 41];
+        iconAnchor = [12, 41];
+        popupAnchor = [1, -34];
+      }
+
+      const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: iconHtml,
+        iconSize: iconSize,
+        iconAnchor: iconAnchor,
+        popupAnchor: popupAnchor,
+      });
+      marker = L.marker([lat, lng], { icon: customIcon }).addTo(this.map);
+    } else {
+      marker = L.marker([lat, lng]).addTo(this.map);
+    }
+
+    // Guardar referencia si es el marcador principal (se podría mejorar para manejar múltiples)
+    this.currentMarker = marker;
 
     if (popupText) {
-      this.currentMarker.bindPopup(popupText, popupOptions).openPopup();
+      marker.bindPopup(popupText, popupOptions).openPopup();
     }
 
     if (tooltipContent) {
-      this.currentMarker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
+      marker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
 
-      this.currentMarker.on('click', () => {
-        this.currentMarker?.openTooltip();
+      marker.on('click', () => {
+        marker?.openTooltip();
       });
     }
   }
