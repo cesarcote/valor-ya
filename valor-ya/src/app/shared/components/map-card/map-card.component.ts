@@ -1,4 +1,4 @@
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PredioData } from '../../../core/models/predio-data.model';
 import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
@@ -32,5 +32,11 @@ export class MapCardComponent {
 
   @Input() set valorYaData(value: MCMValorYAResultado | undefined) {
     this.valorYaResponse.set(value);
+  }
+
+  @Output() close = new EventEmitter<void>();
+
+  onClose() {
+    this.close.emit();
   }
 }

@@ -295,4 +295,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       }
     }
   }
+
+  closeTooltip(): void {
+    if (this.currentMarker) {
+      this.currentMarker.closeTooltip();
+    }
+  }
 }

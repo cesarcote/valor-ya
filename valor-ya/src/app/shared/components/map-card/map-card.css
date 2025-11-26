@@ -25,6 +25,20 @@
   font-weight: bold;
 }
 
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
 .popup-content {
   padding: 15px;
 }

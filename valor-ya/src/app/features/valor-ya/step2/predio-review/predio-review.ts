@@ -100,7 +100,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {}
-
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
       // Crear instancia del componente de tarjeta dinámicamente
@@ -110,6 +109,10 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
       componentRef.setInput('predioData', data);
       componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
+
+      componentRef.instance.close.subscribe(() => {
+        this.mapComponent?.closeTooltip();
+      });
 
       componentRef.changeDetectorRef.detectChanges();
 
