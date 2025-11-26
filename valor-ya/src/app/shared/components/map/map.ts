@@ -119,7 +119,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.currentPolygon = L.polygon(polygonConfig.coordinates, style).addTo(this.map);
 
     const bounds = this.currentPolygon.getBounds();
-    this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
+    this.map.fitBounds(bounds, {
+      maxZoom: 19,
+      paddingTopLeft: [20, 20],
+      paddingBottomRight: [200, 20],
+    });
   }
 
   ubicarLotePorCoordenadas(
