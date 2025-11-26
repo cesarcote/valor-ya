@@ -181,7 +181,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ubicarLotePorCoordenadas(
     coordenadasPoligono: number[][][],
     direccion?: string,
-    popupContent?: string | HTMLElement
+    popupContent?: string | HTMLElement,
+    tooltipClass: string = 'custom-tooltip-card'
   ): void {
     if (!this.map) {
       console.error('Map not initialized!');
@@ -213,9 +214,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         ? {
             permanent: true,
             direction: 'right',
-            className: 'custom-tooltip-card',
+            className: tooltipClass,
             interactive: true,
-            offset: [100, 0],
+            offset: tooltipClass === 'custom-tooltip-card' ? [100, 0] : [0, 0], // Solo offset para la card grande
           }
         : undefined,
     });

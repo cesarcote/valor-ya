@@ -162,7 +162,11 @@ export class ResultComponent implements OnInit, AfterViewInit {
     map.addMarker({
       lat: predioBase.POINT_Y_PREDIO,
       lng: predioBase.POINT_X_PREDIO,
-      popupText: '<strong>Predio a Valorar</strong>',
+      tooltipContent: '<strong>Predio a Valorar</strong>',
+      tooltipOptions: {
+        permanent: true,
+        direction: 'top',
+      },
       color: '#e3192f',
       markerType: 'pin',
     });
@@ -172,13 +176,13 @@ export class ResultComponent implements OnInit, AfterViewInit {
       map.addMarker({
         lat: oferta.POINT_Y_OFERTA,
         lng: oferta.POINT_X_OFERTA,
-        tooltipContent: `<strong>Oferta ${index + 1}</strong><br>Valor: $${this.formatCurrency(
+        tooltipContent: `<strong>Oferta ${index + 1}</strong><br>Valor: ${this.formatCurrency(
           oferta.VALOR_INTEGRAL_OFERTA
         )}`,
         tooltipOptions: {
           permanent: true,
           direction: 'top',
-          className: 'offer-tooltip', // Optional class if we want to style it later
+          className: 'offer-tooltip',
         },
         color: coloresOfertas[index % coloresOfertas.length],
         markerType: 'circle',
@@ -186,7 +190,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
     });
 
     // 3. Centrar el mapa en el predio
-    map.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 15);
+    map.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 16);
   }
 
   async onDescargarAvaluo(): Promise<void> {
