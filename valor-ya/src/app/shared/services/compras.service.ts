@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 export interface CompraRequest {
   usuarioId: number;
   fechaCompra: string;
-  estado: 'PENDIENTE' | 'COMPLETADO' | 'CANCELADO';
+  estado: 'COMPRADO_CON_PAGO' | 'COMPRADA_SIN_PAGO' | 'REGISTRADA' | 'PENDIENTE' | 'COMPLETADO';
   uuid: string;
   valor: number;
   productoId: number;
@@ -36,7 +36,7 @@ export interface CompraResponse {
 
 export interface PagoRequest {
   compraId: number;
-  estado: 'PENDIENTE' | 'APROBADO' | 'RECHAZADO' | 'EN_PROCESO' | 'CANCELADO';
+  estado: 'EXITOSO' | 'RECHAZADO' | 'PENDIENTE' | 'SIN_PAGO' | 'APROBADO';
 
   numeroTx?: string | null;
   banco?: string | null;
@@ -61,7 +61,7 @@ export interface PagoResponse {
 export interface ActualizarCompraPagoRequest {
   pagoId: number;
   estadoPago: 'EXITOSO' | 'RECHAZADO' | 'PENDIENTE' | 'SIN_PAGO' | 'APROBADO';
-  estadoCompra: string;
+  estadoCompra: 'COMPRADO_CON_PAGO' | 'COMPRADA_SIN_PAGO' | 'REGISTRADA' | 'PENDIENTE' | 'COMPLETADO';
 }
 
 export interface ActualizarCompraPagoResponse {

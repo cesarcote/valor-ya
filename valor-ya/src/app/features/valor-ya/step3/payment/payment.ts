@@ -113,7 +113,7 @@ export class PaymentComponent implements OnInit {
       const compraRequest = {
         usuarioId: 50,
         fechaCompra,
-        estado: 'PENDIENTE' as const,
+        estado: 'REGISTRADA' as const,
         uuid,
         pagoId: null,
         facturaId: null,

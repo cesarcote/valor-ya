@@ -117,10 +117,10 @@ export class PaymentStatusComponent implements OnInit {
     }
 
     const statusMap = {
-      success: { estadoPago: 'EXITOSO' as const, estadoCompra: 'COMPRADO_CON_PAGO' },
-      failure: { estadoPago: 'RECHAZADO' as const, estadoCompra: 'PENDIENTE' },
-      pending: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'PENDIENTE' },
-      review: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'PENDIENTE' },
+      success: { estadoPago: 'EXITOSO' as const, estadoCompra: 'COMPRADO_CON_PAGO' as const },
+      failure: { estadoPago: 'RECHAZADO' as const, estadoCompra: 'COMPRADA_SIN_PAGO' as const },
+      pending: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'REGISTRADA' as const },
+      review: { estadoPago: 'PENDIENTE' as const, estadoCompra: 'REGISTRADA' as const },
     };
 
     const mapping = statusMap[this.status()];
