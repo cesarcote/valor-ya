@@ -177,9 +177,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
       map.addMarker({
         lat: oferta.POINT_Y_OFERTA,
         lng: oferta.POINT_X_OFERTA,
-        tooltipContent: `<strong>Oferta ${index + 1}</strong><br>Valor: ${this.formatCurrency(
-          oferta.VALOR_INTEGRAL_OFERTA
-        )}`,
+        tooltipContent: `<strong>Oferta ${index + 1}</strong>`,
         tooltipOptions: {
           permanent: true,
           direction: 'top',
