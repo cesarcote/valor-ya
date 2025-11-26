@@ -101,6 +101,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     if (tooltipContent) {
       this.currentMarker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
+
+      this.currentMarker.on('click', () => {
+        this.currentMarker?.openTooltip();
+      });
     }
   }
 
@@ -122,7 +126,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.fitBounds(bounds, {
       maxZoom: 19,
       paddingTopLeft: [20, 20],
-      paddingBottomRight: [200, 20],
+      paddingBottomRight: [80, 20],
     });
   }
 
