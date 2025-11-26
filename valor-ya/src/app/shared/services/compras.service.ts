@@ -61,12 +61,28 @@ export interface PagoResponse {
 export interface ActualizarCompraPagoRequest {
   pagoId: number;
   estadoPago: 'EXITOSO' | 'RECHAZADO' | 'PENDIENTE' | 'SIN_PAGO' | 'APROBADO';
-  estadoCompra: 'COMPRADO_CON_PAGO' | 'COMPRADA_SIN_PAGO' | 'REGISTRADA' | 'PENDIENTE' | 'COMPLETADO';
+  estadoCompra:
+    | 'COMPRADO_CON_PAGO'
+    | 'COMPRADA_SIN_PAGO'
+    | 'REGISTRADA'
+    | 'PENDIENTE'
+    | 'COMPLETADO';
 }
 
 export interface ActualizarCompraPagoResponse {
   mensaje: string;
   status: 'success' | 'error';
+}
+
+export interface FacturaRequest {
+  compraId: number;
+}
+
+export interface FacturaResponse {
+  status: 'success' | 'error';
+  mensaje: string;
+  facturaId: number;
+  compraId: number;
 }
 
 @Injectable({
@@ -84,7 +100,7 @@ export class ComprasService {
 
     return this.http.post<CompraResponse>(url, compraData).pipe(
       catchError((error) => {
-        console.error('❌ [ComprasService] Error al crear compra:', error);
+        console.error('Error al crear compra:', error);
         throw error;
       })
     );
@@ -99,7 +115,7 @@ export class ComprasService {
 
     return this.http.post<PagoResponse>(url, pagoData).pipe(
       catchError((error) => {
-        console.error('❌ [ComprasService] Error al crear pago:', error);
+        console.error('Error al crear pago:', error);
         throw error;
       })
     );
@@ -116,7 +132,22 @@ export class ComprasService {
 
     return this.http.put<ActualizarCompraPagoResponse>(url, data).pipe(
       catchError((error) => {
-        console.error('❌ [ComprasService] Error al actualizar compra y pago:', error);
+        console.error('Error al actualizar compra y pago:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Crea una factura para una compra existente
+   * usando el paquete PL/SQL TIENDA_VIRTUAL.PK_TV_FACTURA.fn_crea_factura
+   */
+  crearFactura(facturaData: FacturaRequest): Observable<FacturaResponse> {
+    const url = `/api/compras/facturas`;
+
+    return this.http.post<FacturaResponse>(url, facturaData).pipe(
+      catchError((error) => {
+        console.error('Error al crear factura:', error);
         throw error;
       })
     );

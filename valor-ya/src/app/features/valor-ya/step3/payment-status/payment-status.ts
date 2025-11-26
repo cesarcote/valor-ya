@@ -108,7 +108,7 @@ export class PaymentStatusComponent implements OnInit {
     return ['success', 'failure', 'pending', 'review'].includes(status);
   }
 
-  private updatePaymentStatus(pagoId: number): void {
+  private updatePaymentStatus(pagoId: number, compraId?: number): void {
     const statusMap = {
       success: { estadoPago: 'EXITOSO' as const, estadoCompra: 'COMPRADO_CON_PAGO' as const },
       failure: { estadoPago: 'RECHAZADO' as const, estadoCompra: 'COMPRADA_SIN_PAGO' as const },
@@ -125,9 +125,20 @@ export class PaymentStatusComponent implements OnInit {
         estadoCompra: mapping.estadoCompra,
       })
       .subscribe({
-        next: (response) => console.log('✅ Estado de pago actualizado:', response),
-        error: (error) => console.error('❌ Error al actualizar estado de pago:', error),
+        next: () => {
+          if (this.status() === 'success' && compraId) {
+            this.crearFactura(compraId);
+          }
+        },
+        error: (err) => console.error('Error al actualizar estado de pago:', err),
       });
+  }
+
+  private crearFactura(compraId: number): void {
+    this.comprasService.crearFactura({ compraId }).subscribe({
+      next: () => {},
+      error: (err) => console.error('Error al crear factura:', err),
+    });
   }
 
   onPrimaryAction(): void {
@@ -137,7 +148,6 @@ export class PaymentStatusComponent implements OnInit {
       const paymentContextStr = localStorage.getItem('valor-ya-payment-context');
 
       if (!paymentContextStr) {
-        console.warn('No se encontró contexto de pago en localStorage');
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
       }
@@ -145,7 +155,6 @@ export class PaymentStatusComponent implements OnInit {
       const paymentContext = JSON.parse(paymentContextStr);
 
       if (!paymentContext.chip || !paymentContext.dev_reference) {
-        console.warn('Datos incompletos en contexto de pago:', paymentContext);
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
       }
@@ -153,7 +162,8 @@ export class PaymentStatusComponent implements OnInit {
       this.stateService.restoreFromPayment(paymentContext.chip);
 
       const pagoId = Number(paymentContext.dev_reference);
-      this.updatePaymentStatus(pagoId);
+      const compraId = Number(paymentContext.compraId);
+      this.updatePaymentStatus(pagoId, compraId);
 
       localStorage.removeItem('valor-ya-payment-context');
       this.router.navigate([config.primaryAction.route]);
@@ -165,7 +175,8 @@ export class PaymentStatusComponent implements OnInit {
       const paymentContext = JSON.parse(paymentContextStr);
       if (paymentContext.dev_reference) {
         const pagoId = Number(paymentContext.dev_reference);
-        this.updatePaymentStatus(pagoId);
+        const compraId = paymentContext.compraId ? Number(paymentContext.compraId) : undefined;
+        this.updatePaymentStatus(pagoId, compraId);
       }
     }
 

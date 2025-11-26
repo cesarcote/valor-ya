@@ -181,10 +181,10 @@ export class PaymentComponent implements OnInit {
                     const paymentUrl = this.paymentService.getPaymentUrl(response);
 
                     if (paymentUrl) {
-                      // Guardar contexto de pago en localStorage
                       const paymentContext = {
                         chip: predioData.chip,
                         dev_reference: paymentData.order.dev_reference,
+                        compraId: compraResponse.compraId,
                       };
                       localStorage.setItem(
                         'valor-ya-payment-context',

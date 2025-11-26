@@ -158,12 +158,8 @@ export class PaymentComponent implements OnInit {
             codigoTxProveedor: null,
           };
 
-          console.log('[Payment] Paso 2: Creando pago...', pagoRequest);
-
           this.comprasService.crearPago(pagoRequest).subscribe({
             next: (pagoResponse) => {
-              console.log('[Payment] Pago creado:', pagoResponse);
-
               this.stateService.setPagoId(pagoResponse.pagoId);
 
               // PASO 3: Crear link de pago con Paymentez
@@ -183,21 +179,16 @@ export class PaymentComponent implements OnInit {
                 },
               };
 
-              console.log('[Payment] Paso 3: Generando link de pago...', paymentData);
-
               this.paymentService.initiatePayment(paymentData, 'test').subscribe({
                 next: (response) => {
-                  console.log('[Payment] Link de pago generado:', response);
-
                   if (response.success) {
                     const paymentUrl = this.paymentService.getPaymentUrl(response);
-                    console.log('[Payment] URL de pago:', paymentUrl);
 
                     if (paymentUrl) {
-                      // Guardar contexto de pago en localStorage
                       const paymentContext = {
                         chip: predioData.chip,
                         dev_reference: paymentData.order.dev_reference,
+                        compraId: compraResponse.compraId,
                       };
                       localStorage.setItem('test-payment-context', JSON.stringify(paymentContext));
 
@@ -208,21 +199,21 @@ export class PaymentComponent implements OnInit {
                   this.isSubmitting.set(false);
                 },
                 error: (error) => {
-                  console.error('❌ [Payment] Error al generar link de pago:', error);
+                  console.error('[Payment] Error al generar link de pago:', error);
                   this.errorMessage.set('Error al generar el link de pago. Intente nuevamente.');
                   this.isSubmitting.set(false);
                 },
               });
             },
             error: (error) => {
-              console.error('❌ [Payment] Error al crear pago:', error);
+              console.error('[Payment] Error al crear pago:', error);
               this.errorMessage.set('Error al registrar el pago. Intente nuevamente.');
               this.isSubmitting.set(false);
             },
           });
         },
         error: (error) => {
-          console.error('❌ [Payment] Error al crear compra:', error);
+          console.error('[Payment] Error al crear compra:', error);
           this.errorMessage.set('Error al crear la compra. Intente nuevamente.');
           this.isSubmitting.set(false);
         },
