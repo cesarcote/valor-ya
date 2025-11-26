@@ -81,31 +81,25 @@ export class ResultComponent implements OnInit, AfterViewInit {
 
     this.isLoadingResult.set(true);
 
-    // 1. Consultar información del predio (coordenadas)
+    const storedData = localStorage.getItem('test-predio-data');
+    if (storedData) {
+      try {
+        const predioData: PredioData = JSON.parse(storedData);
+        if (predioData.chip === chip) {
+          this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
+          this.loadValorYaResults(chip, predioData);
+          return;
+        }
+      } catch (e) {
+        console.warn('Error parsing stored predio data', e);
+      }
+    }
+
+    // 2. (Fallback)
     this.predioService.consultarPorChip(chip).subscribe({
       next: (predioData) => {
-        // Actualizar el estado con los datos completos (incluyendo coordenadas)
         this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
-
-        // 2. Simular/Obtener respuesta de ValorYa
-        setTimeout(() => {
-          const mockResponse: MCMValorYAResultado = {
-            ...MCM_MOCK_RESPONSE,
-            resultados: MCM_MOCK_RESPONSE.resultados.map((r) => ({
-              ...r,
-              CHIP_PREDIO: chip,
-              DIRECCION_REAL_PREDIO: predioData.direccion || r.DIRECCION_REAL_PREDIO,
-            })),
-          };
-
-          this.apiResponse.set(mockResponse);
-          this.stateService.setValorYaResponse(mockResponse);
-          this.isLoadingResult.set(false);
-
-          // Intentar renderizar mapas
-          this.tryRenderMapPredio();
-          this.tryRenderMapOfertas();
-        }, 1000);
+        this.loadValorYaResults(chip, predioData);
       },
       error: (err) => {
         console.error('Error al consultar datos del predio:', err);
@@ -113,6 +107,30 @@ export class ResultComponent implements OnInit, AfterViewInit {
         this.isLoadingResult.set(false);
       },
     });
+  }
+
+  private loadValorYaResults(chip: string, predioData: PredioData): void {
+    setTimeout(() => {
+      const mockResponse: MCMValorYAResultado = {
+        ...MCM_MOCK_RESPONSE,
+        resultados: MCM_MOCK_RESPONSE.resultados.map((r) => ({
+          ...r,
+          CHIP_PREDIO: chip,
+          DIRECCION_REAL_PREDIO: predioData.direccion || r.DIRECCION_REAL_PREDIO,
+        })),
+      };
+
+      this.apiResponse.set(mockResponse);
+      this.stateService.setValorYaResponse(mockResponse);
+      this.isLoadingResult.set(false);
+
+      this.tryRenderMapPredio();
+      this.tryRenderMapOfertas();
+    }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('test-predio-data');
   }
 
   ngAfterViewInit(): void {}

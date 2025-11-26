@@ -153,6 +153,8 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    localStorage.setItem('test-predio-data', JSON.stringify(predio));
+
     this.procesarMCM(predio);
   }
 
