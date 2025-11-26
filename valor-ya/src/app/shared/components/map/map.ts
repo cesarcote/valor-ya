@@ -339,11 +339,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       if (newOffsetX < 40) newOffsetX = 40;
 
       const tooltip = this.currentMarker.getTooltip()!;
-      tooltip.options.offset = [newOffsetX, 0];
 
-      if (this.map.hasLayer(tooltip)) {
-        this.currentMarker.closeTooltip();
-        this.currentMarker.openTooltip();
+      // Solo aplicar offset dinámico si es la tarjeta personalizada (Step 2)
+      if (tooltip.options.className && tooltip.options.className.includes('custom-tooltip-card')) {
+        tooltip.options.offset = [newOffsetX, 0];
+
+        if (this.map.hasLayer(tooltip)) {
+          this.currentMarker.closeTooltip();
+          this.currentMarker.openTooltip();
+        }
       }
     }
   }

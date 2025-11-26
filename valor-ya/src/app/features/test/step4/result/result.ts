@@ -172,9 +172,14 @@ export class ResultComponent implements OnInit, AfterViewInit {
       map.addMarker({
         lat: oferta.POINT_Y_OFERTA,
         lng: oferta.POINT_X_OFERTA,
-        popupText: `<strong>Oferta ${index + 1}</strong><br>Valor: $${this.formatCurrency(
+        tooltipContent: `<strong>Oferta ${index + 1}</strong><br>Valor: $${this.formatCurrency(
           oferta.VALOR_INTEGRAL_OFERTA
         )}`,
+        tooltipOptions: {
+          permanent: true,
+          direction: 'top',
+          className: 'offer-tooltip', // Optional class if we want to style it later
+        },
         color: coloresOfertas[index % coloresOfertas.length],
         markerType: 'circle',
       });
