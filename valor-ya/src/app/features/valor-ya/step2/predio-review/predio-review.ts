@@ -1,4 +1,14 @@
-import { Component, inject, OnInit, signal, effect, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  effect,
+  ViewChild,
+  AfterViewInit,
+  EnvironmentInjector,
+  createComponent,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -14,6 +24,7 @@ import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 
 @Component({
   selector: 'app-predio-review',
@@ -35,6 +46,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
   private mcmValorYaService = inject(MCMValorYaService);
+  private injector = inject(EnvironmentInjector);
 
   private mapComponent?: MapComponent;
 
@@ -66,6 +78,8 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
+      const valorYa = this.stateService.valorYaResponse();
+
       if (data?.coordenadasPoligono && ready) {
         this.updateMapWithData(data);
       }
@@ -90,13 +104,27 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
+      // Crear instancia del componente de tarjeta dinámicamente
+      const componentRef = createComponent(MapCardComponent, {
+        environmentInjector: this.injector,
+      });
+
+      componentRef.setInput('predioData', data);
+      componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
+
+      componentRef.changeDetectorRef.detectChanges();
+
+      const popupContent = componentRef.location.nativeElement;
+
       this.mapComponent!.ubicarLotePorCoordenadas(
         data.coordenadasPoligono,
         data.loteid,
-        data.direccion
+        data.direccion,
+        popupContent
       );
     }
   }
+
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');

@@ -138,7 +138,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // Set the address for display
     this.direccion.set(direccion || '');
 
     // Convertir coordenadas del polígono al formato de Leaflet
@@ -151,7 +150,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const bounds = this.currentPolygon!.getBounds();
     const center = bounds.getCenter();
 
-    // Usar Tooltip para mostrar la tarjeta siempre a la derecha
     this.addMarker({
       lat: center.lat,
       lng: center.lng,
@@ -162,7 +160,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             direction: 'right',
             className: 'custom-tooltip-card',
             interactive: true,
-            offset: [120, 0],
+            offset: [100, 0],
           }
         : undefined,
     });
@@ -209,28 +207,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     } finally {
       this.isLoading.set(false);
     }
-  }
-
-  private handleLoteResponse(response: any, loteCodigo: string): void {
-    if (!response.features || response.features.length === 0) {
-      console.warn(`No se encontró el lote con código: ${loteCodigo}`);
-      return;
-    }
-
-    const feature = response.features[0];
-    const rings = feature.geometry.rings;
-
-    const coordinates = this.parseRingsToLatLng(rings);
-    this.addPolygon({ coordinates });
-
-    const bounds = this.currentPolygon!.getBounds();
-    const center = bounds.getCenter();
-
-    this.addMarker({
-      lat: center.lat,
-      lng: center.lng,
-      popupText: `<strong>LOTE:</strong> ${loteCodigo}`,
-    });
   }
 
   private parseRingsToLatLng(rings: number[][][]): L.LatLngExpression[] {
@@ -285,8 +261,35 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.map.on('zoomstart', () => catastroLayer.setOpacity(0.3));
-    this.map.on('zoomend', () => catastroLayer.setOpacity(0.8));
+    this.map.on('zoomend', () => {
+      catastroLayer.setOpacity(0.8);
+      this.updateTooltipOffset();
+    });
 
     catastroLayer.addTo(this.map);
+  }
+
+  private updateTooltipOffset(): void {
+    if (this.currentMarker && this.currentMarker.getTooltip()) {
+      const zoom = this.map.getZoom();
+      // Calculate offset based on zoom.
+      // Example: Zoom 18 -> 100px. Zoom 14 -> 60px.
+      // Formula: 100 - (18 - zoom) * 10
+      const baseOffset = 100;
+      const zoomFactor = 10;
+      const referenceZoom = 18;
+
+      let newOffsetX = baseOffset - (referenceZoom - zoom) * zoomFactor;
+
+      if (newOffsetX < 40) newOffsetX = 40;
+
+      const tooltip = this.currentMarker.getTooltip()!;
+      tooltip.options.offset = [newOffsetX, 0];
+
+      if (this.map.hasLayer(tooltip)) {
+        this.currentMarker.closeTooltip();
+        this.currentMarker.openTooltip();
+      }
+    }
   }
 }

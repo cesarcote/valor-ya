@@ -201,14 +201,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
         environmentInjector: this.injector,
       });
 
-      // Asignar inputs
       componentRef.setInput('predioData', data);
       componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
 
-      // Detectar cambios para renderizar el HTML
       componentRef.changeDetectorRef.detectChanges();
 
-      // Obtener el elemento nativo del DOM
       const popupContent = componentRef.location.nativeElement;
 
       this.mapComponent!.ubicarLotePorCoordenadas(
