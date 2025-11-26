@@ -61,12 +61,12 @@
 }
 
 /* Custom Marker Styles */
-.custom-marker-container {
+::ng-deep .custom-marker-container {
   background: transparent;
   border: none;
 }
 
-.custom-div-icon {
+::ng-deep .custom-div-icon {
   width: 30px;
   height: 30px;
   border-radius: 50% 50% 50% 0;
@@ -82,7 +82,7 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.custom-div-icon::after {
+::ng-deep .custom-div-icon::after {
   content: '';
   width: 14px;
   height: 14px;
@@ -92,11 +92,135 @@
   border-radius: 50%;
 }
 
-.marker-label {
+::ng-deep .marker-label {
   transform: rotate(45deg);
   color: white;
   font-weight: bold;
   font-size: 12px;
   z-index: 2;
   margin-bottom: 2px; /* Adjust for visual centering */
+}
+
+/* Custom Tooltip Card Styles */
+::ng-deep .custom-tooltip-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove default tooltip arrow if present */
+::ng-deep .custom-tooltip-card::before {
+  display: none;
+}
+
+/* Reuse Custom Map Popup Styles for the Tooltip Content */
+::ng-deep .custom-map-popup {
+  font-family: 'Roboto', sans-serif;
+  min-width: 300px;
+  max-width: 350px;
+  background: white; /* Ensure background is white since tooltip container is transparent */
+  border-radius: 8px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+::ng-deep .custom-map-popup .popup-header {
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+::ng-deep .custom-map-popup .popup-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+::ng-deep .custom-map-popup .popup-content {
+  padding: 15px;
+}
+
+::ng-deep .custom-map-popup .company-title {
+  text-align: center;
+  color: #002b49;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  font-family: serif;
+}
+
+::ng-deep .custom-map-popup .price {
+  text-align: center;
+  color: #005f73;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+::ng-deep .custom-map-popup .info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+::ng-deep .custom-map-popup .info-row {
+  display: flex;
+  gap: 5px;
+}
+
+::ng-deep .custom-map-popup .info-row strong {
+  color: #333;
+  white-space: nowrap;
+}
+
+::ng-deep .custom-map-popup .popup-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+::ng-deep .custom-map-popup .action-link {
+  background: none;
+  border: none;
+  color: #005f73;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+}
+
+::ng-deep .custom-map-popup .action-link:hover {
+  text-decoration: underline;
+}
+
+/* Leaflet Popup Overrides (Keep for legacy or other popups) */
+::ng-deep .leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+::ng-deep .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+::ng-deep .leaflet-popup-close-button {
+  color: #666 !important;
+  font-size: 18px !important;
+  top: 8px !important;
+  right: 8px !important;
 }

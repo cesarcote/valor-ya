@@ -23,6 +23,9 @@ export interface MarkerConfig {
   lat: number;
   lng: number;
   popupText?: string;
+  popupOptions?: L.PopupOptions;
+  tooltipContent?: string | HTMLElement;
+  tooltipOptions?: L.TooltipOptions;
 }
 
 export interface PolygonConfig {
@@ -89,11 +92,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.clearMarker();
 
-    const { lat, lng, popupText } = markerConfig;
+    const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions } = markerConfig;
     this.currentMarker = L.marker([lat, lng]).addTo(this.map);
 
     if (popupText) {
-      this.currentMarker.bindPopup(popupText).openPopup();
+      this.currentMarker.bindPopup(popupText, popupOptions).openPopup();
+    }
+
+    if (tooltipContent) {
+      this.currentMarker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
     }
   }
 
@@ -118,7 +125,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ubicarLotePorCoordenadas(
     coordenadasPoligono: number[][][],
     loteId?: string,
-    direccion?: string
+    direccion?: string,
+    popupContent?: string | HTMLElement
   ): void {
     if (!this.map) {
       console.error('Map not initialized!');
@@ -143,10 +151,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const bounds = this.currentPolygon!.getBounds();
     const center = bounds.getCenter();
 
+    // Usar Tooltip para mostrar la tarjeta siempre a la derecha
     this.addMarker({
       lat: center.lat,
       lng: center.lng,
-      popupText: `<strong>Dirección:</strong> ${direccion || 'Sin dirección'}`,
+      tooltipContent: popupContent || `<strong>Dirección:</strong> ${direccion || 'Sin dirección'}`,
+      tooltipOptions: popupContent
+        ? {
+            permanent: true,
+            direction: 'right',
+            className: 'custom-tooltip-card',
+            interactive: true,
+            offset: [120, 0],
+          }
+        : undefined,
     });
   }
 

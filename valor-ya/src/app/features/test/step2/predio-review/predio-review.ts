@@ -1,4 +1,14 @@
-import { Component, inject, OnInit, ViewChild, signal, effect, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+  signal,
+  effect,
+  AfterViewInit,
+  EnvironmentInjector,
+  createComponent,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -13,6 +23,7 @@ import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 
 @Component({
   selector: 'app-predio-review',
@@ -33,6 +44,7 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   private stepperService = inject(TestStepperService);
   public stateService = inject(TestStateService);
   private predioService = inject(PredioService);
+  private injector = inject(EnvironmentInjector);
   private mapComponent?: MapComponent;
 
   @ViewChild(MapComponent)
@@ -64,6 +76,8 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
+      const valorYa = this.stateService.valorYaResponse(); // Dependencia para actualizar precio
+
       if (data?.coordenadasPoligono && ready) {
         this.updateMapWithData(data);
       }
@@ -182,10 +196,26 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
 
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
+      // Crear instancia del componente de tarjeta dinámicamente
+      const componentRef = createComponent(MapCardComponent, {
+        environmentInjector: this.injector,
+      });
+
+      // Asignar inputs
+      componentRef.setInput('predioData', data);
+      componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
+
+      // Detectar cambios para renderizar el HTML
+      componentRef.changeDetectorRef.detectChanges();
+
+      // Obtener el elemento nativo del DOM
+      const popupContent = componentRef.location.nativeElement;
+
       this.mapComponent!.ubicarLotePorCoordenadas(
         data.coordenadasPoligono,
         data.loteid,
-        data.direccion
+        data.direccion,
+        popupContent
       );
     }
   }
