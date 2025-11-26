@@ -63,22 +63,24 @@
             [formCtr]="areaConstruidaControl"
             [min]="1"
           ></app-input>
-          <div class="form-row">
-            <app-input
-              type="number"
-              id="estrato"
-              label="Estrato"
-              [formCtr]="estratoControl"
-              [min]="1"
-              [max]="6"
-            ></app-input>
-            <app-input
-              type="text"
-              id="edad"
-              label="Edad (ej: 2021 - 2027)"
-              [formCtr]="edadControl"
-            ></app-input>
-          </div>
+
+          <app-input
+            type="number"
+            id="estrato"
+            label="Estrato"
+            [formCtr]="estratoControl"
+            [min]="1"
+            [max]="6"
+          ></app-input>
+        </div>
+
+        <div class="form-row">
+          <app-input
+            type="text"
+            id="edad"
+            label="Edad (años)"
+            [formCtr]="edadControl"
+          ></app-input>
         </div>
       </div>
 
