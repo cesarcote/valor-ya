@@ -70,7 +70,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50% 50% 50% 0;
-  background: #e3192f; /* Default color */
+  background: #e3192f;
   position: absolute;
   transform: rotate(-45deg);
   left: 50%;
@@ -98,7 +98,7 @@
   font-weight: bold;
   font-size: 12px;
   z-index: 2;
-  margin-bottom: 2px; /* Adjust for visual centering */
+  margin-bottom: 2px;
 }
 
 /* Custom Tooltip Card Styles */
@@ -114,9 +114,6 @@
 ::ng-deep .custom-tooltip-card::before {
   display: none;
 }
-
-/* Reuse Custom Map Popup Styles for the Tooltip Content */
-
 
 /* Leaflet Popup Overrides (Keep for legacy or other popups) */
 ::ng-deep .leaflet-popup-content-wrapper {
