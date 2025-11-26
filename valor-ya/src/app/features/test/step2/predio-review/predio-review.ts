@@ -204,7 +204,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       componentRef.setInput('predioData', data);
       componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
 
-      // Suscribirse al evento close
       componentRef.instance.close.subscribe(() => {
         this.mapComponent?.closeTooltip();
       });

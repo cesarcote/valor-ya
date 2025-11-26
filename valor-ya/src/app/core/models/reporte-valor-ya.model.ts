@@ -11,6 +11,7 @@ export interface ReporteValorYaRequest {
   ofertasUtilizadas: string;
   coeficienteVariacion: string;
   imagenBase64?: string;
+  imagenBase64Ofertas?: string;
 }
 
 export interface ReporteValorYaResponse {
