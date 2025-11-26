@@ -166,6 +166,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
       tooltipOptions: {
         permanent: true,
         direction: 'top',
+        offset: [0, -35],
       },
       color: '#e3192f',
       markerType: 'pin',

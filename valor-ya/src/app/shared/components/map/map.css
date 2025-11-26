@@ -101,6 +101,15 @@
   margin-bottom: 2px;
 }
 
+/* Remove shadows from tooltips */
+::ng-deep .leaflet-tooltip {
+  box-shadow: none !important;
+}
+
+::ng-deep .offer-tooltip {
+  box-shadow: none !important;
+}
+
 /* Custom Tooltip Card Styles */
 ::ng-deep .custom-tooltip-card {
   background: transparent;
