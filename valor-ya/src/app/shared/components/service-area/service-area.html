@@ -1,9 +1,90 @@
-<section class="help-card py-5">
-  <h5 class="help-title">¿Necesitas ayuda?</h5>
-  <div class="help-list">
-    <a class="help-item" href="#">Te explicamos con tutoriales</a>
-    <a class="help-item" href="#">¿Tienes dudas?</a>
-    <a class="help-item" href="#">¿Cómo fue tu experiencia en el proceso?</a>
-    <a class="help-item" href="#">Trámites, solicitudes y servicios</a>
+<div class="aservice-container">
+  <!-- Tutorials Link -->
+  <a
+    href="https://www.youtube.com/channel/UCF1vty5F-FkJjwijlldTvJg"
+    target="_blank"
+    class="aservice-spacing link-card-wrapper"
+  >
+    <div class="aservice">
+      <div class="aservice-item link-card">
+        <p class="aservice-text-govco aservice-link-govco aservice-spacing-card">
+          Te explicamos con tutoriales
+        </p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Doubts Accordion -->
+  <div class="aservice aservice-spacing">
+    <div class="aservice-item">
+      <h2 class="aservice-header-govco">
+        <button
+          class="button-aservice-govco"
+          type="button"
+          (click)="toggleDoubts()"
+          [attr.aria-expanded]="isDoubtsOpen()"
+          [class.collapsed]="!isDoubtsOpen()"
+        >
+          <span class="aservice-text-govco">¿Tienes dudas sobre este trámite o consulta?</span>
+          <i class="fa-solid fa-chevron-down ms-auto"></i>
+        </button>
+      </h2>
+      <div class="aservice-collapse collapse" [class.show]="isDoubtsOpen()">
+        <div class="aservice-body">
+          <div class="row aservice-row-govco mb-3">
+            <i class="fa-solid fa-envelope mail-icon-govco"></i>
+            <div class="aservice-mailto-container ms-2">
+              <a
+                href="mailto:buzon-correspondencia@catastrobogota.gov.co"
+                class="aservice-mailto-govco"
+              >
+                buzon-correspondencia@catastrobogota.gov.co
+              </a>
+            </div>
+          </div>
+          <div class="row aservice-row-govco aservice-row-center-govco">
+            <i class="fa-solid fa-headset headset-icon-govco"></i>
+            <p class="aservice-number-govco ms-2">Línea 195</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</section>
+
+  <!-- Experience Accordion -->
+  <div class="aservice">
+    <div class="aservice-item">
+      <h2 class="aservice-header-govco">
+        <button
+          class="button-aservice-govco"
+          type="button"
+          (click)="toggleExperience()"
+          [attr.aria-expanded]="isExperienceOpen()"
+          [class.collapsed]="!isExperienceOpen()"
+        >
+          <span class="aservice-text-govco">¿Cómo fue tu experiencia durante el proceso?</span>
+          <i class="fa-solid fa-chevron-down ms-auto"></i>
+        </button>
+      </h2>
+      <div class="aservice-collapse collapse" [class.show]="isExperienceOpen()">
+        <div class="aservice-body aservice-body-two">
+          <p class="mb-3">
+            Para nosotros su opinión es muy importante, por esta razón lo invitamos a realizar una
+            pequeña encuesta, la cual nos permitirá conocer su percepción a cerca de su experiencia
+            en la página web y nuestros canales digitales para la radicación de denuncias.
+          </p>
+          <p class="mb-3"><strong>Solo le tomará 5 minutos.</strong></p>
+          <div class="container-button">
+            <a
+              href="#"
+              class="btn btn-primary btn-service-govco btn-contorno text-center text-decoration-none"
+            >
+              Realizar Encuesta
+            </a>
+          </div>
+          <p class="mt-3 mb-0">Muchas gracias.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

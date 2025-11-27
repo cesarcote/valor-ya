@@ -1,48 +1,215 @@
-.help-card{
-  max-width: 273px;
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.help-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #2D2D2D;
-  margin-bottom: 14px;
-  padding-bottom: 22px;
-  border-bottom: 0.0625rem solid #dee2e6;
-}
-
-.help-list {
+.aservice-container {
+  align-items: center;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 18rem;
+  margin-left: auto;
 }
 
-.help-item {
-  display: block;
-  padding: 8px 15px;
-  border-radius: 2rem;
-  color: #2D2D2D;
+.aservice-spacing {
+  margin-bottom: 1.25rem;
+}
+
+.aservice-item {
+  background-color: #ffffff;
+  border-radius: 0.3125rem;
+  border: 1px solid #e6effd;
+  box-shadow: 0 0.25rem 0 #3366cc24;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.link-card-wrapper {
   text-decoration: none;
-  font-weight: 700;
-  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
 }
 
-.help-item:hover {
-  background: #FFF9C5;
+.link-card:hover {
+  background-color: #3366cc;
 }
 
-@media (max-width: 768px) {
-  .help-card {
-    padding: 1.5rem;
-  }
+.link-card:hover .aservice-text-govco {
+  color: #ffffff !important;
+}
 
-  .help-title {
-    font-size: 1.25rem;
-  }
+.aservice-text-govco {
+  color: #004884;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  text-decoration: none;
+}
 
-  .help-item {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.9375rem;
-  }
+.aservice-spacing-card {
+  margin: 1.3125rem auto 1.3125rem 1.6875rem;
+}
+
+.button-aservice-govco {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 0.3125rem;
+  border: 0;
+  display: flex;
+  min-height: 4.375rem;
+  padding: 0 1.5rem;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button-aservice-govco:hover {
+  background-color: #3366cc;
+}
+
+.button-aservice-govco:hover .aservice-text-govco,
+.button-aservice-govco:hover i {
+  color: #ffffff;
+}
+
+.button-aservice-govco i {
+  color: #004884;
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.button-aservice-govco.collapsed i {
+  transform: rotate(-90deg);
+}
+
+.aservice-body {
+  padding: 1.5rem 2rem 1rem 2rem;
+}
+
+.aservice-body-two {
+  padding: 1.5rem 0 1rem 0;
+}
+
+.aservice-mailto-govco {
+  color: #3366cc;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.aservice-number-govco {
+  font-size: 0.9375rem;
+  margin-bottom: 0;
+  color: #000000;
+}
+
+.mail-icon-govco,
+.headset-icon-govco {
+  color: #3366cc;
+  font-size: 1.5rem;
+}
+
+.aservice-item-menu-ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin-bottom: 0.125rem;
+  padding: 0;
+}
+
+.aservice-item-menu-li {
+  padding: 0 1.375rem;
+}
+
+.aservice-item-govco {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #004884;
+}
+
+.aservice-item-govco span {
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.aservice-item-icon-govco i {
+  font-size: 2rem;
+  color: #3366cc;
+}
+
+.aservice-item-govco:hover span,
+.aservice-item-govco:hover i {
+  color: #004884;
+}
+
+.aservice-item-govco.selected span,
+.aservice-item-govco.selected i {
+  color: #3366cc;
+  font-weight: bold;
+}
+
+.aservice-comentarios {
+  margin: 1.125rem 0.625rem 1.25rem 0.625rem;
+}
+
+.aservice-comentarios-textarea {
+  display: block;
+  border-radius: 0.3125rem;
+  color: #737373;
+  height: 12.5rem;
+  border: 1px solid #737373;
+  padding: 0.7rem 1rem;
+  resize: none;
+  width: 100%;
+}
+
+.aservice-comentarios-textarea.errorTextArea {
+  border-color: #a80521;
+}
+
+.aservice-comentarios-textarea.successTextArea {
+  border-color: #3366cc;
+  color: #000000;
+}
+
+.aservice-comentarios-alert {
+  color: #a80521;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.container-button {
+  margin: 0 1.25rem;
+}
+
+.btn-service-govco {
+  background-color: #3366cc;
+  border-radius: 1.5625rem;
+  border: 2px solid #3366cc;
+  color: #ffffff;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+}
+
+.btn-service-govco:hover {
+  background-color: #004884;
+  border-color: #004884;
+}
+
+.btn-service-govco:disabled {
+  background-color: transparent;
+  color: #737373;
+  border-color: #737373;
+}
+
+.aservice-alerta-success-govco {
+  background-color: #cde6df;
+  color: #0d684b;
+  padding: 1rem;
+  border-radius: 0.3125rem;
+  margin: 1rem;
+  text-align: center;
 }
