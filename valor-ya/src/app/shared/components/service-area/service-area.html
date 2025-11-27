@@ -1,4 +1,7 @@
 <div class="aservice-container">
+  <div class="container">
+    <h2 class="help-title">¿Necesitas ayuda?</h2>
+  </div>
   <!-- Tutorials Link -->
   <a
     href="https://www.youtube.com/channel/UCF1vty5F-FkJjwijlldTvJg"
@@ -17,7 +20,7 @@
   <!-- Doubts Accordion -->
   <div class="aservice aservice-spacing">
     <div class="aservice-item">
-      <h2 class="aservice-header-govco">
+      <h2 class="aservice-header-govcom m-0">
         <button
           class="button-aservice-govco"
           type="button"
@@ -31,8 +34,8 @@
       </h2>
       <div class="aservice-collapse collapse" [class.show]="isDoubtsOpen()">
         <div class="aservice-body">
-          <div class="row aservice-row-govco mb-3">
-            <i class="fa-solid fa-envelope mail-icon-govco"></i>
+          <div class="d-flex align-items-center mb-3">
+            <i class="fa-solid fa-envelope mail-icon-govco me-2"></i>
             <div class="aservice-mailto-container ms-2">
               <a
                 href="mailto:buzon-correspondencia@catastrobogota.gov.co"
@@ -42,9 +45,12 @@
               </a>
             </div>
           </div>
-          <div class="row aservice-row-govco aservice-row-center-govco">
-            <i class="fa-solid fa-headset headset-icon-govco"></i>
-            <p class="aservice-number-govco ms-2">Línea 195</p>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-headset headset-icon-govco me-2"></i>
+            <div>
+              <p class="aservice-number-govco">601 234 7600</p>
+              <p class="aservice-number-govco">Ext. 7600</p>
+            </div>
           </div>
         </div>
       </div>
@@ -54,7 +60,7 @@
   <!-- Experience Accordion -->
   <div class="aservice">
     <div class="aservice-item">
-      <h2 class="aservice-header-govco">
+      <h2 class="aservice-header-govco m-0">
         <button
           class="button-aservice-govco"
           type="button"
@@ -68,21 +74,17 @@
       </h2>
       <div class="aservice-collapse collapse" [class.show]="isExperienceOpen()">
         <div class="aservice-body aservice-body-two">
-          <p class="mb-3">
-            Para nosotros su opinión es muy importante, por esta razón lo invitamos a realizar una
-            pequeña encuesta, la cual nos permitirá conocer su percepción a cerca de su experiencia
-            en la página web y nuestros canales digitales para la radicación de denuncias.
+          <p class="mb-3 text-center">
+            Su opinión es vital para mejorar nuestros servicios digitales. Lo invitamos a evaluar su
+            experiencia en nuestra plataforma.
           </p>
-          <p class="mb-3"><strong>Solo le tomará 5 minutos.</strong></p>
-          <div class="container-button">
-            <a
-              href="#"
-              class="btn btn-primary btn-service-govco btn-contorno text-center text-decoration-none"
-            >
-              Realizar Encuesta
-            </a>
+          <p class="mb-3 text-center"><strong>Solo le tomará 5 minutos.</strong></p>
+          <div class="container-button text-center">
+            <app-button
+              text="Realizar Encuesta"
+              variant="primary"
+            ></app-button>
           </div>
-          <p class="mt-3 mb-0">Muchas gracias.</p>
         </div>
       </div>
     </div>

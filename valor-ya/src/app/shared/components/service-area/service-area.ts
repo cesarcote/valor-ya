@@ -1,9 +1,10 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../button/button';
 
 @Component({
   selector: 'app-service-area',
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './service-area.html',
   styleUrls: ['./service-area.css'],
 })
