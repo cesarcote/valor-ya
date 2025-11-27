@@ -92,6 +92,7 @@ export class PaymentStatusComponent implements OnInit {
       const status = params['status'] as PaymentStatus;
       if (this.isValidStatus(status)) {
         this.status.set(status);
+        this.processAutomaticUpdates();
       } else {
         this.router.navigate(['/test/seleccionar']);
         return;
@@ -106,6 +107,28 @@ export class PaymentStatusComponent implements OnInit {
 
   private isValidStatus(status: string): status is PaymentStatus {
     return ['success', 'failure', 'pending', 'review'].includes(status);
+  }
+
+  private processAutomaticUpdates(): void {
+    const paymentContextStr = localStorage.getItem('test-payment-context');
+    if (!paymentContextStr) return;
+
+    const paymentContext = JSON.parse(paymentContextStr);
+
+    if (this.status() === 'success') {
+      if (paymentContext.chip && paymentContext.dev_reference) {
+        this.stateService.restoreFromPayment(paymentContext.chip);
+        const pagoId = Number(paymentContext.dev_reference);
+        const compraId = Number(paymentContext.compraId);
+        this.updatePaymentStatus(pagoId, compraId);
+      }
+    } else {
+      if (paymentContext.dev_reference) {
+        const pagoId = Number(paymentContext.dev_reference);
+        const compraId = paymentContext.compraId ? Number(paymentContext.compraId) : undefined;
+        this.updatePaymentStatus(pagoId, compraId);
+      }
+    }
   }
 
   private updatePaymentStatus(pagoId: number, compraId?: number): void {
@@ -143,43 +166,6 @@ export class PaymentStatusComponent implements OnInit {
 
   onPrimaryAction(): void {
     const config = this.currentConfig();
-
-    if (this.status() === 'success') {
-      const paymentContextStr = localStorage.getItem('test-payment-context');
-
-      if (!paymentContextStr) {
-        this.router.navigate(['/test/seleccionar']);
-        return;
-      }
-
-      const paymentContext = JSON.parse(paymentContextStr);
-
-      if (!paymentContext.chip || !paymentContext.dev_reference) {
-        this.router.navigate(['/test/seleccionar']);
-        return;
-      }
-
-      this.stateService.restoreFromPayment(paymentContext.chip);
-
-      const pagoId = Number(paymentContext.dev_reference);
-      const compraId = Number(paymentContext.compraId);
-      this.updatePaymentStatus(pagoId, compraId);
-
-      //localStorage.removeItem('test-payment-context');
-      this.router.navigate([config.primaryAction.route]);
-      return;
-    }
-
-    const paymentContextStr = localStorage.getItem('test-payment-context');
-    if (paymentContextStr) {
-      const paymentContext = JSON.parse(paymentContextStr);
-      if (paymentContext.dev_reference) {
-        const pagoId = Number(paymentContext.dev_reference);
-        const compraId = paymentContext.compraId ? Number(paymentContext.compraId) : undefined;
-        this.updatePaymentStatus(pagoId, compraId);
-      }
-    }
-
     this.router.navigate([config.primaryAction.route]);
   }
 
