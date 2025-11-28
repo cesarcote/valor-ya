@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
-import { PredioService } from '../../../../shared/services/predio.service';
+import { PredioService } from '../../../../core/services/predio.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';

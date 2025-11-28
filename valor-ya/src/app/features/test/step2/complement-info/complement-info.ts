@@ -10,11 +10,11 @@ import { Router } from '@angular/router';
 
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService } from '../../services/test-state.service';
-
 import {
   SolicitudDatosComplementariosService,
   DatosUsuario,
-} from '../../../../shared/services/solicitud-datos-complementarios.service';
+} from '../../../../core/services/solicitud-datos-complementarios.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';

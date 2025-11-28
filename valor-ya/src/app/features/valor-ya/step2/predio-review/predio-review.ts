@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
-import { PredioService } from '../../../../shared/services/predio.service';
+import { PredioService } from '../../../../core/services/predio.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';

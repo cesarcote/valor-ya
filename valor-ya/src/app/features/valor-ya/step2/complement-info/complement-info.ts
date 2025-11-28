@@ -10,12 +10,11 @@ import { Router } from '@angular/router';
 
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
-
 import {
   SolicitudDatosComplementariosService,
   DatosUsuario,
-} from '../../../../shared/services/solicitud-datos-complementarios.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+} from '../../../../core/services/solicitud-datos-complementarios.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';

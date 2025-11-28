@@ -12,18 +12,18 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { TestStateService } from '../../services/test-state.service';
-import { MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
+import { ReporteService } from '../../../../core/services/reporte.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { PredioService } from '../../../../core/services/predio.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
-import { ReporteService } from '../../../../shared/services/reporte.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+import { MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
+import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
-import { PredioService } from '../../../../shared/services/predio.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 
 @Component({
@@ -241,7 +241,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
     if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
-      next: (blob) => {
+      next: (blob: Blob) => {
         this.isDownloading.set(false);
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -253,7 +253,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
         window.URL.revokeObjectURL(url);
         this.notificationService.success('¡Avalúo descargado exitosamente!');
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isDownloading.set(false);
         console.error('Error generando reporte:', error);
         this.notificationService.error('Error generando reporte');

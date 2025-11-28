@@ -18,7 +18,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
-import { ComprasService } from '../../../../shared/services/compras.service';
+import { ComprasService } from '../../../../core/services/compras.service';
 
 @Component({
   selector: 'app-payment',

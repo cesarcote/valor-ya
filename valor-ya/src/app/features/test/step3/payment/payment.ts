@@ -12,7 +12,7 @@ import { TestStateService } from '../../services/test-state.service';
 import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
-import { ComprasService } from '../../../../shared/services/compras.service';
+import { ComprasService } from '../../../../core/services/compras.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';

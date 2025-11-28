@@ -1,15 +1,14 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-import { ValorYaStateService } from '../../services/valor-ya-state.service';
-import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ComprasService } from '../../../../shared/services/compras.service';
+import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
+import { ValorYaStateService } from '../../services/valor-ya-state.service';
+import { ComprasService } from '../../../../core/services/compras.service';
 
-type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
+export type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 
 interface StatusConfig {
   title: string;
