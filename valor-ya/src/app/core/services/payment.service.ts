@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { currentEnvironment } from '../../../environments/environment.dev';
+import { currentEnvironment } from '../../../environments/environment';
 import { PaymentRequest, PaymentResponse, PaymentConfiguration } from '../models/payment.model';
 
 export type AppModule = 'valor-ya' | 'test' | 'avaluos-en-garantia';

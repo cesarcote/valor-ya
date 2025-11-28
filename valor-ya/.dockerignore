@@ -1,10 +1,6 @@
 node_modules
 dist
-.angular
 .git
 .gitignore
-*.md
-*.log
-coverage
-.vscode
-.idea
+Dockerfile
+

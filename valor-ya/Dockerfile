@@ -1,34 +1,23 @@
-# Stage 1: Build
-FROM node:20-alpine AS build
+### STAGE 1:COMPILATION ###
+FROM node:20-alpine AS build-step
 
+RUN mkdir -p /app
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+COPY package.json /app
+RUN npm install
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY . /app
+# RUN npm run build:prod
+RUN npm run build:dev
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+### STAGE 2:RUN ###
+FROM nginx:1.17.1-alpine
 
-# Copy source code
-COPY . .
+# Copy the build output to replace the default nginx contents.
+# Note: @angular/build:application outputs to dist/valor-ya/browser
+COPY --from=build-step /app/dist/valor-ya/browser /usr/share/nginx/html
 
-# Build the application
-RUN pnpm run build:prod
-
-# Stage 2: Production
-FROM nginx:alpine
-
-# Copy built application from build stage
-COPY --from=build /app/dist/valor-ya/browser /usr/share/nginx/html
-
-# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
 import { ReporteValorYaRequest } from '../../core/models/reporte-valor-ya.model';
-import { currentEnvironment } from '../../../environments/environment.dev';
+import { currentEnvironment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
