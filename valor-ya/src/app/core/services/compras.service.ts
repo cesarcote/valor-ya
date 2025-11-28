@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { currentEnvironment } from '../../../environments/environment';
 
 export interface CompraRequest {
   usuarioId: number;
@@ -90,13 +91,14 @@ export interface FacturaResponse {
 })
 export class ComprasService {
   private http = inject(HttpClient);
+  private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   /**
    * Crea una nueva compra con su detalle asociado
    * usando el stored procedure SP_INSERT_COMPRA
    */
   crearCompra(compraData: CompraRequest): Observable<CompraResponse> {
-    const url = `/api/compras`;
+    const url = `${this.API_BASE_URL}/api/compras`;
 
     return this.http.post<CompraResponse>(url, compraData).pipe(
       catchError((error) => {
@@ -111,7 +113,7 @@ export class ComprasService {
    * usando el stored procedure SP_INSERT_PAGO
    */
   crearPago(pagoData: PagoRequest): Observable<PagoResponse> {
-    const url = `/api/compras/pagos`;
+    const url = `${this.API_BASE_URL}/api/compras/pagos`;
 
     return this.http.post<PagoResponse>(url, pagoData).pipe(
       catchError((error) => {
@@ -128,7 +130,7 @@ export class ComprasService {
   actualizarCompraPago(
     data: ActualizarCompraPagoRequest
   ): Observable<ActualizarCompraPagoResponse> {
-    const url = `/api/compras/pagos/actualizar`;
+    const url = `${this.API_BASE_URL}/api/compras/pagos/actualizar`;
 
     return this.http.put<ActualizarCompraPagoResponse>(url, data).pipe(
       catchError((error) => {
@@ -143,7 +145,7 @@ export class ComprasService {
    * usando el paquete PL/SQL TIENDA_VIRTUAL.PK_TV_FACTURA.fn_crea_factura
    */
   crearFactura(facturaData: FacturaRequest): Observable<FacturaResponse> {
-    const url = `/api/compras/facturas`;
+    const url = `${this.API_BASE_URL}/api/compras/facturas`;
 
     return this.http.post<FacturaResponse>(url, facturaData).pipe(
       catchError((error) => {

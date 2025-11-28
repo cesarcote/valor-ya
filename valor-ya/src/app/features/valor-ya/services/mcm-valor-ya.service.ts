@@ -17,12 +17,11 @@ export class MCMValorYaService {
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   procesarChip(chip: string): Observable<MCMValorYAResultado> {
-    // Usar URL relativa para que el proxy la intercepté en desarrollo
-    const url = `/api/procesar-chips/chip-unico`;
+    const url = `${this.API_BASE_URL}/api/procesar-chips/chip-unico`;
     const body = { chip };
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
-      timeout(3000),
+      timeout(30000), // 30 segundos - MCM puede tardar
       catchError((error) => {
         console.error('❌ [MCM Service] Error en procesarChip:', error);
         throw error;
@@ -31,7 +30,7 @@ export class MCMValorYaService {
   }
 
   descargarAvaluo(chip: string): Observable<Blob> {
-    const url = `${this.API_BASE_URL}/descargar-avaluo/${chip}`;
+    const url = `${this.API_BASE_URL}/api/descargar-avaluo/${chip}`;
 
     return this.http.get(url, { responseType: 'blob' }).pipe(
       catchError((error) => {
@@ -42,7 +41,7 @@ export class MCMValorYaService {
   }
 
   validarMinimoOfertas(chips: string[]): Observable<ValidacionMinimoOfertasResponse> {
-    const url = `/api/procesar-chips/validar-minimo-ofertas`;
+    const url = `${this.API_BASE_URL}/api/procesar-chips/validar-minimo-ofertas`;
     const body = { chips };
 
     return this.http.post<ValidacionMinimoOfertasResponse>(url, body).pipe(
@@ -55,7 +54,7 @@ export class MCMValorYaService {
   }
 
   testConexion(): Observable<TestConexionResponse> {
-    const url = `/api/procesar-chips/test-conexion`;
+    const url = `${this.API_BASE_URL}/api/procesar-chips/test-conexion`;
 
     return this.http.get<TestConexionResponse>(url).pipe(
       timeout(5000),

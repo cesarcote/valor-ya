@@ -21,7 +21,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 
 @Component({
-  selector: 'app-payment',
+  selector: 'test-payment',
   imports: [
     StepperComponent,
     ReactiveFormsModule,

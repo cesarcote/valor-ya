@@ -13,8 +13,7 @@ export class McmService {
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   procesarChip(chip: string): Observable<MCMValorYAResultado> {
-    // Usar URL relativa para que el proxy la intercepté en desarrollo
-    const url = `/api/procesar-chips/chip-unico`;
+    const url = `${this.API_BASE_URL}/api/procesar-chips/chip-unico`;
     const body = { chip };
 
     return this.http.post<MCMValorYAResultado>(url, body).pipe(
