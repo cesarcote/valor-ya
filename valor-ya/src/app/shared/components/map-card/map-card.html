@@ -1,0 +1,36 @@
+<div class="custom-map-popup">
+  <div class="popup-header">
+    <h3>Resultados</h3>
+    <button class="close-btn" (click)="onClose()">×</button>
+  </div>
+  <div class="popup-content">
+    <h2 class="company-title">Valor Ya</h2>
+    @if (precioFormateado()) {
+    <div class="price">{{ precioFormateado() }}</div>
+    }
+
+    <div class="info-grid">
+      <div class="info-row">
+        <strong>Tipo dirección:</strong> <span>ASIGNADA POR CATÁSTRO</span>
+      </div>
+      <div class="info-row">
+        <strong>Latitud:</strong> <span>{{ predio()?.coordenadas?.lat }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Longitud:</strong> <span>{{ predio()?.coordenadas?.lng }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Dirección:</strong> <span>{{ predio()?.direccion }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Sector catastral:</strong> <span>{{ predio()?.barrio || 'SANTA ROSA' }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Localidad:</strong> <span>{{ predio()?.localidad }}</span>
+      </div>
+      <div class="info-row">
+        <strong>CHIP:</strong> <span>{{ predio()?.chip || 'AAA' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

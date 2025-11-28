@@ -1,14 +1,21 @@
+.map-address {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.address {
+  font-weight: normal;
+}
 .map-container {
   width: 100%;
-  height: 100%;
-  min-height: 600px;
+  aspect-ratio: 16 / 9;
+  min-height: 400px;
   position: relative;
 }
 
 .map {
   width: 100%;
   height: 100%;
-  min-height: 600px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -18,7 +25,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.95);
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -52,4 +58,87 @@
   font-family: 'Verdana', sans-serif;
   font-size: 14px;
   color: var(--color-tertiary, #606060);
+}
+
+/* Custom Marker Styles */
+::ng-deep .custom-marker-container {
+  background: transparent;
+  border: none;
+}
+
+::ng-deep .custom-div-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: #e3192f;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+::ng-deep .custom-div-icon::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin: 8px 0 0 8px;
+  background: #fff;
+  position: absolute;
+  border-radius: 50%;
+}
+
+::ng-deep .marker-label {
+  transform: rotate(45deg);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  z-index: 2;
+  margin-bottom: 2px;
+}
+
+/* Remove shadows from tooltips */
+::ng-deep .leaflet-tooltip {
+  box-shadow: none !important;
+}
+
+::ng-deep .offer-tooltip {
+  box-shadow: none !important;
+}
+
+/* Custom Tooltip Card Styles */
+::ng-deep .custom-tooltip-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove default tooltip arrow if present */
+::ng-deep .custom-tooltip-card::before {
+  display: none;
+}
+
+/* Leaflet Popup Overrides (Keep for legacy or other popups) */
+::ng-deep .leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+::ng-deep .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+::ng-deep .leaflet-popup-close-button {
+  color: #666 !important;
+  font-size: 18px !important;
+  top: 8px !important;
+  right: 8px !important;
 }

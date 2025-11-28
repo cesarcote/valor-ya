@@ -1,12 +1,14 @@
 <div class="stepper">
-  @for (stepConfig of stepperService?.steps; track stepConfig.step) {
+  @if (stepperService?.steps) { @for (stepConfig of stepperService.steps; track stepConfig.step) {
   <div
     class="step"
     [class.active]="isCurrentStep(stepConfig.step)"
     [class.completed]="isPastStep(stepConfig.step)"
   >
-    <div class="step-circle">
-      <span class="step-number">{{ stepConfig.step }}</span>
+    <div class="step-circle-container">
+      <div class="step-circle">
+        <span class="step-number">{{ stepConfig.step }}</span>
+      </div>
     </div>
     <div class="step-label">{{ stepConfig.label }}</div>
     @if (!$last) {
@@ -16,5 +18,5 @@
     </div>
     }
   </div>
-  }
+  } }
 </div>

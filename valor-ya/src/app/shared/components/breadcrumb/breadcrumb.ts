@@ -33,24 +33,44 @@ export class Breadcrumb {
       url: '/',
     };
 
+    let currentService: string | null = null;
+
     if (url.includes('/valor-ya')) {
-      this.breadcrumbs.set([
-        baseBreadcrumb,
-        {
-          label: 'Valor ya',
-          // Sin URL para que sea el elemento final
-        },
-      ]);
+      currentService = 'valor-ya';
     } else if (url.includes('/avaluos-en-garantia')) {
-      this.breadcrumbs.set([
-        baseBreadcrumb,
-        {
-          label: 'Avalúos en Garantía',
-          // Sin URL para que sea el elemento final
-        },
-      ]);
-    } else {
-      this.breadcrumbs.set([baseBreadcrumb]);
+      currentService = 'avaluos-en-garantia';
+    } else if (url.includes('/test/')) {
+      currentService = 'test';
+    }
+
+    switch (currentService) {
+      case 'valor-ya':
+        this.breadcrumbs.set([
+          baseBreadcrumb,
+          {
+            label: 'Valor ya',
+          },
+        ]);
+        break;
+      case 'avaluos-en-garantia':
+        this.breadcrumbs.set([
+          baseBreadcrumb,
+          {
+            label: 'Avalúos en Garantía',
+          },
+        ]);
+        break;
+      case 'test':
+        this.breadcrumbs.set([
+          baseBreadcrumb,
+          {
+            label: 'Valor ya',
+          },
+        ]);
+        break;
+      default:
+        this.breadcrumbs.set([baseBreadcrumb]);
+        break;
     }
   }
 }

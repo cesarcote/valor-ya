@@ -1,9 +1,89 @@
-<section class="help-card py-5">
-  <h5 class="help-title">¿Necesitas ayuda?</h5>
-  <div class="help-list">
-    <a class="help-item" href="#">Te explicamos con tutoriales</a>
-    <a class="help-item" href="#">¿Tienes dudas?</a>
-    <a class="help-item" href="#">¿Cómo fue tu experiencia en el proceso?</a>
-    <a class="help-item" href="#">Trámites, solicitudes y servicios</a>
+<div class="aservice-container mx-auto ms-md-auto me-md-0">
+  <div class="container">
+    <h2 class="help-title">¿Necesitas ayuda?</h2>
   </div>
-</section>
+  <!-- Tutorials Link -->
+  <a
+    href="https://www.youtube.com/channel/UCF1vty5F-FkJjwijlldTvJg"
+    target="_blank"
+    class="aservice-spacing link-card-wrapper"
+  >
+    <div class="aservice">
+      <div class="aservice-item link-card">
+        <p class="aservice-text-govco aservice-link-govco aservice-spacing-card">
+          Te explicamos con tutoriales
+        </p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Doubts Accordion -->
+  <div class="aservice aservice-spacing">
+    <div class="aservice-item">
+      <h2 class="aservice-header-govcom m-0">
+        <button
+          class="button-aservice-govco"
+          type="button"
+          (click)="toggleDoubts()"
+          [attr.aria-expanded]="isDoubtsOpen()"
+          [class.collapsed]="!isDoubtsOpen()"
+        >
+          <span class="aservice-text-govco">¿Tienes dudas sobre este trámite o consulta?</span>
+          <i class="fa-solid fa-chevron-down ms-auto"></i>
+        </button>
+      </h2>
+      <div class="aservice-collapse collapse" [class.show]="isDoubtsOpen()">
+        <div class="aservice-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="fa-solid fa-envelope mail-icon-govco me-2"></i>
+            <div class="aservice-mailto-container ms-2">
+              <a
+                href="mailto:buzon-correspondencia@catastrobogota.gov.co"
+                class="aservice-mailto-govco"
+              >
+                buzon-correspondencia@catastrobogota.gov.co
+              </a>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-headset headset-icon-govco me-2"></i>
+            <div>
+              <p class="aservice-number-govco">601 234 7600</p>
+              <p class="aservice-number-govco">Ext. 7600</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Experience Accordion -->
+  <div class="aservice">
+    <div class="aservice-item">
+      <h2 class="aservice-header-govco m-0">
+        <button
+          class="button-aservice-govco"
+          type="button"
+          (click)="toggleExperience()"
+          [attr.aria-expanded]="isExperienceOpen()"
+          [class.collapsed]="!isExperienceOpen()"
+        >
+          <span class="aservice-text-govco">¿Cómo fue tu experiencia durante el proceso?</span>
+          <i class="fa-solid fa-chevron-down ms-auto"></i>
+        </button>
+      </h2>
+      <div class="aservice-collapse collapse" [class.show]="isExperienceOpen()">
+        <div class="aservice-body aservice-body-two">
+          <p class="mb-3 text-center">
+            Tu opinión es vital para mejorar nuestros servicios digitales. Te invitamos a evaluar su
+            experiencia en nuestra plataforma.
+          </p>
+          <p class="mb-3 text-center"><strong>Solo le tomará 5 minutos.</strong></p>
+          <div class="container-button text-center">
+            <app-button text="Realizar Encuesta" variant="primary"></app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

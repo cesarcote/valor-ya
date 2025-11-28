@@ -1,48 +1,102 @@
-.help-card{
-  max-width: 273px;
-  margin-left: auto;
-  margin-right: 0;
+.aservice-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 17rem;
+  padding-top: 3rem;
 }
 
 .help-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
-  color: #2D2D2D;
-  margin-bottom: 14px;
+  color: #2d2d2d;
+  margin-bottom: 22px;
   padding-bottom: 22px;
   border-bottom: 0.0625rem solid #dee2e6;
 }
 
-.help-list {
+.aservice-spacing {
+  margin-bottom: 1.25rem;
+}
+
+.aservice-item {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #f9f9f9;
+  box-shadow: 0 0.25rem 0 #f9f9f9;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.help-item {
-  display: block;
-  padding: 8px 15px;
-  border-radius: 2rem;
-  color: #2D2D2D;
+.link-card-wrapper {
   text-decoration: none;
-  font-weight: 700;
-  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
 }
 
-.help-item:hover {
-  background: #FFF9C5;
+.link-card:hover {
+  background-color: #fff9c5;
 }
 
-@media (max-width: 768px) {
-  .help-card {
-    padding: 1.5rem;
-  }
+.aservice-text-govco {
+  color: #2d2d2d;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  text-decoration: none;
+}
 
-  .help-title {
-    font-size: 1.25rem;
-  }
+.aservice-spacing-card {
+  margin: 1.3125rem auto 1.3125rem 1.6875rem;
+}
 
-  .help-item {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.9375rem;
-  }
+.button-aservice-govco {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 0;
+  display: flex;
+  min-height: 4.375rem;
+  padding: 0 1.5rem;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button-aservice-govco:hover {
+  background-color: #fff9c5;
+}
+
+.button-aservice-govco i {
+  color: #2d2d2d;
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.button-aservice-govco.collapsed i {
+  transform: rotate(-90deg);
+}
+
+.aservice-body {
+  padding: 1.5rem 2rem;
+}
+
+.aservice-mailto-govco {
+  color: #3366cc;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.aservice-number-govco {
+  font-size: 0.9375rem;
+  margin-bottom: 0;
+  color: #000000;
+}
+
+.mail-icon-govco,
+.headset-icon-govco {
+  color: #feb400;
+  font-size: 1.5rem;
 }

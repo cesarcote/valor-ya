@@ -17,9 +17,6 @@ export class PredioService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Transforma la respuesta del backend en el modelo de datos del frontend
-   */
   private mapCatastroResponseToPredioData(
     response: CatastroResponse,
     valorBusqueda?: string,
@@ -39,10 +36,17 @@ export class PredioService {
       barrio: infoAdicional.barrio || '',
       tipoPredio: infoAdicional.tipoPredio || '',
       estrato: infoAdicional.estrato || '',
-      areaConstruida: (infoAdicional.areaConstruidaPrivada || '0') + ' m²',
+      areaConstruida: infoAdicional.areaConstruidaPrivada || '0',
       edad: infoAdicional.edad || '',
       coordenadas: this.DEFAULT_COORDINATES,
       coordenadasPoligono: infoGeografica?.coordenadasPoligono,
+      areaPoligono: infoGeografica?.areaPoligono,
+      longitudPoligono: infoGeografica?.longitudPoligono,
+      ph: infoAdicional.ph,
+      nph: infoAdicional.nph,
+      codigoManzana: infoAdicional.codigoManzana,
+      codigoPredio: infoAdicional.codigoPredio,
+      codigoBarrio: infoAdicional.codigoBarrio,
     };
   }
 
@@ -75,8 +79,6 @@ export class PredioService {
 
     return this.http.get<CatastroResponse>(url, { params }).pipe(
       map((response: CatastroResponse) => {
-        console.log('✅ Respuesta exitosa de la API');
-
         if (response.success && response.data && response.data.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, chip, 'chip');
         } else {
@@ -100,7 +102,7 @@ export class PredioService {
       barrio: 'Código y nombre del sector catastral.',
       tipoPredio: 'Agrupaciones de Uso2.',
       estrato: 'código estrato.',
-      areaConstruida: 'área construida del predio.',
+      areaConstruida: 'área construida privada del predio.',
       edad: 'Rango de edad entre -3 años y +3 años de antigüedad.',
       coordenadas: { lat: 4.711, lng: -74.0721 },
     });

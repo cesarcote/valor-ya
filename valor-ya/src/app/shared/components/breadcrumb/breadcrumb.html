@@ -1,20 +1,19 @@
 <nav class="breadcrumb-container" aria-label="breadcrumb">
   <ol class="breadcrumb">
     @for (item of breadcrumbs(); track $index; let last = $last; let first = $first) {
-      <li class="breadcrumb-item" [class.active]="last" [class.first]="first">
-        @if (!last && item.url) {
-          <a [routerLink]="item.url" class="breadcrumb-link">
-            {{ item.label }}
-          </a>
-        } @else {
-          <span class="breadcrumb-current">
-            {{ item.label }}
-          </span>
-        }
-        @if (!last) {
-          <img src="assets/images/breadcrum.svg" alt="" class="breadcrumb-separator-icon">
-        }
-      </li>
+    <li class="breadcrumb-item" [class.active]="last" [class.first]="first">
+      @if (!last && item.url) {
+      <a [routerLink]="item.url" class="breadcrumb-link">
+        {{ item.label }}
+      </a>
+      } @else {
+      <span class="breadcrumb-current">
+        {{ item.label }}
+      </span>
+      } @if (!last) {
+      <img src="assets/images/breadcrum.svg" alt="" class="breadcrumb-separator-icon" />
+      }
+    </li>
     }
   </ol>
 </nav>

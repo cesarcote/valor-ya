@@ -1,0 +1,22 @@
+export interface ReporteValorYaRequest {
+  chip: string;
+  zona: string;
+  tipoPredio: string;
+  valorYa: string;
+  limiteInferior: string;
+  limiteSuperior: string;
+  valorYaM2: string;
+  limiteInferiorM2: string;
+  limiteSuperiorM2: string;
+  ofertasUtilizadas: string;
+  coeficienteVariacion: string;
+  imagenBase64?: string;
+  imagenBase64Ofertas?: string;
+}
+
+export interface ReporteValorYaResponse {
+  success: boolean;
+  message: string;
+  reportUrl?: string;
+  reportData?: any;
+}

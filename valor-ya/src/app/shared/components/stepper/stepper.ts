@@ -1,14 +1,9 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  Optional,
-  signal,
-  effect,
-} from '@angular/core';
+import { Component, inject, Optional, signal, effect } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { ValorYaStepperService } from '../../../core/services/valor-ya-stepper.service';
-import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.service';
+import { ValorYaStepperService } from '../../../features/valor-ya/services/valor-ya-stepper.service';
+import { AvaluosStepperService } from '../../../features/avaluos-en-garantia/services/avaluos-stepper.service';
+import { TestStepperService } from '../../../features/test/services/test-stepper.service';
 
 @Component({
   selector: 'app-stepper',
@@ -16,35 +11,50 @@ import { AvaluosStepperService } from '../../../core/services/avaluos-stepper.se
   templateUrl: './stepper.html',
   styleUrls: ['./stepper.css'],
 })
-export class StepperComponent implements OnInit {
+export class StepperComponent {
   stepperService: any;
 
   currentStep = signal(1);
   progressPercentage = signal('15%');
 
   constructor(
+    private router: Router,
     @Optional() private valorYaStepperService: ValorYaStepperService,
-    @Optional() private avaluosStepperService: AvaluosStepperService
+    @Optional() private avaluosStepperService: AvaluosStepperService,
+    @Optional() private testStepperService: TestStepperService
   ) {
-    this.stepperService = this.avaluosStepperService || this.valorYaStepperService;
+    const url = this.router.url;
+
+    switch (true) {
+      case url.includes('/valor-ya'):
+        this.stepperService = this.valorYaStepperService;
+        break;
+      case url.includes('/avaluos'):
+        this.stepperService = this.avaluosStepperService;
+        break;
+      case url.includes('/test'):
+        this.stepperService = this.testStepperService;
+        break;
+      default:
+        this.stepperService =
+          this.valorYaStepperService || this.avaluosStepperService || this.testStepperService;
+        break;
+    }
 
     if (this.stepperService) {
-      // Use effect to react to signal changes
       effect(() => {
         const step = this.stepperService.currentStep();
+        const percentage = this.stepperService.progressPercentage();
         this.currentStep.set(step);
-        this.progressPercentage.set(this.stepperService.progressPercentage());
+        this.progressPercentage.set(percentage);
       });
     }
   }
 
-  ngOnInit(): void {
-    // ngOnInit is intentionally left empty.
-    // The logic that was here has been moved to the constructor
-    // to ensure it runs within the correct injection context.
-  }
-
   isStepActive(step: number): boolean {
+    if (this.stepperService && typeof this.stepperService.isStepActive === 'function') {
+      return this.stepperService.isStepActive(step);
+    }
     return this.currentStep() >= step;
   }
 

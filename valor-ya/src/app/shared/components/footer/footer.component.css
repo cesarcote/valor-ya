@@ -1,6 +1,3 @@
-/* Footer - Bootstrap enhanced with Gov.co classes */
-
-/* White floating container */
 .footer-container {
   background-color: white;
   position: relative;
@@ -13,7 +10,7 @@
 .govco-footer-logo {
   background-color: #0943b5;
 }
-/* Gov.co specific logos - Design styles */
+
 .govco-logo-entidad {
   height: 50px;
   display: inline-block;

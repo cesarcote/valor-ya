@@ -1,0 +1,253 @@
+.step-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.maps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.map-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-section {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f3f4f6;
+}
+
+.info-section {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f3f4f6;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.info-item:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.info-label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.highlight-section {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.highlight-section .section-title {
+  color: #374151;
+  border-bottom: none;
+}
+
+.valuation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.valuation-item {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.valuation-item:hover {
+  border-color: #feb400;
+  box-shadow: 0 2px 4px rgba(254, 180, 0, 0.1);
+}
+
+.valuation-item.primary {
+  background: white;
+  border: 2px solid #feb400;
+  box-shadow: 0 4px 6px rgba(254, 180, 0, 0.1);
+}
+
+.valuation-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.valuation-item.primary .valuation-label {
+  color: #92400e;
+}
+
+.valuation-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.valuation-item.primary .valuation-value {
+  font-size: 1.75rem;
+  color: #feb400;
+}
+
+/* Custom actions section for container-content */
+.actions-section-custom {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.loading-section,
+.error-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-text,
+.error-text {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.error-text {
+  color: #dc2626;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: #dc2626;
+}
+
+.error-icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #dc2626;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .result-section {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .valuation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .actions-section {
+    flex-direction: column;
+  }
+
+  .actions-section app-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .result-section {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .valuation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .actions-section {
+    flex-direction: column;
+  }
+
+  .actions-section app-button {
+    width: 100%;
+  }
+}

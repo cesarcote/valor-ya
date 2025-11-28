@@ -23,6 +23,11 @@ export interface MarkerConfig {
   lat: number;
   lng: number;
   popupText?: string;
+  popupOptions?: L.PopupOptions;
+  tooltipContent?: string | HTMLElement;
+  tooltipOptions?: L.TooltipOptions;
+  color?: string;
+  markerType?: 'pin' | 'circle';
 }
 
 export interface PolygonConfig {
@@ -54,6 +59,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   });
 
   isLoading = signal(false);
+  direccion = signal<string>('');
 
   private readonly DEFAULT_POLYGON_STYLE = {
     color: '#e3192f',
@@ -86,13 +92,67 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   addMarker(markerConfig: MarkerConfig): void {
     if (!this.map) return;
 
-    this.clearMarker();
+    // Si no se quiere acumular marcadores, descomentar la siguiente línea
+    // this.clearMarker();
 
-    const { lat, lng, popupText } = markerConfig;
-    this.currentMarker = L.marker([lat, lng]).addTo(this.map);
+    const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions, color, markerType } =
+      markerConfig;
+
+    let marker: L.Marker;
+
+    if (color) {
+      let iconHtml: string;
+      let iconSize: [number, number];
+      let iconAnchor: [number, number];
+      let popupAnchor: [number, number];
+
+      if (markerType === 'circle') {
+        iconHtml = `
+          <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="8" fill="${color}" stroke="#fff" stroke-width="2"/>
+          </svg>
+        `;
+        iconSize = [20, 20];
+        iconAnchor = [10, 10];
+        popupAnchor = [0, -10];
+      } else {
+        iconHtml = `
+          <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+            <path fill="${color}" stroke="#fff" stroke-width="2"
+              d="M12.5 0C5.6 0 0 5.6 0 12.5c0 1.9 0.4 3.7 1.2 5.3L12.5 41l11.3-23.2c0.8-1.6 1.2-3.4 1.2-5.3C25 5.6 19.4 0 12.5 0z"/>
+            <circle cx="12.5" cy="12.5" r="6" fill="#fff"/>
+          </svg>
+        `;
+        iconSize = [25, 41];
+        iconAnchor = [12, 41];
+        popupAnchor = [1, -34];
+      }
+
+      const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: iconHtml,
+        iconSize: iconSize,
+        iconAnchor: iconAnchor,
+        popupAnchor: popupAnchor,
+      });
+      marker = L.marker([lat, lng], { icon: customIcon }).addTo(this.map);
+    } else {
+      marker = L.marker([lat, lng]).addTo(this.map);
+    }
+
+    // Guardar referencia si es el marcador principal (se podría mejorar para manejar múltiples)
+    this.currentMarker = marker;
 
     if (popupText) {
-      this.currentMarker.bindPopup(popupText).openPopup();
+      marker.bindPopup(popupText, popupOptions).openPopup();
+    }
+
+    if (tooltipContent) {
+      marker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
+
+      marker.on('click', () => {
+        marker?.openTooltip();
+      });
     }
   }
 
@@ -111,10 +171,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.currentPolygon = L.polygon(polygonConfig.coordinates, style).addTo(this.map);
 
     const bounds = this.currentPolygon.getBounds();
-    this.map.fitBounds(bounds, { maxZoom: 20, padding: [20, 20] });
+    this.map.fitBounds(bounds, {
+      maxZoom: 19,
+      paddingTopLeft: [20, 20],
+      paddingBottomRight: [80, 20],
+    });
   }
 
-  ubicarLotePorCoordenadas(coordenadasPoligono: number[][][], loteId?: string): void {
+  ubicarLotePorCoordenadas(
+    coordenadasPoligono: number[][][],
+    direccion?: string,
+    popupContent?: string | HTMLElement,
+    tooltipClass: string = 'custom-tooltip-card'
+  ): void {
     if (!this.map) {
       console.error('Map not initialized!');
       return;
@@ -124,6 +193,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       console.warn('Invalid coordinates:', coordenadasPoligono);
       return;
     }
+
+    this.direccion.set(direccion || '');
 
     // Convertir coordenadas del polígono al formato de Leaflet
     const coordinates = this.parseRingsToLatLng(coordenadasPoligono);
@@ -138,7 +209,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.addMarker({
       lat: center.lat,
       lng: center.lng,
-      popupText: `<strong>LOTE:</strong> ${loteId || 'Sin código'}`,
+      tooltipContent: popupContent || `<strong>Dirección:</strong> ${direccion || 'Sin dirección'}`,
+      tooltipOptions: popupContent
+        ? {
+            permanent: true,
+            direction: 'right',
+            className: tooltipClass,
+            interactive: true,
+            offset: tooltipClass === 'custom-tooltip-card' ? [100, 0] : [0, 0], // Solo offset para la card grande
+          }
+        : undefined,
     });
   }
 
@@ -161,26 +241,28 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.clearPolygon();
   }
 
-  private handleLoteResponse(response: any, loteCodigo: string): void {
-    if (!response.features || response.features.length === 0) {
-      console.warn(`No se encontró el lote con código: ${loteCodigo}`);
-      return;
+  async captureMapAsBase64(): Promise<string | null> {
+    if (!this.mapContainer) return null;
+
+    try {
+      this.isLoading.set(true);
+
+      const html2canvas = (await import('html2canvas')).default;
+
+      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+      console.error('Error al capturar el mapa:', error);
+      return null;
+    } finally {
+      this.isLoading.set(false);
     }
-
-    const feature = response.features[0];
-    const rings = feature.geometry.rings;
-
-    const coordinates = this.parseRingsToLatLng(rings);
-    this.addPolygon({ coordinates });
-
-    const bounds = this.currentPolygon!.getBounds();
-    const center = bounds.getCenter();
-
-    this.addMarker({
-      lat: center.lat,
-      lng: center.lng,
-      popupText: `<strong>LOTE:</strong> ${loteCodigo}`,
-    });
   }
 
   private parseRingsToLatLng(rings: number[][][]): L.LatLngExpression[] {
@@ -235,8 +317,45 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.map.on('zoomstart', () => catastroLayer.setOpacity(0.3));
-    this.map.on('zoomend', () => catastroLayer.setOpacity(0.8));
+    this.map.on('zoomend', () => {
+      catastroLayer.setOpacity(0.8);
+      this.updateTooltipOffset();
+    });
 
     catastroLayer.addTo(this.map);
+  }
+
+  private updateTooltipOffset(): void {
+    if (this.currentMarker && this.currentMarker.getTooltip()) {
+      const zoom = this.map.getZoom();
+      // Calculate offset based on zoom.
+      // Example: Zoom 18 -> 100px. Zoom 14 -> 60px.
+      // Formula: 100 - (18 - zoom) * 10
+      const baseOffset = 100;
+      const zoomFactor = 10;
+      const referenceZoom = 18;
+
+      let newOffsetX = baseOffset - (referenceZoom - zoom) * zoomFactor;
+
+      if (newOffsetX < 40) newOffsetX = 40;
+
+      const tooltip = this.currentMarker.getTooltip()!;
+
+      // Solo aplicar offset dinámico si es la tarjeta personalizada (Step 2)
+      if (tooltip.options.className && tooltip.options.className.includes('custom-tooltip-card')) {
+        tooltip.options.offset = [newOffsetX, 0];
+
+        if (this.map.hasLayer(tooltip)) {
+          this.currentMarker.closeTooltip();
+          this.currentMarker.openTooltip();
+        }
+      }
+    }
+  }
+
+  closeTooltip(): void {
+    if (this.currentMarker) {
+      this.currentMarker.closeTooltip();
+    }
   }
 }

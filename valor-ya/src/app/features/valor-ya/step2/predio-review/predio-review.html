@@ -1,0 +1,63 @@
+<app-valorya-description></app-valorya-description>
+<app-stepper></app-stepper>
+
+<div class="step-container">
+  @if (isLoading()) {
+  <div class="loading-simple">
+    <p>Cargando información del predio...</p>
+  </div>
+  } @else if (errorMessage()) {
+  <app-container-content
+    title="Información del Predio"
+    [showContinueButton]="false"
+    (volver)="onVolver()"
+  >
+    <div class="no-data-section">
+      <h3>No se encontró información</h3>
+      <p class="error-message">{{ errorMessage() }}</p>
+    </div>
+  </app-container-content>
+  } @else if (predioData()) {
+  <app-container-content
+    title="Información del Predio"
+    continueButtonText="Continuar"
+    [continueButtonDisabled]="isValidatingAvailability()"
+    [isLoading]="isValidatingAvailability()"
+    (volver)="onVolver()"
+    (continuar)="onContinuar()"
+  >
+    <div class="map-section">
+      <app-map></app-map>
+    </div>
+
+    <app-predio-info-card [predioData]="predioData()" [showMessage]="true" [showAllFields]="true">
+    </app-predio-info-card>
+
+    <div class="confirmation-section">
+      <p class="confirmation-question">
+        ¿La información que reposa en nuestro sistema de información es la correcta?
+      </p>
+      <div class="action-buttons-extra">
+        <app-button
+          text="No es correcta"
+          variant="secondary"
+          type="button"
+          (clicked)="onNoEsCorrecta()"
+        >
+        </app-button>
+      </div>
+    </div>
+  </app-container-content>
+  }
+</div>
+
+@if (showModal()) {
+<app-modal
+  [message]="modalMessage()"
+  [title]="modalTitle()"
+  [iconType]="modalIconType()"
+  [buttonText]="modalButtonText()"
+  (close)="onCloseModal()"
+>
+</app-modal>
+}

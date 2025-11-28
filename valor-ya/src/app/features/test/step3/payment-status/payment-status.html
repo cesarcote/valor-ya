@@ -1,0 +1,48 @@
+<app-valorya-description></app-valorya-description>
+<app-stepper></app-stepper>
+
+<app-container-content
+  [title]="'Estado del Pago'"
+  [showContinueButton]="!!currentConfig().primaryAction"
+  [showBackButton]="!!currentConfig().secondaryAction"
+  [continueButtonText]="currentConfig().primaryAction.label"
+  [backButtonText]="currentConfig().secondaryAction?.label || ''"
+  (continuar)="onPrimaryAction()"
+  (volver)="onSecondaryAction()"
+>
+  <div class="payment-status-container">
+    <!-- Loading State -->
+    @if (isLoading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p class="loading-text">Verificando estado del pago...</p>
+    </div>
+    }
+
+    <!-- Status Content -->
+    @if (!isLoading()) {
+    <div class="status-card" [ngClass]="currentConfig().bgColor">
+      <!-- Icon -->
+      <div class="status-icon-container">
+        <div class="status-icon" [ngClass]="currentConfig().iconColor">
+          {{ currentConfig().icon }}
+        </div>
+      </div>
+
+      <!-- Title and Message -->
+      <h1 class="status-title">{{ currentConfig().title }}</h1>
+      <p class="status-message">{{ currentConfig().message }}</p>
+
+      <!-- Help Text -->
+      <div class="help-text">
+        <p>
+          ¿Preguntas sobre tu pago?
+          <a href="tel:+576012347600">Llámanos al 195</a> o
+          <a href="mailto:buzon-correspondencia@catastrobogota.gov.co">escríbenos</a>
+        </p>
+        <p class="small-text">Lunes a Viernes 8:00 AM - 4:30 PM</p>
+      </div>
+    </div>
+    }
+  </div>
+</app-container-content>

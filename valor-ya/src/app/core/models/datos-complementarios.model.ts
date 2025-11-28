@@ -7,9 +7,6 @@ export interface DatosComplementarios {
   areaConstruida?: number;
   edad?: string;
   estrato?: number;
-  numeroAscensores?: number;
-  numeroParqueaderos?: number;
-  numeroDepositos?: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -22,9 +19,6 @@ export interface DatosComplementariosRequest {
   areaConstruida?: number;
   edad?: string;
   estrato?: number;
-  numeroAscensores?: number;
-  numeroParqueaderos?: number;
-  numeroDepositos?: number;
 }
 
 export interface DatosComplementariosResponse {

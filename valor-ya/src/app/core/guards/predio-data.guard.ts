@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { ValorYaStateService } from '../services/valor-ya-state.service';
+import { ValorYaStateService } from '../../features/valor-ya/services/valor-ya-state.service';
 
 export const predioDataGuard: CanActivateFn = () => {
   const stateService = inject(ValorYaStateService);
@@ -8,7 +8,7 @@ export const predioDataGuard: CanActivateFn = () => {
 
   const predioData = stateService.predioData();
 
-  if (!predioData || !predioData.loteid) {
+  if (!predioData || !predioData.chip) {
     router.navigate(['/valor-ya/solicitud']);
     return false;
   }
