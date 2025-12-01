@@ -9,18 +9,8 @@ export interface CompraRequest {
   fechaCompra: string;
   estado: 'COMPRADO_CON_PAGO' | 'COMPRADA_SIN_PAGO' | 'REGISTRADA' | 'PENDIENTE' | 'COMPLETADO';
   uuid: string;
-  valor: number;
-  productoId: number;
   cantidad: number;
-  valorUnitario: number;
-
-  enviada?: number;
-  version?: number;
-  pagoId?: number | null;
-  facturaId?: number | null;
-  fechaEnvio?: string | null;
-  tipoFiltroProdId?: number | null;
-  valorFiltro?: string | null;
+  valorFiltro: number | null;
   prodDetId1?: string | null;
   prodDetId2?: string | null;
   archivoPrev?: string | null;
@@ -38,19 +28,17 @@ export interface CompraResponse {
 export interface PagoRequest {
   compraId: number;
   estado: 'EXITOSO' | 'RECHAZADO' | 'PENDIENTE' | 'SIN_PAGO' | 'APROBADO';
-
-  numeroTx?: string | null;
-  banco?: string | null;
-  version?: number;
-  fechaInicioTx?: string | null;
-  fechaFinTx?: string | null;
-  numeroConfTx?: string | null;
-  fechaConfTx?: string | null;
-  tipoPersona?: string | null;
-  numPago?: number | null;
-  estadoPagoProveedor?: string | null;
-  formaPagoProveedor?: string | null;
-  codigoTxProveedor?: string | null;
+  fechaInicioTx: string | null;
+  fechaFinTx: string | null;
+  numeroTx: string;
+  numeroConfTx: string | null;
+  fechaConfTx: string | null;
+  tipoPersona: string;
+  banco: string;
+  version: number;
+  estadoPagoProveedor: string | null;
+  formaPagoProveedor: string;
+  codigoTxProveedor: string | null;
 }
 
 export interface PagoResponse {

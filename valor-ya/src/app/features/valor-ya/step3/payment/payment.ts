@@ -102,8 +102,6 @@ export class PaymentComponent implements OnInit {
       // PASO 1: Crear la compra
       const uuid = `UUID-${Date.now()}`;
       const fechaCompra = new Date().toISOString().split('T')[0];
-      const valor = 50000;
-      const productoId = 1;
       const currentYear = new Date().getFullYear();
       const radNum = Math.floor(Math.random() * 90000) + 10000;
 
@@ -112,16 +110,7 @@ export class PaymentComponent implements OnInit {
         fechaCompra,
         estado: 'REGISTRADA' as const,
         uuid,
-        pagoId: null,
-        facturaId: null,
-        enviada: 0,
-        fechaEnvio: null,
-        valor,
-        version: 1,
-        productoId,
         cantidad: 1,
-        valorUnitario: valor,
-        tipoFiltroProdId: null,
         valorFiltro: null,
         prodDetId1: predioData.chip,
         prodDetId2: null,
@@ -148,7 +137,6 @@ export class PaymentComponent implements OnInit {
             tipoPersona: 'NATURAL',
             banco: 'BANCO UNION COLOMBIANO',
             version: 1,
-            numPago: 1,
             estadoPagoProveedor: null,
             formaPagoProveedor: 'credit_card',
             codigoTxProveedor: null,
@@ -169,7 +157,7 @@ export class PaymentComponent implements OnInit {
                 order: {
                   dev_reference: pagoResponse.pagoId,
                   description: 'COMPRA EN LINEA DE PRODUCTOS DIGITALES UAECD - VALOR YA',
-                  amount: valor,
+                  amount: 50000,
                   installments_type: 0,
                   currency: 'COP',
                 },
