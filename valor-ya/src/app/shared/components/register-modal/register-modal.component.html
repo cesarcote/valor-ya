@@ -1,0 +1,353 @@
+<!-- Modal de Registro -->
+<div class="register-modal-content">
+  <!-- Header del modal -->
+  <div class="modal-header border-bottom">
+    <h2 class="modal-title">Crear mi cuenta</h2>
+    <button type="button" class="btn-close" aria-label="Cerrar" (click)="onClose()"></button>
+  </div>
+
+  <!-- Body del modal -->
+  <div class="modal-body">
+    <!-- ========== PASO 1: Documento de Identidad ========== -->
+    @if (currentStep() === 1) {
+    <div class="step-one-form">
+      <!-- Indicador de pasos -->
+      <div class="step-indicator mb-4">
+        <div class="step active">
+          <div class="step-inner">1</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step inactive">
+          <div class="step-inner">2</div>
+        </div>
+      </div>
+
+      <h3 class="main-title text-center">Crear mi cuenta</h3>
+      <p class="text-center text-muted mb-4">
+        En los campos señalados con asterisco (*) es obligatorio ingresar la información solicitada.
+      </p>
+
+      <!-- Formulario paso 1 -->
+      <form [formGroup]="stepOneForm">
+        <!-- Tipo de documento -->
+        <div class="form-group mb-3">
+          <label class="form-label" for="documentType">
+            Selecciona el tipo de documento<sup class="text-danger">*</sup>
+          </label>
+          <select id="documentType" class="form-select" formControlName="documentType">
+            <option value="" disabled>Selecciona el tipo de documento</option>
+            @for (doc of documentTypes(); track doc.id) {
+            <option [value]="doc.id">{{ doc.description }}</option>
+            }
+          </select>
+          @if (documentType?.invalid && documentType?.touched) {
+          <div class="invalid-feedback d-block">Debe seleccionar un tipo de documento.</div>
+          }
+        </div>
+
+        <!-- Número de documento -->
+        <div class="form-group mb-3">
+          <label class="form-label" for="documentNumber">
+            Escribe el número de documento<sup class="text-danger">*</sup>
+          </label>
+          @if (isNIT) {
+          <small class="text-muted d-block mb-1">
+            Ingrese el número del NIT, de la misma forma como está inscrito.
+          </small>
+          }
+          <input
+            id="documentNumber"
+            type="text"
+            class="form-control"
+            formControlName="documentNumber"
+            placeholder="Escribe el número de documento"
+            maxlength="12"
+          />
+          @if (documentNumber?.invalid && documentNumber?.touched) {
+          <div class="invalid-feedback d-block">
+            {{ documentNumberError }}
+          </div>
+          }
+        </div>
+
+        <!-- Confirmar número de documento -->
+        <div class="form-group mb-3">
+          <label class="form-label" for="documentNumberConfirm">
+            Confirma el número de documento<sup class="text-danger">*</sup>
+          </label>
+          <input
+            id="documentNumberConfirm"
+            type="text"
+            class="form-control"
+            formControlName="documentNumberConfirm"
+            placeholder="Confirma el número de documento"
+            maxlength="12"
+            autocomplete="off"
+            (paste)="$event.preventDefault()"
+          />
+          @if (documentNumberConfirm?.invalid && documentNumberConfirm?.touched) {
+          <div class="invalid-feedback d-block">
+            {{ documentNumberConfirmError }}
+          </div>
+          }
+        </div>
+
+        <!-- Fecha de expedición -->
+        <div class="form-group mb-3">
+          <label class="form-label" for="expeditionDate">
+            Fecha de expedición<sup class="text-danger">*</sup>
+          </label>
+          @if (isNIT) {
+          <small class="text-muted d-block mb-1">
+            Consulte la fecha de expedición de su NIT en el certificado de existencia y
+            representación legal.
+          </small>
+          }
+          <input
+            id="expeditionDate"
+            type="date"
+            class="form-control"
+            formControlName="expeditionDate"
+            [max]="maxDate"
+          />
+          @if (expeditionDate?.invalid && expeditionDate?.touched) {
+          <div class="invalid-feedback d-block">
+            Selecciona la fecha de expedición de tu documento.
+          </div>
+          }
+        </div>
+
+        <!-- Botón siguiente -->
+        <div class="text-end mt-4">
+          <app-button
+            text="Siguiente"
+            variant="primary"
+            [disabled]="isLoading()"
+            customClass="px-4"
+            (clicked)="onContinueToStepTwo()"
+          />
+        </div>
+      </form>
+    </div>
+    }
+
+    <!-- ========== PASO 2: Información Personal ========== -->
+    @if (currentStep() === 2) {
+    <div class="step-two-form">
+      <!-- Indicador de pasos -->
+      <div class="step-indicator mb-4">
+        <div class="step completed">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+        </div>
+        <div class="step-connector completed"></div>
+        <div class="step active">
+          <div class="step-inner">2</div>
+        </div>
+      </div>
+
+      <h3 class="main-title text-center">Información personal</h3>
+      <p class="text-center text-muted mb-4">
+        En los campos señalados con asterisco (*) es obligatorio ingresar la información solicitada.
+      </p>
+
+      <!-- Formulario paso 2 -->
+      <form [formGroup]="stepTwoForm">
+        <div class="row">
+          <!-- Nombres (o Razón Social si es NIT) -->
+          <div [class]="isNIT ? 'col-12 mb-3' : 'col-md-6 mb-3'">
+            <label class="form-label" for="name">
+              {{ isNIT ? 'Razón social' : 'Nombres' }}<sup class="text-danger">*</sup>
+            </label>
+            <input
+              id="name"
+              type="text"
+              class="form-control"
+              formControlName="name"
+              [placeholder]="isNIT ? 'Escriba su razón social' : 'Escriba sus nombres'"
+              (input)="toUpperCase($event)"
+            />
+            @if (name?.invalid && name?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ nameError }}
+            </div>
+            }
+          </div>
+
+          <!-- Apellidos (solo si no es NIT) -->
+          @if (!isNIT) {
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="lastname">
+              Apellidos<sup class="text-danger">*</sup>
+            </label>
+            <input
+              id="lastname"
+              type="text"
+              class="form-control"
+              formControlName="lastname"
+              placeholder="Escriba sus apellidos"
+              (input)="toUpperCase($event)"
+            />
+            @if (lastname?.invalid && lastname?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ lastnameError }}
+            </div>
+            }
+          </div>
+          }
+
+          <!-- Email -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="email">
+              Correo electrónico<sup class="text-danger">*</sup>
+            </label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="Escriba su correo electrónico"
+              (input)="toLowerCase($event)"
+            />
+            @if (email?.invalid && email?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ emailError }}
+            </div>
+            }
+          </div>
+
+          <!-- Confirmar email -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="emailConfirm">
+              Confirma tu correo<sup class="text-danger">*</sup>
+            </label>
+            <input
+              id="emailConfirm"
+              type="email"
+              class="form-control"
+              formControlName="emailConfirm"
+              placeholder="Confirma tu correo"
+              (input)="toLowerCase($event)"
+              (paste)="$event.preventDefault()"
+              autocomplete="off"
+            />
+            @if (emailConfirm?.invalid && emailConfirm?.touched) {
+            <div class="invalid-feedback d-block">
+              @if (emailConfirm?.hasError('mismatch')) { Los correos electrónicos deben coincidir. }
+            </div>
+            }
+          </div>
+
+          <!-- Celular -->
+          <div class="col-12 mb-3">
+            <label class="form-label" for="cellphone">
+              Celular<sup class="text-danger">*</sup>
+            </label>
+            <input
+              id="cellphone"
+              type="tel"
+              class="form-control"
+              formControlName="cellphone"
+              placeholder="Escriba su número de celular"
+              maxlength="20"
+            />
+            @if (cellphone?.invalid && cellphone?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ cellphoneError }}
+            </div>
+            }
+          </div>
+
+          <!-- Género (solo si no es NIT) -->
+          @if (!isNIT) {
+          <div class="col-12 mb-3">
+            <label class="form-label" for="sexType">
+              Selecciona tu género<sup class="text-danger">*</sup>
+            </label>
+            <select id="sexType" class="form-select" formControlName="sexType">
+              <option value="" disabled>Selecciona tu género</option>
+              @for (sex of sexTypes(); track sex.id) {
+              <option [value]="sex.id">{{ sex.description }}</option>
+              }
+            </select>
+            @if (sexType?.invalid && sexType?.touched) {
+            <div class="invalid-feedback d-block">{{ sexTypeError }}</div>
+            }
+          </div>
+          }
+
+          <!-- Términos y condiciones -->
+          <div class="col-12 mb-3">
+            <div class="form-check">
+              <input
+                id="acceptTerms"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="acceptTerms"
+                (change)="onTermsChange($event)"
+              />
+              <label class="form-check-label" for="acceptTerms">
+                Acepto los términos y condiciones y autorizo el tratamiento de mis datos personales
+                de acuerdo con la
+                <a href="/terms" target="_blank" class="terms-link">
+                  Política de tratamiento de los datos personales
+                </a>
+              </label>
+            </div>
+            @if (acceptTermsControl?.invalid && acceptTermsControl?.touched) {
+            <div class="invalid-feedback d-block">{{ acceptTermsError }}</div>
+            }
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="col-md-6 mt-3">
+            <app-button
+              text="Anterior"
+              variant="secondary"
+              [fullWidth]="true"
+              (clicked)="onBackToStepOne()"
+            />
+          </div>
+          <div class="col-md-6 mt-3">
+            <app-button
+              text="Finalizar"
+              variant="primary"
+              [fullWidth]="true"
+              [disabled]="isLoading()"
+              (clicked)="onRegister()"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    }
+
+    <!-- Enlace a login -->
+    @if (currentStep() === 1) {
+    <div class="login-copy text-center mt-4 pt-3 border-top">
+      <p class="text-muted mb-0">
+        ¿Ya tienes una cuenta?
+        <a href="javascript:void(0)" class="login-link" (click)="onOpenLogin()"> Inicia sesión </a>
+      </p>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal de Confirmación para salir -->
+@if (showConfirmation()) {
+<div class="confirmation-backdrop" (click)="onCancelClose()" (keydown)="onCancelClose()">
+  <div class="confirmation-dialog">
+    <app-confirmation-modal (confirm)="onConfirmClose()" (cancelAction)="onCancelClose()" />
+  </div>
+</div>
+}
