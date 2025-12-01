@@ -28,17 +28,16 @@ interface StatusConfig {
   styleUrls: ['./payment-status.css'],
 })
 export class PaymentStatusComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
-  private comprasService = inject(ComprasService);
-
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
+  private readonly comprasService = inject(ComprasService);
   status = signal<PaymentStatus>('pending');
   transactionId = signal<string | null>(null);
   isLoading = signal(true);
 
-  private statusConfigs: Record<PaymentStatus, StatusConfig> = {
+  private readonly statusConfigs: Record<PaymentStatus, StatusConfig> = {
     success: {
       title: '¡Pago Exitoso!',
       message:
@@ -94,7 +93,6 @@ export class PaymentStatusComponent implements OnInit {
         this.processAutomaticUpdates();
       } else {
         this.router.navigate(['/test/seleccionar']);
-        return;
       }
     });
 
@@ -121,12 +119,10 @@ export class PaymentStatusComponent implements OnInit {
         const compraId = Number(paymentContext.compraId);
         this.updatePaymentStatus(pagoId, compraId);
       }
-    } else {
-      if (paymentContext.dev_reference) {
-        const pagoId = Number(paymentContext.dev_reference);
-        const compraId = paymentContext.compraId ? Number(paymentContext.compraId) : undefined;
-        this.updatePaymentStatus(pagoId, compraId);
-      }
+    } else if (paymentContext.dev_reference) {
+      const pagoId = Number(paymentContext.dev_reference);
+      const compraId = paymentContext.compraId ? Number(paymentContext.compraId) : undefined;
+      this.updatePaymentStatus(pagoId, compraId);
     }
   }
 

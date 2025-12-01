@@ -46,7 +46,7 @@ export interface PolygonConfig {
 export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
 
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private map!: L.Map;
   private currentMarker?: L.Marker;
   private currentPolygon?: L.Polygon;
@@ -326,7 +326,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateTooltipOffset(): void {
-    if (this.currentMarker && this.currentMarker.getTooltip()) {
+    if (this.currentMarker?.getTooltip()) {
       const zoom = this.map.getZoom();
       // Calculate offset based on zoom.
       // Example: Zoom 18 -> 100px. Zoom 14 -> 60px.
@@ -342,7 +342,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const tooltip = this.currentMarker.getTooltip()!;
 
       // Solo aplicar offset dinámico si es la tarjeta personalizada (Step 2)
-      if (tooltip.options.className && tooltip.options.className.includes('custom-tooltip-card')) {
+      if (tooltip.options?.className?.includes('custom-tooltip-card')) {
         tooltip.options.offset = [newOffsetX, 0];
 
         if (this.map.hasLayer(tooltip)) {

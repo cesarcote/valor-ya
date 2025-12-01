@@ -14,7 +14,6 @@ import {
   SolicitudDatosComplementariosService,
   DatosUsuario,
 } from '../../../../core/services/solicitud-datos-complementarios.service';
-import { NotificationService } from '../../../../shared/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -35,12 +34,11 @@ import { ContainerContentComponent } from '../../../../shared/components/contain
   styleUrls: ['./complement-info.css'],
 })
 export class ComplementInfo implements OnInit {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
-  private solicitudDatosService = inject(SolicitudDatosComplementariosService);
-
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
+  private readonly solicitudDatosService = inject(SolicitudDatosComplementariosService);
   readonly TIPO_PREDIO_OPTIONS: SelectOption[] = [
     { value: 'Apartamento', label: 'Apartamento' },
     { value: 'Casa', label: 'Casa' },
@@ -119,76 +117,104 @@ export class ComplementInfo implements OnInit {
   }
 
   onConsultarMCM(): void {
-    if (this.complementForm.valid || this.complementForm.get('tipoPredio')?.disabled) {
-      this.isLoading.set(true);
-      this.errorMessage.set('');
-
-      const predioData = this.stateService.predioData()!;
-
-      const formValues = this.complementForm.getRawValue();
-
-      let tipoPredioFinal = formValues.tipoPredio;
-      if (formValues.tipoPredio === 'Otro') {
-        tipoPredioFinal = formValues.otroTipoPredio;
-      }
-
-      const datosUsuario: DatosUsuario = {
-        tipoPredio: tipoPredioFinal,
-      };
-
-      // Solo agregar campos que el usuario realmente completó
-      if (formValues.numeroHabitaciones !== '') {
-        datosUsuario.numeroHabitaciones = parseInt(formValues.numeroHabitaciones);
-      }
-      if (formValues.numeroBanos !== '') {
-        datosUsuario.numeroBanos = parseInt(formValues.numeroBanos);
-      }
-      if (formValues.areaConstruida !== '') {
-        datosUsuario.areaConstruida = parseFloat(formValues.areaConstruida);
-      }
-      if (formValues.edad) {
-        datosUsuario.edad = formValues.edad;
-      }
-      if (formValues.estrato !== '') {
-        datosUsuario.estrato = parseInt(formValues.estrato);
-      }
-      if (formValues.numeroAscensores !== '') {
-        datosUsuario.numeroAscensores = parseInt(formValues.numeroAscensores);
-      }
-      if (formValues.numeroParqueaderos !== '') {
-        datosUsuario.numeroParqueaderos = parseInt(formValues.numeroParqueaderos);
-      }
-      if (formValues.numeroDepositos !== '') {
-        datosUsuario.numeroDepositos = parseInt(formValues.numeroDepositos);
-      }
-
-      this.solicitudDatosService
-        .enviarSolicitudDatos({
-          loteId: predioData.loteid!,
-          datosEndpoint: predioData,
-          datosUsuario,
-          tipoUnidad: tipoPredioFinal,
-        })
-        .subscribe({
-          next: (datosGuardados) => {
-            this.stateService.setDatosComplementarios(datosGuardados);
-            this.isLoading.set(false);
-            this.stepperService.setStep(TestStep.RESPUESTA);
-            this.router.navigate(['/test/pago']);
-          },
-          error: (error) => {
-            this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
-            this.isLoading.set(false);
-          },
-        });
-    } else {
-      Object.keys(this.complementForm.controls).forEach((key) => {
-        const control = this.complementForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
-        }
-      });
+    if (!this.canSubmitForm()) {
+      this.markInvalidControls();
+      return;
     }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    const predioData = this.stateService.predioData()!;
+    const formValues = this.complementForm.getRawValue();
+    const tipoPredioFinal = this.getTipoPredioFinal(formValues);
+    const datosUsuario = this.buildDatosUsuario(formValues, tipoPredioFinal);
+
+    this.submitDatosComplementarios(predioData, datosUsuario, tipoPredioFinal);
+  }
+
+  private canSubmitForm(): boolean {
+    return this.complementForm.valid || this.complementForm.get('tipoPredio')?.disabled === true;
+  }
+
+  private markInvalidControls(): void {
+    Object.keys(this.complementForm.controls).forEach((key) => {
+      const control = this.complementForm.get(key);
+      if (control?.invalid) {
+        control.markAsTouched();
+      }
+    });
+  }
+
+  private getTipoPredioFinal(formValues: any): string {
+    let tipoPredioFinal = formValues.tipoPredio;
+    if (formValues.tipoPredio === 'Otro') {
+      tipoPredioFinal = formValues.otroTipoPredio;
+    }
+    return tipoPredioFinal;
+  }
+
+  private buildDatosUsuario(formValues: any, tipoPredioFinal: string): DatosUsuario {
+    const datosUsuario: DatosUsuario = {
+      tipoPredio: tipoPredioFinal,
+    };
+
+    if (formValues.numeroHabitaciones !== '') {
+      datosUsuario.numeroHabitaciones = Number.parseInt(formValues.numeroHabitaciones);
+    }
+    if (formValues.numeroBanos !== '') {
+      datosUsuario.numeroBanos = Number.parseInt(formValues.numeroBanos);
+    }
+    if (formValues.areaConstruida !== '') {
+      datosUsuario.areaConstruida = Number.parseFloat(formValues.areaConstruida);
+    }
+    if (formValues.edad) {
+      datosUsuario.edad = formValues.edad;
+    }
+    if (formValues.estrato !== '') {
+      datosUsuario.estrato = Number.parseInt(formValues.estrato);
+    }
+    if (formValues.numeroAscensores !== '') {
+      datosUsuario.numeroAscensores = Number.parseInt(formValues.numeroAscensores);
+    }
+    if (formValues.numeroParqueaderos !== '') {
+      datosUsuario.numeroParqueaderos = Number.parseInt(formValues.numeroParqueaderos);
+    }
+    if (formValues.numeroDepositos !== '') {
+      datosUsuario.numeroDepositos = Number.parseInt(formValues.numeroDepositos);
+    }
+
+    return datosUsuario;
+  }
+
+  private submitDatosComplementarios(
+    predioData: any,
+    datosUsuario: DatosUsuario,
+    tipoPredioFinal: string
+  ): void {
+    this.solicitudDatosService
+      .enviarSolicitudDatos({
+        loteId: predioData.loteid!,
+        datosEndpoint: predioData,
+        datosUsuario,
+        tipoUnidad: tipoPredioFinal,
+      })
+      .subscribe({
+        next: (datosGuardados) => this.onSubmitSuccess(datosGuardados),
+        error: (error) => this.onSubmitError(error),
+      });
+  }
+
+  private onSubmitSuccess(datosGuardados: any): void {
+    this.stateService.setDatosComplementarios(datosGuardados);
+    this.isLoading.set(false);
+    this.stepperService.setStep(TestStep.RESPUESTA);
+    this.router.navigate(['/test/pago']);
+  }
+
+  private onSubmitError(error: any): void {
+    this.errorMessage.set(`Error al guardar los datos: ${error.message}`);
+    this.isLoading.set(false);
   }
 
   get tipoPredioControl() {

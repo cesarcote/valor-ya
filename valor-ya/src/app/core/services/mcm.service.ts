@@ -9,7 +9,7 @@ import { currentEnvironment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class McmService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   procesarChip(chip: string): Observable<MCMValorYAResultado> {

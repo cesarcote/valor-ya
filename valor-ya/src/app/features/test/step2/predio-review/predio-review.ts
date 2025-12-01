@@ -5,7 +5,6 @@ import {
   ViewChild,
   signal,
   effect,
-  AfterViewInit,
   EnvironmentInjector,
   createComponent,
 } from '@angular/core';
@@ -39,12 +38,12 @@ import { MapCardComponent } from '../../../../shared/components/map-card/map-car
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
 })
-export class PredioReviewComponent implements OnInit, AfterViewInit {
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
-  private predioService = inject(PredioService);
-  private injector = inject(EnvironmentInjector);
+export class PredioReviewComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
+  private readonly predioService = inject(PredioService);
+  private readonly injector = inject(EnvironmentInjector);
   private mapComponent?: MapComponent;
 
   @ViewChild(MapComponent)
@@ -76,7 +75,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     effect(() => {
       const data = this.predioData();
       const ready = this.mapReady();
-      const valorYa = this.stateService.valorYaResponse(); // Dependencia para actualizar precio
 
       if (data?.coordenadasPoligono && ready) {
         this.updateMapWithData(data);
@@ -98,10 +96,6 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.realizarConsulta(tipo, valor);
   }
 
-  ngAfterViewInit(): void {
-    // Lifecycle hook for AfterViewInit interface
-  }
-
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -116,10 +110,11 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
       case TipoBusqueda.DIRECCION:
         consulta$ = this.predioService.consultarPorDireccion(valor);
         break;
-      case TipoBusqueda.FMI:
+      case TipoBusqueda.FMI: {
         const [zona, matricula] = valor.split('-');
         consulta$ = this.predioService.consultarPorFMI(zona, matricula);
         break;
+      }
       default:
         this.router.navigate(['/test/seleccionar']);
         return;

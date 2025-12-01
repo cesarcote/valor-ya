@@ -6,8 +6,7 @@ import {
   ViewChild,
   EnvironmentInjector,
   createComponent,
-  AfterViewInit,
-  OnDestroy,
+  //OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -23,7 +22,6 @@ import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
 import { MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
-import { MCM_MOCK_RESPONSE } from '../../../test/data/mcm-mock';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 import { PredioData } from '../../../../core/models/predio-data.model';
@@ -41,15 +39,15 @@ import { PredioData } from '../../../../core/models/predio-data.model';
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
 })
-export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
-  private router = inject(Router);
-  private stepperService = inject(ValorYaStepperService);
-  public stateService = inject(ValorYaStateService);
-  private apiService = inject(MCMValorYaService);
-  private reporteService = inject(ReporteService);
-  private notificationService = inject(NotificationService);
-  private injector = inject(EnvironmentInjector);
-  private predioService = inject(PredioService);
+export class ResultComponent implements OnInit/*, OnDestroy*/ {
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(ValorYaStepperService);
+  public readonly stateService = inject(ValorYaStateService);
+  private readonly apiService = inject(MCMValorYaService);
+  private readonly reporteService = inject(ReporteService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly injector = inject(EnvironmentInjector);
+  private readonly predioService = inject(PredioService);
 
   @ViewChild('mapPredio')
   set mapPredioSetter(map: MapComponent) {
@@ -84,7 +82,7 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isLoadingResult.set(true);
 
-    // 1. Intentar cargar desde localStorage primero (Optimización)
+    // 1. cargar desde localStorage primero
     const storedData = localStorage.getItem('valorya-predio-data');
     if (storedData) {
       try {
@@ -113,12 +111,9 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit(): void {}
-
-  ngOnDestroy(): void {
-    // Limpiar datos temporales al salir del paso de resultados
+  /*ngOnDestroy(): void {
     localStorage.removeItem('valorya-predio-data');
-  }
+  }*/
 
   private loadValorYaResults(chip: string): void {
     this.apiService.procesarChip(chip).subscribe({
@@ -127,7 +122,6 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stateService.setValorYaResponse(resp);
         this.isLoadingResult.set(false);
 
-        // Intentar renderizar mapas
         this.tryRenderMapPredio();
         this.tryRenderMapOfertas();
       },
@@ -156,7 +150,6 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private renderizarMapaPredio(map: MapComponent, data: PredioData): void {
-    // Crear tarjeta dinámica
     const componentRef = createComponent(MapCardComponent, {
       environmentInjector: this.injector,
     });
@@ -245,7 +238,15 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
       console.warn('Error capturando mapas:', error);
     }
 
-    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
+    const mcmResponse = this.apiResponse();
+    if (!mcmResponse) {
+      console.error('No hay respuesta del MCM disponible');
+      alert('Error: No se encontraron los datos del avalúo.');
+      this.isDownloading.set(false);
+      return;
+    }
+
+    const datos = this.reporteService.generarDatosReporte(predioData.chip, tipoPredio, mcmResponse);
 
     if (imagenBase64) datos.imagenBase64 = imagenBase64;
     if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
@@ -257,14 +258,14 @@ export class ResultComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isDownloading.set(false);
         console.log('Reporte generado exitosamente');
 
-        const url = window.URL.createObjectURL(blob);
+        const url = globalThis.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `ValorYa-${predioData.chip}.pdf`;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        a.remove();
+        globalThis.URL.revokeObjectURL(url);
 
         this.notificationService.success('¡Avalúo descargado exitosamente!');
       },

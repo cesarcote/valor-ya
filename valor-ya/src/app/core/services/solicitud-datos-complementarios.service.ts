@@ -32,7 +32,7 @@ export interface SolicitudDatosOptions {
   providedIn: 'root',
 })
 export class SolicitudDatosComplementariosService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   enviarSolicitudDatos(options: SolicitudDatosOptions): Observable<DatosComplementarios> {
     const payload = this.construirPayload(options);
@@ -61,7 +61,7 @@ export class SolicitudDatosComplementariosService {
 
     return this.http.post<any>(apiUrl, emailRequest, { headers, timeout: 60000 }).pipe(
       map((response) => {
-        if (response && response.success) {
+        if (response?.success) {
           return {
             ...payload,
             id: Math.floor(Math.random() * 1000),
@@ -101,8 +101,8 @@ export class SolicitudDatosComplementariosService {
 
   private extraerDatosDePredio(predio: PredioData): Partial<DatosComplementariosRequest> {
     return {
-      areaConstruida: predio.areaConstruida ? parseFloat(predio.areaConstruida) : undefined,
-      estrato: predio.estrato ? parseInt(predio.estrato) : undefined,
+      areaConstruida: predio.areaConstruida ? Number.parseFloat(predio.areaConstruida) : undefined,
+      estrato: predio.estrato ? Number.parseInt(predio.estrato) : undefined,
       edad: predio.edad || undefined,
       tipoPredio: predio.tipoPredio || undefined,
     };
@@ -111,11 +111,11 @@ export class SolicitudDatosComplementariosService {
   private limpiarPayload(payload: DatosComplementariosRequest): DatosComplementariosRequest {
     const cleaned: any = { loteId: payload.loteId };
 
-    Object.entries(payload).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(payload)) {
       if (value !== undefined && value !== null && value !== '') {
         cleaned[key] = value;
       }
-    });
+    }
 
     return cleaned;
   }

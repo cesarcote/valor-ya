@@ -6,7 +6,6 @@ import {
   ViewChild,
   EnvironmentInjector,
   createComponent,
-  AfterViewInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -39,14 +38,14 @@ import { PredioData } from '../../../../core/models/predio-data.model';
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
 })
-export class ResultComponent implements OnInit, AfterViewInit {
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
-  private reporteService = inject(ReporteService);
-  private notificationService = inject(NotificationService);
-  private injector = inject(EnvironmentInjector);
-  private predioService = inject(PredioService);
+export class ResultComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
+  private readonly reporteService = inject(ReporteService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly injector = inject(EnvironmentInjector);
+  private readonly predioService = inject(PredioService);
 
   @ViewChild('mapPredio')
   set mapPredioSetter(map: MapComponent) {
@@ -132,8 +131,6 @@ export class ResultComponent implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     localStorage.removeItem('test-predio-data');
   }
-
-  ngAfterViewInit(): void {}
 
   private tryRenderMapPredio(): void {
     if (
@@ -235,7 +232,7 @@ export class ResultComponent implements OnInit, AfterViewInit {
       console.warn('Error capturando mapas:', error);
     }
 
-    const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
+    const datos = this.reporteService.generarDatosReporte(predioData.chip, tipoPredio, this.apiResponse()!);
 
     if (imagenBase64) datos.imagenBase64 = imagenBase64;
     if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
@@ -243,14 +240,14 @@ export class ResultComponent implements OnInit, AfterViewInit {
     this.reporteService.generarReporteValorYa(datos).subscribe({
       next: (blob: Blob) => {
         this.isDownloading.set(false);
-        const url = window.URL.createObjectURL(blob);
+        const url = globalThis.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `ValorYa-${predioData.chip}.pdf`;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        a.remove();
+        globalThis.URL.revokeObjectURL(url);
         this.notificationService.success('¡Avalúo descargado exitosamente!');
       },
       error: (error: any) => {

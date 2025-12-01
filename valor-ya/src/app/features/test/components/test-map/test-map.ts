@@ -39,7 +39,7 @@ export interface TestMarkerConfig {
 export class TestMapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
 
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private map!: L.Map;
   private markers: L.Marker[] = [];
 

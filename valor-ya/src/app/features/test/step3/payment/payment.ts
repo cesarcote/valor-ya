@@ -9,7 +9,6 @@ import {
 import { Router } from '@angular/router';
 
 import { TestStateService } from '../../services/test-state.service';
-import { MCMValorYaService } from '../../../valor-ya/services/mcm-valor-ya.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { ComprasService } from '../../../../core/services/compras.service';
@@ -35,13 +34,12 @@ import { ContainerContentComponent } from '../../../../shared/components/contain
   styleUrls: ['./payment.css'],
 })
 export class PaymentComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
-  private apiService = inject(MCMValorYaService);
-  private paymentService = inject(PaymentService);
-  private comprasService = inject(ComprasService);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly comprasService = inject(ComprasService);
 
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
@@ -69,7 +67,6 @@ export class PaymentComponent implements OnInit {
       this.modalMessage.set('No se encontró información del predio. Regrese al inicio.');
       this.modalIconType.set('warning');
       this.modalButtonText.set('Aceptar');
-      return;
     }
   }
 
@@ -191,8 +188,7 @@ export class PaymentComponent implements OnInit {
                         compraId: compraResponse.compraId,
                       };
                       localStorage.setItem('test-payment-context', JSON.stringify(paymentContext));
-
-                      window.location.href = paymentUrl;
+                      globalThis.location.href = paymentUrl;
                     }
                   }
 
@@ -244,10 +240,10 @@ export class PaymentComponent implements OnInit {
   }
 
   onCloseModal(): void {
-    if (this.modalIconType() !== 'success') {
-      this.router.navigate(['/test/seleccionar']);
-    } else {
+    if (this.modalIconType() === 'success') {
       this.showModal.set(false);
+    } else {
+      this.router.navigate(['/test/seleccionar']);
     }
   }
 

@@ -24,9 +24,9 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
   styleUrls: ['./search-forms.css'],
 })
 export class TestSearchFormsComponent {
-  private router = inject(Router);
-  private stepperService = inject(TestStepperService);
-  public stateService = inject(TestStateService);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(TestStepperService);
+  public readonly stateService = inject(TestStateService);
 
   public selectedTabIndex = computed(() => {
     const tipoBusqueda = this.stateService.tipoBusqueda();

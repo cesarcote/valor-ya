@@ -78,13 +78,9 @@ export interface FacturaResponse {
   providedIn: 'root',
 })
 export class ComprasService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
-  /**
-   * Crea una nueva compra con su detalle asociado
-   * usando el stored procedure SP_INSERT_COMPRA
-   */
   crearCompra(compraData: CompraRequest): Observable<CompraResponse> {
     const url = `${this.API_BASE_URL}/api/compras`;
 
@@ -96,10 +92,6 @@ export class ComprasService {
     );
   }
 
-  /**
-   * Registra un pago para una compra existente
-   * usando el stored procedure SP_INSERT_PAGO
-   */
   crearPago(pagoData: PagoRequest): Observable<PagoResponse> {
     const url = `${this.API_BASE_URL}/api/compras/pagos`;
 
@@ -111,10 +103,6 @@ export class ComprasService {
     );
   }
 
-  /**
-   * Actualiza el estado de una compra y su pago asociado
-   * usando el stored procedure SP_ACTUALIZAR_COMPRA_PAGO
-   */
   actualizarCompraPago(
     data: ActualizarCompraPagoRequest
   ): Observable<ActualizarCompraPagoResponse> {
@@ -128,10 +116,6 @@ export class ComprasService {
     );
   }
 
-  /**
-   * Crea una factura para una compra existente
-   * usando el paquete PL/SQL TIENDA_VIRTUAL.PK_TV_FACTURA.fn_crea_factura
-   */
   crearFactura(facturaData: FacturaRequest): Observable<FacturaResponse> {
     const url = `${this.API_BASE_URL}/api/compras/facturas`;
 

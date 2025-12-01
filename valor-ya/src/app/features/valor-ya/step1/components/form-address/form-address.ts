@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
+import { Component, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -15,20 +15,18 @@ export interface AddressData {
   templateUrl: './form-address.html',
   styleUrls: ['./form-address.css'],
 })
-export class FormAddressComponent implements OnInit {
+export class FormAddressComponent  {
   @Output() consultar = new EventEmitter<AddressData>();
 
   direccionControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
 
-  private direccionStatus = toSignal(this.direccionControl.statusChanges, {
+  private readonly direccionStatus = toSignal(this.direccionControl.statusChanges, {
     initialValue: 'INVALID',
   });
 
   isFormValid = computed(() => {
     return this.direccionStatus() === 'VALID';
   });
-
-  ngOnInit(): void {}
 
   onConsultar(): void {
     if (this.direccionControl.invalid) {

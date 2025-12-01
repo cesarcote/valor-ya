@@ -15,7 +15,7 @@ export class PredioService {
     lng: -74.0645468,
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   private mapCatastroResponseToPredioData(
     response: CatastroResponse,
@@ -60,7 +60,7 @@ export class PredioService {
 
     return this.http.get<CatastroResponse>(url, { params }).pipe(
       map((response: CatastroResponse) => {
-        if (response.success && response.data && response.data.infoAdicional) {
+        if (response.success && response.data?.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, direccion, 'direccion');
         } else {
           throw new Error('La respuesta no contiene los datos esperados');
@@ -79,7 +79,7 @@ export class PredioService {
 
     return this.http.get<CatastroResponse>(url, { params }).pipe(
       map((response: CatastroResponse) => {
-        if (response.success && response.data && response.data.infoAdicional) {
+        if (response.success && response.data?.infoAdicional) {
           return this.mapCatastroResponseToPredioData(response, chip, 'chip');
         } else {
           console.error('❌ Estructura de respuesta inesperada');
@@ -87,7 +87,7 @@ export class PredioService {
         }
       }),
       catchError((error: any) => {
-        console.error('🚨 Error en consulta:', error.status, error.message);
+        console.error('Error en consulta:', error.status, error.message);
         throw new Error(`No se encontraron datos para el CHIP: ${chip}`);
       })
     );

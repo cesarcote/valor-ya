@@ -3,20 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
 import { ReporteValorYaRequest } from '../../core/models/reporte-valor-ya.model';
+import { MCMValorYAResultado } from '../../core/models/mcm-valor-ya.model';
 import { currentEnvironment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReporteService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly API_BASE_URL = currentEnvironment.baseUrl;
 
   generarReporteValorYa(data: ReporteValorYaRequest): Observable<Blob> {
     const url = `${this.API_BASE_URL}/api/reportes/valorya-completo/pdf`;
 
     return this.http.post(url, data, { responseType: 'blob' }).pipe(
-      timeout(60000), // 1 minuto para generación de PDF
+      timeout(60000),
       catchError((error) => {
         console.error('❌ [Reporte Service] Error generando reporte:', error);
         throw error;
@@ -25,9 +26,42 @@ export class ReporteService {
   }
 
   /**
-   * Genera datos mock para el reporte usando información del state
+   * Genera datos para el reporte usando la respuesta real del API MCM
+   */
+  generarDatosReporte(
+    chip: string,
+    tipoPredio: string,
+    mcmResponse: MCMValorYAResultado
+  ): ReporteValorYaRequest {
+    const resultado = mcmResponse.resultados?.[0];
+    const metadatos = mcmResponse.metadatos;
+
+    if (!resultado) {
+      throw new Error('No hay resultados disponibles del MCM');
+    }
+
+    return {
+      chip: chip,
+      zona: resultado.CODIGO_ZONA_FISICA_PREDIO || '',
+      tipoPredio: tipoPredio,
+      valorYa: String(resultado.VALOR_INTEGRAL_PREDIO || 0),
+      limiteInferior: String(resultado.LIM_INFERIOR || 0),
+      limiteSuperior: String(resultado.LIM_SUPERIOR || 0),
+      valorYaM2: String(resultado.AREA_CONSTRUIDA_PREDIO || 0),
+      limiteInferiorM2: String(resultado.AREA_CONSTRUIDA_PREDIO || 0),
+      limiteSuperiorM2: String(resultado.AREA_CONSTRUIDA_PREDIO || 0),
+      ofertasUtilizadas: String(metadatos?.ofertas_utilizadas || mcmResponse.resultados.length),
+      coeficienteVariacion: String(resultado.CV || 0),
+    };
+  }
+
+  /**
+   * @deprecated Usar generarDatosReporte() con datos reales del MCM
    */
   generarDatosMockReporte(chip: string, tipoPredio: string): ReporteValorYaRequest {
+    console.warn(
+      'Usando datos mock para el reporte. Preferir generarDatosReporte() con datos reales.'
+    );
     return {
       chip: chip,
       zona: '6893015154321',
@@ -42,38 +76,4 @@ export class ReporteService {
       coeficienteVariacion: '15.2%',
     };
   }
-
-  /**
-   * Método de conveniencia para generar reporte usando datos del state service
-   * Ejemplo de uso:
-   *
-   * constructor(
-   *   private reporteService: ReporteService,
-   *   private stateService: ValorYaStateService
-   * ) {}
-   *
-   * generarReporte() {
-   *   const predioData = this.stateService.predioData();
-   *   const tipoPredio = this.stateService.tipoUnidadSeleccionada()?.descripcionUnidad;
-   *
-   *   if (predioData?.chip && tipoPredio) {
-   *     const datos = this.reporteService.generarDatosMockReporte(predioData.chip, tipoPredio);
-   *
-   *     this.reporteService.generarReporteValorYa(datos).subscribe({
-   *       next: (blob) => {
-   *         // Descargar el PDF directamente
-   *         const url = window.URL.createObjectURL(blob);
-   *         const a = document.createElement('a');
-   *         a.href = url;
-   *         a.download = 'avaluo.pdf';
-   *         a.click();
-   *         window.URL.revokeObjectURL(url);
-   *       },
-   *       error: (error) => {
-   *         console.error('Error generando reporte:', error);
-   *       }
-   *     });
-   *   }
-   * }
-   */
 }

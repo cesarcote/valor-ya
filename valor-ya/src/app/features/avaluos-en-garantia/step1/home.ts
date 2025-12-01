@@ -14,9 +14,9 @@ import { ButtonComponent } from '../../../shared/components/button/button';
   styleUrls: ['./home.css'],
 })
 export class AvaluosHome implements OnInit {
-  private router = inject(Router);
-  private stepperService = inject(AvaluosStepperService);
-  private stateService = inject(AvaluosStateService);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(AvaluosStepperService);
+  private readonly stateService = inject(AvaluosStateService);
 
   isLoading = signal(false);
 

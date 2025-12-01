@@ -10,9 +10,9 @@ export type AppModule = 'valor-ya' | 'test' | 'avaluos-en-garantia';
   providedIn: 'root',
 })
 export class PaymentService {
-  private http = inject(HttpClient);
-  private apiUrl = currentEnvironment.baseUrl + '/api';
-  private frontendUrl = window.location.origin;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = currentEnvironment.baseUrl + '/api';
+  private readonly frontendUrl = globalThis.location?.origin ?? '';
 
   initiatePayment(
     paymentData: Omit<PaymentRequest, 'configuration'>,

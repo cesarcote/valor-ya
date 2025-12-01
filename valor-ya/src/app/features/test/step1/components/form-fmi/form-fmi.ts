@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
+import { Component, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -17,15 +17,14 @@ export interface FmiData {
   templateUrl: './form-fmi.html',
   styleUrls: ['./form-fmi.css'],
 })
-export class TestFormFmiComponent implements OnInit {
+export class TestFormFmiComponent {
   @Output() consultar = new EventEmitter<FmiData>();
 
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  // Convertir statusChanges a signals
-  private zonaStatus = toSignal(this.zonaControl.statusChanges, { initialValue: 'INVALID' });
-  private matriculaStatus = toSignal(this.matriculaControl.statusChanges, {
+  private readonly zonaStatus = toSignal(this.zonaControl.statusChanges, { initialValue: 'INVALID' });
+  private readonly matriculaStatus = toSignal(this.matriculaControl.statusChanges, {
     initialValue: 'INVALID',
   });
 
@@ -38,8 +37,6 @@ export class TestFormFmiComponent implements OnInit {
     { value: '50S', label: '50S-Bogotá Zona Sur' },
     { value: '50N', label: '50N-Bogotá Zona Norte' },
   ];
-
-  ngOnInit(): void {}
 
   onConsultar(): void {
     if (this.zonaControl.invalid || this.matriculaControl.invalid) {

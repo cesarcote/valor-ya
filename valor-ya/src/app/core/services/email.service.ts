@@ -21,13 +21,8 @@ export interface EmailResponse {
 export class EmailService {
   private readonly apiUrl = `${currentEnvironment.baseUrl}/emails/test-plantilla-personalizada`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
-  /**
-   * Envía un email usando una plantilla personalizada
-   * @param request Datos del email con plantilla
-   * @returns Observable con la respuesta del envío
-   */
   enviarEmailConPlantilla(request: EmailTemplateRequest): Observable<EmailResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

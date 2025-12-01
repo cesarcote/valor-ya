@@ -8,7 +8,7 @@ export const predioDataGuard: CanActivateFn = () => {
 
   const predioData = stateService.predioData();
 
-  if (!predioData || !predioData.chip) {
+  if (!predioData?.chip) {
     router.navigate(['/valor-ya/solicitud']);
     return false;
   }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
+import { Component, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -15,7 +15,7 @@ export interface ChipData {
   templateUrl: './form-chip.html',
   styleUrls: ['./form-chip.css'],
 })
-export class TestFormChipComponent implements OnInit {
+export class TestFormChipComponent {
   @Output() consultar = new EventEmitter<ChipData>();
 
   chipControl = new FormControl('', [
@@ -24,13 +24,11 @@ export class TestFormChipComponent implements OnInit {
     Validators.maxLength(30),
   ]);
 
-  private chipStatus = toSignal(this.chipControl.statusChanges, { initialValue: 'INVALID' });
+  private readonly chipStatus = toSignal(this.chipControl.statusChanges, { initialValue: 'INVALID' });
 
   isFormValid = computed(() => {
     return this.chipStatus() === 'VALID';
   });
-
-  ngOnInit(): void {}
 
   onConsultar(): void {
     if (this.chipControl.invalid) {
