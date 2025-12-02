@@ -1,0 +1,62 @@
+.confirmation-modal-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.confirmation-text {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1rem;
+  color: #212529;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-actions .btn {
+  min-width: 120px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+}
+
+.modal-actions .btn-primary {
+  background-color: #e3192f;
+  border-color: #e3192f;
+}
+
+.modal-actions .btn-primary:hover {
+  background-color: #c41528;
+  border-color: #c41528;
+}
+
+.modal-actions .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.modal-actions .btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .confirmation-modal-content {
+    padding: 1rem;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}

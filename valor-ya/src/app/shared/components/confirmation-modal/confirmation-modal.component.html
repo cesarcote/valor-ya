@@ -1,0 +1,10 @@
+<div class="confirmation-modal-content">
+  <p class="confirmation-text">
+    Aún tienes información pendiente por diligenciar<br />
+    ¿Estás seguro que deseas salir?
+  </p>
+  <div class="modal-actions">
+    <app-button text="No, continuar" variant="secondary" (clicked)="onCancel()" />
+    <app-button text="Sí, salir" variant="primary" (clicked)="onConfirm()" />
+  </div>
+</div>

@@ -54,26 +54,4 @@ export class ReporteService {
       coeficienteVariacion: String(resultado.CV || 0),
     };
   }
-
-  /**
-   * @deprecated Usar generarDatosReporte() con datos reales del MCM
-   */
-  generarDatosMockReporte(chip: string, tipoPredio: string): ReporteValorYaRequest {
-    console.warn(
-      'Usando datos mock para el reporte. Preferir generarDatosReporte() con datos reales.'
-    );
-    return {
-      chip: chip,
-      zona: '6893015154321',
-      tipoPredio: tipoPredio,
-      valorYa: '$81.308.563,424',
-      limiteInferior: '$79.962.917,408',
-      limiteSuperior: '$82.654.209,814',
-      valorYaM2: '$2.174.025,76',
-      limiteInferiorM2: '$2.138.045,92',
-      limiteSuperiorM2: '$2.210.005,61',
-      ofertasUtilizadas: '25',
-      coeficienteVariacion: '15.2%',
-    };
-  }
 }

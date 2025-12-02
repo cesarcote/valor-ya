@@ -29,8 +29,13 @@ export class LoginModalComponent implements OnInit {
   isLoading = signal(false);
   hidePassword = signal(true);
   emailUser = signal('');
+  tiempoExpiracion = signal(5);
   documentTypes = signal<DocumentType[]>([]);
   showConfirmation = signal(false);
+
+  // Datos guardados del paso 1 para usar en paso 2
+  private tipoDocumentoSeleccionado = '';
+  private numeroDocumentoIngresado = '';
 
   // Formularios
   stepOneForm!: FormGroup;
@@ -84,6 +89,39 @@ export class LoginModalComponent implements OnInit {
     return this.stepTwoForm.get('password');
   }
 
+  // Getters para mensajes de error de validación
+  get documentNumberError(): string {
+    if (this.documentNumber?.hasError('required')) {
+      return 'Este campo es requerido.';
+    }
+    if (this.documentNumber?.hasError('minlength')) {
+      return 'El documento debe tener mínimo 4 dígitos.';
+    }
+    if (this.documentNumber?.hasError('pattern')) {
+      return 'El formato del número de documento no es válido.';
+    }
+    if (this.documentNumber?.hasError('notFoundID')) {
+      return 'Este número de documento no se encuentra registrado.';
+    }
+    if (this.documentNumber?.hasError('blockID')) {
+      return 'Este número de documento se encuentra bloqueado.';
+    }
+    return '';
+  }
+
+  get passwordError(): string {
+    if (this.password?.hasError('required')) {
+      return 'Este campo es requerido.';
+    }
+    if (this.password?.hasError('minlength') || this.password?.hasError('maxlength')) {
+      return 'La contraseña debe tener 4 dígitos.';
+    }
+    if (this.password?.hasError('invalidPassword')) {
+      return 'La contraseña es incorrecta.';
+    }
+    return '';
+  }
+
   onContinue(): void {
     if (this.stepOneForm.invalid) {
       this.stepOneForm.markAllAsTouched();
@@ -92,26 +130,51 @@ export class LoginModalComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    // Verificar si el documento existe (simulación de envío de clave temporal)
+    // Mapear tipos de documento del frontend al backend
+    const tipoDocumentoMap: { [key: number]: string } = {
+      1: 'CC', // Cédula de ciudadanía
+      2: 'NIT', // NIT
+      3: 'CE', // Cédula de extranjería
+      4: 'PA', // Pasaporte
+      5: 'TI', // Tarjeta de identidad
+      6: 'NUIP', // Número Único de Identificación Personal
+    };
+
+    const tipoDocValue = Number(this.documentType?.value);
+    const tipoDocumento = tipoDocumentoMap[tipoDocValue] || 'CC';
+
+    // Guardar datos para el paso 2
+    this.tipoDocumentoSeleccionado = tipoDocumento;
+    this.numeroDocumentoIngresado = this.documentNumber?.value;
+
+    // Solicitar clave temporal al API
     this.authService
-      .checkDocumentAvailability(this.documentNumber?.value, this.documentType?.value)
+      .requestTempKey({
+        tipoDocumento: tipoDocumento,
+        numeroDocumento: this.documentNumber?.value,
+        validInput: true,
+      })
       .subscribe({
-        next: (result) => {
+        next: (response) => {
           this.isLoading.set(false);
 
-          if (result.available) {
-            // Documento no registrado
-            this.documentNumber?.setErrors({ notFoundID: true });
-          } else {
-            // Documento existe, continuar al paso 2
+          if (response.success && response.data?.success) {
+            // Clave enviada exitosamente
+            const data = response.data.data;
+            this.emailUser.set(data.emailOfuscado);
+            this.tiempoExpiracion.set(data.tiempoExpiracion);
             this.stepOneCompleted.set(true);
-            // Simular email parcialmente oculto
-            this.emailUser.set('us***@ejemplo.com');
+            this.notificationService.success(data.mensaje);
+          } else {
+            // Error - usuario no encontrado u otro error
+            const errorMsg = response.error || response.data?.message || 'Error al solicitar clave';
+            this.documentNumber?.setErrors({ notFoundID: true });
+            this.notificationService.error(errorMsg);
           }
         },
         error: () => {
           this.isLoading.set(false);
-          this.notificationService.error('Error al verificar el documento');
+          this.notificationService.error('Error al solicitar clave temporal');
         },
       });
   }
@@ -126,21 +189,23 @@ export class LoginModalComponent implements OnInit {
 
     this.authService
       .login({
-        documentType: this.documentType?.value,
-        documentNumber: this.documentNumber?.value,
-        password: this.password?.value,
+        tipoDocumento: this.tipoDocumentoSeleccionado,
+        numeroDocumento: this.numeroDocumentoIngresado,
+        claveTemporal: this.password?.value,
       })
       .subscribe({
         next: (response) => {
           this.isLoading.set(false);
 
-          if (response.success) {
-            this.notificationService.success(response.message);
+          if (response.success && response.data?.success) {
+            const mensaje = response.data.message || response.message || '¡Bienvenido!';
+            this.notificationService.success(mensaje);
             this.loginSuccess.emit();
             this.closeModal.emit();
           } else {
             this.password?.setErrors({ invalidPassword: true });
-            this.notificationService.error(response.message);
+            const errorMsg = response.error || response.message || 'Clave temporal incorrecta';
+            this.notificationService.error(errorMsg);
           }
         },
         error: () => {

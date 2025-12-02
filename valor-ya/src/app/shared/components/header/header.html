@@ -27,7 +27,15 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="session-buttons-content d-none d-lg-flex ms-auto"></div>
+      <div class="session-buttons-content d-none d-lg-flex ms-auto align-items-center gap-2">
+        @if (!isAuthenticated()) {
+        <app-button text="Registrarse" variant="secondary" (clicked)="openRegisterModal()" />
+        <app-button text="Iniciar sesión" variant="primary" (clicked)="openLoginModal()" />
+        } @else {
+        <span class="text-muted me-2"> Hola, {{ currentUser()?.nombre }} </span>
+        <app-button text="Cerrar sesión" variant="secondary" (clicked)="logout()" />
+        }
+      </div>
     </div>
   </nav>
 
@@ -238,10 +246,52 @@
           </li>
         </ul>
 
-        <div class="session-buttons-content d-lg-none mt-3"></div>
+        <div class="session-buttons-content d-lg-none mt-3">
+          @if (!isAuthenticated()) {
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm me-2"
+            (click)="openLoginModal()"
+          >
+            Iniciar sesión
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="openRegisterModal()">
+            Registrarse
+          </button>
+          } @else {
+          <span class="text-muted me-2 d-block mb-2"> Hola, {{ currentUser()?.nombre }} </span>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="logout()">
+            Cerrar sesión
+          </button>
+          }
+        </div>
       </div>
     </div>
   </nav>
 </div>
+
+<!-- Modal de Login -->
+@if (showLoginModal()) {
+<div class="modal-backdrop fade show" (click)="closeModals()" (keydown.enter)="closeModals()"></div>
+<dialog class="modal fade show d-block" open>
+  <app-login-modal
+    (closeModal)="closeModals()"
+    (openRegister)="openRegisterModal()"
+    (loginSuccess)="onLoginSuccess()"
+  />
+</dialog>
+}
+
+<!-- Modal de Registro -->
+@if (showRegisterModal()) {
+<div class="modal-backdrop fade show" (click)="closeModals()" (keydown.enter)="closeModals()"></div>
+<dialog class="modal fade show d-block" open>
+  <app-register-modal
+    (closeModal)="closeModals()"
+    (openLogin)="openLoginModal()"
+    (registerSuccess)="onRegisterSuccess()"
+  />
+</dialog>
+}
 
 <app-page-header></app-page-header>

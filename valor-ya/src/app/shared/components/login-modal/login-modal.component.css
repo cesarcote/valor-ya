@@ -1,0 +1,186 @@
+.login-modal-content {
+  background: #fff;
+  border-radius: 8px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Logo e imagen */
+.logo-image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-image {
+  width: 120px;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Información del paso */
+.step-info {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.step-description {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Formularios */
+.form-label {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-control,
+.form-select {
+  font-family: 'Nunito Sans', sans-serif;
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #e3192f;
+  box-shadow: 0 0 0 0.2rem rgba(227, 25, 47, 0.15);
+}
+
+/* Mensajes de error */
+.invalid-feedback {
+  font-size: 0.8rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #e3192f;
+  border-color: #e3192f;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #c41528;
+  border-color: #c41528;
+}
+
+.btn-primary:disabled {
+  background-color: #e3192f;
+  border-color: #e3192f;
+  opacity: 0.65;
+}
+
+.btn-link {
+  font-family: 'Nunito Sans', sans-serif;
+  color: #606060;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.btn-link:hover {
+  color: #e3192f;
+  text-decoration: underline;
+}
+
+/* Enlace de registro */
+.register-link {
+  color: #e3192f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* Input group para contraseña */
+.input-group .btn-outline-secondary {
+  border-color: #ced4da;
+  color: #495057;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #495057;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .logo-image {
+    width: 100px;
+  }
+
+  .step-info {
+    font-size: 1rem;
+  }
+
+  .step-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Focus states */
+.btn-close:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 0.2rem rgba(227, 25, 47, 0.25);
+}
+
+/* Modal de confirmación */
+.confirmation-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1060;
+}
+
+.confirmation-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1070;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+}

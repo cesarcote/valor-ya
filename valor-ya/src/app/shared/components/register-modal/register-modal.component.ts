@@ -233,27 +233,44 @@ export class RegisterModalComponent implements OnInit {
 
     this.isLoading.set(true);
 
+    // Mapear tipos de documento del frontend al backend
+    const tipoDocumentoMap: { [key: number]: string } = {
+      1: 'CC', // Cédula de ciudadanía
+      2: 'NIT', // NIT
+      3: 'CE', // Cédula de extranjería
+      4: 'PA', // Pasaporte
+      5: 'TI', // Tarjeta de identidad
+      6: 'NUIP', // Número Único de Identificación Personal
+    };
+
+    const tipoDocValue = Number(this.documentType?.value);
+    const tipoDocumento = tipoDocumentoMap[tipoDocValue] || 'CC';
+
     this.authService
       .register({
-        documentType: this.documentType?.value,
-        documentNumber: this.documentNumber?.value,
-        date: this.expeditionDate?.value,
-        name: this.name?.value,
-        lastname: this.lastname?.value,
+        tipoDocumento: tipoDocumento,
+        numeroDocumento: this.documentNumber?.value,
+        fechaExpedicion: this.expeditionDate?.value,
+        nombre: this.name?.value,
+        apellido: this.lastname?.value,
         email: this.email?.value,
-        cellphone: this.cellphone?.value,
-        sexType: this.sexType?.value,
+        celular: this.cellphone?.value,
+        tipoGenero: Number(this.sexType?.value),
       })
       .subscribe({
         next: (response) => {
           this.isLoading.set(false);
 
-          if (response.success) {
-            this.notificationService.success(response.message);
+          if (response.success && response.data?.success) {
+            // Respuesta exitosa - mostrar mensaje del data interno
+            const mensaje = response.data.message || response.message || '¡Registro exitoso!';
+            this.notificationService.success(mensaje);
             this.registerSuccess.emit();
             this.closeModal.emit();
           } else {
-            this.notificationService.error(response.message);
+            // Error - puede venir en response.error o response.data.message
+            const errorMsg = response.error || response.message || 'Error en el registro';
+            this.notificationService.error(errorMsg);
           }
         },
         error: () => {
