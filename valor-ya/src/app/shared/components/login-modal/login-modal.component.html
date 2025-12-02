@@ -1,0 +1,459 @@
+<!-- Modal de Login -->
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="login-modal-content">
+      <!-- Header del modal -->
+      <div class="modal-header border-bottom">
+        <h2 class="modal-title">Inicio de sesión</h2>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="onClose()"></button>
+      </div>
+
+      <!-- Body del modal -->
+      <div class="modal-body">
+        <!-- ========== PASO 1: Documento de Identidad ========== -->
+        @if (!stepOneCompleted()) {
+        <div class="step-one-form">
+          <!-- Imagen y bienvenida -->
+          <div class="main-info text-center">
+            <div class="logo-image-container mb-3">
+              <!-- Modal de Login -->
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="login-modal-content">
+                    <!-- Header del modal -->
+                    <div class="modal-header border-bottom">
+                      <h2 class="modal-title">Inicio de sesión</h2>
+                      <button type="button" class="btn-close" aria-label="Cerrar" (click)="onClose()"></button>
+                    </div>
+
+                    <!-- Body del modal -->
+                    <div class="modal-body">
+                      <!-- ========== PASO 1: Documento de Identidad ========== -->
+                      @if (!stepOneCompleted()) {
+                      <div class="step-one-form">
+                        <!-- Imagen y bienvenida -->
+                        <div class="main-info text-center">
+                          <div class="logo-image-container mb-3">
+                            <img src="assets/images/login.png" alt="Imagen Usuario" class="logo-image" />
+                          </div>
+
+                          <h3 class="step-info mb-2">¡Bienvenido a ValorYa!</h3>
+                          <p class="step-description text-muted">
+                            Escribe el número de documento de identidad con el que te registraste para ingresar.
+                          </p>
+                        </div>
+
+                        <!-- Formulario paso 1 -->
+                        <form [formGroup]="stepOneForm" class="mt-4">
+                          <!-- Tipo de documento -->
+                          <div class="form-group mb-3">
+                            <label class="form-label" for="documentType">
+                              Selecciona el tipo de documento<sup class="text-danger">*</sup>
+                            </label>
+                            <select
+                              id="documentType"
+                              class="form-select"
+                              formControlName="documentType"
+                              (change)="clearErrors()"
+                            >
+                              <option value="" disabled>Selecciona el tipo de documento</option>
+                              @for (doc of documentTypes(); track doc.id) {
+                              <option [value]="doc.id">{{ doc.description }}</option>
+                              }
+                            </select>
+                            @if (documentType?.invalid && documentType?.touched) {
+                            <div class="invalid-feedback d-block">Debe seleccionar un tipo de documento.</div>
+                            }
+                          </div>
+
+                          <!-- Número de documento -->
+                          <div class="form-group mb-3">
+                            <label class="form-label" for="documentNumber">
+                              Escribe tu número de documento de identidad<sup class="text-danger">*</sup>
+                            </label>
+                            <input
+                              id="documentNumber"
+                              type="text"
+                              class="form-control"
+                              formControlName="documentNumber"
+                              placeholder="Escribe tu número de documento"
+                              maxlength="12"
+                            />
+                            @if (documentNumber?.invalid && documentNumber?.touched) {
+                            <div class="invalid-feedback d-block">
+                              @if (documentNumber?.hasError('required')) { Este campo es requerido. } @else if
+                              (documentNumber?.hasError('minlength')) { El documento debe tener mínimo 4 dígitos.
+                              } @else if (documentNumber?.hasError('pattern')) { El formato del número de
+                              documento no es válido. } @else if (documentNumber?.hasError('notFoundID')) { Este
+                              número de documento no se encuentra registrado. } @else if
+                              (documentNumber?.hasError('blockID')) { Este número de documento se encuentra
+                              bloqueado. }
+                            </div>
+                            }
+                          </div>
+
+                          <!-- Botón continuar -->
+                          <div class="footer-actions text-center mt-4">
+                            <app-button
+                              text="Iniciar sesión"
+                              variant="primary"
+                              [disabled]="isLoading()"
+                              customClass="px-4 py-2"
+                              (clicked)="onContinue()"
+                            />
+
+                            <div class="mt-3">
+                              <app-button
+                                text="¿No puedes acceder a tu cuenta?"
+                                variant="link"
+                                [rounded]="false"
+                              />
+                            </div>
+                          </div>
+
+                          <!-- Enlace a registro -->
+                          <div class="register-copy text-center mt-4">
+                            <p class="text-muted mb-0">
+                              En caso de no tener cuenta,<br />
+                              <a href="javascript:void(0)" class="register-link" (click)="onOpenRegister()">
+                                regístrate aquí
+                              </a>
+                            </p>
+                          </div>
+                        </form>
+                      </div>
+                      }
+
+                      <!-- ========== PASO 2: Contraseña ========== -->
+                      @if (stepOneCompleted()) {
+                      <div class="step-two-form">
+                        <!-- Imagen y mensaje -->
+                        <div class="main-info text-center">
+                          <div class="logo-image-container mb-3">
+                            <img src="assets/images/login.png" alt="Imagen Usuario" class="logo-image" />
+                          </div>
+
+                          <h3 class="step-info mb-2">Clave temporal</h3>
+                          <p class="step-description text-muted">
+                            Ten en cuenta que recibirás una clave distinta en tu correo cada vez que ingreses.
+                          </p>
+                        </div>
+
+                        <!-- Formulario paso 2 -->
+                        <form [formGroup]="stepTwoForm" class="mt-4">
+                          <!-- Campo de contraseña -->
+                          <div class="form-group mb-3">
+                            <label class="form-label" for="password">
+                              Escribe la clave enviada al correo:
+                              <span class="text-primary fw-bold d-block">{{ emailUser() }}</span>
+                            </label>
+                            <div class="input-group">
+                              <input
+                                id="password"
+                                [type]="hidePassword() ? 'password' : 'text'"
+                                class="form-control"
+                                formControlName="password"
+                                placeholder="Ingresa la contraseña"
+                                maxlength="4"
+                                autocomplete="off"
+                              />
+                              <button
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                (click)="togglePasswordVisibility()"
+                              >
+                                @if (hidePassword()) {
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  fill="currentColor"
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path
+                                    d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
+                                  />
+                                  <path
+                                    d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+                                  />
+                                </svg>
+                                } @else {
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  fill="currentColor"
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path
+                                    d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"
+                                  />
+                                  <path
+                                    d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"
+                                  />
+                                  <path
+                                    d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"
+                                  />
+                                </svg>
+                                }
+                              </button>
+                            </div>
+                            @if (password?.invalid && password?.touched) {
+                            <div class="invalid-feedback d-block">
+                              @if (password?.hasError('required')) { Este campo es requerido. } @else if
+                              (password?.hasError('minlength')) { Por favor ingresa la contraseña de 4 dígitos. }
+                              @else if (password?.hasError('invalidPassword')) { La contraseña es incorrecta,
+                              intente nuevamente. }
+                            </div>
+                            }
+                          </div>
+
+                          <!-- Botones de acción -->
+                          <div class="footer-actions text-center mt-4">
+                            <app-button
+                              text="Ingresar"
+                              variant="primary"
+                              [disabled]="isLoading()"
+                              customClass="px-4 py-2"
+                              (clicked)="onLogin()"
+                            />
+
+                            <div class="mt-3">
+                              <app-button text="← Volver" variant="link" [rounded]="false" (clicked)="onBack()" />
+                            </div>
+
+                            <div class="mt-2">
+                              <app-button
+                                text="¿No puedes acceder a tu cuenta?"
+                                variant="link"
+                                [rounded]="false"
+                                customClass="text-muted"
+                              />
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Modal de Confirmación para salir -->
+                  @if (showConfirmation()) {
+                  <div class="confirmation-backdrop" (click)="onCancelClose()" (keydown.escape)="onCancelClose()"></div>
+                  <div class="confirmation-dialog">
+                    <app-confirmation-modal (confirm)="onConfirmClose()" (cancelAction)="onCancelClose()" />
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <h3 class="step-info mb-2">¡Bienvenido a ValorYa!</h3>
+            <p class="step-description text-muted">
+              Escribe el número de documento de identidad con el que te registraste para ingresar.
+            </p>
+          </div>
+
+          <!-- Formulario paso 1 -->
+          <form [formGroup]="stepOneForm" class="mt-4">
+            <!-- Tipo de documento -->
+            <div class="form-group mb-3">
+              <label class="form-label" for="documentType">
+                Selecciona el tipo de documento<sup class="text-danger">*</sup>
+              </label>
+              <select
+                id="documentType"
+                class="form-select"
+                formControlName="documentType"
+                (change)="clearErrors()"
+              >
+                <option value="" disabled>Selecciona el tipo de documento</option>
+                @for (doc of documentTypes(); track doc.id) {
+                <option [value]="doc.id">{{ doc.description }}</option>
+                }
+              </select>
+              @if (documentType?.invalid && documentType?.touched) {
+              <div class="invalid-feedback d-block">Debe seleccionar un tipo de documento.</div>
+              }
+            </div>
+
+            <!-- Número de documento -->
+            <div class="form-group mb-3">
+              <label class="form-label" for="documentNumber">
+                Escribe tu número de documento de identidad<sup class="text-danger">*</sup>
+              </label>
+              <input
+                id="documentNumber"
+                type="text"
+                class="form-control"
+                formControlName="documentNumber"
+                placeholder="Escribe tu número de documento"
+                maxlength="12"
+              />
+              @if (documentNumber?.invalid && documentNumber?.touched) {
+              <div class="invalid-feedback d-block">
+                @if (documentNumber?.hasError('required')) { Este campo es requerido. } @else if
+                (documentNumber?.hasError('minlength')) { El documento debe tener mínimo 4 dígitos.
+                } @else if (documentNumber?.hasError('pattern')) { El formato del número de
+                documento no es válido. } @else if (documentNumber?.hasError('notFoundID')) { Este
+                número de documento no se encuentra registrado. } @else if
+                (documentNumber?.hasError('blockID')) { Este número de documento se encuentra
+                bloqueado. }
+              </div>
+              }
+            </div>
+
+            <!-- Botón continuar -->
+            <div class="footer-actions text-center mt-4">
+              <app-button
+                text="Iniciar sesión"
+                variant="primary"
+                [disabled]="isLoading()"
+                customClass="px-4 py-2"
+                (clicked)="onContinue()"
+              />
+
+              <div class="mt-3">
+                <app-button
+                  text="¿No puedes acceder a tu cuenta?"
+                  variant="link"
+                  [rounded]="false"
+                />
+              </div>
+            </div>
+
+            <!-- Enlace a registro -->
+            <div class="register-copy text-center mt-4">
+              <p class="text-muted mb-0">
+                En caso de no tener cuenta,<br />
+                <a href="javascript:void(0)" class="register-link" (click)="onOpenRegister()">
+                  regístrate aquí
+                </a>
+              </p>
+            </div>
+          </form>
+        </div>
+        }
+
+        <!-- ========== PASO 2: Contraseña ========== -->
+        @if (stepOneCompleted()) {
+        <div class="step-two-form">
+          <!-- Imagen y mensaje -->
+          <div class="main-info text-center">
+            <div class="logo-image-container mb-3">
+              <img src="assets/images/login.png" alt="Imagen Usuario" class="logo-image" />
+            </div>
+
+            <h3 class="step-info mb-2">Clave temporal</h3>
+            <p class="step-description text-muted">
+              Ten en cuenta que recibirás una clave distinta en tu correo cada vez que ingreses.
+            </p>
+          </div>
+
+          <!-- Formulario paso 2 -->
+          <form [formGroup]="stepTwoForm" class="mt-4">
+            <!-- Campo de contraseña -->
+            <div class="form-group mb-3">
+              <label class="form-label" for="password">
+                Escribe la clave enviada al correo:
+                <span class="text-primary fw-bold d-block">{{ emailUser() }}</span>
+              </label>
+              <div class="input-group">
+                <input
+                  id="password"
+                  [type]="hidePassword() ? 'password' : 'text'"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="Ingresa la contraseña"
+                  maxlength="4"
+                  autocomplete="off"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility()"
+                >
+                  @if (hidePassword()) {
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
+                    />
+                    <path
+                      d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+                    />
+                  </svg>
+                  } @else {
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"
+                    />
+                    <path
+                      d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"
+                    />
+                    <path
+                      d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"
+                    />
+                  </svg>
+                  }
+                </button>
+              </div>
+              @if (password?.invalid && password?.touched) {
+              <div class="invalid-feedback d-block">
+                @if (password?.hasError('required')) { Este campo es requerido. } @else if
+                (password?.hasError('minlength')) { Por favor ingresa la contraseña de 4 dígitos. }
+                @else if (password?.hasError('invalidPassword')) { La contraseña es incorrecta,
+                intente nuevamente. }
+              </div>
+              }
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="footer-actions text-center mt-4">
+              <app-button
+                text="Ingresar"
+                variant="primary"
+                [disabled]="isLoading()"
+                customClass="px-4 py-2"
+                (clicked)="onLogin()"
+              />
+
+              <div class="mt-3">
+                <app-button text="← Volver" variant="link" [rounded]="false" (clicked)="onBack()" />
+              </div>
+
+              <div class="mt-2">
+                <app-button
+                  text="¿No puedes acceder a tu cuenta?"
+                  variant="link"
+                  [rounded]="false"
+                  customClass="text-muted"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Modal de Confirmación para salir -->
+    @if (showConfirmation()) {
+    <div class="confirmation-backdrop" (click)="onCancelClose()" (keydown.escape)="onCancelClose()"></div>
+    <div class="confirmation-dialog">
+      <app-confirmation-modal (confirm)="onConfirmClose()" (cancelAction)="onCancelClose()" />
+    </div>
+    }
+  </div>
+</div>

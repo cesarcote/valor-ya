@@ -1,6 +1,5 @@
 .register-modal-content {
-  background: #fff;
-  border-radius: 8px;
+  padding: 1.5rem;
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -9,76 +8,169 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 0;
 }
 
 .modal-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #212529;
-  margin: 0;
-}
-
-.modal-body {
-  padding: 1.5rem;
+  margin-bottom: 8px;
 }
 
 /* Indicador de pasos */
+/* ========== Stepper (igual que el componente compartido) ========== */
 .step-indicator {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 50%;
-  min-width: 160px;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
   max-width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .step {
-  background-color: #fbbf24;
-  color: #000;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  border: 2px solid transparent;
-}
-
-.step.active {
-  background-color: #f59e0b;
-  color: #000;
-}
-
-.step.inactive {
-  background-color: #e5e7eb;
-  color: #374151;
-}
-
-.step.completed {
-  background-color: #10b981;
-  color: #000;
-}
-
-.step-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.step-connector {
+  position: relative;
   flex: 1;
-  height: 2px;
-  background-color: #fcd34d;
+  background: none;
+  border: none;
+  width: auto;
+  height: auto;
+  font-size: inherit;
 }
 
-.step-connector.completed {
-  background-color: #10b981;
+.step-circle-container {
+  width: 100%;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.step-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  background: #dcdcdc;
+  transition: all 0.3s ease;
+}
+
+.step-number {
+  font-weight: 700;
+  color: #481f00;
+}
+
+.step-label {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #606060;
+  text-align: center;
+}
+
+.step:not(:last-child) .line-container {
+  position: absolute;
+  top: 1.375rem;
+  left: 50%;
+  width: calc(100%);
+  height: 0.125rem;
+  z-index: 1;
+}
+
+.line-base {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #dcdcdc;
+}
+
+.line-progress {
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  background: #feb400;
+  transition: width 0.3s ease;
+}
+
+/* Estado activo */
+.step.active .step-circle {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: white;
+  border: 0.1875rem solid #feb400;
+}
+
+.step.active .step-circle::after {
+  content: '';
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #feb400;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.step.active .step-number {
+  position: relative;
+  z-index: 3;
+  color: #481f00;
+}
+
+.step.active .step-label {
+  font-weight: 500;
+  color: #481f00;
+}
+
+/* Estado inactivo */
+.step.inactive .step-circle {
+  background: #dcdcdc;
+}
+
+.step.inactive .step-number {
+  color: #606060;
+}
+
+/* Estado completado */
+.step.completed .step-circle {
+  background: #feb400;
+}
+
+.step.completed .step-number {
+  display: none;
+}
+
+.step.completed .step-circle::before {
+  content: '✓';
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #481f00;
+  position: relative;
+  z-index: 3;
+}
+
+.step.completed .step-label {
+  color: #481f00;
+}
+
+.step.active:not(:last-child) .line-progress {
+  width: 50%;
+}
+
+.step.completed:not(:last-child) .line-progress {
+  width: 100%;
 }
 
 /* Título principal */
@@ -169,21 +261,6 @@
 .form-check-label {
   font-size: 0.85rem;
   color: #495057;
-}
-
-/* Responsive */
-@media (max-width: 576px) {
-  .modal-body {
-    padding: 1rem;
-  }
-
-  .step-indicator {
-    width: 70%;
-  }
-
-  .main-title {
-    font-size: 1rem;
-  }
 }
 
 /* Focus states */
