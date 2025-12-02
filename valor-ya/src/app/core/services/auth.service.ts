@@ -234,16 +234,16 @@ export class AuthService {
    */
   logout(): void {
     const token = this.tokenService.getToken();
-    
+
     // Limpiar estado local primero
     this.currentUserSignal.set(null);
     this.tokenService.clearAll();
-    
+
     // Llamar al API para invalidar el token en el servidor
     if (token) {
       this.http.post(`${this.apiUrl}/api/auth/logout`, {}).subscribe({
         next: () => console.log('Sesión cerrada en el servidor'),
-        error: (err) => console.warn('Error cerrando sesión en servidor:', err)
+        error: (err) => console.warn('Error cerrando sesión en servidor:', err),
       });
     }
   }

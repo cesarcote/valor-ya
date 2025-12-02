@@ -1,3 +1,8 @@
+.modal-content{
+  border-radius: 1.5rem;
+  border: none;
+}
+
 .register-modal-content {
   padding: 1.5rem;
   max-height: 90vh;
@@ -175,7 +180,6 @@
 
 /* Título principal */
 .main-title {
-  font-family: 'Nunito Sans', sans-serif;
   font-size: 1.125rem;
   font-weight: 700;
   color: #212529;
@@ -183,15 +187,12 @@
 
 /* Formularios */
 .form-label {
-  font-family: 'Nunito Sans', sans-serif;
-  font-size: 0.875rem;
   font-weight: 600;
-  color: #495057;
+  color: #000000DE;
 }
 
 .form-control,
 .form-select {
-  font-family: 'Nunito Sans', sans-serif;
   border-radius: 6px;
   padding: 0.625rem 0.875rem;
   border: 1px solid #ced4da;
@@ -200,13 +201,12 @@
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #e3192f;
-  box-shadow: 0 0 0 0.2rem rgba(227, 25, 47, 0.15);
+  border-color: #000000DE;
+  box-shadow: none;
 }
 
 /* Mensajes de error */
 .invalid-feedback {
-  font-size: 0.8rem;
   color: #dc3545;
   margin-top: 0.25rem;
 }
@@ -215,7 +215,6 @@
 .btn-primary {
   background-color: #e3192f;
   border-color: #e3192f;
-  font-family: 'Nunito Sans', sans-serif;
   font-weight: 600;
 }
 
@@ -231,20 +230,14 @@
 }
 
 .btn-secondary {
-  font-family: 'Nunito Sans', sans-serif;
   font-weight: 600;
 }
 
 /* Enlaces */
 .login-link,
 .terms-link {
-  color: #e3192f;
+  color: #606060;
   font-weight: 600;
-  text-decoration: none;
-}
-
-.login-link:hover,
-.terms-link:hover {
   text-decoration: underline;
 }
 
@@ -291,7 +284,7 @@
   transform: translate(-50%, -50%);
   z-index: 1070;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 1.5rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   max-width: 400px;
   width: 90%;

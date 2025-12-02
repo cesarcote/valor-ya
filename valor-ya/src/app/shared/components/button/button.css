@@ -2,3 +2,12 @@
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
 }
+
+/* Variante link */
+.btn-link {
+  color: #606060;
+  font-weight: 600;
+  text-decoration: underline;
+  background: none;
+  border: none;
+}

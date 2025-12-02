@@ -1,5 +1,5 @@
 <!-- Modal de Registro -->
-<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-dialog modal-dialog-centered modal-md">
   <div class="modal-content">
     <div class="register-modal-content">
       <!-- Header del modal -->
@@ -326,22 +326,9 @@
               </div>
 
               <!-- Botones de acción -->
-              <div class="col-md-6 mt-3">
-                <app-button
-                  text="Anterior"
-                  variant="secondary"
-                  [fullWidth]="true"
-                  (clicked)="onBackToStepOne()"
-                />
-              </div>
-              <div class="col-md-6 mt-3">
-                <app-button
-                  text="Finalizar"
-                  variant="primary"
-                  [fullWidth]="true"
-                  [disabled]="isLoading()"
-                  (clicked)="onRegister()"
-                />
+              <div class="col-12 mt-3 d-flex justify-content-between">
+                <app-button text="Anterior" variant="secondary" (clicked)="onBackToStepOne()" />
+                <app-button text="Finalizar" variant="primary" (clicked)="onRegister()" />
               </div>
             </div>
           </form>

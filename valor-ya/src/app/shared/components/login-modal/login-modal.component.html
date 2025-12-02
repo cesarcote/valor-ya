@@ -1,5 +1,5 @@
 <!-- Modal de Login -->
-<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered modal-md">
   <div class="modal-content">
     <div class="login-modal-content">
       <!-- Header del modal -->
@@ -15,7 +15,7 @@
         <div class="step-one-form">
           <!-- Imagen y bienvenida -->
           <div class="main-info text-center">
-            <div class="logo-image-container mb-3">
+            <div class="logo-image-container">
               <img src="assets/images/login.png" alt="Usuario" class="logo-image" />
             </div>
 
@@ -121,7 +121,7 @@
             <div class="form-group mb-3">
               <label class="form-label" for="password">
                 Escribe la clave enviada al correo:
-                <span class="text-primary fw-bold d-block">{{ emailUser() }}</span>
+                <span class="fw-bold d-block">{{ emailUser() }}</span>
               </label>
               <div class="input-group">
                 <input
@@ -186,7 +186,6 @@
               <app-button
                 text="Ingresar"
                 variant="primary"
-                [disabled]="isLoading()"
                 customClass="px-4 py-2"
                 (clicked)="onLogin()"
               />
