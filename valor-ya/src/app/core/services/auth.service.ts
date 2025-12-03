@@ -17,7 +17,6 @@ import { TokenService } from './token.service';
 
 /**
  * Servicio de autenticación
- * Conectado al backend real
  */
 @Injectable({
   providedIn: 'root',
@@ -27,16 +26,13 @@ export class AuthService {
   private readonly tokenService = inject(TokenService);
   private readonly apiUrl = currentEnvironment.baseUrl;
 
-  // Estado del usuario actual usando signals
   private readonly currentUserSignal = signal<User | null>(null);
   private readonly isLoadingSignal = signal(false);
 
-  // Computed signals públicos
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
   readonly isLoading = this.isLoadingSignal.asReadonly();
 
-  // Catálogos estáticos de tipos de documento y sexo
   private readonly documentTypes: DocumentType[] = [
     { id: 1, description: 'Cédula de ciudadanía' },
     { id: 2, description: 'NIT' },
@@ -145,7 +141,7 @@ export class AuthService {
   }
 
   /**
-   * Iniciar sesión con clave temporal (API REAL)
+   * Iniciar sesión con clave temporal
    */
   login(request: LoginRequest): Observable<LoginResponse> {
     this.isLoadingSignal.set(true);
@@ -189,7 +185,7 @@ export class AuthService {
   }
 
   /**
-   * Registrar nuevo usuario (API REAL)
+   * Registrar nuevo usuario
    */
   register(request: RegisterRequest): Observable<RegisterResponse> {
     this.isLoadingSignal.set(true);
