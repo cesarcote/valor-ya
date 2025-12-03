@@ -1,4 +1,4 @@
-.modal-content{
+.modal-content {
   border-radius: 1.5rem;
   border: none;
 }
@@ -210,7 +210,7 @@
 /* Formularios */
 .form-label {
   font-weight: 600;
-  color: #000000DE;
+  color: #000000de;
 }
 
 .form-control,
@@ -223,7 +223,7 @@
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #000000DE;
+  border-color: #000000de;
   box-shadow: none;
 }
 
