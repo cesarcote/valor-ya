@@ -32,7 +32,6 @@
         <app-button text="Registrarse" variant="secondary" (clicked)="openRegisterModal()" />
         <app-button text="Iniciar sesión" variant="primary" (clicked)="openLoginModal()" />
         } @else {
-        <span class="text-muted me-2"> Hola, {{ currentUser()?.nombre }} </span>
         <app-button text="Cerrar sesión" variant="secondary" (clicked)="logout()" />
         }
       </div>
@@ -246,23 +245,12 @@
           </li>
         </ul>
 
-        <div class="session-buttons-content d-lg-none mt-3">
+        <div class="session-buttons-content d-lg-none mt-3 mb-3 d-flex justify-content-center gap-2">
           @if (!isAuthenticated()) {
-          <button
-            type="button"
-            class="btn btn-outline-primary btn-sm me-2"
-            (click)="openLoginModal()"
-          >
-            Iniciar sesión
-          </button>
-          <button type="button" class="btn btn-primary btn-sm" (click)="openRegisterModal()">
-            Registrarse
-          </button>
+          <app-button text="Registrarse" variant="secondary" (clicked)="openRegisterModal()" />
+          <app-button text="Iniciar sesión" variant="primary" (clicked)="openLoginModal()" />
           } @else {
-          <span class="text-muted me-2 d-block mb-2"> Hola, {{ currentUser()?.nombre }} </span>
-          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="logout()">
-            Cerrar sesión
-          </button>
+          <app-button text="Cerrar sesión" variant="secondary" (clicked)="logout()" />
           }
         </div>
       </div>
