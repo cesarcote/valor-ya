@@ -7,28 +7,28 @@ import { User } from '../models/user.model';
 })
 export class TokenService {
   saveToken(token: string): void {
-    sessionStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_KEY, token);
   }
 
   getToken(): string | null {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
 
   removeToken(): void {
-    sessionStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_KEY);
   }
 
   saveUser(user: User): void {
-    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   getUser(): User | null {
-    const user = sessionStorage.getItem(USER_KEY);
+    const user = localStorage.getItem(USER_KEY);
     return user ? JSON.parse(user) : null;
   }
 
   removeUser(): void {
-    sessionStorage.removeItem(USER_KEY);
+    localStorage.removeItem(USER_KEY);
   }
 
   clearAll(): void {

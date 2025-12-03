@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { PaymentService } from '../../../../core/services/payment.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
@@ -41,6 +42,7 @@ export class PaymentComponent implements OnInit {
   public stateService = inject(ValorYaStateService);
   private paymentService = inject(PaymentService);
   private comprasService = inject(ComprasService);
+  private readonly authService = inject(AuthService);
 
   facturacionForm!: FormGroup;
   isSubmitting = signal(false);
@@ -60,6 +62,7 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.PROCESO);
     this.initForm();
+    this.autofillUserData();
 
     const predioData = this.stateService.predioData();
     if (!predioData?.chip) {
@@ -70,6 +73,35 @@ export class PaymentComponent implements OnInit {
       this.modalButtonText.set('Aceptar');
       return;
     }
+  }
+
+  /**
+   * Autocompleta los datos del formulario con la información del usuario autenticado
+   */
+  private autofillUserData(): void {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
+    // Mapear tipo de documento del usuario al formato del select
+    const tipoDocMap: { [key: string]: string } = {
+      'CC': 'CC',
+      'CE': 'CE',
+      'NIT': 'NIT',
+      'PA': 'CE',
+      'TI': 'CC',
+      'NUIP': 'CC',
+    };
+    const tipoDoc = user.tipoDocumento?.codigo || '';
+
+    this.facturacionForm.patchValue({
+      tipoDocumento: tipoDocMap[tipoDoc] || tipoDoc,
+      numeroDocumento: user.numeroDocumento || '',
+      nombre: user.nombre || '',
+      apellidos: user.apellido || '',
+      direccion: user.direccionCorrespondencia || '',
+      telefono: user.celular || user.telefono || '',
+      email: user.email || '',
+    });
   }
 
   initForm(): void {
@@ -104,9 +136,10 @@ export class PaymentComponent implements OnInit {
       const fechaCompra = new Date().toISOString().split('T')[0];
       const currentYear = new Date().getFullYear();
       const radNum = Math.floor(Math.random() * 90000) + 10000;
+      const user = this.authService.currentUser();
 
       const compraRequest = {
-        usuarioId: 50,
+        usuarioId: user?.id ? Number(user.id) : 50,
         fechaCompra,
         estado: 'REGISTRADA' as const,
         uuid,

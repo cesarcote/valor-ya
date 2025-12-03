@@ -1,10 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { PageHeader } from '../page-header/page-header';
 import { ButtonComponent } from '../button/button';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { AuthModalService } from '../../../core/services/auth-modal.service';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +14,10 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './header.html',
   styleUrls: ['./header.css'],
 })
-export class Header {
+export class Header implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
+  private readonly authModalService = inject(AuthModalService);
+  private subscription?: Subscription;
 
   title = 'ValorYa';
   baseUrl = 'https://www.catastrobogota.gov.co/';
@@ -25,6 +29,17 @@ export class Header {
   // Estado de autenticación
   isAuthenticated = this.authService.isAuthenticated;
   currentUser = this.authService.currentUser;
+
+  ngOnInit(): void {
+    // Escuchar cuando el interceptor solicite abrir el modal de login
+    this.subscription = this.authModalService.openLogin$.subscribe(() => {
+      this.openLoginModal();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
 
   openLoginModal(): void {
     this.showRegisterModal.set(false);
