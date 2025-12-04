@@ -29,7 +29,7 @@
     [showBackButton]="false"
     [showContinueButton]="false"
   >
-  <!-- Mapas -->
+    <!-- Mapas -->
     <div class="maps-container">
       <!-- Mapa 1: Ubicación del Predio -->
       <div class="map-section">
@@ -43,7 +43,7 @@
       <div class="map-section">
         <h3 class="section-title">Ofertas de Referencia</h3>
         <div class="map-wrapper">
-          <app-map #mapOfertas [config]="{ zoom: 15 }"></app-map>
+          <app-map #mapOfertas [config]="{ zoom: 15 }" [showDireccion]="false"></app-map>
         </div>
       </div>
     </div>

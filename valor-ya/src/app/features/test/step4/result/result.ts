@@ -19,7 +19,10 @@ import { StepperComponent } from '../../../../shared/components/stepper/stepper'
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
-import { MCMValorYAResultado, CalcularValorYaResponse } from '../../../../core/models/mcm-valor-ya.model';
+import {
+  MCMValorYAResultado,
+  CalcularValorYaResponse,
+} from '../../../../core/models/mcm-valor-ya.model';
 import { MCM_MOCK_RESPONSE, CALCULAR_VALORYA_MOCK_RESPONSE } from '../../data/mcm-mock';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';

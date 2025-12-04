@@ -1,4 +1,8 @@
-<h4 class="map-address">Dirección del predio: <span class="address">{{ direccion() }}</span></h4>
+@if (showDireccion()) {
+<h4 class="map-address">
+  Dirección del predio: <span class="address">{{ direccion() }}</span>
+</h4>
+}
 <div class="map-container">
   <div #map class="map"></div>
   @if (isLoading()) {

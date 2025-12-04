@@ -60,6 +60,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   isLoading = signal(false);
   direccion = signal<string>('');
+  showDireccion = input(true);
 
   private readonly DEFAULT_POLYGON_STYLE = {
     color: '#e3192f',

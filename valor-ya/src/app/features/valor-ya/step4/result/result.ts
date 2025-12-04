@@ -20,7 +20,10 @@ import { StepperComponent } from '../../../../shared/components/stepper/stepper'
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
-import { CalcularValorYaResponse, MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
+import {
+  CalcularValorYaResponse,
+  MCMValorYAResultado,
+} from '../../../../core/models/mcm-valor-ya.model';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 import { PredioData } from '../../../../core/models/predio-data.model';
@@ -219,7 +222,9 @@ export class ResultComponent implements OnInit {
 
     if (!predioData?.chip) {
       console.error('No se encontró el chip del predio');
-      this.notificationService.error('Error: No se puede descargar el avalúo sin información del predio.');
+      this.notificationService.error(
+        'Error: No se puede descargar el avalúo sin información del predio.'
+      );
       return;
     }
 
