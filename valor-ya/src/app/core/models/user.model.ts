@@ -2,7 +2,8 @@
  * Modelo de usuario para autenticación
  */
 export interface User {
-  id: number | string;
+  id: number | string; // ID real del usuario (para compras/pagos)
+  personId?: number | string; // PERSON_ID que viene del login
   nombre: string;
   apellido: string;
   nombreCompleto?: string;
@@ -22,6 +23,28 @@ export interface User {
   nombreEntidad?: string;
   direccionCorrespondencia?: string;
   descripcion?: string;
+}
+
+// ========== CONSULTA USUARIO POR PERSON_ID ==========
+export interface UserByPersonIdData {
+  ID: number;
+  USERNAME: string;
+  BLOQUEADO: number;
+  PERSON_ID: number;
+  PWD_TEMPORAL: number;
+  FECHA_REGISTRO: string;
+  FECHA_ASIGNACION_PWD: string | null;
+  RESTABLECER_UUID: string | null;
+  RESTABLECER_FECHA_ENV: string | null;
+  RESTABLECER_FECHA_USO: string | null;
+  RESTABLECER_UTILIZADO: number;
+}
+
+export interface UserByPersonIdResponse {
+  success: boolean;
+  message?: string;
+  data?: UserByPersonIdData;
+  error?: string;
 }
 
 // ========== SOLICITUD DE CLAVE TEMPORAL ==========

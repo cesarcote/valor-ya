@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, map, catchError } from 'rxjs';
+import { Observable, of, map, catchError, switchMap } from 'rxjs';
 import {
   User,
   LoginRequest,
@@ -11,6 +11,7 @@ import {
   RegisterResponse,
   DocumentType,
   SexType,
+  UserByPersonIdResponse,
 } from '../models/user.model';
 import { currentEnvironment } from '../../../environments/environment';
 import { TokenService } from './token.service';
@@ -142,35 +143,52 @@ export class AuthService {
 
   /**
    * Iniciar sesión con clave temporal
+   * Después del login, consulta el usuario por PERSON_ID para obtener el ID real
+   * Esto porque en pago no acepta PERSON_ID sino USER_ID
    */
   login(request: LoginRequest): Observable<LoginResponse> {
     this.isLoadingSignal.set(true);
 
     return this.http.post<LoginResponse>(`${this.apiUrl}/api/auth/login`, request).pipe(
-      map((response) => {
-        this.isLoadingSignal.set(false);
-
+      switchMap((response) => {
         if (response.success && response.data?.success) {
           const loginData = response.data.data;
           const usuario = loginData.usuario;
 
-          // Mapear usuario del login al modelo User
-          const user: User = {
-            id: usuario.id,
-            nombre: usuario.nombre,
-            apellido: usuario.apellido,
-            nombreCompleto: usuario.nombreCompleto,
-            numeroDocumento: usuario.numeroDocumento,
-            email: usuario.email,
-            estado: usuario.estado,
-            tipoPersona: usuario.tipoPersona,
-          };
+          // Guardar el token primero para que el interceptor lo use en la siguiente llamada
+          this.tokenService.saveToken(loginData.token);
 
-          this.currentUserSignal.set(user);
-          this.saveSession(user, loginData.token);
+          // Consultar el usuario por PERSON_ID para obtener el ID real
+          return this.getUserByPersonId(usuario.id).pipe(
+            map((userResponse) => {
+              const realUserId = userResponse.success && userResponse.data
+                ? userResponse.data.ID
+                : usuario.id;
+
+              // Mapear usuario del login al modelo User con el ID real
+              const user: User = {
+                id: realUserId,
+                personId: usuario.id,
+                nombre: usuario.nombre,
+                apellido: usuario.apellido,
+                nombreCompleto: usuario.nombreCompleto,
+                numeroDocumento: usuario.numeroDocumento,
+                email: usuario.email,
+                estado: usuario.estado,
+                tipoPersona: usuario.tipoPersona,
+              };
+
+              this.currentUserSignal.set(user);
+              this.tokenService.saveUser(user);
+              this.isLoadingSignal.set(false);
+
+              return response;
+            })
+          );
         }
 
-        return response;
+        this.isLoadingSignal.set(false);
+        return of(response);
       }),
       catchError((error) => {
         this.isLoadingSignal.set(false);
@@ -180,6 +198,18 @@ export class AuthService {
           success: false,
           error: error.error?.error || 'Error al iniciar sesión',
         });
+      })
+    );
+  }
+
+  /**
+   * Consultar usuario por PERSON_ID para obtener el ID real
+   */
+  private getUserByPersonId(personId: number | string): Observable<UserByPersonIdResponse> {
+    return this.http.get<UserByPersonIdResponse>(`${this.apiUrl}/api/users/person/${personId}`).pipe(
+      catchError((error) => {
+        console.warn('Error consultando usuario por PERSON_ID:', error);
+        return of({ success: false, error: 'Error al consultar usuario' });
       })
     );
   }
@@ -235,6 +265,9 @@ export class AuthService {
     this.currentUserSignal.set(null);
     this.tokenService.clearAll();
 
+    // Limpiar datos de sesión de ValorYa
+    this.clearValorYaSessionData();
+
     // Llamar al API para invalidar el token en el servidor
     if (token) {
       this.http.post(`${this.apiUrl}/api/auth/logout`, {}).subscribe({
@@ -242,6 +275,16 @@ export class AuthService {
         error: (err) => console.warn('Error cerrando sesión en servidor:', err),
       });
     }
+  }
+
+  /**
+   * Limpiar datos de sesión de ValorYa (predio, pago, etc.)
+   */
+  clearValorYaSessionData(): void {
+    localStorage.removeItem('valorya-predio-data');
+    localStorage.removeItem('valor-ya-payment-context');
+    localStorage.removeItem('test-predio-data');
+    localStorage.removeItem('test-payment-context');
   }
 
   /**

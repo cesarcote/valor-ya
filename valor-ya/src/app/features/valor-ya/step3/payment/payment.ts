@@ -139,7 +139,7 @@ export class PaymentComponent implements OnInit {
       const user = this.authService.currentUser();
 
       const compraRequest = {
-        usuarioId: 97079,
+        usuarioId: user?.id ? Number(user.id) : 0,
         fechaCompra,
         estado: 'REGISTRADA' as const,
         uuid,

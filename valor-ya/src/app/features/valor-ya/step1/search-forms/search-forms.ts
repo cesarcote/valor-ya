@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/tabs/tabs';
 import { FormChipComponent, ChipData } from '../components/form-chip/form-chip';
@@ -26,6 +27,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
 export class SearchFormsComponent {
   private readonly router = inject(Router);
   private readonly stepperService = inject(ValorYaStepperService);
+  private readonly authService = inject(AuthService);
   public readonly stateService = inject(ValorYaStateService);
 
   public selectedTabIndex = computed(() => {
@@ -55,6 +57,9 @@ export class SearchFormsComponent {
 
   constructor() {
     this.stepperService.setStep(ValorYaStep.INICIO);
+
+    // Limpiar datos de consulta de predio y pago de ValorYa al volver al step1
+    this.authService.clearValorYaSessionData();
 
     if (!this.stateService.tipoBusqueda()) {
       this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);

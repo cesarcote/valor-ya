@@ -5,17 +5,19 @@ import {
   signal,
   effect,
   ViewChild,
-  AfterViewInit,
   EnvironmentInjector,
   createComponent,
+  OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { PredioService } from '../../../../core/services/predio.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { AuthModalService } from '../../../../core/services/auth-modal.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
@@ -40,15 +42,19 @@ import { MapCardComponent } from '../../../../shared/components/map-card/map-car
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
 })
-export class PredioReviewComponent implements OnInit, AfterViewInit {
+export class PredioReviewComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private predioService = inject(PredioService);
   private mcmValorYaService = inject(MCMValorYaService);
+  private readonly authService = inject(AuthService);
+  private readonly authModalService = inject(AuthModalService);
   private injector = inject(EnvironmentInjector);
 
   private mapComponent?: MapComponent;
+  private loginSubscription?: Subscription;
+  private readonly pendingContinue = signal(false);
 
   @ViewChild(MapComponent)
   set mapSetter(map: MapComponent) {
@@ -88,6 +94,13 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
 
+    this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
+      if (this.pendingContinue()) {
+        this.pendingContinue.set(false);
+        this.onContinuar();
+      }
+    });
+
     const tipo = this.stateService.tipoBusqueda();
     const valor = this.stateService.valorBusqueda();
 
@@ -99,7 +112,10 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
     this.realizarConsulta(tipo, valor);
   }
 
-  ngAfterViewInit(): void {}
+  ngOnDestroy(): void {
+    this.loginSubscription?.unsubscribe();
+  }
+
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
       // Crear instancia del componente de tarjeta dinámicamente
@@ -170,6 +186,13 @@ export class PredioReviewComponent implements OnInit, AfterViewInit {
   }
 
   onContinuar(): void {
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isAuthenticated()) {
+      this.pendingContinue.set(true);
+      this.authModalService.openLoginModal();
+      return;
+    }
+
     const predio = this.predioData();
 
     if (!predio || !predio.loteid || !predio.chip) {

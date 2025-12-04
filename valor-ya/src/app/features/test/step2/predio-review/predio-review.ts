@@ -2,6 +2,7 @@ import {
   Component,
   inject,
   OnInit,
+  OnDestroy,
   ViewChild,
   signal,
   effect,
@@ -9,11 +10,13 @@ import {
   createComponent,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { PredioService } from '../../../../core/services/predio.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { AuthModalService } from '../../../../core/services/auth-modal.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
@@ -38,13 +41,17 @@ import { MapCardComponent } from '../../../../shared/components/map-card/map-car
   templateUrl: './predio-review.html',
   styleUrls: ['./predio-review.css'],
 })
-export class PredioReviewComponent implements OnInit {
+export class PredioReviewComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly stepperService = inject(TestStepperService);
   public readonly stateService = inject(TestStateService);
   private readonly predioService = inject(PredioService);
+  private readonly authService = inject(AuthService);
+  private readonly authModalService = inject(AuthModalService);
   private readonly injector = inject(EnvironmentInjector);
   private mapComponent?: MapComponent;
+  private loginSubscription?: Subscription;
+  private readonly pendingContinue = signal(false);
 
   @ViewChild(MapComponent)
   set mapSetter(map: MapComponent) {
@@ -85,6 +92,13 @@ export class PredioReviewComponent implements OnInit {
   ngOnInit(): void {
     this.stepperService.setStep(TestStep.SOLICITUD);
 
+    this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
+      if (this.pendingContinue()) {
+        this.pendingContinue.set(false);
+        this.onContinuar();
+      }
+    });
+
     const tipo = this.stateService.tipoBusqueda();
     const valor = this.stateService.valorBusqueda();
 
@@ -94,6 +108,10 @@ export class PredioReviewComponent implements OnInit {
     }
 
     this.realizarConsulta(tipo, valor);
+  }
+
+  ngOnDestroy(): void {
+    this.loginSubscription?.unsubscribe();
   }
 
   private realizarConsulta(tipo: TipoBusqueda, valor: string): void {
@@ -141,6 +159,13 @@ export class PredioReviewComponent implements OnInit {
   }
 
   onContinuar(): void {
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isAuthenticated()) {
+      this.pendingContinue.set(true);
+      this.authModalService.openLoginModal();
+      return;
+    }
+
     const predio = this.predioData();
 
     if (!predio?.loteid || !predio?.chip) {

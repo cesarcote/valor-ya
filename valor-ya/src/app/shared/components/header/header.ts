@@ -22,7 +22,6 @@ export class Header implements OnInit, OnDestroy {
   title = 'ValorYa';
   baseUrl = 'https://www.catastrobogota.gov.co/';
 
-  // Estado de los modales
   showLoginModal = signal(false);
   showRegisterModal = signal(false);
 
@@ -58,12 +57,12 @@ export class Header implements OnInit, OnDestroy {
 
   onLoginSuccess(): void {
     this.closeModals();
+    this.authModalService.notifyLoginSuccess();
   }
 
   onRegisterSuccess(): void {
     this.closeModals();
-    // Opcional: abrir login después de registrarse
-    // this.openLoginModal();
+    this.openLoginModal();
   }
 
   logout(): void {

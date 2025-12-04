@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/tabs/tabs';
 import { TestFormChipComponent, ChipData } from '../components/form-chip/form-chip';
@@ -26,6 +27,7 @@ import { ValoryaDescription } from '../../../../shared/components/valorya-descri
 export class TestSearchFormsComponent {
   private readonly router = inject(Router);
   private readonly stepperService = inject(TestStepperService);
+  private readonly authService = inject(AuthService);
   public readonly stateService = inject(TestStateService);
 
   public selectedTabIndex = computed(() => {
@@ -55,6 +57,8 @@ export class TestSearchFormsComponent {
 
   constructor() {
     this.stepperService.setStep(TestStep.INICIO);
+
+    this.authService.clearValorYaSessionData();
 
     if (!this.stateService.tipoBusqueda()) {
       this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);
