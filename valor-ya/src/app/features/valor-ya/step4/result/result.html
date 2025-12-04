@@ -23,7 +23,7 @@
       <p class="error-text">{{ errorLoadingResult() }}</p>
     </div>
   </app-container-content>
-  } @else if (resultadoPrincipal && metadatos) {
+  } @else if (resumen) {
   <app-container-content
     title="Resultado del Predio"
     [showBackButton]="false"
@@ -47,29 +47,34 @@
         </div>
       </div>
     </div>
+
     <!-- Resumen del Avalúo -->
     <div class="info-section">
       <h3 class="section-title">Resumen del Avalúo</h3>
       <div class="info-grid">
         <div class="info-item">
           <span class="info-label">Ofertas Utilizadas:</span>
-          <span class="info-value">{{ formatInteger(metadatos.ofertas_utilizadas) }}</span>
+          <span class="info-value">{{ formatInteger(resumen.ofertas_utilizadas) }}</span>
         </div>
         <div class="info-item">
           <span class="info-label">Ofertas Válidas:</span>
-          <span class="info-value">{{ metadatos.chips_procesados }}</span>
+          <span class="info-value">{{ resumen.chips_procesados }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Área Construida:</span>
+          <span class="info-value">{{ formatNumber(resumen.AREA_CONSTRUIDA_PREDIO) }} m²</span>
         </div>
         <div class="info-item">
           <span class="info-label">Coeficiente de Variación (CV):</span>
-          <span class="info-value">{{ formatNumber(resultadoPrincipal.CV) }}%</span>
+          <span class="info-value">{{ formatNumber(resumen.CV) }}%</span>
         </div>
         <div class="info-item">
           <span class="info-label">Límite Inferior:</span>
-          <span class="info-value">{{ formatCurrency(resultadoPrincipal.LIM_INFERIOR) }}</span>
+          <span class="info-value">{{ formatCurrency(resumen.LIMITE_INFERIOR) }}</span>
         </div>
         <div class="info-item">
           <span class="info-label">Límite Superior:</span>
-          <span class="info-value">{{ formatCurrency(resultadoPrincipal.LIM_SUPERIOR) }}</span>
+          <span class="info-value">{{ formatCurrency(resumen.LIMITE_SUPERIOR) }}</span>
         </div>
       </div>
     </div>
@@ -79,13 +84,11 @@
       <div class="valuation-grid">
         <div class="valuation-item primary">
           <span class="valuation-label">Valor Ya</span>
-          <span class="valuation-value">{{
-            formatCurrency(resultadoPrincipal.VALOR_AVALUO_PREDIO)
-          }}</span>
+          <span class="valuation-value">{{ formatCurrency(resumen.VALOR_YA) }}</span>
         </div>
         <div class="valuation-item">
           <span class="valuation-label">Valor por m²</span>
-          <span class="valuation-value">{{ formatCurrency(resultadoPrincipal.MEDIA) }}</span>
+          <span class="valuation-value">{{ formatCurrency(resumen.VALORYA_M2) }}</span>
         </div>
       </div>
     </div>

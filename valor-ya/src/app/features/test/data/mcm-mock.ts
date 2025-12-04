@@ -136,3 +136,26 @@ export const MCM_MOCK_RESPONSE = {
   ],
   status: 'success',
 };
+
+/**
+ * Mock de respuesta de calcular-valorya para testing
+ */
+export const CALCULAR_VALORYA_MOCK_RESPONSE = {
+  data: {
+    CHIP: 'AAA0036YERJ',
+    CODIGO_USO: '045',
+    ZONA: 'ZONA_MOCK_TEST',
+    AREA_CONSTRUIDA_PREDIO: 37.4,
+    VALOR_YA: 81345000,
+    VALORYA_M2: 2174025.76,
+    LIMITE_INFERIOR: 2138045.92,
+    LIMITE_INFERIOR_M2: 57167.51,
+    LIMITE_SUPERIOR: 2210005.61,
+    LIMITE_SUPERIOR_M2: 59090.52,
+    CV: 1.65,
+    ofertas_utilizadas: 62501,
+    chips_procesados: 3,
+  },
+  mensaje: 'Cálculo ValorYa completado exitosamente',
+  status: 'success',
+};

@@ -19,8 +19,8 @@ import { StepperComponent } from '../../../../shared/components/stepper/stepper'
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
-import { MCMValorYAResultado } from '../../../../core/models/mcm-valor-ya.model';
-import { MCM_MOCK_RESPONSE } from '../../data/mcm-mock';
+import { MCMValorYAResultado, CalcularValorYaResponse } from '../../../../core/models/mcm-valor-ya.model';
+import { MCM_MOCK_RESPONSE, CALCULAR_VALORYA_MOCK_RESPONSE } from '../../data/mcm-mock';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 import { PredioData } from '../../../../core/models/predio-data.model';
@@ -67,6 +67,7 @@ export class ResultComponent implements OnInit {
   errorLoadingResult = signal('');
 
   apiResponse = signal<MCMValorYAResultado | null>(null);
+  valorYaResumen = signal<CalcularValorYaResponse | null>(null);
 
   ngOnInit(): void {
     this.stepperService.setStep(TestStep.RESPUESTA);
@@ -110,6 +111,7 @@ export class ResultComponent implements OnInit {
 
   private loadValorYaResults(chip: string, predioData: PredioData): void {
     setTimeout(() => {
+      // Mock de datos completos para mapa de ofertas
       const mockResponse: MCMValorYAResultado = {
         ...MCM_MOCK_RESPONSE,
         resultados: MCM_MOCK_RESPONSE.resultados.map((r) => ({
@@ -119,7 +121,17 @@ export class ResultComponent implements OnInit {
         })),
       };
 
+      // Mock de resumen para datos y reporte
+      const mockResumen: CalcularValorYaResponse = {
+        ...CALCULAR_VALORYA_MOCK_RESPONSE,
+        data: {
+          ...CALCULAR_VALORYA_MOCK_RESPONSE.data,
+          CHIP: chip,
+        },
+      };
+
       this.apiResponse.set(mockResponse);
+      this.valorYaResumen.set(mockResumen);
       this.stateService.setValorYaResponse(mockResponse);
       this.isLoadingResult.set(false);
 
@@ -171,7 +183,7 @@ export class ResultComponent implements OnInit {
     if (!response.resultados || response.resultados.length === 0) return;
 
     const predioBase = response.resultados[0];
-    const coloresOfertas = ['#2563eb', '#10b981', '#f9bc16ff'];
+    const coloresOfertas = ['#2563eb', '#10b981', '#f9bc16ff', '#8b5cf6', '#f97316'];
 
     // 1. Marcador del Predio a Valorar (Pin Rojo)
     map.addMarker({
@@ -187,12 +199,13 @@ export class ResultComponent implements OnInit {
       markerType: 'pin',
     });
 
-    // 2. Marcadores de las Ofertas (Círculos de colores)
-    response.resultados.forEach((oferta, index) => {
+    // 2. Marcadores de los Predios Circundantes (máximo 5)
+    const prediosCircundantes = response.resultados.slice(0, 5);
+    prediosCircundantes.forEach((oferta, index) => {
       map.addMarker({
         lat: oferta.POINT_Y_OFERTA,
         lng: oferta.POINT_X_OFERTA,
-        tooltipContent: `<strong>Oferta ${index + 1}</strong>`,
+        tooltipContent: `<strong>Predio ${index + 1}</strong>`,
         tooltipOptions: {
           permanent: true,
           direction: 'top',
@@ -214,7 +227,6 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    const tipoPredio = predioData.tipoPredio || 'OTRO';
     this.isDownloading.set(true);
 
     // Capturar imágenes de los mapas
@@ -232,7 +244,7 @@ export class ResultComponent implements OnInit {
       console.warn('Error capturando mapas:', error);
     }
 
-    const datos = this.reporteService.generarDatosReporte(predioData.chip, tipoPredio, this.apiResponse()!);
+    const datos = this.reporteService.generarDatosReporte(predioData, this.valorYaResumen()!);
 
     if (imagenBase64) datos.imagenBase64 = imagenBase64;
     if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;

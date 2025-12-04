@@ -6,6 +6,7 @@ import {
   MCMValorYAResultado,
   ValidacionMinimoOfertasResponse,
   TestConexionResponse,
+  CalcularValorYaResponse,
 } from '../../../core/models/mcm-valor-ya.model';
 import { currentEnvironment } from '../../../../environments/environment';
 
@@ -60,6 +61,23 @@ export class MCMValorYaService {
       timeout(5000),
       catchError((error) => {
         console.error('❌ [MCM Service] Error en testConexion:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Calcula el ValorYa simplificado para un chip
+   * Devuelve resumen con valor, límites y estadísticas
+   */
+  calcularValorYa(chip: string): Observable<CalcularValorYaResponse> {
+    const url = `${this.API_BASE_URL}/api/procesar-chips/calcular-valorya`;
+    const body = { chip };
+
+    return this.http.post<CalcularValorYaResponse>(url, body).pipe(
+      timeout(30000),
+      catchError((error) => {
+        console.error('❌ [MCM Service] Error en calcularValorYa:', error);
         throw error;
       })
     );

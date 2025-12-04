@@ -54,6 +54,29 @@ export interface MCMValorYAResultado {
   status: string;
 }
 
+/**
+ * Respuesta del endpoint calcular-valorya (resumen simplificado)
+ */
+export interface CalcularValorYaResponse {
+  data: {
+    CHIP: string;
+    CODIGO_USO: string;
+    ZONA: string;
+    AREA_CONSTRUIDA_PREDIO: number;
+    VALOR_YA: number;
+    VALORYA_M2: number;
+    LIMITE_INFERIOR: number;
+    LIMITE_INFERIOR_M2: number;
+    LIMITE_SUPERIOR: number;
+    LIMITE_SUPERIOR_M2: number;
+    CV: number;
+    ofertas_utilizadas: number;
+    chips_procesados: number;
+  };
+  mensaje: string;
+  status: string;
+}
+
 export interface ValidacionMinimoOfertasResponse {
   valido: boolean;
   chips_procesados: number;
