@@ -82,12 +82,12 @@ export class PaymentComponent implements OnInit {
 
     // Mapear tipo de documento del usuario al formato del select
     const tipoDocMap: { [key: string]: string } = {
-      'CC': 'CC',
-      'CE': 'CE',
-      'NIT': 'NIT',
-      'PA': 'CE',
-      'TI': 'CC',
-      'NUIP': 'CC',
+      CC: 'CC',
+      CE: 'CE',
+      NIT: 'NIT',
+      PA: 'CE',
+      TI: 'CC',
+      NUIP: 'CC',
     };
     const tipoDoc = user.tipoDocumento?.codigo || '';
 

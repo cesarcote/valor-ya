@@ -84,12 +84,12 @@ export class PaymentComponent implements OnInit {
 
     // Mapear tipo de documento del usuario al formato del select
     const tipoDocMap: { [key: string]: string } = {
-      'CC': 'CC',
-      'CE': 'CE',
-      'NIT': 'NIT',
-      'PA': 'CE',
-      'TI': 'CC',
-      'NUIP': 'CC',
+      CC: 'CC',
+      CE: 'CE',
+      NIT: 'NIT',
+      PA: 'CE',
+      TI: 'CC',
+      NUIP: 'CC',
     };
     const tipoDoc = user.tipoDocumento?.codigo || '';
 
@@ -139,7 +139,7 @@ export class PaymentComponent implements OnInit {
       const user = this.authService.currentUser();
 
       const compraRequest = {
-        usuarioId: user?.id ? Number(user.id) : 50,
+        usuarioId: 97079,
         fechaCompra,
         estado: 'REGISTRADA' as const,
         uuid,
