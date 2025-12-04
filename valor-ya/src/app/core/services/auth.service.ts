@@ -161,9 +161,8 @@ export class AuthService {
           // Consultar el usuario por PERSON_ID para obtener el ID real
           return this.getUserByPersonId(usuario.id).pipe(
             map((userResponse) => {
-              const realUserId = userResponse.success && userResponse.data
-                ? userResponse.data.ID
-                : usuario.id;
+              const realUserId =
+                userResponse.success && userResponse.data ? userResponse.data.ID : usuario.id;
 
               // Mapear usuario del login al modelo User con el ID real
               const user: User = {
@@ -206,12 +205,14 @@ export class AuthService {
    * Consultar usuario por PERSON_ID para obtener el ID real
    */
   private getUserByPersonId(personId: number | string): Observable<UserByPersonIdResponse> {
-    return this.http.get<UserByPersonIdResponse>(`${this.apiUrl}/api/users/person/${personId}`).pipe(
-      catchError((error) => {
-        console.warn('Error consultando usuario por PERSON_ID:', error);
-        return of({ success: false, error: 'Error al consultar usuario' });
-      })
-    );
+    return this.http
+      .get<UserByPersonIdResponse>(`${this.apiUrl}/api/users/person/${personId}`)
+      .pipe(
+        catchError((error) => {
+          console.warn('Error consultando usuario por PERSON_ID:', error);
+          return of({ success: false, error: 'Error al consultar usuario' });
+        })
+      );
   }
 
   /**
