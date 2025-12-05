@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { predioDataGuard } from './core/guards/predio-data.guard';
 import { testDataGuard } from './core/guards/test-data.guard';
+import { authGuard, testAuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
       {
         path: 'solicitud',
         title: 'Valor YA - Solicitud',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2/predio-review/predio-review').then(
             (m) => m.PredioReviewComponent
@@ -30,13 +32,14 @@ export const routes: Routes = [
       {
         path: 'pago',
         title: 'Valor YA - Pago',
-        canActivate: [predioDataGuard],
+        canActivate: [authGuard, predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step3/payment/payment').then((m) => m.PaymentComponent),
       },
       {
         path: 'pago-status/:status',
         title: 'Valor YA - Estado del Pago',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/valor-ya/step3/payment-status/payment-status').then(
             (m) => m.PaymentStatusComponent
@@ -45,7 +48,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
-        canActivate: [predioDataGuard],
+        canActivate: [authGuard, predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo
@@ -54,7 +57,7 @@ export const routes: Routes = [
       {
         path: 'respuesta',
         title: 'Valor YA - Respuesta',
-        canActivate: [predioDataGuard],
+        canActivate: [authGuard, predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step4/result/result').then((m) => m.ResultComponent),
       },
@@ -83,6 +86,7 @@ export const routes: Routes = [
       {
         path: 'solicitud',
         title: 'Test - Solicitud',
+        canActivate: [testAuthGuard],
         loadComponent: () =>
           import('./features/test/step2/predio-review/predio-review').then(
             (m) => m.PredioReviewComponent
@@ -91,13 +95,14 @@ export const routes: Routes = [
       {
         path: 'pago',
         title: 'Test - Pago',
-        canActivate: [testDataGuard],
+        canActivate: [testAuthGuard, testDataGuard],
         loadComponent: () =>
           import('./features/test/step3/payment/payment').then((m) => m.PaymentComponent),
       },
       {
         path: 'pago-status/:status',
         title: 'Test - Estado del Pago',
+        canActivate: [testAuthGuard],
         loadComponent: () =>
           import('./features/test/step3/payment-status/payment-status').then(
             (m) => m.PaymentStatusComponent
@@ -106,7 +111,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Test - Complementar Información',
-        canActivate: [testDataGuard],
+        canActivate: [testAuthGuard, testDataGuard],
         loadComponent: () =>
           import('./features/test/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo
@@ -115,7 +120,7 @@ export const routes: Routes = [
       {
         path: 'respuesta',
         title: 'Test - Respuesta',
-        canActivate: [testDataGuard],
+        canActivate: [testAuthGuard, testDataGuard],
         loadComponent: () =>
           import('./features/test/step4/result/result').then((m) => m.ResultComponent),
       },

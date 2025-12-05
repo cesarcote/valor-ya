@@ -282,10 +282,17 @@ export class AuthService {
    * Limpiar datos de sesión de ValorYa (predio, pago, etc.)
    */
   clearValorYaSessionData(): void {
+    // Limpiar localStorage
     localStorage.removeItem('valorya-predio-data');
     localStorage.removeItem('valor-ya-payment-context');
     localStorage.removeItem('test-predio-data');
     localStorage.removeItem('test-payment-context');
+
+    // Limpiar sessionStorage
+    sessionStorage.removeItem('valorya-busqueda-state');
+    sessionStorage.removeItem('valorya-resultado-state');
+    sessionStorage.removeItem('test-busqueda-state');
+    sessionStorage.removeItem('test-resultado-state');
   }
 
   /**

@@ -233,24 +233,25 @@ export class ResultComponent implements OnInit {
     this.isDownloading.set(true);
 
     // Capturar imágenes de los mapas
-    let imagenBase64: string | undefined;
-    let imagenBase64Ofertas: string | undefined;
+    let imagenBase64 = '';
+    let imagenBase64Ofertas = '';
 
     try {
       if (this.mapPredio) {
-        imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || undefined;
+        imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || '';
       }
       if (this.mapOfertas) {
-        imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || undefined;
+        imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || '';
       }
     } catch (error) {
       console.warn('Error capturando mapas:', error);
     }
 
-    const datos = this.reporteService.generarDatosReporte(predioData, this.valorYaResumen()!);
-
-    if (imagenBase64) datos.imagenBase64 = imagenBase64;
-    if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
+    const datos = {
+      chip: predioData.chip || '',
+      imagenBase64,
+      imagenBase64Ofertas,
+    };
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
       next: (blob: Blob) => {

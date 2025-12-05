@@ -15,7 +15,6 @@ import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-step
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ReporteService } from '../../../../core/services/reporte.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { PredioService } from '../../../../core/services/predio.service';
 import { StepperComponent } from '../../../../shared/components/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
@@ -51,7 +50,6 @@ export class ResultComponent implements OnInit {
   private readonly reporteService = inject(ReporteService);
   private readonly notificationService = inject(NotificationService);
   private readonly injector = inject(EnvironmentInjector);
-  private readonly predioService = inject(PredioService);
 
   @ViewChild('mapPredio')
   set mapPredioSetter(map: MapComponent) {
@@ -94,13 +92,15 @@ export class ResultComponent implements OnInit {
 
     this.isLoadingResult.set(true);
 
-    // 1. cargar desde localStorage primero
+    // Cargar datos del predio desde localStorage
     const storedData = localStorage.getItem('valorya-predio-data');
+
     if (storedData) {
       try {
         const predioData: PredioData = JSON.parse(storedData);
         if (predioData.chip === chip) {
-          this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
+          const tipoBusqueda = this.stateService.tipoBusqueda()!;
+          this.stateService.setPredioData(predioData, tipoBusqueda, chip);
           this.loadValorYaResults(chip);
           return;
         }
@@ -109,18 +109,9 @@ export class ResultComponent implements OnInit {
       }
     }
 
-    // 2. Si no hay datos en local, consultar API (Fallback)
-    this.predioService.consultarPorChip(chip).subscribe({
-      next: (predioData) => {
-        this.stateService.setPredioData(predioData, this.stateService.tipoBusqueda()!, chip);
-        this.loadValorYaResults(chip);
-      },
-      error: (err) => {
-        console.error('Error al consultar datos del predio:', err);
-        this.errorLoadingResult.set('Error al cargar la información del predio.');
-        this.isLoadingResult.set(false);
-      },
-    });
+    // Si no hay datos en localStorage, mostrar error
+    this.errorLoadingResult.set('Error al cargar la información del predio.');
+    this.isLoadingResult.set(false);
   }
 
   private loadValorYaResults(chip: string): void {
@@ -261,24 +252,25 @@ export class ResultComponent implements OnInit {
 
     this.isDownloading.set(true);
 
-    let imagenBase64: string | undefined;
-    let imagenBase64Ofertas: string | undefined;
+    let imagenBase64 = '';
+    let imagenBase64Ofertas = '';
 
     try {
       if (this.mapPredio) {
-        imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || undefined;
+        imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || '';
       }
       if (this.mapOfertas) {
-        imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || undefined;
+        imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || '';
       }
     } catch (error) {
       console.warn('Error capturando mapas:', error);
     }
 
-    const datos = this.reporteService.generarDatosReporte(predioData, valorYaResponse);
-
-    if (imagenBase64) datos.imagenBase64 = imagenBase64;
-    if (imagenBase64Ofertas) datos.imagenBase64Ofertas = imagenBase64Ofertas;
+    const datos = {
+      chip: predioData.chip || '',
+      imagenBase64,
+      imagenBase64Ofertas,
+    };
 
     console.log('Generando reporte de avalúo para chip:', predioData.chip);
 

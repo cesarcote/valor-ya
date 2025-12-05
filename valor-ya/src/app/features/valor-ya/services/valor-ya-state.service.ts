@@ -14,7 +14,15 @@ interface BusquedaState {
   valorBusqueda: string;
 }
 
+interface ResultadoState {
+  chip: string;
+  compraId?: number;
+  pagoId?: number;
+  uuid?: string;
+}
+
 const STORAGE_KEY = 'valorya-busqueda-state';
+const RESULTADO_STORAGE_KEY = 'valorya-resultado-state';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +44,7 @@ export class ValorYaStateService {
 
   constructor() {
     this.restoreFromStorage();
+    this.restoreResultadoFromStorage();
   }
 
   /**
@@ -55,6 +64,26 @@ export class ValorYaStateService {
   }
 
   /**
+   * Restaura el estado de resultado desde sessionStorage
+   */
+  private restoreResultadoFromStorage(): void {
+    try {
+      const stored = sessionStorage.getItem(RESULTADO_STORAGE_KEY);
+      if (stored) {
+        const state: ResultadoState = JSON.parse(stored);
+        // Solo restauramos el chip para que el guard pase
+        // Los datos completos se cargarán en el componente result
+        this.predioData.set({ chip: state.chip } as PredioData);
+        if (state.compraId) this.compraId.set(state.compraId);
+        if (state.pagoId) this.pagoId.set(state.pagoId);
+        if (state.uuid) this.uuid.set(state.uuid);
+      }
+    } catch (error) {
+      console.error('Error al restaurar estado de resultado:', error);
+    }
+  }
+
+  /**
    * Persiste el estado de búsqueda en sessionStorage
    */
   private persistToStorage(): void {
@@ -68,10 +97,27 @@ export class ValorYaStateService {
   }
 
   /**
+   * Persiste el estado de resultado en sessionStorage
+   */
+  private persistResultadoToStorage(): void {
+    const chip = this.predioData()?.chip;
+    if (chip) {
+      const state: ResultadoState = {
+        chip,
+        compraId: this.compraId(),
+        pagoId: this.pagoId(),
+        uuid: this.uuid(),
+      };
+      sessionStorage.setItem(RESULTADO_STORAGE_KEY, JSON.stringify(state));
+    }
+  }
+
+  /**
    * Limpia el estado persistido
    */
   clearStorage(): void {
     sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(RESULTADO_STORAGE_KEY);
   }
 
   /**
@@ -106,6 +152,7 @@ export class ValorYaStateService {
     this.predioData.set(predioData);
     this.tipoBusqueda.set(tipo);
     this.valorBusqueda.set(valor);
+    this.persistResultadoToStorage();
   }
 
   setValorYaResponse(response: MCMValorYAResultado): void {
@@ -115,10 +162,12 @@ export class ValorYaStateService {
   setCompraInfo(compraId: number, uuid: string): void {
     this.compraId.set(compraId);
     this.uuid.set(uuid);
+    this.persistResultadoToStorage();
   }
 
   setPagoId(pagoId: number): void {
     this.pagoId.set(pagoId);
+    this.persistResultadoToStorage();
   }
 
   restoreFromPayment(chip: string): void {
