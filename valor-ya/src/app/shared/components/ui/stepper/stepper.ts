@@ -1,9 +1,9 @@
 import { Component, inject, Optional, signal, effect } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ValorYaStepperService } from '../../../features/valor-ya/services/valor-ya-stepper.service';
-import { AvaluosStepperService } from '../../../features/avaluos-en-garantia/services/avaluos-stepper.service';
-import { TestStepperService } from '../../../features/test/services/test-stepper.service';
+import { ValorYaStepperService } from '../../../../features/valor-ya/services/valor-ya-stepper.service';
+import { AvaluosStepperService } from '../../../../features/avaluos-en-garantia/services/avaluos-stepper.service';
+import { TestStepperService } from '../../../../features/test/services/test-stepper.service';
 
 @Component({
   selector: 'app-stepper',

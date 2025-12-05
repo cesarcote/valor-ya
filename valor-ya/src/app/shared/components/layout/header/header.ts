@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { PageHeader } from '../page-header/page-header';
 import { ButtonComponent } from '../../ui/button/button';
-import { LoginModalComponent } from '../../../core/auth/components/login-modal/login-modal.component';
-import { RegisterModalComponent } from '../../../core/auth/components/register-modal/register-modal.component';
-import { AuthService } from '../../../core/auth/services/auth.service';
-import { AuthModalService } from '../../../core/auth/services/auth-modal.service';
+import { LoginModalComponent } from '../../../../core/auth/components/login-modal/login-modal.component';
+import { RegisterModalComponent } from '../../../../core/auth/components/register-modal/register-modal.component';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { AuthModalService } from '../../../../core/auth/services/auth-modal.service';
 
 @Component({
   selector: 'app-header',

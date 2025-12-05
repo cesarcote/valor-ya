@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { currentEnvironment } from '../../../environments/environment';
+import { currentEnvironment } from '../../../../environments/environment';
 
 export interface EmailTemplateRequest {
   destinatario: string;

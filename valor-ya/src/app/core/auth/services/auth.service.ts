@@ -13,7 +13,7 @@ import {
   SexType,
   UserByPersonIdResponse,
 } from '../../models/user.model';
-import { currentEnvironment } from '../../../environments/environment';
+import { currentEnvironment } from '../../../../environments/environment';
 import { TokenService } from './token.service';
 
 /**
