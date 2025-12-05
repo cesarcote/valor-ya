@@ -6,7 +6,7 @@ import {
   PaymentRequest,
   PaymentResponse,
   PaymentConfiguration,
-} from '../../../core/models/payment.model';
+} from '../models/payment.model';
 
 export type AppModule = 'valor-ya' | 'test' | 'avaluos-en-garantia';
 

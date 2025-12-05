@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { PredioData } from '../../../core/models/predio-data.model';
+import { PredioData } from '../models/predio-data.model';
 import { currentEnvironment } from '../../../../environments/environment';
-import { CatastroResponse } from '../../../core/models/catastro-response.model';
+import { CatastroResponse } from '../models/catastro-response.model';
 
 @Injectable({
   providedIn: 'root',

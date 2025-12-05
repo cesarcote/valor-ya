@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { PredioData } from '../../../core/models/predio-data.model';
-import { DatosComplementarios } from '../../../core/models/datos-complementarios.model';
-import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
+import { PredioData } from '../../valor-ya/models/predio-data.model';
+import { DatosComplementarios } from '../../valor-ya/models/datos-complementarios.model';
+import { MCMValorYAResultado } from '../../valor-ya/models/mcm-valor-ya.model';
 
 export enum TipoBusqueda {
   CHIP = 'chip',
