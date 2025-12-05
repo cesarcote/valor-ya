@@ -60,7 +60,7 @@ export class ValorYaStateService {
   private persistToStorage(): void {
     const tipo = this.tipoBusqueda();
     const valor = this.valorBusqueda();
-    
+
     if (tipo && valor) {
       const state: BusquedaState = { tipoBusqueda: tipo, valorBusqueda: valor };
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
