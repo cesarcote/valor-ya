@@ -2,9 +2,9 @@ import { Component, inject, OnInit, signal, computed, Output, EventEmitter } fro
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { InputComponent } from '../../../../../shared/components/input/input';
-import { ButtonComponent } from '../../../../../shared/components/button/button';
-import { SelectComponent, SelectOption } from '../../../../../shared/components/select/select';
+import { InputComponent } from '../../../../../shared/components/ui/input/input';
+import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
+import { SelectComponent, SelectOption } from '../../../../../shared/components/ui/select/select';
 
 export interface FmiData {
   zona: string;

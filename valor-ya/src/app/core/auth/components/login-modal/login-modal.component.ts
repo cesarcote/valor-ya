@@ -1,15 +1,14 @@
 import { Component, inject, signal, OnInit, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { DocumentType } from '../../../core/models/user.model';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
-import { ButtonComponent } from '../button/button';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { DocumentType } from '../../../models/user.model';
+import { ConfirmationModalComponent } from '../../../../shared/components/feedback/confirmation-modal/confirmation-modal.component';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-login-modal',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ConfirmationModalComponent, ButtonComponent],
   templateUrl: './login-modal.component.html',
   styleUrls: ['./login-modal.component.css'],

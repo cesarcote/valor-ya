@@ -8,15 +8,14 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { DocumentType, SexType } from '../../../core/models/user.model';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
-import { ButtonComponent } from '../button/button';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { DocumentType, SexType } from '../../../models/user.model';
+import { ConfirmationModalComponent } from '../../../../shared/components/feedback/confirmation-modal/confirmation-modal.component';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-register-modal',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ConfirmationModalComponent, ButtonComponent],
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.css'],

@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService } from '../../services/test-state.service';
-import { ComprasService } from '../../../../core/services/compras.service';
+import { ComprasService } from '../../../valor-ya/services/compras.service';
 
 export type PaymentStatus = 'success' | 'failure' | 'pending' | 'review';
 

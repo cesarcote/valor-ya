@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
 
 import { TestStateService } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
-import { PaymentService } from '../../../../core/services/payment.service';
-import { ComprasService } from '../../../../core/services/compras.service';
+import { PaymentService } from '../../../valor-ya/services/payment.service';
+import { ComprasService } from '../../../valor-ya/services/compras.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { InputComponent } from '../../../../shared/components/input/input';
-import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
+import { InputComponent } from '../../../../shared/components/ui/input/input';
+import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ModalComponent } from '../../../../shared/components/modal/modal.component';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 
 @Component({
   selector: 'test-payment',

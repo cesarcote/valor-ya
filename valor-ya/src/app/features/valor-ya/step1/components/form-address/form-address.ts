@@ -2,8 +2,8 @@ import { Component, computed, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { InputComponent } from '../../../../../shared/components/input/input';
-import { ButtonComponent } from '../../../../../shared/components/button/button';
+import { InputComponent } from '../../../../../shared/components/ui/input/input';
+import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 export interface AddressData {
   direccion: string;

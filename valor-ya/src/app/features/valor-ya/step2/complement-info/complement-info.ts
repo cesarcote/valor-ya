@@ -15,11 +15,11 @@ import {
   DatosUsuario,
 } from '../../../../core/services/solicitud-datos-complementarios.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { InputComponent } from '../../../../shared/components/input/input';
-import { SelectComponent, SelectOption } from '../../../../shared/components/select/select';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
+import { InputComponent } from '../../../../shared/components/ui/input/input';
+import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 
 @Component({
   selector: 'app-complement-info',

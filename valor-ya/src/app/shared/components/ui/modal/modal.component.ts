@@ -3,6 +3,7 @@ import { ButtonComponent } from '../button/button';
 
 @Component({
   selector: 'app-modal',
+  standalone: true,
   imports: [ButtonComponent],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css'],

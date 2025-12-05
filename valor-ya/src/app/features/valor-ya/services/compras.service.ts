@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { currentEnvironment } from '../../../environments/environment';
+import { currentEnvironment } from '../../../../environments/environment';
 
 export interface CompraRequest {
   usuarioId: number;

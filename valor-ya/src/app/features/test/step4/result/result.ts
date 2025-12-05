@@ -12,13 +12,13 @@ import { CommonModule } from '@angular/common';
 
 import { TestStateService } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
-import { ReporteService } from '../../../../core/services/reporte.service';
+import { ReporteService } from '../../../valor-ya/services/reporte.service';
+import { PredioService } from '../../../valor-ya/services/predio.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { PredioService } from '../../../../core/services/predio.service';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 import {
   MCMValorYAResultado,
   CalcularValorYaResponse,

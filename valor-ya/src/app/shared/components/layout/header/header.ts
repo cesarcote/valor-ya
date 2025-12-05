@@ -2,9 +2,9 @@ import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { PageHeader } from '../page-header/page-header';
-import { ButtonComponent } from '../button/button';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { RegisterModalComponent } from '../register-modal/register-modal.component';
+import { ButtonComponent } from '../../ui/button/button';
+import { LoginModalComponent } from '../../../core/auth/components/login-modal/login-modal.component';
+import { RegisterModalComponent } from '../../../core/auth/components/register-modal/register-modal.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuthModalService } from '../../../core/services/auth-modal.service';
 

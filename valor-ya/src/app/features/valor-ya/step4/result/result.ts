@@ -13,19 +13,19 @@ import { CommonModule } from '@angular/common';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
-import { ReporteService } from '../../../../core/services/reporte.service';
+import { ReporteService } from '../../services/reporte.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
+import { MapComponent } from '../../../../shared/components/map';
+import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
+import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
 import {
   CalcularValorYaResponse,
   MCMValorYAResultado,
 } from '../../../../core/models/mcm-valor-ya.model';
-import { MapComponent } from '../../../../shared/components/map';
-import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
-import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { PredioData } from '../../../../core/models/predio-data.model';
 
 @Component({

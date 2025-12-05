@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 
 import { AvaluosStepperService, AvaluosStep } from '../services/avaluos-stepper.service';
 import { AvaluosStateService } from '../services/avaluos-state.service';
-import { StepperComponent } from '../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../shared/components/button/button';
+import { StepperComponent } from '../../../shared/components/ui/stepper/stepper';
+import { ButtonComponent } from '../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-avaluos-process',

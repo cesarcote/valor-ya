@@ -14,17 +14,17 @@ import { Observable, Subscription } from 'rxjs';
 
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
-import { PredioService } from '../../../../core/services/predio.service';
+import { PredioService } from '../../../valor-ya/services/predio.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AuthModalService } from '../../../../core/services/auth-modal.service';
 import { PredioData } from '../../../../core/models/predio-data.model';
-import { StepperComponent } from '../../../../shared/components/stepper/stepper';
-import { ButtonComponent } from '../../../../shared/components/button/button';
+import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { PredioInfoCardComponent } from '../../../../shared/components/predio-info-card/predio-info-card';
 import { MapComponent } from '../../../../shared/components/map';
 import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
-import { ModalComponent } from '../../../../shared/components/modal/modal.component';
-import { ContainerContentComponent } from '../../../../shared/components/container-content/container-content';
+import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
+import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 
 @Component({
