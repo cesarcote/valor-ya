@@ -25,6 +25,8 @@ export class ButtonComponent {
 
   @Input() disabled: boolean = false;
 
+  @Input() title: string = '';
+
   @Input() fullWidth: boolean = false;
 
   @Input() rounded: boolean = true;

@@ -199,12 +199,12 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.modalMessage.set(
       'Por el momento, ValorYa solo está disponible para predios en Propiedad Horizontal (apartamentos y casas PH). ' +
         'Estamos trabajando para ampliar este servicio a otros tipos de predios.\n\n' +
-        'Si tienes dudas, contáctanos:\n\n' +
-        '📞 +57 601 234 7600 ext. 7600\n\n' +
+        'Si tienes dudas, contáctanos:\n' +
+        '📞 +57 601 234 7600 ext. 7600\n' +
         '✉️ buzon-correspondencia@catastrobogota.gov.co'
     );
     this.modalIconType.set('warning');
-    this.modalButtonText.set('Volver a buscar');
+    this.modalButtonText.set('Nueva Consulta');
   }
 
   onNoEsCorrecta(): void {

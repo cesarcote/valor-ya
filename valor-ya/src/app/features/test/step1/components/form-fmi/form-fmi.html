@@ -20,6 +20,13 @@
 </div>
 
 <div class="form-buttons">
-  <app-button text="Consultar" variant="primary" type="button" (clicked)="onConsultar()">
+  <app-button
+    text="Consultar"
+    variant="primary"
+    type="button"
+    [disabled]="true"
+    title="Estamos trabajando en esta funcionalidad"
+    (clicked)="onConsultar()"
+  >
   </app-button>
 </div>
