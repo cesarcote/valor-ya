@@ -23,7 +23,6 @@ export const routes: Routes = [
       {
         path: 'solicitud',
         title: 'Valor YA - Solicitud',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2/predio-review/predio-review').then(
             (m) => m.PredioReviewComponent
@@ -48,7 +47,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
-        canActivate: [authGuard, predioDataGuard],
+        canActivate: [predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo
@@ -86,7 +85,6 @@ export const routes: Routes = [
       {
         path: 'solicitud',
         title: 'Test - Solicitud',
-        canActivate: [testAuthGuard],
         loadComponent: () =>
           import('./features/test/step2/predio-review/predio-review').then(
             (m) => m.PredioReviewComponent
@@ -111,7 +109,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Test - Complementar Información',
-        canActivate: [testAuthGuard, testDataGuard],
+        canActivate: [testDataGuard],
         loadComponent: () =>
           import('./features/test/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo
