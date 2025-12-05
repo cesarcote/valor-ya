@@ -45,6 +45,7 @@ export class Breadcrumb {
 
     switch (currentService) {
       case 'valor-ya':
+      case 'test':
         this.breadcrumbs.set([
           baseBreadcrumb,
           {
@@ -57,14 +58,6 @@ export class Breadcrumb {
           baseBreadcrumb,
           {
             label: 'Avalúos en Garantía',
-          },
-        ]);
-        break;
-      case 'test':
-        this.breadcrumbs.set([
-          baseBreadcrumb,
-          {
-            label: 'Valor ya',
           },
         ]);
         break;
