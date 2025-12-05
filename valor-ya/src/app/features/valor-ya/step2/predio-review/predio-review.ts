@@ -98,6 +98,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
       if (this.pendingContinue()) {
         this.pendingContinue.set(false);
+        // Después del login, ejecutar las validaciones completas de nuevo
         this.onContinuar();
       }
     });
@@ -212,70 +213,101 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   }
 
   onContinuar(): void {
-    // Verificar si el usuario está autenticado
+    const predio = this.predioData();
+
+    // Validación 1: Datos completos del predio
+    if (!predio || !predio.loteid || !predio.chip) {
+      this.errorMessage.set('No hay información completa del predio');
+      return;
+    }
+
+    this.isValidatingAvailability.set(true);
+    this.errorMessage.set('');
+
+    // Validación 2: Verificar conexión con el servicio MCM
+    this.validarConexionMCM(predio);
+  }
+
+  /**
+   * Paso 1: Verificar que el servicio MCM esté disponible
+   */
+  private validarConexionMCM(predio: PredioData): void {
+    this.mcmValorYaService.testConexion().subscribe({
+      next: (conexionResponse) => {
+        if (conexionResponse.estado !== 'CONECTADO') {
+          this.mostrarErrorServicioNoDisponible();
+          return;
+        }
+        // Continuar con la siguiente validación
+        this.validarMinimoOfertas(predio);
+      },
+      error: () => {
+        this.mostrarErrorServicioNoDisponible();
+      },
+    });
+  }
+
+  /**
+   * Paso 2: Validar que existan suficientes ofertas para calcular el valor
+   */
+  private validarMinimoOfertas(predio: PredioData): void {
+    this.mcmValorYaService.validarMinimoOfertas([predio.chip!]).subscribe({
+      next: () => {
+        // Las validaciones técnicas pasaron, ahora verificar autenticación
+        this.isValidatingAvailability.set(false);
+        this.verificarAutenticacionYContinuar(predio);
+      },
+      error: () => {
+        this.mostrarErrorSinOfertas();
+      },
+    });
+  }
+
+  /**
+   * Paso 3: Verificar autenticación del usuario (última validación)
+   */
+  private verificarAutenticacionYContinuar(predio: PredioData): void {
     if (!this.authService.isAuthenticated()) {
       this.pendingContinue.set(true);
       this.authModalService.openLoginModal();
       return;
     }
 
-    const predio = this.predioData();
+    this.navegarAlPago(predio);
+  }
 
-    if (!predio || !predio.loteid || !predio.chip) {
-      this.errorMessage.set('No hay información completa del predio');
-      return;
-    }
-
+  /**
+   * Paso final: Guardar datos y navegar al paso de pago
+   */
+  private navegarAlPago(predio: PredioData): void {
     localStorage.setItem('valorya-predio-data', JSON.stringify(predio));
+    this.stepperService.setStep(ValorYaStep.PROCESO);
+    this.router.navigate(['/valor-ya/pago']);
+  }
 
-    this.isValidatingAvailability.set(true);
-    this.errorMessage.set('');
+  private mostrarErrorServicioNoDisponible(): void {
+    this.isValidatingAvailability.set(false);
+    this.showModal.set(true);
+    this.modalTitle.set('Servicio no disponible');
+    this.modalMessage.set(
+      'El sistema de valoración no está disponible en este momento. Por favor, intente más tarde.'
+    );
+    this.modalIconType.set('error');
+    this.modalButtonText.set('Aceptar');
+  }
 
-    // Paso 1: Verificar conexión con la API
-    this.mcmValorYaService.testConexion().subscribe({
-      next: (conexionResponse) => {
-        if (conexionResponse.estado !== 'CONECTADO') {
-          this.isValidatingAvailability.set(false);
-          this.showModal.set(true);
-          this.modalTitle.set('Servicio no disponible');
-          this.modalMessage.set(
-            'El sistema de valoración no está disponible en este momento. Por favor, intente más tarde.'
-          );
-          this.modalIconType.set('error');
-          this.modalButtonText.set('Aceptar');
-          return;
-        }
-
-        // Paso 2: Validar mínimo de ofertas
-        this.mcmValorYaService.validarMinimoOfertas([predio.chip!]).subscribe({
-          next: (validacionResponse) => {
-            this.isValidatingAvailability.set(false);
-            this.stepperService.setStep(ValorYaStep.PROCESO);
-            this.router.navigate(['/valor-ya/pago']);
-          },
-          error: (error) => {
-            this.isValidatingAvailability.set(false);
-            this.showModal.set(true);
-            this.modalTitle.set('Información no disponible');
-            this.modalMessage.set(
-              'No podemos calcular el valor de tu predio. Contáctanos al +57 601 234 7600 ext. 7600 o escríbenos a buzon-correspondencia@catastrobogota.gov.co'
-            );
-            this.modalIconType.set('error');
-            this.modalButtonText.set('Aceptar');
-          },
-        });
-      },
-      error: (error) => {
-        this.isValidatingAvailability.set(false);
-        this.showModal.set(true);
-        this.modalTitle.set('Servicio no disponible');
-        this.modalMessage.set(
-          'El sistema de valoración no está disponible en este momento. Por favor, intente más tarde.'
-        );
-        this.modalIconType.set('error');
-        this.modalButtonText.set('Aceptar');
-      },
-    });
+  private mostrarErrorSinOfertas(): void {
+    this.isValidatingAvailability.set(false);
+    this.showModal.set(true);
+    this.modalTitle.set('Información no disponible');
+    this.modalMessage.set(
+      'No podemos calcular el valor de tu predio.\n\n' +
+        'Contáctanos:\n\n' +
+        '📞 +57 601 234 7600 ext. 7600\n\n' +
+        '✉️ buzon-correspondencia@catastrobogota.gov.co'
+    );
+    this.modalIconType.set('error');
+    this.modalButtonText.set('Aceptar');
   }
 
   onVolver(): void {

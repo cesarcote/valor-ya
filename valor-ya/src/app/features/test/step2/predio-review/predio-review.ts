@@ -96,6 +96,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
       if (this.pendingContinue()) {
         this.pendingContinue.set(false);
+        // Después del login, ejecutar las validaciones completas de nuevo
         this.onContinuar();
       }
     });
@@ -185,22 +186,36 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   }
 
   onContinuar(): void {
-    // Verificar si el usuario está autenticado
+    const predio = this.predioData();
+
+    // Validación 1: Datos completos del predio
+    if (!predio?.loteid || !predio?.chip) {
+      this.errorMessage.set('No hay información completa del predio');
+      return;
+    }
+
+    // En test no hay validaciones reales de MCM, ir directo a verificar auth
+    this.verificarAutenticacionYContinuar(predio);
+  }
+
+  /**
+   * Verificar autenticación del usuario (simula que ya pasó validaciones técnicas)
+   */
+  private verificarAutenticacionYContinuar(predio: PredioData): void {
     if (!this.authService.isAuthenticated()) {
       this.pendingContinue.set(true);
       this.authModalService.openLoginModal();
       return;
     }
 
-    const predio = this.predioData();
+    this.navegarAlPago(predio);
+  }
 
-    if (!predio?.loteid || !predio?.chip) {
-      this.errorMessage.set('No hay información completa del predio');
-      return;
-    }
-
+  /**
+   * Guardar datos y navegar al paso de pago
+   */
+  private navegarAlPago(predio: PredioData): void {
     localStorage.setItem('test-predio-data', JSON.stringify(predio));
-
     this.procesarMCM(predio);
   }
 

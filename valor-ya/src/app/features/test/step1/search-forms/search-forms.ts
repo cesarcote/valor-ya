@@ -59,6 +59,7 @@ export class TestSearchFormsComponent {
     this.stepperService.setStep(TestStep.INICIO);
 
     this.authService.clearValorYaSessionData();
+    this.stateService.clearStorage();
 
     if (!this.stateService.tipoBusqueda()) {
       this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);

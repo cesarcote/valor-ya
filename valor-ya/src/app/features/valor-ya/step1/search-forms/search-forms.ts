@@ -60,6 +60,8 @@ export class SearchFormsComponent {
 
     // Limpiar datos de consulta de predio y pago de ValorYa al volver al step1
     this.authService.clearValorYaSessionData();
+    // Limpiar estado de búsqueda persistido
+    this.stateService.clearStorage();
 
     if (!this.stateService.tipoBusqueda()) {
       this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);
