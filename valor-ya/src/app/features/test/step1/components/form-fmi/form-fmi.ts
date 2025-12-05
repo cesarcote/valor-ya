@@ -23,7 +23,9 @@ export class TestFormFmiComponent {
   zonaControl = new FormControl('', [Validators.required]);
   matriculaControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  private readonly zonaStatus = toSignal(this.zonaControl.statusChanges, { initialValue: 'INVALID' });
+  private readonly zonaStatus = toSignal(this.zonaControl.statusChanges, {
+    initialValue: 'INVALID',
+  });
   private readonly matriculaStatus = toSignal(this.matriculaControl.statusChanges, {
     initialValue: 'INVALID',
   });

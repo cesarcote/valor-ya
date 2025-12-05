@@ -15,7 +15,7 @@ export interface AddressData {
   templateUrl: './form-address.html',
   styleUrls: ['./form-address.css'],
 })
-export class FormAddressComponent  {
+export class FormAddressComponent {
   @Output() consultar = new EventEmitter<AddressData>();
 
   direccionControl = new FormControl('', [Validators.required, Validators.minLength(5)]);

@@ -20,7 +20,6 @@ export interface SelectOption {
 
 @Component({
   selector: 'app-select',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ValidateStatusFieldPipe, ValidateMessageFieldPipe],
   providers: [
     {

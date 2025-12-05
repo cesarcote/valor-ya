@@ -4,7 +4,6 @@ import { ButtonComponent } from '../button/button';
 
 @Component({
   selector: 'app-confirmation-modal',
-  standalone: true,
   imports: [CommonModule, ButtonComponent],
   templateUrl: './confirmation-modal.component.html',
   styleUrls: ['./confirmation-modal.component.css'],

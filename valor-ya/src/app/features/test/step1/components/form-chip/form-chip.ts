@@ -24,7 +24,9 @@ export class TestFormChipComponent {
     Validators.maxLength(30),
   ]);
 
-  private readonly chipStatus = toSignal(this.chipControl.statusChanges, { initialValue: 'INVALID' });
+  private readonly chipStatus = toSignal(this.chipControl.statusChanges, {
+    initialValue: 'INVALID',
+  });
 
   isFormValid = computed(() => {
     return this.chipStatus() === 'VALID';

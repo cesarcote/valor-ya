@@ -7,7 +7,6 @@ import { TestStepperService } from '../../../features/test/services/test-stepper
 
 @Component({
   selector: 'app-stepper',
-  standalone: true,
   imports: [],
   templateUrl: './stepper.html',
   styleUrls: ['./stepper.css'],

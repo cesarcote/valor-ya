@@ -22,7 +22,6 @@ interface StatusConfig {
 
 @Component({
   selector: 'test-payment-status',
-  standalone: true,
   imports: [CommonModule, StepperComponent, ValoryaDescription, ContainerContentComponent],
   templateUrl: './payment-status.html',
   styleUrls: ['./payment-status.css'],

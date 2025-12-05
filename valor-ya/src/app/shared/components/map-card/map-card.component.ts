@@ -5,7 +5,6 @@ import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
 
 @Component({
   selector: 'app-map-card',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './map-card.html',
   styleUrls: ['./map-card.css'],

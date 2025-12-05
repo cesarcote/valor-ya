@@ -31,7 +31,6 @@ export interface TestMarkerConfig {
 
 @Component({
   selector: 'app-test-map',
-  standalone: true,
   templateUrl: './test-map.html',
   styleUrls: ['./test-map.css'],
   encapsulation: ViewEncapsulation.None,
