@@ -147,21 +147,21 @@ export class PaymentStatusComponent implements OnInit {
         estadoCompra: mapping.estadoCompra,
       })
       .subscribe({
-        /*next: () => {
+        next: () => {
           if (this.status() === 'success' && compraId) {
             this.crearFactura(compraId);
           }
-        },*/
+        },
         error: (err) => console.error('Error al actualizar estado de pago:', err),
       });
   }
 
-  /*private crearFactura(compraId: number): void {
+  private crearFactura(compraId: number): void {
     this.comprasService.crearFactura({ compraId }).subscribe({
       next: () => {},
       error: (err) => console.error('Error al crear factura:', err),
     });
-  }*/
+  }
 
   onPrimaryAction(): void {
     const config = this.currentConfig();
