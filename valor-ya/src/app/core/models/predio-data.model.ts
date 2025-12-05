@@ -17,9 +17,10 @@ export interface PredioData {
   coordenadasPoligono?: number[][][];
   areaPoligono?: number;
   longitudPoligono?: number;
-  ph?: string;
-  nph?: string;
-  codigoManzana?: string;
-  codigoPredio?: string;
+  codigoManzana?: string | null;
+  codigoPredio?: string | null;
   codigoBarrio?: string;
+  codigoUso?: string;
+  vetustez?: string;
+  condicionJuridica?: string;
 }

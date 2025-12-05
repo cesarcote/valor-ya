@@ -21,7 +21,9 @@
   <app-container-content
     title="Información del Predio"
     continueButtonText="Continuar"
-    [continueButtonDisabled]="isValidatingAvailability() || isProcessingMCM()"
+    [continueButtonDisabled]="
+      isValidatingAvailability() || isProcessingMCM() || !isPredioElegible()
+    "
     [isLoading]="isValidatingAvailability() || isProcessingMCM()"
     (volver)="onVolver()"
     (continuar)="onContinuar()"

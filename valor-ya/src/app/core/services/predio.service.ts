@@ -17,6 +17,9 @@ export class PredioService {
 
   constructor(private readonly http: HttpClient) {}
 
+  // Códigos de uso permitidos para ValorYa (Propiedad Horizontal)
+  private readonly CODIGOS_USO_PERMITIDOS = ['037', '038'];
+
   private mapCatastroResponseToPredioData(
     response: CatastroResponse,
     valorBusqueda?: string,
@@ -42,12 +45,21 @@ export class PredioService {
       coordenadasPoligono: infoGeografica?.coordenadasPoligono,
       areaPoligono: infoGeografica?.areaPoligono,
       longitudPoligono: infoGeografica?.longitudPoligono,
-      ph: infoAdicional.ph,
-      nph: infoAdicional.nph,
       codigoManzana: infoAdicional.codigoManzana,
       codigoPredio: infoAdicional.codigoPredio,
       codigoBarrio: infoAdicional.codigoBarrio,
+      codigoUso: infoAdicional.codigoUso,
+      vetustez: infoAdicional.vetustez,
+      condicionJuridica: infoAdicional.condicionJuridica,
     };
+  }
+
+  /**
+   * Valida si el predio es elegible para ValorYa
+   * Solo predios con codigoUso 037 o 038 (Propiedad Horizontal) son válidos
+   */
+  esCodigoUsoValido(codigoUso?: string): boolean {
+    return !!codigoUso && this.CODIGOS_USO_PERMITIDOS.includes(codigoUso);
   }
 
   consultarPorDireccion(direccion: string): Observable<PredioData> {

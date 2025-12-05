@@ -74,6 +74,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   public readonly isLoading = signal<boolean>(true);
   public readonly mapReady = signal<boolean>(false);
   public readonly isValidatingAvailability = signal<boolean>(false);
+  public readonly isPredioElegible = signal<boolean>(true);
   public readonly showModal = signal<boolean>(false);
   public readonly modalMessage = signal<string>('');
   public readonly modalTitle = signal<string>('Advertencia');
@@ -167,6 +168,17 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
 
     consulta$.subscribe({
       next: (data) => {
+        // Validar primero si el predio es elegible para ValorYa (solo PH con códigos 037 o 038)
+        const esElegible = this.predioService.esCodigoUsoValido(data.codigoUso);
+        this.isPredioElegible.set(esElegible);
+
+        if (!esElegible) {
+          this.isLoading.set(false);
+          this.showPredioNoElegibleModal();
+          return;
+        }
+
+        // Solo mostrar info del predio si es elegible
         this.predioData.set(data);
         this.stateService.setPredioData(data, tipo, valor);
         this.isLoading.set(false);
@@ -179,6 +191,20 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
         this.isLoading.set(false);
       },
     });
+  }
+
+  private showPredioNoElegibleModal(): void {
+    this.showModal.set(true);
+    this.modalTitle.set('Predio no elegible');
+    this.modalMessage.set(
+      'Por el momento, ValorYa solo está disponible para predios en Propiedad Horizontal (apartamentos y casas PH). ' +
+        'Estamos trabajando para ampliar este servicio a otros tipos de predios.\n\n' +
+        'Si tienes dudas, contáctanos:\n\n' +
+        '📞 +57 601 234 7600 ext. 7600\n\n' +
+        '✉️ buzon-correspondencia@catastrobogota.gov.co'
+    );
+    this.modalIconType.set('warning');
+    this.modalButtonText.set('Volver a buscar');
   }
 
   onNoEsCorrecta(): void {
@@ -260,5 +286,10 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
 
   onCloseModal(): void {
     this.showModal.set(false);
+
+    // Si el predio no es elegible, redirigir al step1
+    if (!this.isPredioElegible()) {
+      this.onVolver();
+    }
   }
 }
