@@ -26,6 +26,7 @@ import {
 } from '../../../../core/models/mcm-valor-ya.model';
 import { MapComponent } from '../../../../shared/components/map';
 import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { PredioData } from '../../../../core/models/predio-data.model';
 
 @Component({
@@ -37,6 +38,7 @@ import { PredioData } from '../../../../core/models/predio-data.model';
     ValoryaDescription,
     ContainerContentComponent,
     MapComponent,
+    ModalComponent,
   ],
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
@@ -69,6 +71,13 @@ export class ResultComponent implements OnInit {
   isDownloading = signal(false);
   isLoadingResult = signal(false);
   errorLoadingResult = signal('');
+
+  // Modal de error
+  showModal = signal(false);
+  modalTitle = signal('');
+  modalMessage = signal('');
+  modalIconType = signal<'success' | 'warning' | 'error'>('error');
+  modalButtonText = signal('Aceptar');
 
   valorYaResumen = signal<CalcularValorYaResponse | null>(null);
   ofertasResponse = signal<MCMValorYAResultado | null>(null);
@@ -115,6 +124,23 @@ export class ResultComponent implements OnInit {
   }
 
   private loadValorYaResults(chip: string): void {
+    // Primero validar conexión con el servicio MCM
+    this.apiService.testConexion().subscribe({
+      next: (conexionResponse) => {
+        if (conexionResponse.estado !== 'CONECTADO') {
+          this.mostrarErrorSistema();
+          return;
+        }
+        // Conexión OK, cargar resultados
+        this.cargarResultadosValorYa(chip);
+      },
+      error: () => {
+        this.mostrarErrorSistema();
+      },
+    });
+  }
+
+  private cargarResultadosValorYa(chip: string): void {
     // Cargar resumen para mostrar datos y generar reporte
     this.apiService.calcularValorYa(chip).subscribe({
       next: (resumen: CalcularValorYaResponse) => {
@@ -124,8 +150,7 @@ export class ResultComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error al obtener resultados del avalúo:', err);
-        this.errorLoadingResult.set('No se pudieron cargar los resultados del avalúo');
-        this.isLoadingResult.set(false);
+        this.mostrarErrorSistema();
       },
     });
 
@@ -315,5 +340,23 @@ export class ResultComponent implements OnInit {
   formatInteger(value: number | null | undefined): string {
     if (!value) return 'N/A';
     return new Intl.NumberFormat('es-CO').format(value);
+  }
+
+  private mostrarErrorSistema(): void {
+    this.isLoadingResult.set(false);
+    this.showModal.set(true);
+    this.modalTitle.set('Error en el sistema');
+    this.modalMessage.set(
+      'Tu pago fue procesado exitosamente, pero el sistema de valoración presenta inconvenientes en este momento.\n\n' +
+        'Contacta a nuestro equipo y atenderemos tu caso.\n\n' +
+        '📞 +57 601 234 7600 ext. 7600\n\n' +
+        '✉️ buzon-correspondencia@catastrobogota.gov.co'
+    );
+    this.modalIconType.set('error');
+    this.modalButtonText.set('Entendido');
+  }
+
+  onCloseModal(): void {
+    this.showModal.set(false);
   }
 }
