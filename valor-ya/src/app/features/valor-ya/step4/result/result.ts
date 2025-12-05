@@ -22,10 +22,7 @@ import { ContainerContentComponent } from '../../../../shared/components/layout/
 import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
 import { MapComponent } from '../../components/map';
 import { MapCardComponent } from '../../components/map-card/map-card.component';
-import {
-  CalcularValorYaResponse,
-  MCMValorYAResultado,
-} from '../../models/mcm-valor-ya.model';
+import { CalcularValorYaResponse, MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
 import { PredioData } from '../../models/predio-data.model';
 
 @Component({

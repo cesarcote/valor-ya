@@ -13,7 +13,7 @@ import { TestStateService } from '../../services/test-state.service';
 import {
   SolicitudDatosComplementariosService,
   DatosUsuario,
-} from '../../../../core/services/solicitud-datos-complementarios.service';
+} from '../../../valor-ya/services/solicitud-datos-complementarios.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';

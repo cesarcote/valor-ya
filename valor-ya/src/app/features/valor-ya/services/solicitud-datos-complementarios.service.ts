@@ -5,9 +5,9 @@ import { map, catchError } from 'rxjs/operators';
 import {
   DatosComplementarios,
   DatosComplementariosRequest,
-} from '../../features/valor-ya/models/datos-complementarios.model';
-import { PredioData } from '../../features/valor-ya/models/predio-data.model';
-import { currentEnvironment } from '../../../environments/environment';
+} from '../models/datos-complementarios.model';
+import { PredioData } from '../models/predio-data.model';
+import { currentEnvironment } from '../../../../environments/environment';
 
 export interface DatosUsuario {
   tipoPredio?: string;

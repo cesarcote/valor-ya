@@ -13,7 +13,7 @@ import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import {
   SolicitudDatosComplementariosService,
   DatosUsuario,
-} from '../../../../core/services/solicitud-datos-complementarios.service';
+} from '../../services/solicitud-datos-complementarios.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
