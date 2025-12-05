@@ -1,5 +1,5 @@
 import { Component, Input, output, HostBinding } from '@angular/core';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent } from '../../ui/button/button';
 
 @Component({
   selector: 'app-container-content',

@@ -18,7 +18,7 @@ import { NotificationService } from '../../../../shared/services/notification.se
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';
-import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ValoryaDescription } from '../../components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 
 @Component({

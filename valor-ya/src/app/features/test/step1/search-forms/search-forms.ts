@@ -9,7 +9,7 @@ import { TabsComponent, Tab } from '../../../../shared/components/ui/tabs/tabs';
 import { TestFormChipComponent, ChipData } from '../components/form-chip/form-chip';
 import { TestFormAddressComponent, AddressData } from '../components/form-address/form-address';
 import { TestFormFmiComponent, FmiData } from '../components/form-fmi/form-fmi';
-import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ValoryaDescription } from '../../../valor-ya/components/valorya-description/valorya-description';
 
 @Component({
   selector: 'app-test-search-forms',

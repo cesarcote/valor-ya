@@ -7,7 +7,7 @@ import {
   ValidacionMinimoOfertasResponse,
   TestConexionResponse,
   CalcularValorYaResponse,
-} from '../../../core/models/mcm-valor-ya.model';
+} from '../models/mcm-valor-ya.model';
 import { currentEnvironment } from '../../../../environments/environment';
 
 @Injectable({

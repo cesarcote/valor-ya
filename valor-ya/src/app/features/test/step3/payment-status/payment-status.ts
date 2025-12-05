@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
-import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ValoryaDescription } from '../../../valor-ya/components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { TestStateService } from '../../services/test-state.service';

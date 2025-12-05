@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PredioData } from '../../../core/models/predio-data.model';
-import { MCMValorYAResultado } from '../../../core/models/mcm-valor-ya.model';
+import { PredioData } from '../../models/predio-data.model';
+import { MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
 
 @Component({
   selector: 'app-map-card',

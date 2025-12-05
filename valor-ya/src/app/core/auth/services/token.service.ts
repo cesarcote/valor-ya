@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { TOKEN_KEY, USER_KEY } from '../constants/token.constant';
-import { User } from '../models/user.model';
+import { TOKEN_KEY, USER_KEY } from '../../constants/token.constant';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',

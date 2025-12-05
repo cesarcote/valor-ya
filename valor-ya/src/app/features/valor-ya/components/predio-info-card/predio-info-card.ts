@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PredioData } from '../../../core/models/predio-data.model';
+import { PredioData } from '../../models/predio-data.model';
 
 @Component({
   selector: 'app-predio-info-card',

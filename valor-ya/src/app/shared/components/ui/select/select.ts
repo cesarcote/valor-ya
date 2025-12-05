@@ -10,8 +10,8 @@ import {
   Validators,
   ValidationErrors,
 } from '@angular/forms';
-import { ValidateStatusFieldPipe } from '../../pipes/validate-status-field.pipe';
-import { ValidateMessageFieldPipe } from '../../pipes/validate-message-field.pipe';
+import { ValidateStatusFieldPipe } from '../../../pipes/validate-status-field.pipe';
+import { ValidateMessageFieldPipe } from '../../../pipes/validate-message-field.pipe';
 
 export interface SelectOption {
   value: string | number;

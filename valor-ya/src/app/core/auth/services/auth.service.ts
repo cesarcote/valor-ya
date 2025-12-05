@@ -12,7 +12,7 @@ import {
   DocumentType,
   SexType,
   UserByPersonIdResponse,
-} from '../models/user.model';
+} from '../../models/user.model';
 import { currentEnvironment } from '../../../environments/environment';
 import { TokenService } from './token.service';
 
