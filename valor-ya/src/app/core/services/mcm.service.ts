@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
-import { MCMValorYAResultado } from '../../core/models/mcm-valor-ya.model';
+import { MCMValorYAResultado } from '../../features/valor-ya/models/mcm-valor-ya.model';
 import { currentEnvironment } from '../../../environments/environment';
 
 @Injectable({
