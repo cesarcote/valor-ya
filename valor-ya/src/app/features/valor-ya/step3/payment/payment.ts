@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { PaymentService } from '../../services/payment.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';

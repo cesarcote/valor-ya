@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { TestStateService, TipoBusqueda } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/ui/tabs/tabs';
 import { TestFormChipComponent, ChipData } from '../components/form-chip/form-chip';

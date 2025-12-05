@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/feedback/confirmation-modal/confirmation-modal.component';

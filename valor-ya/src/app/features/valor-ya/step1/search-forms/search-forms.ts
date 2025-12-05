@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { TabsComponent, Tab } from '../../../../shared/components/ui/tabs/tabs';
 import { FormChipComponent, ChipData } from '../components/form-chip/form-chip';

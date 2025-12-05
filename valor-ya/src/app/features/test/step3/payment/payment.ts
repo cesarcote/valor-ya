@@ -12,7 +12,7 @@ import { TestStateService } from '../../services/test-state.service';
 import { TestStepperService, TestStep } from '../../services/test-stepper.service';
 import { PaymentService } from '../../../valor-ya/services/payment.service';
 import { ComprasService } from '../../../valor-ya/services/compras.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';

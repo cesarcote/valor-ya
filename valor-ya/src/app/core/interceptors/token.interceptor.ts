@@ -1,8 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { TokenService } from '../services/token.service';
-import { AuthModalService } from '../services/auth-modal.service';
+import { TokenService } from '../auth/services/token.service';
+import { AuthModalService } from '../auth/services/auth-modal.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);

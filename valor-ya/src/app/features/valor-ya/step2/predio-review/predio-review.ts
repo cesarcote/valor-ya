@@ -16,8 +16,8 @@ import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-step
 import { ValorYaStateService, TipoBusqueda } from '../../services/valor-ya-state.service';
 import { PredioService } from '../../services/predio.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
-import { AuthService } from '../../../../core/services/auth.service';
-import { AuthModalService } from '../../../../core/services/auth-modal.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { AuthModalService } from '../../../../core/auth/services/auth-modal.service';
 import { PredioData } from '../../models/predio-data.model';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';

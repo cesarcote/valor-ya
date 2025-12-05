@@ -8,7 +8,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType, SexType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/feedback/confirmation-modal/confirmation-modal.component';
