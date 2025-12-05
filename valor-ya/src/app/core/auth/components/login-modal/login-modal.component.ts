@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType } from '../../../models/user.model';
-import { ConfirmationModalComponent } from '../../../../shared/components/feedback/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 
 @Component({

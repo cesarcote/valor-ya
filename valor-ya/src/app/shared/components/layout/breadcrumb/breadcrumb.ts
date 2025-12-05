@@ -14,7 +14,7 @@ interface BreadcrumbItem {
   styleUrl: './breadcrumb.css',
 })
 export class Breadcrumb {
-  private router = inject(Router);
+  private readonly router = inject(Router);
   breadcrumbs = signal<BreadcrumbItem[]>([]);
 
   constructor() {
