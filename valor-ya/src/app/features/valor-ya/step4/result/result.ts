@@ -17,16 +17,16 @@ import { ReporteService } from '../../services/reporte.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
-import { ValoryaDescription } from '../../../../shared/components/valorya-description/valorya-description';
+import { ValoryaDescription } from '../../components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
-import { MapComponent } from '../../../../shared/components/map';
-import { MapCardComponent } from '../../../../shared/components/map-card/map-card.component';
 import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
+import { MapComponent } from '../../components/map';
+import { MapCardComponent } from '../../components/map-card/map-card.component';
 import {
   CalcularValorYaResponse,
   MCMValorYAResultado,
-} from '../../../../core/models/mcm-valor-ya.model';
-import { PredioData } from '../../../../core/models/predio-data.model';
+} from '../../models/mcm-valor-ya.model';
+import { PredioData } from '../../models/predio-data.model';
 
 @Component({
   selector: 'app-result',
