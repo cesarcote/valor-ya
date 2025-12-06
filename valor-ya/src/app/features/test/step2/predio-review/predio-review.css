@@ -342,6 +342,13 @@ h3 {
   }
 
   .action-buttons {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .action-buttons app-button {
+    flex: 1;
+    min-width: 0;
   }
 }

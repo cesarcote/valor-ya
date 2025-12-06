@@ -23,9 +23,6 @@
 }
 
 .container-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
 }
@@ -38,14 +35,5 @@
 
   .container-title {
     font-size: 1.5rem;
-  }
-
-  .container-actions {
-    flex-direction: column-reverse;
-    gap: 0.75rem;
-  }
-
-  .container-actions app-button {
-    width: 100%;
   }
 }

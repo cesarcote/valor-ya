@@ -13,9 +13,10 @@
   </div>
 
   <!-- Botones de acción -->
-  <div class="container-actions">
+  <div class="container-actions d-flex flex-row justify-content-end gap-2">
     @if (showBackButton) {
     <app-button
+      class="me-auto"
       [text]="backButtonText"
       variant="secondary"
       type="button"
