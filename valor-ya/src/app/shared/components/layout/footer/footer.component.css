@@ -1,3 +1,21 @@
+.background-footer {
+  background-color: #bbbbbb;
+}
+
+.govco-text-header-1 {
+  font-size: 24px;
+  color: #3366CC;
+}
+
+.govco-text-header-2 {
+  font-size: 24px;
+  color: #3366CC;
+}
+
+.links {
+  color: #3366CC;
+}
+
 .footer-container {
   background-color: white;
   position: relative;
@@ -7,15 +25,18 @@
   border: #eaf2fb 1px solid;
   padding: 48px 50px;
 }
+
 .govco-footer-logo {
   background-color: #0943b5;
 }
 
 .govco-logo-entidad {
-  height: 50px;
-  display: inline-block;
+  height: 57px;
 }
 
+.info {
+  line-height: 1.5 rem !important;
+}
 .govco-co {
   height: 40px;
   display: inline-block;
