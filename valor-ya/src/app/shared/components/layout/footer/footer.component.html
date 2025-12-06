@@ -4,15 +4,15 @@
       <div class="container footer-container col-12">
         <div class="govco-footer-text">
           <div class="row align-items-center mb-2">
-            <div class="col-lg-8">
-              <h2 class="govco-text-header-1 mb-0">{{ nombre_entidad }}</h2>
-            </div>
-            <div class="col-lg-4 col-12 text-center text-lg-end my-4 my-lg-0">
+            <div class="col-lg-4 col-12 text-center text-lg-end order-1 order-lg-2 my-4 my-lg-0">
               <img
                 class="govco-logo-entidad"
                 src="../../../../assets/images/logo.png"
                 alt="Logo entidad"
               />
+            </div>
+            <div class="col-lg-8 col-12 text-center text-lg-start order-2 order-lg-1 mb-3 mb-lg-0">
+              <h2 class="govco-text-header-1 mb-0">{{ nombre_entidad }}</h2>
             </div>
           </div>
 
@@ -138,25 +138,51 @@
 
     <div class="govco-footer-logo py-3">
       <div class="container col-12">
-        <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
-          <a href="https://colombia.co/" title="Ir al portal de Marca país" class="me-3">
-            <img
-              class="govco-co"
-              src="../../../../assets/images/logoGovCO.png"
-              alt="Logo Colombia"
-            />
-          </a>
-          <span
-            class="govco-separator border-end border-light opacity-75 mx-3"
-            style="height: 44px"
-          ></span>
-          <a href="https://www.gov.co/" title="Ir al portal del Estado Colombiano - GOV.CO">
-            <img
-              class="govco-logo"
-              src="../../../../assets/images/footerFooterColombia.png"
-              alt="Logo Gov.co"
-            />
-          </a>
+        <div class="row align-items-center pb-2">
+          <div class="col-lg-4 col-12 text-center text-lg-start mb-3 mb-lg-0">
+            <ul class="legal-items list-unstyled mb-0">
+              <li class="item">© {{ currentYear }} Catastro. Todos los derechos reservados</li>
+            </ul>
+          </div>
+          <div class="col-lg-4 col-12 text-center text-lg-start mb-3 mb-lg-0">
+            <ul class="legal-items list-unstyled mb-0">
+              <li class="item mb-2 text-lg-center">
+                <a
+                  class="item-link text-white"
+                  href="https://www.catastrobogota.gov.co/contacto/politicas-de-seguridad-privacidad-condiciones-de-uso-y-proteccion-de-datos-personales"
+                  target="_blank"
+                  >Políticas de protección de datos personales</a
+                >
+              </li>
+              <li class="item text-lg-center">
+                <a class="item-link text-white" href="#/terms" target="_blank"
+                  >Términos y Condiciones de Catastro en Línea</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-4 col-12 text-center text-lg-end">
+            <div class="d-flex align-items-center justify-content-center justify-content-lg-end">
+              <a href="https://colombia.co/" title="Ir al portal de Marca país" class="me-3">
+                <img
+                  class="govco-co"
+                  src="../../../../assets/images/logoGovCO.png"
+                  alt="Logo Colombia"
+                />
+              </a>
+              <span
+                class="govco-separator border-end border-light opacity-75 mx-3"
+                style="height: 44px"
+              ></span>
+              <a href="https://www.gov.co/" title="Ir al portal del Estado Colombiano - GOV.CO">
+                <img
+                  class="govco-logo"
+                  src="../../../../assets/images/footerFooterColombia.png"
+                  alt="Logo Gov.co"
+                />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

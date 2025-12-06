@@ -10,6 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class Footer {
   private readonly sanitizer = inject(DomSanitizer);
 
+  currentYear = new Date().getFullYear();
   nombre_entidad = 'Unidad Administrativa Especial de Catastro Distrital';
   Direccion = 'Av. Carrera 30 No. 25 - 90, Torre B Piso 2';
   Cod_postal = '111311';

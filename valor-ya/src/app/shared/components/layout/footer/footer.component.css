@@ -69,3 +69,24 @@
   gap: 8px;
   color: #004884;
 }
+
+.legal-items {
+  padding: 0;
+  margin: 0;
+}
+
+.legal-items .item {
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.legal-items .item-link {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.legal-items .item-link:hover {
+  color: #FEB400;
+  text-decoration: underline !important;
+}
