@@ -15,11 +15,13 @@ import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-step
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ReporteService } from '../../services/reporte.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { ValoryaDescription } from '../../components/valorya-description/valorya-description';
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
+import { LoadingComponent } from '../../../../shared/components/ui/loading/loading';
 import { MapComponent } from '../../components/map';
 import { MapCardComponent } from '../../components/map-card/map-card.component';
 import { CalcularValorYaResponse, MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
@@ -35,6 +37,7 @@ import { PredioData } from '../../models/predio-data.model';
     ContainerContentComponent,
     MapComponent,
     ModalComponent,
+    LoadingComponent,
   ],
   templateUrl: './result.html',
   styleUrls: ['./result.css'],
@@ -46,6 +49,7 @@ export class ResultComponent implements OnInit {
   private readonly apiService = inject(MCMValorYaService);
   private readonly reporteService = inject(ReporteService);
   private readonly notificationService = inject(NotificationService);
+  private readonly loadingService = inject(LoadingService);
   private readonly injector = inject(EnvironmentInjector);
 
   @ViewChild('mapPredio')
@@ -248,6 +252,7 @@ export class ResultComponent implements OnInit {
     }
 
     this.isDownloading.set(true);
+    this.loadingService.show();
 
     let imagenBase64 = '';
     let imagenBase64Ofertas = '';
@@ -274,6 +279,7 @@ export class ResultComponent implements OnInit {
     this.reporteService.generarReporteValorYa(datos).subscribe({
       next: (blob: Blob) => {
         this.isDownloading.set(false);
+        this.loadingService.hide();
         console.log('Reporte generado exitosamente');
 
         const url = globalThis.URL.createObjectURL(blob);
@@ -289,6 +295,7 @@ export class ResultComponent implements OnInit {
       },
       error: (error: any) => {
         this.isDownloading.set(false);
+        this.loadingService.hide();
         console.error('Error generando reporte:', error);
         this.notificationService.error('Error generando reporte');
       },
