@@ -2,7 +2,8 @@
   background-color: #bbbbbb;
 }
 
-.govco-text-header-1, .govco-text-header-2 {
+.govco-text-header-1,
+.govco-text-header-2 {
   font-size: 24px;
   color: #3366cc;
 }
@@ -68,4 +69,3 @@
   gap: 8px;
   color: #004884;
 }
-
