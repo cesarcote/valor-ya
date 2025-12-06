@@ -19,7 +19,7 @@
 
 ## 📖 Descripción General
 
-**ValorYa** es una plataforma web desarrollada para la Unidad Administrativa Especial de Catastro Distrital de Bogotá que permite calcular el valor comercial de predios utilizando el **Método de Comparación de Mercado (MCM)**. 
+**ValorYa** es una plataforma web desarrollada para la Unidad Administrativa Especial de Catastro Distrital de Bogotá que permite calcular el valor comercial de predios utilizando el **Método de Comparación de Mercado (MCM)**.
 
 ### Características Principales
 
@@ -76,25 +76,25 @@
 
 ### Frontend
 
-| Tecnología | Versión | Propósito |
-|------------|---------|-----------|
-| **Angular** | 18+ | Framework principal (Standalone Components) |
-| **TypeScript** | 5.5+ | Lenguaje de programación |
-| **RxJS** | 7.x | Programación reactiva |
-| **Leaflet** | 1.9.x | Mapas interactivos |
-| **esri-leaflet** | 3.x | Integración con ArcGIS |
-| **html2canvas** | 1.4.x | Captura de mapas para PDF |
-| **Bootstrap** | 5.x | Framework CSS responsive |
+| Tecnología       | Versión | Propósito                                   |
+| ---------------- | ------- | ------------------------------------------- |
+| **Angular**      | 18+     | Framework principal (Standalone Components) |
+| **TypeScript**   | 5.5+    | Lenguaje de programación                    |
+| **RxJS**         | 7.x     | Programación reactiva                       |
+| **Leaflet**      | 1.9.x   | Mapas interactivos                          |
+| **esri-leaflet** | 3.x     | Integración con ArcGIS                      |
+| **html2canvas**  | 1.4.x   | Captura de mapas para PDF                   |
+| **Bootstrap**    | 5.x     | Framework CSS responsive                    |
 
 ### Backend
 
-| Tecnología | Versión | Propósito |
-|------------|---------|-----------|
-| **Spring Boot** | 3.x | Framework backend |
-| **Java** | 17+ | Lenguaje de programación |
-| **Oracle Database** | 19c+ | Base de datos principal |
-| **JasperReports** | 6.x | Generación de reportes PDF |
-| **RestTemplate** | - | Cliente HTTP para APIs externas |
+| Tecnología          | Versión | Propósito                       |
+| ------------------- | ------- | ------------------------------- |
+| **Spring Boot**     | 3.x     | Framework backend               |
+| **Java**            | 17+     | Lenguaje de programación        |
+| **Oracle Database** | 19c+    | Base de datos principal         |
+| **JasperReports**   | 6.x     | Generación de reportes PDF      |
+| **RestTemplate**    | -       | Cliente HTTP para APIs externas |
 
 ### Herramientas de Desarrollo
 
@@ -244,15 +244,15 @@ export class ValorYaStateService {
   // Signals para estado reactivo
   private predioDataSignal = signal<PredioData | null>(null);
   private valorYaResumenSignal = signal<CalcularValorYaResponse | null>(null);
-  
+
   // Estado de búsqueda (persistido en sessionStorage)
   tipoBusqueda = signal<TipoBusqueda>(TipoBusqueda.DIRECCION);
   valorBusqueda = signal<string>('');
-  
+
   // Estado de pago (persistido en localStorage)
   compraId = signal<number | null>(null);
   pagoId = signal<number | null>(null);
-  
+
   // Métodos públicos
   setPredioData(data: PredioData): void { ... }
   setValorYaResumen(data: CalcularValorYaResponse): void { ... }
@@ -261,6 +261,7 @@ export class ValorYaStateService {
 ```
 
 **Persistencia:**
+
 - `sessionStorage`: Estado temporal de búsqueda (se pierde al cerrar tab)
 - `localStorage`: Datos del predio y pago (persiste entre sesiones)
 
@@ -272,21 +273,22 @@ Gestiona autenticación con signals y JWT.
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUserSignal = signal<User | null>(null);
-  
+
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
-  
+
   // Métodos principales
   login(credentials: LoginRequest): Observable<LoginResponse> { ... }
   register(data: RegisterRequest): Observable<RegisterResponse> { ... }
   logout(): void { ... }
-  
+
   // Recupera sesión del localStorage al iniciar
   loadUserFromStorage(): void { ... }
 }
 ```
 
 **Flujo de Login:**
+
 1. Usuario ingresa credenciales
 2. Backend valida y retorna JWT token
 3. Token se guarda en `localStorage` vía `TokenService`
@@ -301,13 +303,13 @@ Consume la API del Método de Comparación de Mercado.
 export class MCMValorYaService {
   // Procesar ofertas para un CHIP (máximo 5 para mapa)
   procesarChip(chip: string): Observable<MCMValorYAResultado> { ... }
-  
+
   // Calcular valor final del predio
   calcularValorYa(chip: string): Observable<CalcularValorYaResponse> { ... }
-  
+
   // Validar que existan mínimo 3 ofertas
   validarMinimoOfertas(chips: string[]): Observable<ValidacionMinimoOfertasResponse> { ... }
-  
+
   // Test de conexión al servicio MCM
   testConexion(): Observable<TestConexionResponse> { ... }
 }
@@ -322,13 +324,13 @@ Gestiona el proceso de compra y pago.
 export class ComprasService {
   // Crear compra (registra la transacción)
   crearCompra(data: CompraRequest): Observable<CompraResponse> { ... }
-  
+
   // Crear pago asociado a la compra
   crearPago(data: PagoRequest): Observable<PagoResponse> { ... }
-  
+
   // Actualizar estados después del callback de Paymentez
   actualizarCompraPago(data: ActualizarCompraPagoRequest): Observable<...> { ... }
-  
+
   // Generar factura
   crearFactura(data: FacturaRequest): Observable<FacturaResponse> { ... }
 }
@@ -343,7 +345,7 @@ Integración con Paymentez.
 export class PaymentService {
   // Iniciar proceso de pago (obtiene URL de Paymentez)
   initiatePayment(data: PaymentData, origin: string): Observable<PaymentResponse> { ... }
-  
+
   // Extraer URL de redirección
   getPaymentUrl(response: PaymentResponse): string | null { ... }
 }
@@ -378,16 +380,18 @@ src/main/java/com/valorya/
 
 #### 1. **Catastro Controller** - `/api/catastro`
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/consultar?Opcion={2\|3}&Identificador={valor}` | Consultar predio por Dirección (2) o CHIP (3) |
+| Método | Endpoint                                         | Descripción                                   |
+| ------ | ------------------------------------------------ | --------------------------------------------- |
+| GET    | `/consultar?Opcion={2\|3}&Identificador={valor}` | Consultar predio por Dirección (2) o CHIP (3) |
 
 **Ejemplo Request:**
+
 ```
 GET /api/catastro/consultar?Opcion=2&Identificador=CL 10 # 5 30
 ```
 
 **Ejemplo Response:**
+
 ```json
 {
   "chip": "AAA0036YERJ",
@@ -406,14 +410,15 @@ GET /api/catastro/consultar?Opcion=2&Identificador=CL 10 # 5 30
 
 #### 2. **Compras Controller** - `/api/compras`
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/compras` | Crear nueva compra |
-| POST | `/compras/pagos` | Crear pago para una compra |
-| POST | `/compras/pagos/actualizar` | Actualizar estado de compra y pago |
-| POST | `/compras/facturas` | Generar factura |
+| Método | Endpoint                    | Descripción                        |
+| ------ | --------------------------- | ---------------------------------- |
+| POST   | `/compras`                  | Crear nueva compra                 |
+| POST   | `/compras/pagos`            | Crear pago para una compra         |
+| POST   | `/compras/pagos/actualizar` | Actualizar estado de compra y pago |
+| POST   | `/compras/facturas`         | Generar factura                    |
 
 **Ejemplo - Crear Compra:**
+
 ```json
 POST /api/compras
 {
@@ -429,6 +434,7 @@ POST /api/compras
 ```
 
 **Response:**
+
 ```json
 {
   "compraId": 789,
@@ -439,6 +445,7 @@ POST /api/compras
 ```
 
 **Ejemplo - Crear Pago:**
+
 ```json
 POST /api/compras/pagos
 {
@@ -453,6 +460,7 @@ POST /api/compras/pagos
 ```
 
 **Response:**
+
 ```json
 {
   "pagoId": 456,
@@ -463,14 +471,15 @@ POST /api/compras/pagos
 
 #### 3. **Procesar Chips Controller** - `/api/procesar-chips`
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/test-conexion` | Verificar disponibilidad del servicio MCM |
-| POST | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas |
-| POST | `/calcular-valorya` | Calcular valor final del predio |
-| POST | `/chip-unico` | Obtener máximo 5 ofertas para el mapa |
+| Método | Endpoint                  | Descripción                               |
+| ------ | ------------------------- | ----------------------------------------- |
+| GET    | `/test-conexion`          | Verificar disponibilidad del servicio MCM |
+| POST   | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas          |
+| POST   | `/calcular-valorya`       | Calcular valor final del predio           |
+| POST   | `/chip-unico`             | Obtener máximo 5 ofertas para el mapa     |
 
 **Ejemplo - Calcular ValorYa:**
+
 ```json
 POST /api/procesar-chips/calcular-valorya
 {
@@ -479,6 +488,7 @@ POST /api/procesar-chips/calcular-valorya
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -502,11 +512,12 @@ POST /api/procesar-chips/calcular-valorya
 
 #### 4. **Reporte Controller** - `/api/reportes`
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/valorya-completo/pdf` | Generar PDF del avalúo |
+| Método | Endpoint                | Descripción            |
+| ------ | ----------------------- | ---------------------- |
+| POST   | `/valorya-completo/pdf` | Generar PDF del avalúo |
 
 **Ejemplo Request:**
+
 ```json
 POST /api/reportes/valorya-completo/pdf
 {
@@ -517,6 +528,7 @@ POST /api/reportes/valorya-completo/pdf
 ```
 
 **Response:**
+
 ```
 Content-Type: application/pdf
 Content-Disposition: attachment; filename="ValorYa-AAA0036YERJ.pdf"
@@ -557,6 +569,7 @@ El backend implementa una lógica dual según el tipo de predio:
 ### Stored Procedures Oracle
 
 #### `SP_GET_USOS_PREDIO`
+
 ```sql
 -- Retorna los usos (códigos) de un predio
 -- Permite detectar si es PH único o múltiples usos
@@ -567,6 +580,7 @@ PROCEDURE SP_GET_USOS_PREDIO (
 ```
 
 #### `SP_CALCULAR_VALOR_POR_CHIP`
+
 ```sql
 -- Calcula el valor para predios NO-PH
 PROCEDURE SP_CALCULAR_VALOR_POR_CHIP (
@@ -601,6 +615,7 @@ PROCEDURE SP_CALCULAR_VALOR_POR_CHIP (
 ### Token JWT
 
 **Estructura:**
+
 ```json
 {
   "sub": "user@example.com",
@@ -612,6 +627,7 @@ PROCEDURE SP_CALCULAR_VALOR_POR_CHIP (
 ```
 
 **Storage:**
+
 - **localStorage:** `valorya-token`, `valorya-user`
 - **Expiración:** 24 horas
 - **Renovación:** Automática en login
@@ -619,6 +635,7 @@ PROCEDURE SP_CALCULAR_VALOR_POR_CHIP (
 ### Guards de Ruta
 
 #### `authGuard`
+
 ```typescript
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -634,6 +651,7 @@ export const authGuard: CanActivateFn = () => {
 ```
 
 #### `predioDataGuard`
+
 ```typescript
 export const predioDataGuard: CanActivateFn = () => {
   const stateService = inject(ValorYaStateService);
@@ -684,38 +702,39 @@ export const predioDataGuard: CanActivateFn = () => {
 
 #### Estados de Compra
 
-| Estado | Descripción |
-|--------|-------------|
-| **REGISTRADA** | Compra creada, pago pendiente |
-| **COMPRADA_SIN_PAGO** | Pago rechazado o fallido |
-| **COMPRADO_CON_PAGO** | Pago exitoso |
-| **PENDIENTE** | Pago en revisión |
-| **COMPLETADO** | Proceso finalizado con éxito |
+| Estado                | Descripción                   |
+| --------------------- | ----------------------------- |
+| **REGISTRADA**        | Compra creada, pago pendiente |
+| **COMPRADA_SIN_PAGO** | Pago rechazado o fallido      |
+| **COMPRADO_CON_PAGO** | Pago exitoso                  |
+| **PENDIENTE**         | Pago en revisión              |
+| **COMPLETADO**        | Proceso finalizado con éxito  |
 
 #### Estados de Pago
 
-| Estado | Descripción |
-|--------|-------------|
+| Estado        | Descripción                     |
+| ------------- | ------------------------------- |
 | **PENDIENTE** | Esperando respuesta de pasarela |
-| **EXITOSO** | Pago aprobado |
-| **RECHAZADO** | Pago declinado |
-| **SIN_PAGO** | No se completó el pago |
+| **EXITOSO**   | Pago aprobado                   |
+| **RECHAZADO** | Pago declinado                  |
+| **SIN_PAGO**  | No se completó el pago          |
 
 ### Callback de Paymentez
 
 **URL:** `/valor-ya/pago-status/:status`
 
 **Parámetros:**
+
 - `status`: `success` | `failure` | `pending` | `review`
 
 **Acciones según status:**
 
-| Status | Estado Pago | Estado Compra | Acción |
-|--------|-------------|---------------|--------|
-| `success` | EXITOSO | COMPRADO_CON_PAGO | Continuar a resultado |
-| `failure` | RECHAZADO | COMPRADA_SIN_PAGO | Mostrar error |
-| `pending` | PENDIENTE | REGISTRADA | Mostrar pendiente |
-| `review` | PENDIENTE | REGISTRADA | Mostrar en revisión |
+| Status    | Estado Pago | Estado Compra     | Acción                |
+| --------- | ----------- | ----------------- | --------------------- |
+| `success` | EXITOSO     | COMPRADO_CON_PAGO | Continuar a resultado |
+| `failure` | RECHAZADO   | COMPRADA_SIN_PAGO | Mostrar error         |
+| `pending` | PENDIENTE   | REGISTRADA        | Mostrar pendiente     |
+| `review`  | PENDIENTE   | REGISTRADA        | Mostrar en revisión   |
 
 ---
 
@@ -725,18 +744,18 @@ export const predioDataGuard: CanActivateFn = () => {
 
 #### localStorage
 
-| Key | Contenido | Propósito |
-|-----|-----------|-----------|
-| `valorya-token` | JWT token | Autenticación |
-| `valorya-user` | Objeto User | Info del usuario logueado |
-| `valorya-predio-data` | Objeto PredioData | Datos completos del predio |
-| `valor-ya-payment-context` | {chip, dev_reference, compraId} | Contexto del pago |
+| Key                        | Contenido                       | Propósito                  |
+| -------------------------- | ------------------------------- | -------------------------- |
+| `valorya-token`            | JWT token                       | Autenticación              |
+| `valorya-user`             | Objeto User                     | Info del usuario logueado  |
+| `valorya-predio-data`      | Objeto PredioData               | Datos completos del predio |
+| `valor-ya-payment-context` | {chip, dev_reference, compraId} | Contexto del pago          |
 
 #### sessionStorage
 
-| Key | Contenido | Propósito |
-|-----|-----------|-----------|
-| `valorya-busqueda-state` | {tipo, valor} | Recuperar búsqueda al recargar |
+| Key                       | Contenido      | Propósito                            |
+| ------------------------- | -------------- | ------------------------------------ |
+| `valorya-busqueda-state`  | {tipo, valor}  | Recuperar búsqueda al recargar       |
 | `valorya-resultado-state` | {chip, pagoId} | Persistir resultado entre navegación |
 
 ### Signals de Angular
@@ -800,8 +819,8 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     const cloned = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return next(cloned);
   }
@@ -886,6 +905,7 @@ async captureMapAsBase64(): Promise<string | null> {
 ### Estructura del PDF
 
 **Secciones:**
+
 1. **Encabezado** - Logo UAECD, título, fecha
 2. **Información del Predio**
    - CHIP, Dirección, Cédula Catastral
@@ -909,28 +929,31 @@ async captureMapAsBase64(): Promise<string | null> {
 
 ### Colores Principales
 
-| Color | Hex | Uso |
-|-------|-----|-----|
-| **Azul Primario** | `#3366CC` | Botones, enlaces, headers |
-| **Azul Oscuro** | `#004884` | Texto, iconos |
-| **Amarillo** | `#FEB400` | Hover, loading spinner, destacados |
-| **Blanco** | `#FFFFFF` | Fondos |
-| **Gris Claro** | `#F3F4F6` | Bordes, fondos secundarios |
+| Color             | Hex       | Uso                                |
+| ----------------- | --------- | ---------------------------------- |
+| **Azul Primario** | `#3366CC` | Botones, enlaces, headers          |
+| **Azul Oscuro**   | `#004884` | Texto, iconos                      |
+| **Amarillo**      | `#FEB400` | Hover, loading spinner, destacados |
+| **Blanco**        | `#FFFFFF` | Fondos                             |
+| **Gris Claro**    | `#F3F4F6` | Bordes, fondos secundarios         |
 
 ### Responsive Design
 
 **Breakpoints:**
+
 - **Mobile:** < 768px
 - **Tablet:** 768px - 1024px
 - **Desktop:** > 1024px
 
 **Mobile-First:**
+
 - Columnas apiladas en mobile
 - Grid de 1 columna
 - Navegación colapsable
 - Botones full-width
 
 **Bootstrap 5:**
+
 - Sistema de grid responsive
 - Utilidades de espaciado
 - Clases de visibilidad (`d-none d-lg-flex`)
@@ -952,10 +975,12 @@ private validarCodigoUso(predio: PredioData): boolean {
 ```
 
 **Códigos permitidos:**
+
 - **037** - Casa en Propiedad Horizontal
 - **038** - Apartamento
 
 **Si no cumple:**
+
 - Modal "Predio no elegible para ValorYa"
 - Contacto de soporte
 - Regreso a búsqueda
@@ -972,6 +997,7 @@ private validarConexionMCM(): Observable<boolean> {
 ```
 
 **Si no cumple:**
+
 - Modal "Servicio no disponible"
 - Información de mantenimiento
 - Contacto de soporte
@@ -990,6 +1016,7 @@ private validarMinimoOfertas(chip: string): Observable<boolean> {
 **Criterio:** Mínimo 3 ofertas de referencia procesadas
 
 **Si no cumple:**
+
 - Modal "No podemos calcular el valor"
 - Explicación técnica
 - Regreso a búsqueda
@@ -1004,19 +1031,19 @@ private validarMinimoOfertas(chip: string): Observable<boolean> {
 logout(): void {
   // Limpiar tokens
   this.tokenService.removeToken();
-  
+
   // Limpiar localStorage
   localStorage.removeItem('valorya-user');
   localStorage.removeItem('valorya-predio-data');
   localStorage.removeItem('valor-ya-payment-context');
-  
+
   // Limpiar sessionStorage
   sessionStorage.removeItem('valorya-busqueda-state');
   sessionStorage.removeItem('valorya-resultado-state');
-  
+
   // Resetear signals
   this.currentUserSignal.set(null);
-  
+
   // Redirigir
   this.router.navigate(['/valor-ya/seleccionar']);
 }
@@ -1029,7 +1056,7 @@ onNuevaConsulta(): void {
   // Resetear estado
   this.stateService.reset();
   this.stepperService.reset();
-  
+
   // Navegar al inicio
   this.router.navigate(['/valor-ya/seleccionar']);
 }
@@ -1041,12 +1068,12 @@ onNuevaConsulta(): void {
 
 ### Diferencias con ValorYa
 
-| Aspecto | ValorYa | Test |
-|---------|---------|------|
-| **Código de Uso** | Solo 037 y 038 | Cualquier código |
-| **Pago** | Real con Paymentez | Mock (no real) |
-| **Propósito** | Producción | Testing y desarrollo |
-| **Validaciones** | Todas activas | Relajadas |
+| Aspecto           | ValorYa            | Test                 |
+| ----------------- | ------------------ | -------------------- |
+| **Código de Uso** | Solo 037 y 038     | Cualquier código     |
+| **Pago**          | Real con Paymentez | Mock (no real)       |
+| **Propósito**     | Producción         | Testing y desarrollo |
+| **Validaciones**  | Todas activas      | Relajadas            |
 
 ### Uso del Módulo Test
 
@@ -1061,11 +1088,13 @@ onNuevaConsulta(): void {
 ## 📞 Información de Contacto
 
 **Soporte Técnico:**
+
 - 📞 +57 601 234 7600 ext. 7600
 - ✉️ buzon-correspondencia@catastrobogota.gov.co
 - 🕐 Lunes a Viernes de 8:00 AM a 4:30 PM
 
 **Sede Principal:**
+
 - 📍 Av. Carrera 30 No. 25 - 90, Torre B Piso 2
 - 🏙️ Bogotá D.C., Colombia
 - 📮 Código Postal: 111311
