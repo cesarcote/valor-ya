@@ -2,18 +2,13 @@
   background-color: #bbbbbb;
 }
 
-.govco-text-header-1 {
+.govco-text-header-1, .govco-text-header-2 {
   font-size: 24px;
-  color: #3366CC;
-}
-
-.govco-text-header-2 {
-  font-size: 24px;
-  color: #3366CC;
+  color: #3366cc;
 }
 
 .links {
-  color: #3366CC;
+  color: #3366cc;
 }
 
 .footer-container {
@@ -47,3 +42,30 @@
   display: inline-block;
   vertical-align: super;
 }
+
+.govco-network {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  column-gap: 15px;
+  row-gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.govco-links-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 1em;
+  color: #004884;
+}
+
+.govcobasefooter_contentinfo_network-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #004884;
+}
+

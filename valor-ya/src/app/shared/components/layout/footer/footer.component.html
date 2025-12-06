@@ -42,7 +42,9 @@
                 <p class="mb-0">Información general: {{ Lin_general }}</p>
                 <p class="mb-0">
                   Portal Bogotá:
-                  <a href="{{ Portal_bogota }}" class="links text-decoration-none">{{ Portal_bogota }}</a>
+                  <a href="{{ Portal_bogota }}" class="links text-decoration-none">{{
+                    Portal_bogota
+                  }}</a>
                 </p>
               </div>
             </div>
@@ -50,97 +52,83 @@
 
           <div class="row mb-4">
             <div class="col-lg-12">
-              <div class="govco-network d-flex gap-4 flex-wrap">
-                <div class="govco-iconContainer">
-                  <a
-                    href="{{ redes_sociales[0].url }}"
-                    target="_blank"
-                    title="{{ redes_sociales[0].title }}"
-                    class="d-flex align-items-center text-decoration-none gap-2"
-                  >
-                    <span [innerHTML]="redes_sociales[0].svg"></span>
-                    <span class="govco-link-modal">{{ redes_sociales[0].nombre }}</span>
-                  </a>
-                </div>
-                <div class="govco-iconContainer">
-                  <a
-                    href="{{ redes_sociales[1].url }}"
-                    target="_blank"
-                    title="{{ redes_sociales[1].title }}"
-                    class="d-flex align-items-center text-decoration-none gap-2"
-                  >
-                    <span [innerHTML]="redes_sociales[1].svg"></span>
-                    <span class="govco-link-modal">{{ redes_sociales[1].nombre }}</span>
-                  </a>
-                </div>
-                <div class="govco-iconContainer">
-                  <a
-                    href="{{ redes_sociales[2].url }}"
-                    target="_blank"
-                    title="{{ redes_sociales[2].title }}"
-                    class="d-flex align-items-center text-decoration-none gap-2"
-                  >
-                    <span [innerHTML]="redes_sociales[2].svg"></span>
-                    <span class="govco-link-modal">{{ redes_sociales[2].nombre }}</span>
-                  </a>
-                </div>
-                <div class="govco-iconContainer">
-                  <a
-                    href="{{ redes_sociales[3].url }}"
-                    target="_blank"
-                    title="{{ redes_sociales[3].title }}"
-                    class="d-flex align-items-center text-decoration-none gap-2"
-                  >
-                    <span [innerHTML]="redes_sociales[3].svg"></span>
-                    <span class="govco-link-modal">{{ redes_sociales[3].nombre }}</span>
-                  </a>
-                </div>
+              <div class="govco-network">
+                <a
+                  href="{{ redes_sociales[0].url }}"
+                  target="_blank"
+                  title="{{ redes_sociales[0].title }}"
+                  class="govcobasefooter_contentinfo_network-link"
+                >
+                  <span [innerHTML]="redes_sociales[0].svg"></span>
+                  <span>{{ redes_sociales[0].nombre }}</span>
+                </a>
+                <a
+                  href="{{ redes_sociales[1].url }}"
+                  target="_blank"
+                  title="{{ redes_sociales[1].title }}"
+                  class="govcobasefooter_contentinfo_network-link"
+                >
+                  <span [innerHTML]="redes_sociales[1].svg"></span>
+                  <span>{{ redes_sociales[1].nombre }}</span>
+                </a>
+                <a
+                  href="{{ redes_sociales[2].url }}"
+                  target="_blank"
+                  title="{{ redes_sociales[2].title }}"
+                  class="govcobasefooter_contentinfo_network-link"
+                >
+                  <span [innerHTML]="redes_sociales[2].svg"></span>
+                  <span>{{ redes_sociales[2].nombre }}</span>
+                </a>
+                <a
+                  href="{{ redes_sociales[3].url }}"
+                  target="_blank"
+                  title="{{ redes_sociales[3].title }}"
+                  class="govcobasefooter_contentinfo_network-link"
+                >
+                  <span [innerHTML]="redes_sociales[3].svg"></span>
+                  <span>{{ redes_sociales[3].nombre }}</span>
+                </a>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12">
-              <div class="govco-links-container d-flex flex-wrap gap-4">
-                <div class="govco-link-container">
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
-                    href="https://www.catastrobogota.gov.co/contacto/politicas-de-seguridad-privacidad-condiciones-de-uso-y-proteccion-de-datos-personales"
-                    >Políticas</a
-                  >
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
-                    href="https://www.catastrobogota.gov.co/mapa-del-sitio"
-                    >Mapa del sitio</a
-                  >
-                </div>
-                <div class="govco-link-container">
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
-                    href="https://outlook.office.com/owa/"
-                    target="_blank"
-                    >Correo institucional</a
-                  >
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
-                    href="http://intranet.catastrobogota.gov.co/"
-                    target="_blank"
-                    >Intranet</a
-                  >
-                </div>
-                <div class="govco-link-container">
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block mb-2"
-                    href="https://mesadeservicio.catastrobogota.gov.co/CAisd/pdmweb.exe"
-                    target="_blank"
-                    >Mesa de servicio</a
-                  >
-                  <a
-                    class="govco-link-modal govco-link-modal-bold d-block"
-                    href="https://www.catastrobogota.gov.co/declaracion-de-accesibilidad"
-                    >Accesibilidad</a
-                  >
-                </div>
+              <div class="govco-links-container">
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="https://www.catastrobogota.gov.co/contacto/politicas-de-seguridad-privacidad-condiciones-de-uso-y-proteccion-de-datos-personales"
+                  >Políticas</a
+                >
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="https://www.catastrobogota.gov.co/mapa-del-sitio"
+                  >Mapa del sitio</a
+                >
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="https://outlook.office.com/owa/"
+                  target="_blank"
+                  >Correo institucional</a
+                >
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="http://intranet.catastrobogota.gov.co/"
+                  target="_blank"
+                  >Intranet</a
+                >
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="https://mesadeservicio.catastrobogota.gov.co/CAisd/pdmweb.exe"
+                  target="_blank"
+                  >Mesa de servicio</a
+                >
+                <a
+                  class="govcobasefooter_contentinfo_network-link"
+                  href="https://www.catastrobogota.gov.co/declaracion-de-accesibilidad"
+                  >Accesibilidad</a
+                >
               </div>
             </div>
           </div>
