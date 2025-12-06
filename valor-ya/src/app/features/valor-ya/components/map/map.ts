@@ -248,14 +248,35 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     try {
       this.isLoading.set(true);
 
+      const container = this.mapContainer.nativeElement;
+
+      const originalWidth = container.style.width;
+      const originalHeight = container.style.height;
+      const originalAspectRatio = container.style.aspectRatio;
+
+      container.style.width = '767px';
+      container.style.height = '432px';
+      container.style.aspectRatio = 'unset';
+
+      this.map.invalidateSize();
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       const html2canvas = (await import('html2canvas')).default;
 
-      const canvas = await html2canvas(this.mapContainer.nativeElement, {
+      const canvas = await html2canvas(container, {
         useCORS: true,
         allowTaint: true,
         logging: false,
         backgroundColor: '#ffffff',
+        width: 767,
+        height: 432,
       });
+
+      container.style.width = originalWidth;
+      container.style.height = originalHeight;
+      container.style.aspectRatio = originalAspectRatio;
+      this.map.invalidateSize();
 
       return canvas.toDataURL('image/png');
     } catch (error) {
