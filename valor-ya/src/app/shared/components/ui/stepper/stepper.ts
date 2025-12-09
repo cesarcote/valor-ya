@@ -1,4 +1,4 @@
-import { Component, inject, Optional, signal, effect } from '@angular/core';
+import { Component, Optional, signal, effect } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ValorYaStepperService } from '../../../../features/valor-ya/services/valor-ya-stepper.service';
@@ -17,9 +17,9 @@ export class StepperComponent {
   progressPercentage = signal('15%');
 
   constructor(
-    private router: Router,
-    @Optional() private valorYaStepperService: ValorYaStepperService,
-    @Optional() private avaluosStepperService: AvaluosStepperService
+    private readonly router: Router,
+    @Optional() private readonly valorYaStepperService: ValorYaStepperService,
+    @Optional() private readonly avaluosStepperService: AvaluosStepperService
   ) {
     const url = this.router.url;
 
