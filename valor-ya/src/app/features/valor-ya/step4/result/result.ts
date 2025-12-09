@@ -169,8 +169,9 @@ export class ResultComponent implements OnInit {
   }
 
   private tryRenderMapOfertas(): void {
-    if (this.mapOfertas && this.ofertasResponse()) {
-      this.renderizarMapaOfertas(this.mapOfertas, this.ofertasResponse()!);
+    const ofertas = this.ofertasResponse();
+    if (this.mapOfertas && ofertas) {
+      this.renderizarMapaOfertas(this.mapOfertas, ofertas);
     }
   }
 
