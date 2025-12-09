@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { ValorYaStepperService } from '../../../../features/valor-ya/services/valor-ya-stepper.service';
 import { AvaluosStepperService } from '../../../../features/avaluos-en-garantia/services/avaluos-stepper.service';
-import { TestStepperService } from '../../../../features/test/services/test-stepper.service';
 
 @Component({
   selector: 'app-stepper',
@@ -20,8 +19,7 @@ export class StepperComponent {
   constructor(
     private router: Router,
     @Optional() private valorYaStepperService: ValorYaStepperService,
-    @Optional() private avaluosStepperService: AvaluosStepperService,
-    @Optional() private testStepperService: TestStepperService
+    @Optional() private avaluosStepperService: AvaluosStepperService
   ) {
     const url = this.router.url;
 
@@ -32,12 +30,8 @@ export class StepperComponent {
       case url.includes('/avaluos'):
         this.stepperService = this.avaluosStepperService;
         break;
-      case url.includes('/test'):
-        this.stepperService = this.testStepperService;
-        break;
       default:
-        this.stepperService =
-          this.valorYaStepperService || this.avaluosStepperService || this.testStepperService;
+        this.stepperService = this.valorYaStepperService || this.avaluosStepperService;
         break;
     }
 

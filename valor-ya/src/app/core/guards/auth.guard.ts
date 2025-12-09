@@ -15,15 +15,3 @@ export const authGuard: CanActivateFn = () => {
   return false;
 };
 
-export const testAuthGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-
-  if (authService.isAuthenticated()) {
-    return true;
-  }
-
-  // Si no está autenticado, redirigir al step 1 de test
-  router.navigate(['/test/seleccionar']);
-  return false;
-};
