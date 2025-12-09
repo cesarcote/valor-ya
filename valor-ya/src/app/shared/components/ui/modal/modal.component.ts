@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, HostListener } from '@angular/core';
 import { ButtonComponent } from '../button/button';
 
 @Component({
@@ -12,5 +12,10 @@ export class ModalComponent {
   title = input<string>('Advertencia');
   iconType = input<'success' | 'warning' | 'error'>('warning');
   buttonText = input<string>('Aceptar');
-  close = output<void>();
+  closeModal = output<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closeModal.emit();
+  }
 }

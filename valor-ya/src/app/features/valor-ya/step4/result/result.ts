@@ -183,7 +183,7 @@ export class ResultComponent implements OnInit {
     componentRef.setInput('predioData', data);
     componentRef.setInput('valorYaData', this.valorYaResumen());
 
-    componentRef.instance.close.subscribe(() => {
+    componentRef.instance.closeCard.subscribe(() => {
       map.closeTooltip();
     });
 

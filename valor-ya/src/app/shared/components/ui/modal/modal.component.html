@@ -1,5 +1,6 @@
-<div class="modal-backdrop" (click)="close.emit()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal-backdrop">
+  <button class="backdrop-button" (click)="closeModal.emit()" tabindex="-1"></button>
+  <div class="modal-content">
     <div class="success-header">
       <div class="success-icon" [class]="iconType()">
         @if (iconType() === 'warning') {
@@ -32,7 +33,11 @@
       <p class="result-subtitle">{{ message() }}</p>
     </div>
     <div class="modal-footer">
-      <app-button [text]="buttonText()" variant="primary" (clicked)="close.emit()"></app-button>
+      <app-button
+        [text]="buttonText()"
+        variant="primary"
+        (clicked)="closeModal.emit()"
+      ></app-button>
     </div>
   </div>
 </div>

@@ -33,9 +33,9 @@ export class MapCardComponent {
     this.valorYaResponse.set(value);
   }
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closeCard = new EventEmitter<void>();
 
   onClose() {
-    this.close.emit();
+    this.closeCard.emit();
   }
 }

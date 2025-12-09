@@ -145,10 +145,10 @@ export class ComplementInfo implements OnInit {
 
       // Solo agregar campos que el usuario realmente completó
       if (formValues.numeroHabitaciones !== '') {
-        datosUsuario.numeroHabitaciones = parseInt(formValues.numeroHabitaciones);
+        datosUsuario.numeroHabitaciones = Number.parseInt(formValues.numeroHabitaciones);
       }
       if (formValues.numeroBanos !== '') {
-        datosUsuario.numeroBanos = parseInt(formValues.numeroBanos);
+        datosUsuario.numeroBanos = Number.parseInt(formValues.numeroBanos);
       }
       if (formValues.areaConstruida !== '') {
         datosUsuario.areaConstruida = parseFloat(formValues.areaConstruida);
@@ -157,16 +157,16 @@ export class ComplementInfo implements OnInit {
         datosUsuario.edad = formValues.edad;
       }
       if (formValues.estrato !== '') {
-        datosUsuario.estrato = parseInt(formValues.estrato);
+        datosUsuario.estrato = Number.parseInt(formValues.estrato);
       }
       if (formValues.numeroAscensores !== '') {
-        datosUsuario.numeroAscensores = parseInt(formValues.numeroAscensores);
+        datosUsuario.numeroAscensores = Number.parseInt(formValues.numeroAscensores);
       }
       if (formValues.numeroParqueaderos !== '') {
-        datosUsuario.numeroParqueaderos = parseInt(formValues.numeroParqueaderos);
+        datosUsuario.numeroParqueaderos = Number.parseInt(formValues.numeroParqueaderos);
       }
       if (formValues.numeroDepositos !== '') {
-        datosUsuario.numeroDepositos = parseInt(formValues.numeroDepositos);
+        datosUsuario.numeroDepositos = Number.parseInt(formValues.numeroDepositos);
       }
 
       this.solicitudDatosService

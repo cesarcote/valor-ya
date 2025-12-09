@@ -43,15 +43,14 @@ import { MapCardComponent } from '../../components/map-card/map-card.component';
   styleUrls: ['./predio-review.css'],
 })
 export class PredioReviewComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private stepperService = inject(ValorYaStepperService);
+  private readonly router = inject(Router);
+  private readonly stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
-  private predioService = inject(PredioService);
-  private mcmValorYaService = inject(MCMValorYaService);
+  private readonly predioService = inject(PredioService);
+  private readonly mcmValorYaService = inject(MCMValorYaService);
   private readonly authService = inject(AuthService);
   private readonly authModalService = inject(AuthModalService);
-  private injector = inject(EnvironmentInjector);
-
+  private readonly injector = inject(EnvironmentInjector);
   private mapComponent?: MapComponent;
   private loginSubscription?: Subscription;
   private readonly pendingContinue = signal(false);
@@ -128,7 +127,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
       componentRef.setInput('predioData', data);
       componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
 
-      componentRef.instance.close.subscribe(() => {
+      componentRef.instance.closeCard.subscribe(() => {
         this.mapComponent?.closeTooltip();
       });
 
@@ -158,10 +157,16 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
       case TipoBusqueda.DIRECCION:
         consulta$ = this.predioService.consultarPorDireccion(valor);
         break;
-      case TipoBusqueda.FMI:
+      case TipoBusqueda.FMI: {
         const [zona, matricula] = valor.split('-');
+        if (!zona || !matricula) {
+          this.errorMessage.set('El formato del FMI es inválido.');
+          this.isLoading.set(false);
+          return;
+        }
         consulta$ = this.predioService.consultarPorFMI(zona, matricula);
         break;
+      }
       default:
         this.router.navigate(['/valor-ya/seleccionar']);
         return;
@@ -216,7 +221,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     const predio = this.predioData();
 
     // Validación 1: Datos completos del predio
-    if (!predio || !predio.loteid || !predio.chip) {
+    if (!predio?.loteid || !predio?.chip) {
       this.errorMessage.set('No hay información completa del predio');
       return;
     }
