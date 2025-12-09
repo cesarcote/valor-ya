@@ -7,11 +7,11 @@ export const environment = {
     baseUrl: 'https://dev-api.catastro.gov.co',
   },
   qa: {
-    baseUrl: 'https://qa-api.catastro.gov.co',
+    baseUrl: 'http://vmprocondock.catastrobogota.gov.co:3402',
   },
   prod: {
     baseUrl: 'https://api.catastro.gov.co',
   },
 };
 
-export const currentEnvironment = environment.local;
+export const currentEnvironment = environment.qa;
