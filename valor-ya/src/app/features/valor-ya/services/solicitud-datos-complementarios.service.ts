@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { AuthService } from '../../../core/auth/services/auth.service';
 import {
   DatosComplementarios,
   DatosComplementariosRequest,
@@ -33,6 +34,7 @@ export interface SolicitudDatosOptions {
 })
 export class SolicitudDatosComplementariosService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   enviarSolicitudDatos(options: SolicitudDatosOptions): Observable<DatosComplementarios> {
     const payload = this.construirPayload(options);
@@ -42,8 +44,11 @@ export class SolicitudDatosComplementariosService {
   private enviarEmailConPlantilla(
     payload: DatosComplementariosRequest
   ): Observable<DatosComplementarios> {
+    const currentUser = this.authService.currentUser();
+    const destinatario = currentUser?.email;
+
     const emailRequest = {
-      destinatario: 'test.valorya@yopmail.com',
+      destinatario,
       asunto: 'Información de Predio - ValorYa',
       template: 'datos-predio',
       datos: {
