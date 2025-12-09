@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, output, HostListener } from '@angular/core';
+import { Component, inject, signal, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -11,8 +11,9 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType, SexType } from '../../../models/user.model';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
+import { FormModalBaseComponent } from '../../../../shared/components/base/form-modal-base.component';
 
 @Component({
   selector: 'app-register-modal',
@@ -20,13 +21,12 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button'
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.css'],
 })
-export class RegisterModalComponent implements OnInit {
+export class RegisterModalComponent extends FormModalBaseComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
 
   // Outputs para comunicación con el componente padre
-  closeModal = output<void>();
   openLogin = output<void>();
   registerSuccess = output<void>();
 
@@ -36,7 +36,6 @@ export class RegisterModalComponent implements OnInit {
   acceptTerms = signal(false);
   documentTypes = signal<DocumentType[]>([]);
   sexTypes = signal<SexType[]>([]);
-  showConfirmation = signal(false);
 
   // Formularios
   stepOneForm!: FormGroup;
@@ -44,12 +43,6 @@ export class RegisterModalComponent implements OnInit {
 
   // Fecha máxima para expedición (hoy)
   maxDate = new Date().toISOString().split('T')[0];
-
-  // Escuchar tecla ESC para mostrar confirmación
-  @HostListener('document:keydown.escape')
-  onEscapeKey(): void {
-    this.tryClose();
-  }
 
   ngOnInit(): void {
     this.initForms();
@@ -279,28 +272,7 @@ export class RegisterModalComponent implements OnInit {
       });
   }
 
-  onClose(): void {
-    this.tryClose();
-  }
-
-  private tryClose(): void {
-    if (this.hasUnsavedData()) {
-      this.showConfirmation.set(true);
-    } else {
-      this.closeModal.emit();
-    }
-  }
-
-  onConfirmClose(): void {
-    this.showConfirmation.set(false);
-    this.closeModal.emit();
-  }
-
-  onCancelClose(): void {
-    this.showConfirmation.set(false);
-  }
-
-  private hasUnsavedData(): boolean {
+  protected override hasUnsavedData(): boolean {
     const hasStepOneData =
       this.stepOneForm.get('documentType')?.value ||
       this.stepOneForm.get('documentNumber')?.value ||
@@ -310,7 +282,7 @@ export class RegisterModalComponent implements OnInit {
       this.stepTwoForm.get('lastname')?.value ||
       this.stepTwoForm.get('email')?.value ||
       this.stepTwoForm.get('cellphone')?.value;
-    return hasStepOneData || hasStepTwoData;
+    return !!(hasStepOneData || hasStepTwoData);
   }
 
   onOpenLogin(): void {

@@ -1,11 +1,12 @@
-import { Component, inject, signal, OnInit, output, HostListener } from '@angular/core';
+import { Component, inject, signal, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType } from '../../../models/user.model';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
+import { FormModalBaseComponent } from '../../../../shared/components/base/form-modal-base.component';
 
 @Component({
   selector: 'app-login-modal',
@@ -13,13 +14,13 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button'
   templateUrl: './login-modal.component.html',
   styleUrls: ['./login-modal.component.css'],
 })
-export class LoginModalComponent implements OnInit {
+export class LoginModalComponent extends FormModalBaseComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
 
   // Outputs para comunicación con el componente padre
-  closeModal = output<void>();
+  // closeModal heredado de FormModalBaseComponent
   openRegister = output<void>();
   loginSuccess = output<void>();
 
@@ -30,7 +31,7 @@ export class LoginModalComponent implements OnInit {
   emailUser = signal('');
   tiempoExpiracion = signal(5);
   documentTypes = signal<DocumentType[]>([]);
-  showConfirmation = signal(false);
+  // showConfirmation heredado de FormModalBaseComponent
 
   // Datos guardados del paso 1 para usar en paso 2
   private tipoDocumentoSeleccionado = '';
@@ -40,11 +41,7 @@ export class LoginModalComponent implements OnInit {
   stepOneForm!: FormGroup;
   stepTwoForm!: FormGroup;
 
-  // Escuchar tecla ESC para mostrar confirmación
-  @HostListener('document:keydown.escape')
-  onEscapeKey(): void {
-    this.tryClose();
-  }
+  // Escuchar tecla ESC para mostrar confirmación - Heredado
 
   ngOnInit(): void {
     this.initForms();
@@ -219,32 +216,11 @@ export class LoginModalComponent implements OnInit {
     this.stepTwoForm.reset();
   }
 
-  onClose(): void {
-    this.tryClose();
-  }
-
-  private tryClose(): void {
-    if (this.hasUnsavedData()) {
-      this.showConfirmation.set(true);
-    } else {
-      this.closeModal.emit();
-    }
-  }
-
-  onConfirmClose(): void {
-    this.showConfirmation.set(false);
-    this.closeModal.emit();
-  }
-
-  onCancelClose(): void {
-    this.showConfirmation.set(false);
-  }
-
-  private hasUnsavedData(): boolean {
+  protected override hasUnsavedData(): boolean {
     const hasStepOneData =
       this.stepOneForm.get('documentType')?.value || this.stepOneForm.get('documentNumber')?.value;
     const hasStepTwoData = this.stepTwoForm.get('password')?.value;
-    return hasStepOneData || hasStepTwoData;
+    return !!(hasStepOneData || hasStepTwoData);
   }
 
   onOpenRegister(): void {

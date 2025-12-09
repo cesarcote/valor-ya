@@ -1,6 +1,6 @@
 import { Component, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button';
+import { ButtonComponent } from '../button/button';
 
 @Component({
   selector: 'app-confirmation-modal',

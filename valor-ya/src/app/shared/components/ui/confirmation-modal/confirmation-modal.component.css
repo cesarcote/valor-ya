@@ -48,12 +48,8 @@
 
 /* Responsive */
 @media (max-width: 576px) {
-  .confirmation-modal-content {
-    padding: 1rem;
-  }
-
   .modal-actions {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   .modal-actions .btn {
