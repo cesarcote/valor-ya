@@ -249,7 +249,6 @@ h3 {
   align-items: center;
   justify-content: center;
   background: #e0e0e0;
-  color: #666;
   border-radius: 50%;
   font-weight: 600;
   flex-shrink: 0;
@@ -268,18 +267,6 @@ h3 {
 .step.completed .step-text {
   color: #004884;
   font-weight: 600;
-}
-
-.confirmation-section {
-  margin-top: 2rem;
-}
-
-.confirmation-question {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #333;
-  text-align: center;
-  margin-bottom: 1.5rem;
 }
 
 .action-buttons {
