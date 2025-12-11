@@ -97,7 +97,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": ["src/styles.css"],
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "main": "src/test.ts"
           }
         }
       }
