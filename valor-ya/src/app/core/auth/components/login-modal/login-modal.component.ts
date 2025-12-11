@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
@@ -16,8 +17,10 @@ import { FormModalBaseComponent } from '../../../../shared/components/base/form-
 })
 export class LoginModalComponent extends FormModalBaseComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
+
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
+  private readonly recaptchaV3Service = inject(ReCaptchaV3Service);
 
   // Outputs para comunicación con el componente padre
   // closeModal heredado de FormModalBaseComponent
@@ -183,32 +186,44 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
 
     this.isLoading.set(true);
 
-    this.authService
-      .login({
-        tipoDocumento: this.tipoDocumentoSeleccionado,
-        numeroDocumento: this.numeroDocumentoIngresado,
-        claveTemporal: this.password?.value,
-      })
-      .subscribe({
-        next: (response) => {
-          this.isLoading.set(false);
+    this.recaptchaV3Service.execute('login').subscribe({
+      next: (token: string) => {
+        this.authService
+          .login({
+            tipoDocumento: this.tipoDocumentoSeleccionado,
+            numeroDocumento: this.numeroDocumentoIngresado,
+            claveTemporal: this.password?.value,
+            recaptchaToken: token,
+          })
+          .subscribe({
+            next: (response) => {
+              this.isLoading.set(false);
 
-          if (response.success && response.data?.success) {
-            const mensaje = response.data.message || response.message || '¡Bienvenido!';
-            this.notificationService.success(mensaje);
-            this.loginSuccess.emit();
-            this.closeModal.emit();
-          } else {
-            this.password?.setErrors({ invalidPassword: true });
-            const errorMsg = response.error || response.message || 'Clave temporal incorrecta';
-            this.notificationService.error(errorMsg);
-          }
-        },
-        error: () => {
-          this.isLoading.set(false);
-          this.notificationService.error('Error al iniciar sesión');
-        },
-      });
+              if (response.success && response.data?.success) {
+                const mensaje = response.data.message || response.message || '¡Bienvenido!';
+                this.notificationService.success(mensaje);
+                this.loginSuccess.emit();
+                this.closeModal.emit();
+              } else {
+                this.password?.setErrors({ invalidPassword: true });
+                const errorMsg = response.error || response.message || 'Clave temporal incorrecta';
+                this.notificationService.error(errorMsg);
+              }
+            },
+            error: () => {
+              this.isLoading.set(false);
+              this.notificationService.error('Error al iniciar sesión');
+            },
+          });
+      },
+      error: (error: unknown) => {
+        this.isLoading.set(false);
+        console.error('Error executing reCAPTCHA', error);
+        // Fallback or error handling - still try to login?
+        // Let's assume strict requirement and fail or try without token
+        this.notificationService.error('Error de validación de seguridad. Intente nuevamente.');
+      },
+    });
   }
 
   onBack(): void {

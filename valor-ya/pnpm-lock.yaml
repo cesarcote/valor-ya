@@ -38,6 +38,9 @@ importers:
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
+      ng-recaptcha:
+        specifier: ^13.2.1
+        version: 13.2.1(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)(zone.js@0.15.1))
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
@@ -69,6 +72,9 @@ importers:
       '@types/node':
         specifier: ^22.0.0
         version: 22.18.12
+      baseline-browser-mapping:
+        specifier: ^2.9.6
+        version: 2.9.6
       jasmine-core:
         specifier: ~5.9.0
         version: 5.9.0
@@ -1184,6 +1190,9 @@ packages:
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
+  '@types/grecaptcha@3.0.9':
+    resolution: {integrity: sha512-fFxMtjAvXXMYTzDFK5NpcVB7WHnrHVLl00QzEGpuFxSAC789io6M+vjcn+g5FTEamIJtJr/IHkCDsqvJxeWDyw==}
+
   '@types/jasmine@5.1.10':
     resolution: {integrity: sha512-ctILpOSFD58PTyGwr400GadefIHPqdWQ8VlZI9D65USOWR/aIw8dkDAw17KPCu/Wn+e+r9BWpPtmuB5T/pP8ng==}
 
@@ -1271,8 +1280,8 @@ packages:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
     engines: {node: ^4.5.0 || >= 5.9}
 
-  baseline-browser-mapping@2.8.16:
-    resolution: {integrity: sha512-OMu3BGQ4E7P1ErFsIPpbJh0qvDudM/UuJeHgkAvfWe+0HFJCXh+t/l8L6fVLR55RI/UbKrVLnAXZSVwd9ysWYw==}
+  baseline-browser-mapping@2.9.6:
+    resolution: {integrity: sha512-v9BVVpOTLB59C9E7aSnmIF8h7qRsFpx+A2nugVMTszEOMcfjlZMsXRm4LF23I3Z9AJxc8ANpIvzbzONoX9VJlg==}
     hasBin: true
 
   beasties@0.3.5:
@@ -2185,6 +2194,11 @@ packages:
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
+
+  ng-recaptcha@13.2.1:
+    resolution: {integrity: sha512-aBOoFla9t6AfT9t5paykoXomCDKreBKouB16VUFxSZwn1RCfDsdcaTmSNJKYLFz5j0Cq/V+szY9f3mHLgzRw5Q==}
+    peerDependencies:
+      '@angular/core': ^17.0.0
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -3912,6 +3926,8 @@ snapshots:
 
   '@types/geojson@7946.0.16': {}
 
+  '@types/grecaptcha@3.0.9': {}
+
   '@types/jasmine@5.1.10': {}
 
   '@types/leaflet@1.9.21':
@@ -4002,7 +4018,7 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  baseline-browser-mapping@2.8.16: {}
+  baseline-browser-mapping@2.9.6: {}
 
   beasties@0.3.5:
     dependencies:
@@ -4065,7 +4081,7 @@ snapshots:
 
   browserslist@4.26.3:
     dependencies:
-      baseline-browser-mapping: 2.8.16
+      baseline-browser-mapping: 2.9.6
       caniuse-lite: 1.0.30001750
       electron-to-chromium: 1.5.235
       node-releases: 2.0.23
@@ -5025,6 +5041,12 @@ snapshots:
   negotiator@0.6.3: {}
 
   negotiator@1.0.0: {}
+
+  ng-recaptcha@13.2.1(@angular/core@20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)(zone.js@0.15.1)):
+    dependencies:
+      '@angular/core': 20.3.4(@angular/compiler@20.3.4)(rxjs@7.8.2)(zone.js@0.15.1)
+      '@types/grecaptcha': 3.0.9
+      tslib: 2.8.1
 
   node-addon-api@6.1.0:
     optional: true

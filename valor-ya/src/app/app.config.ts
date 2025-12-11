@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
+  importProvidersFrom,
 } from '@angular/core';
 import {
   provideRouter,
@@ -15,6 +16,8 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 
 import { routes } from './app.routes';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { currentEnvironment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,5 +34,10 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions()
     ),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
+    importProvidersFrom(RecaptchaV3Module),
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: currentEnvironment.recaptcha.siteKey,
+    },
   ],
 };

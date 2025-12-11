@@ -79,6 +79,7 @@ export interface LoginRequest {
   tipoDocumento: string;
   numeroDocumento: string;
   claveTemporal: string;
+  recaptchaToken?: string;
 }
 
 export interface LoginUsuario {
