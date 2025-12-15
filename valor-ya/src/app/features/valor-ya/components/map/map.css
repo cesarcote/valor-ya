@@ -20,39 +20,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.map-controls {
-  position: absolute;
-  bottom: 80px;
-  left: 10px;
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.center-btn {
-  width: 30px;
-  height: 30px;
-  background: white;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-  transition: background-color 0.2s, color 0.2s;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
-}
-
-.center-btn:hover {
-  background: #f4f4f4;
-  color: #e3192f;
-}
-
-.center-btn:active {
-  background: #e8e8e8;
-}
 
 .card-overlay {
   position: absolute;
@@ -195,4 +162,17 @@
   font-size: 18px !important;
   top: 8px !important;
   right: 8px !important;
+}
+
+::ng-deep .leaflet-control-center {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .leaflet-control-center svg {
+  width: 18px;
+  height: 18px;
 }

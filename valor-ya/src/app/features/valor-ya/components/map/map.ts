@@ -56,6 +56,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
   private currentMarker?: L.Marker;
   private currentPolygon?: L.Polygon;
+  private centerControl?: L.Control;
   private restoreCardAfterZoom = false;
   private mobileMql?: MediaQueryList;
   private onMobileChange?: (event: MediaQueryListEvent) => void;
@@ -95,6 +96,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.map) {
+      this.centerControl?.remove();
       this.map.remove();
     }
 
@@ -311,6 +313,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.initMarkerIcons();
     this.addCatastroTileLayer();
     this.registerZoomHandlers();
+    this.createCenterControl();
   }
   private registerZoomHandlers(): void {
     this.map.on('zoomstart', () => {
@@ -354,6 +357,31 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.mobileMql.addEventListener('change', this.onMobileChange);
   }
 
+  
+  private createCenterControl(): void {
+    const CenterControl = L.Control.extend({
+      onAdd: () => {
+        const container = L.DomUtil.create('div', 'leaflet-bar');
+        const link = L.DomUtil.create('a', 'leaflet-control-center', container);
+        link.setAttribute('href', '#');
+        link.setAttribute('role', 'button');
+        link.setAttribute('aria-label', 'Centrar en el predio');
+        link.title = 'Centrar en el predio';
+        link.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>';
+
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(link, 'click', (e: Event) => {
+          L.DomEvent.preventDefault(e);
+          this.centerOnPredio();
+        });
+
+        return container;
+      },
+    });
+
+    this.centerControl = new CenterControl({ position: 'topleft' });
+    this.centerControl.addTo(this.map);
+  }
   private initMarkerIcons(): void {
     const iconDefault = L.icon({
       iconRetinaUrl: 'assets/marker-icon-2x.png',

@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { RecaptchaGatewayService } from '../../services/recaptcha-gateway.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { DocumentType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
@@ -20,7 +20,7 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
 
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
-  private readonly recaptchaV3Service = inject(ReCaptchaV3Service);
+  private readonly recaptchaGateway = inject(RecaptchaGatewayService);
 
   // Outputs para comunicación con el componente padre
   // closeModal heredado de FormModalBaseComponent
@@ -186,35 +186,38 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
 
     this.isLoading.set(true);
 
-    this.recaptchaV3Service.execute('login').subscribe({
+    this.recaptchaGateway.execute('login').subscribe({
       next: (token: string) => {
-        this.authService
-          .login({
-            tipoDocumento: this.tipoDocumentoSeleccionado,
-            numeroDocumento: this.numeroDocumentoIngresado,
-            claveTemporal: this.password?.value,
-            recaptchaToken: token,
-          })
-          .subscribe({
-            next: (response) => {
-              this.isLoading.set(false);
+        const loginRequest: any = {
+          tipoDocumento: this.tipoDocumentoSeleccionado,
+          numeroDocumento: this.numeroDocumentoIngresado,
+          claveTemporal: this.password?.value,
+        };
 
-              if (response.success && response.data?.success) {
-                const mensaje = response.data.message || response.message || '¡Bienvenido!';
-                this.notificationService.success(mensaje);
-                this.loginSuccess.emit();
-                this.closeModal.emit();
-              } else {
-                this.password?.setErrors({ invalidPassword: true });
-                const errorMsg = response.error || response.message || 'Clave temporal incorrecta';
-                this.notificationService.error(errorMsg);
-              }
-            },
-            error: () => {
-              this.isLoading.set(false);
-              this.notificationService.error('Error al iniciar sesión');
-            },
-          });
+        if (token) {
+          loginRequest.recaptchaToken = token;
+        }
+
+        this.authService.login(loginRequest).subscribe({
+          next: (response) => {
+            this.isLoading.set(false);
+
+            if (response.success && response.data?.success) {
+              const mensaje = response.data.message || response.message || '¡Bienvenido!';
+              this.notificationService.success(mensaje);
+              this.loginSuccess.emit();
+              this.closeModal.emit();
+            } else {
+              this.password?.setErrors({ invalidPassword: true });
+              const errorMsg = response.error || response.message || 'Clave temporal incorrecta';
+              this.notificationService.error(errorMsg);
+            }
+          },
+          error: () => {
+            this.isLoading.set(false);
+            this.notificationService.error('Error al iniciar sesión');
+          },
+        });
       },
       error: (error: unknown) => {
         this.isLoading.set(false);
