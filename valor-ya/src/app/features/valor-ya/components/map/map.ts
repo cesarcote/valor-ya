@@ -57,8 +57,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private currentMarker?: L.Marker;
   private currentPolygon?: L.Polygon;
   private restoreCardAfterZoom = false;
+  private mobileMql?: MediaQueryList;
+  private onMobileChange?: (event: MediaQueryListEvent) => void;
 
   cardVisible = signal(false);
+  isMobile = signal(false);
   cardPredioData = signal<PredioData | undefined>(undefined);
   cardValorYaData = signal<MCMValorYAResultado | CalcularValorYaResponse | undefined>(undefined);
   predioSelected = output<void>();
@@ -86,12 +89,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/Mapa_Referencia/mapa_base_3857/MapServer';
 
   ngAfterViewInit(): void {
+    this.initMobileDetection();
     this.initMap();
   }
 
   ngOnDestroy(): void {
     if (this.map) {
       this.map.remove();
+    }
+
+    if (this.mobileMql && this.onMobileChange) {
+      this.mobileMql.removeEventListener('change', this.onMobileChange);
     }
   }
 
@@ -130,7 +138,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       marker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
     }
 
-    if (this.cardPredioData()) {
+    if (this.cardPredioData() && !this.isMobile()) {
       marker.on('click', () => {
         if (!this.cardVisible()) {
           this.showCard();
@@ -192,7 +200,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (predioData) {
       this.cardPredioData.set(predioData);
       this.cardValorYaData.set(valorYaData);
-      this.showCard();
+      if (!this.isMobile()) {
+        this.showCard();
+      }
     }
 
     const coordinates = this.parseRingsToLatLng(coordenadasPoligono);
@@ -327,6 +337,21 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!tooltipPane) return;
 
     tooltipPane.querySelectorAll('.custom-tooltip-card').forEach((node) => node.remove());
+  }
+  private initMobileDetection(): void {
+    if (typeof window === 'undefined') return;
+
+    this.mobileMql = window.matchMedia('(max-width: 768px)');
+    this.isMobile.set(this.mobileMql.matches);
+
+    this.onMobileChange = (event: MediaQueryListEvent) => {
+      this.isMobile.set(event.matches);
+      if (event.matches) {
+        this.hideCard();
+      }
+    };
+
+    this.mobileMql.addEventListener('change', this.onMobileChange);
   }
 
   private initMarkerIcons(): void {
