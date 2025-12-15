@@ -7,11 +7,15 @@ import {
   signal,
   input,
   inject,
+  output,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 import { MapUtils } from '../../../../shared/utils/map.utils';
+import { MapCardComponent } from '../map-card/map-card.component';
+import { PredioData } from '../../models/predio-data.model';
+import { MCMValorYAResultado, CalcularValorYaResponse } from '../../models/mcm-valor-ya.model';
 
 export interface MapConfig {
   center?: [number, number];
@@ -43,6 +47,7 @@ export interface PolygonConfig {
   selector: 'app-map',
   templateUrl: './map.html',
   styleUrls: ['./map.css'],
+  imports: [MapCardComponent],
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
@@ -51,6 +56,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
   private currentMarker?: L.Marker;
   private currentPolygon?: L.Polygon;
+  private restoreCardAfterZoom = false;
+
+  cardVisible = signal(false);
+  cardPredioData = signal<PredioData | undefined>(undefined);
+  cardValorYaData = signal<MCMValorYAResultado | CalcularValorYaResponse | undefined>(undefined);
+  predioSelected = output<void>();
 
   config = input<MapConfig>({
     center: [4.6097, -74.0817],
@@ -94,8 +105,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   addMarker(markerConfig: MarkerConfig): void {
     if (!this.map) return;
 
-    // Si no se quiere acumular marcadores, descomentar la siguiente línea
-    // this.clearMarker();
+    this.clearMarker();
 
     const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions, color, markerType } =
       markerConfig;
@@ -110,18 +120,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       marker = L.marker([lat, lng]).addTo(this.map);
     }
 
-    // Guardar referencia si es el marcador principal (se podría mejorar para manejar múltiples)
     this.currentMarker = marker;
 
     if (popupText) {
       marker.bindPopup(popupText, popupOptions).openPopup();
     }
 
-    if (tooltipContent) {
+    if (tooltipContent && tooltipOptions) {
       marker.bindTooltip(tooltipContent, tooltipOptions).openTooltip();
+    }
 
+    if (this.cardPredioData()) {
       marker.on('click', () => {
-        marker?.openTooltip();
+        if (!this.cardVisible()) {
+          this.showCard();
+          this.predioSelected.emit();
+        }
       });
     }
   }
@@ -140,6 +154,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.currentPolygon = L.polygon(polygonConfig.coordinates, style).addTo(this.map);
 
+    this.currentPolygon.on('click', () => {
+      if (!this.cardVisible()) {
+        this.showCard();
+        this.predioSelected.emit();
+      }
+    });
+
     const bounds = this.currentPolygon.getBounds();
     this.map.fitBounds(bounds, {
       maxZoom: 19,
@@ -151,8 +172,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ubicarLotePorCoordenadas(
     coordenadasPoligono: number[][][],
     direccion?: string,
-    popupContent?: string | HTMLElement,
-    tooltipClass: string = 'custom-tooltip-card'
+    predioData?: PredioData,
+    valorYaData?: MCMValorYAResultado | CalcularValorYaResponse
   ): void {
     if (!this.map) {
       console.error('Map not initialized!');
@@ -164,31 +185,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.clearAll();
+
     this.direccion.set(direccion || '');
 
-    // Convertir coordenadas del polígono al formato de Leaflet
+    if (predioData) {
+      this.cardPredioData.set(predioData);
+      this.cardValorYaData.set(valorYaData);
+      this.showCard();
+    }
+
     const coordinates = this.parseRingsToLatLng(coordenadasPoligono);
 
-    // Agregar el polígono al mapa
     this.addPolygon({ coordinates });
 
-    // Agregar marcador en el centro del polígono
     const bounds = this.currentPolygon!.getBounds();
     const center = bounds.getCenter();
 
     this.addMarker({
       lat: center.lat,
       lng: center.lng,
-      tooltipContent: popupContent || `<strong>Dirección:</strong> ${direccion || 'Sin dirección'}`,
-      tooltipOptions: popupContent
-        ? {
-            permanent: true,
-            direction: 'right',
-            className: tooltipClass,
-            interactive: true,
-            offset: tooltipClass === 'custom-tooltip-card' ? [100, 0] : [0, 0], // Solo offset para la card grande
-          }
-        : undefined,
     });
   }
 
@@ -209,6 +225,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   clearAll(): void {
     this.clearMarker();
     this.clearPolygon();
+    this.hideCard();
+    this.cardPredioData.set(undefined);
+    this.cardValorYaData.set(undefined);
   }
 
   async captureMapAsBase64(): Promise<string | null> {
@@ -281,6 +300,33 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.initMarkerIcons();
     this.addCatastroTileLayer();
+    this.registerZoomHandlers();
+  }
+  private registerZoomHandlers(): void {
+    this.map.on('zoomstart', () => {
+      this.removeCustomTooltipCards();
+      if (this.cardVisible()) {
+        this.restoreCardAfterZoom = true;
+        this.hideCard();
+      } else {
+        this.restoreCardAfterZoom = false;
+      }
+    });
+
+    this.map.on('zoomend', () => {
+      this.removeCustomTooltipCards();
+      if (this.restoreCardAfterZoom && this.cardPredioData()) {
+        this.showCard();
+      }
+      this.restoreCardAfterZoom = false;
+    });
+  }
+
+  private removeCustomTooltipCards(): void {
+    const tooltipPane = this.map.getPanes()?.tooltipPane;
+    if (!tooltipPane) return;
+
+    tooltipPane.querySelectorAll('.custom-tooltip-card').forEach((node) => node.remove());
   }
 
   private initMarkerIcons(): void {
@@ -308,45 +354,39 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.map.on('zoomstart', () => catastroLayer.setOpacity(0.3));
-    this.map.on('zoomend', () => {
-      catastroLayer.setOpacity(0.8);
-      this.updateTooltipOffset();
-    });
+    this.map.on('zoomend', () => catastroLayer.setOpacity(0.8));
 
     catastroLayer.addTo(this.map);
   }
 
-  private updateTooltipOffset(): void {
-    if (this.currentMarker?.getTooltip()) {
-      const zoom = this.map.getZoom();
-      // Calculate offset based on zoom.
-      // Example: Zoom 18 -> 100px. Zoom 14 -> 60px.
-      // Formula: 100 - (18 - zoom) * 10
-      const baseOffset = 100;
-      const zoomFactor = 10;
-      const referenceZoom = 18;
+  showCard(): void {
+    this.cardVisible.set(true);
+  }
 
-      let newOffsetX = baseOffset - (referenceZoom - zoom) * zoomFactor;
-
-      if (newOffsetX < 40) newOffsetX = 40;
-
-      const tooltip = this.currentMarker.getTooltip()!;
-
-      // Solo aplicar offset dinámico si es la tarjeta personalizada (Step 2)
-      if (tooltip.options?.className?.includes('custom-tooltip-card')) {
-        tooltip.options.offset = [newOffsetX, 0];
-
-        if (this.map.hasLayer(tooltip)) {
-          this.currentMarker.closeTooltip();
-          this.currentMarker.openTooltip();
-        }
-      }
-    }
+  hideCard(): void {
+    this.cardVisible.set(false);
   }
 
   closeTooltip(): void {
-    if (this.currentMarker) {
-      this.currentMarker.closeTooltip();
-    }
+    this.hideCard();
+  }
+
+  openTooltip(): void {
+    this.showCard();
+  }
+
+  centerOnPredio(): void {
+    if (!this.map || !this.currentPolygon) return;
+
+    const bounds = this.currentPolygon.getBounds();
+    this.map.fitBounds(bounds, {
+      maxZoom: 19,
+      paddingTopLeft: [20, 20],
+      paddingBottomRight: [80, 20],
+    });
+  }
+
+  isTooltipVisible(): boolean {
+    return this.cardVisible();
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PredioData } from '../../models/predio-data.model';
-import { MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
+import { MCMValorYAResultado, CalcularValorYaResponse } from '../../models/mcm-valor-ya.model';
 
 @Component({
   selector: 'app-map-card',
@@ -11,17 +11,20 @@ import { MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
 })
 export class MapCardComponent {
   predio = signal<PredioData | undefined>(undefined);
-  valorYaResponse = signal<MCMValorYAResultado | undefined>(undefined);
+  valorYaResponse = signal<MCMValorYAResultado | CalcularValorYaResponse | undefined>(undefined);
 
   precioFormateado = computed(() => {
     const response = this.valorYaResponse();
-    if (response?.resultados?.[0]?.VALOR_AVALUO_PREDIO) {
-      return new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 0,
-      }).format(response.resultados[0].VALOR_AVALUO_PREDIO);
+    if (!response) return null;
+
+    if ('resultados' in response && response.resultados?.[0]?.VALOR_AVALUO_PREDIO) {
+      return this.formatCurrency(response.resultados[0].VALOR_AVALUO_PREDIO);
     }
+
+    if ('data' in response && response.data?.VALOR_YA) {
+      return this.formatCurrency(response.data.VALOR_YA);
+    }
+
     return null;
   });
 
@@ -29,7 +32,7 @@ export class MapCardComponent {
     this.predio.set(value);
   }
 
-  @Input() set valorYaData(value: MCMValorYAResultado | undefined) {
+  @Input() set valorYaData(value: MCMValorYAResultado | CalcularValorYaResponse | undefined) {
     this.valorYaResponse.set(value);
   }
 
@@ -37,5 +40,13 @@ export class MapCardComponent {
 
   onClose() {
     this.closeCard.emit();
+  }
+
+  private formatCurrency(value: number): string {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(value);
   }
 }

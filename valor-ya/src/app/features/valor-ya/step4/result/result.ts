@@ -1,12 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-  EnvironmentInjector,
-  createComponent,
-} from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -23,7 +15,6 @@ import { ContainerContentComponent } from '../../../../shared/components/layout/
 import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
 import { LoadingComponent } from '../../../../shared/components/ui/loading/loading';
 import { MapComponent } from '../../components/map';
-import { MapCardComponent } from '../../components/map-card/map-card.component';
 import { CalcularValorYaResponse, MCMValorYAResultado } from '../../models/mcm-valor-ya.model';
 import { PredioData } from '../../models/predio-data.model';
 
@@ -50,7 +41,6 @@ export class ResultComponent implements OnInit {
   private readonly reporteService = inject(ReporteService);
   private readonly notificationService = inject(NotificationService);
   private readonly loadingService = inject(LoadingService);
-  private readonly injector = inject(EnvironmentInjector);
 
   @ViewChild('mapPredio')
   set mapPredioSetter(map: MapComponent) {
@@ -176,21 +166,12 @@ export class ResultComponent implements OnInit {
   }
 
   private renderizarMapaPredio(map: MapComponent, data: PredioData): void {
-    const componentRef = createComponent(MapCardComponent, {
-      environmentInjector: this.injector,
-    });
-
-    componentRef.setInput('predioData', data);
-    componentRef.setInput('valorYaData', this.valorYaResumen());
-
-    componentRef.instance.closeCard.subscribe(() => {
-      map.closeTooltip();
-    });
-
-    componentRef.changeDetectorRef.detectChanges();
-    const popupContent = componentRef.location.nativeElement;
-
-    map.ubicarLotePorCoordenadas(data.coordenadasPoligono!, data.direccion, popupContent);
+    map.ubicarLotePorCoordenadas(
+      data.coordenadasPoligono!,
+      data.direccion,
+      data,
+      this.valorYaResumen() ?? undefined
+    );
   }
 
   private renderizarMapaOfertas(map: MapComponent, response: MCMValorYAResultado): void {

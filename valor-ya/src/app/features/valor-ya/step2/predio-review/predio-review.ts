@@ -1,14 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  effect,
-  ViewChild,
-  EnvironmentInjector,
-  createComponent,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnInit, signal, effect, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
@@ -26,7 +16,6 @@ import { MapComponent } from '../../components/map';
 import { ValoryaDescription } from '../../components/valorya-description/valorya-description';
 import { ModalComponent } from '../../../../shared/components/ui/modal/modal.component';
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
-import { MapCardComponent } from '../../components/map-card/map-card.component';
 
 @Component({
   selector: 'app-predio-review',
@@ -50,21 +39,16 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   private readonly mcmValorYaService = inject(MCMValorYaService);
   private readonly authService = inject(AuthService);
   private readonly authModalService = inject(AuthModalService);
-  private readonly injector = inject(EnvironmentInjector);
   private mapComponent?: MapComponent;
   private loginSubscription?: Subscription;
   private readonly pendingContinue = signal(false);
+  private mapInitialized = false;
 
   @ViewChild(MapComponent)
   set mapSetter(map: MapComponent) {
     this.mapComponent = map;
     if (map) {
       this.mapReady.set(true);
-
-      const data = this.predioData();
-      if (data?.coordenadasPoligono) {
-        this.updateMapWithData(data);
-      }
     }
   }
 
@@ -85,7 +69,8 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
       const data = this.predioData();
       const ready = this.mapReady();
 
-      if (data?.coordenadasPoligono && ready) {
+      if (data?.coordenadasPoligono && ready && !this.mapInitialized) {
+        this.mapInitialized = true;
         this.updateMapWithData(data);
       }
     });
@@ -119,26 +104,11 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
 
   private updateMapWithData(data: PredioData): void {
     if (data.coordenadasPoligono) {
-      // Crear instancia del componente de tarjeta dinámicamente
-      const componentRef = createComponent(MapCardComponent, {
-        environmentInjector: this.injector,
-      });
-
-      componentRef.setInput('predioData', data);
-      componentRef.setInput('valorYaData', this.stateService.valorYaResponse());
-
-      componentRef.instance.closeCard.subscribe(() => {
-        this.mapComponent?.closeTooltip();
-      });
-
-      componentRef.changeDetectorRef.detectChanges();
-
-      const popupContent = componentRef.location.nativeElement;
-
       this.mapComponent!.ubicarLotePorCoordenadas(
         data.coordenadasPoligono,
         data.direccion,
-        popupContent
+        data,
+        this.stateService.valorYaResponse()
       );
     }
   }
