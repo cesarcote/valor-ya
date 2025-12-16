@@ -30,4 +30,4 @@ export const environment = {
   },
 };
 
-export const currentEnvironment = environment.qa;
+export const currentEnvironment = environment.local;

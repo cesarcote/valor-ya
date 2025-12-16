@@ -471,12 +471,12 @@ POST /api/compras/pagos
 
 #### 3. **Procesar Chips Controller** - `/api/procesar-chips`
 
-| Método | Endpoint                  | Descripción                               |
-| ------ | ------------------------- | ----------------------------------------- |
-| GET    | `/test-conexion`          | Verificar disponibilidad del servicio MCM |
-| POST   | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas          |
-| POST   | `/calcular-valorya`       | Calcular valor final del predio           |
-| POST   | `/chip-unico`             | Obtener máximo 5 ofertas para el mapa     |
+| Método | Endpoint            | Descripción                               |
+| ------ | ------------------- | ----------------------------------------- |
+| GET    | `/test-conexion`    | Verificar disponibilidad del servicio MCM |
+| POST   | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas     |
+| POST   | `/calcular-valorya` | Calcular valor final del predio           |
+| POST   | `/chip-unico`       | Obtener máximo 5 ofertas para el mapa     |
 
 **Ejemplo - Calcular ValorYa:**
 

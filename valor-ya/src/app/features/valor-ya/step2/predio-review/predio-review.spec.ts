@@ -67,7 +67,9 @@ describe('PredioReviewComponent', () => {
 
     mockMCMService = {
       testConexion: jasmine.createSpy('testConexion').and.returnValue(of({ estado: 'CONECTADO' })),
-      validarMinimoOfertas: jasmine.createSpy('validarMinimoOfertas').and.returnValue(of(true)),
+      validarMinimoOfertas: jasmine
+        .createSpy('validarMinimoOfertas')
+        .and.returnValue(of({ valido: true, chips_procesados: 3 } as any)),
     };
 
     mockAuthService = {
@@ -151,7 +153,9 @@ describe('PredioReviewComponent', () => {
     });
 
     it('should show error if not enough offers', () => {
-      mockMCMService.validarMinimoOfertas.and.returnValue(throwError(() => new Error('No offers')));
+      mockMCMService.validarMinimoOfertas.and.returnValue(
+        throwError(() => new Error('No offers'))
+      );
       component.onContinuar();
       expect(component.showModal()).toBeTrue();
       expect(component.modalTitle()).toBe('Información no disponible');

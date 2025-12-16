@@ -175,7 +175,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const bounds = this.currentPolygon.getBounds();
     this.map.fitBounds(bounds, {
-            maxZoom: 19,
+      maxZoom: 19,
       paddingTopLeft: [20, 20],
       paddingBottomRight: [80, 20],
     });
@@ -360,7 +360,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.mobileMql.addEventListener('change', this.onMobileChange);
   }
 
-  
   private createCenterControl(): void {
     const CenterControl = L.Control.extend({
       onAdd: () => {
@@ -370,7 +369,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         link.setAttribute('role', 'button');
         link.setAttribute('aria-label', 'Centrar en el predio');
         link.title = 'Centrar en el predio';
-        link.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>';
+        link.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>';
 
         L.DomEvent.disableClickPropagation(container);
         L.DomEvent.on(link, 'click', (e: Event) => {
@@ -436,7 +436,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const bounds = this.currentPolygon.getBounds();
     this.map.fitBounds(bounds, {
-            maxZoom: 19,
+      maxZoom: 19,
       paddingTopLeft: [20, 20],
       paddingBottomRight: [80, 20],
     });
