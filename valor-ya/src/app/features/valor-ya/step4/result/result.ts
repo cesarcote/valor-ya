@@ -241,22 +241,54 @@ export class ResultComponent implements OnInit {
 
     try {
       if (this.mapPredio) {
+        const cardWasVisible = this.mapPredio.isTooltipVisible();
+        this.mapPredio.openTooltip();
+        this.mapPredio.centerOnPredio(false);
+        await new Promise((resolve) => setTimeout(resolve, 500));
         imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || '';
+        if (!cardWasVisible) {
+          this.mapPredio.closeTooltip();
+        }
+        if (!imagenBase64) {
+          console.warn('No se pudo capturar el mapa del predio');
+        }
       }
-      if (this.mapOfertas) {
+      if (this.mapOfertas && this.ofertasResponse()) {
+        const predioBase = this.ofertasResponse()!.resultados[0];
+        this.mapOfertas.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 16, false);
+        await new Promise((resolve) => setTimeout(resolve, 500));
         imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || '';
+        if (!imagenBase64Ofertas) {
+          console.warn('No se pudo capturar el mapa de ofertas');
+        }
       }
     } catch (error) {
       console.warn('Error capturando mapas:', error);
     }
 
+    if (!imagenBase64) {
+      this.isDownloading.set(false);
+      this.loadingService.hide();
+      this.notificationService.error(
+        'No se pudo capturar el mapa del predio. Por favor, intente nuevamente.'
+      );
+      return;
+    }
+
     const datos = {
       chip: predioData.chip || '',
-      imagenBase64,
-      imagenBase64Ofertas,
+      imagenBase64: imagenBase64,
+      imagenBase64Ofertas: imagenBase64Ofertas ? imagenBase64Ofertas : null,
     };
 
     console.log('Generando reporte de avalúo para chip:', predioData.chip);
+    console.log('Datos del reporte:', {
+      chip: datos.chip,
+      tieneImagenPredio: !!datos.imagenBase64,
+      tieneImagenOfertas: !!datos.imagenBase64Ofertas,
+      tamañoImagenPredio: datos.imagenBase64?.length || 0,
+      tamañoImagenOfertas: datos.imagenBase64Ofertas ? datos.imagenBase64Ofertas.length : 0,
+    });
 
     this.reporteService.generarReporteValorYa(datos).subscribe({
       next: (blob: Blob) => {
@@ -275,11 +307,28 @@ export class ResultComponent implements OnInit {
 
         this.notificationService.success('¡Avalúo descargado exitosamente!');
       },
-      error: (error: any) => {
+      error: async (error: any) => {
         this.isDownloading.set(false);
         this.loadingService.hide();
         console.error('Error generando reporte:', error);
-        this.notificationService.error('Error generando reporte');
+
+        let errorMessage = 'Error generando reporte';
+        if (error.error instanceof Blob) {
+          try {
+            const text = await error.error.text();
+            const errorData = JSON.parse(text);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+            console.error('Mensaje del servidor:', errorData);
+          } catch (e) {
+            console.error('No se pudo leer el mensaje de error del servidor');
+          }
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        this.notificationService.error(errorMessage);
       },
     });
   }

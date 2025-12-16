@@ -3,7 +3,7 @@
   Dirección del predio: <span class="address">{{ direccion() }}</span>
 </h4>
 }
-<div class="map-container">
+<div class="map-container" #mapWrapper>
   <div #map class="map"></div>
 
   
@@ -17,7 +17,7 @@
     >
     </app-map-card>
   </div>
-  } @if (isLoading()) {
+  } @if (isLoading() && !isCapturing()) {
   <div class="map-loading">
     <div class="spinner"></div>
     <p>Cargando ubicación...</p>

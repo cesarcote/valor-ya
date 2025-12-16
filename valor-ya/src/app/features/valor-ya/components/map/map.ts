@@ -50,6 +50,7 @@ export interface PolygonConfig {
   imports: [MapCardComponent],
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('mapWrapper', { static: false }) mapWrapper!: ElementRef;
   @ViewChild('map', { static: false }) mapContainer!: ElementRef;
 
   private readonly http = inject(HttpClient);
@@ -75,6 +76,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   });
 
   isLoading = signal(false);
+  isCapturing = signal(false);
   direccion = signal<string>('');
   showDireccion = input(true);
 
@@ -105,11 +107,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  setView(lat: number, lng: number, zoom?: number): void {
+  setView(lat: number, lng: number, zoom?: number, animate: boolean = true): void {
     if (!this.map) return;
 
     const zoomLevel = zoom ?? this.config().zoom ?? 14;
-    this.map.setView([lat, lng], zoomLevel);
+    this.map.setView([lat, lng], zoomLevel, { animate });
   }
 
   addMarker(markerConfig: MarkerConfig): void {
@@ -173,7 +175,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const bounds = this.currentPolygon.getBounds();
     this.map.fitBounds(bounds, {
-      maxZoom: 19,
+            maxZoom: 19,
       paddingTopLeft: [20, 20],
       paddingBottomRight: [80, 20],
     });
@@ -243,12 +245,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   async captureMapAsBase64(): Promise<string | null> {
-    if (!this.mapContainer) return null;
+    if (!this.mapContainer || !this.map) return null;
 
     try {
-      this.isLoading.set(true);
+      this.isCapturing.set(true);
 
-      const container = this.mapContainer.nativeElement;
+      const container = this.mapWrapper.nativeElement;
 
       const originalWidth = container.style.width;
       const originalHeight = container.style.height;
@@ -260,7 +262,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       this.map.invalidateSize();
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       const html2canvas = (await import('html2canvas')).default;
 
@@ -271,6 +273,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         backgroundColor: '#ffffff',
         width: 767,
         height: 432,
+        scale: 1,
       });
 
       container.style.width = originalWidth;
@@ -283,7 +286,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       console.error('Error al capturar el mapa:', error);
       return null;
     } finally {
-      this.isLoading.set(false);
+      this.isCapturing.set(false);
     }
   }
 
@@ -428,12 +431,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.showCard();
   }
 
-  centerOnPredio(): void {
+  centerOnPredio(animate: boolean = true): void {
     if (!this.map || !this.currentPolygon) return;
 
     const bounds = this.currentPolygon.getBounds();
     this.map.fitBounds(bounds, {
-      maxZoom: 19,
+            maxZoom: 19,
       paddingTopLeft: [20, 20],
       paddingBottomRight: [80, 20],
     });
