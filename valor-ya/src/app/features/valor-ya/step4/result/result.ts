@@ -197,22 +197,25 @@ export class ResultComponent implements OnInit {
     // 2. Marcadores de los Predios Circundantes (máximo 5)
     const prediosCircundantes = response.resultados.slice(0, 5);
     prediosCircundantes.forEach((oferta, index) => {
-      map.addMarker({
-        lat: oferta.POINT_Y_OFERTA,
-        lng: oferta.POINT_X_OFERTA,
-        tooltipContent: `<strong>Predio ${index + 1}</strong>`,
-        tooltipOptions: {
-          permanent: true,
-          direction: 'top',
-          className: 'offer-tooltip',
+      map.addMarker(
+        {
+          lat: oferta.POINT_Y_OFERTA,
+          lng: oferta.POINT_X_OFERTA,
+          tooltipContent: `<strong>Predio ${index + 1}</strong>`,
+          tooltipOptions: {
+            permanent: true,
+            direction: 'top',
+            className: 'offer-tooltip',
+          },
+          color: coloresOfertas[index % coloresOfertas.length],
+          markerType: 'circle',
         },
-        color: coloresOfertas[index % coloresOfertas.length],
-        markerType: 'circle',
-      }, { replace: false });
+        { replace: false }
+      );
     });
 
-    // 3. Centrar el mapa en el predio
-    map.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 16);
+    // 3. Centrar automáticamente mostrando predio + ofertas (igual que el botón de centrar)
+    map.centerOnPredio(true);
   }
 
   async onDescargarAvaluo(): Promise<void> {
@@ -241,22 +244,14 @@ export class ResultComponent implements OnInit {
 
     try {
       if (this.mapPredio) {
-        const cardWasVisible = this.mapPredio.isTooltipVisible();
-        this.mapPredio.openTooltip();
-        this.mapPredio.centerOnPredio(false);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Capturar el mapa tal como el usuario lo dejó (sin re-centrar ni forzar la tarjeta/tooltip)
         imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || '';
-        if (!cardWasVisible) {
-          this.mapPredio.closeTooltip();
-        }
         if (!imagenBase64) {
           console.warn('No se pudo capturar el mapa del predio');
         }
       }
       if (this.mapOfertas && this.ofertasResponse()) {
-        const predioBase = this.ofertasResponse()!.resultados[0];
-        this.mapOfertas.setView(predioBase.POINT_Y_PREDIO, predioBase.POINT_X_PREDIO, 16, false);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Capturar el mapa tal como el usuario lo dejó (sin re-centrar)
         imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || '';
         if (!imagenBase64Ofertas) {
           console.warn('No se pudo capturar el mapa de ofertas');

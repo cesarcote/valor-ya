@@ -434,14 +434,33 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   centerOnPredio(animate: boolean = true): void {
-    if (!this.map || !this.currentPolygon) return;
+    if (!this.map) return;
 
-    const bounds = this.currentPolygon.getBounds();
-    this.map.fitBounds(bounds, {
-      maxZoom: 19,
-      paddingTopLeft: [20, 20],
-      paddingBottomRight: [80, 20],
-    });
+    // Caso 1: Mapa del predio (tiene polígono) -> centrar al polígono
+    if (this.currentPolygon) {
+      const bounds = this.currentPolygon.getBounds();
+      this.map.fitBounds(bounds, {
+        maxZoom: 19,
+        paddingTopLeft: [20, 20],
+        paddingBottomRight: [80, 20],
+        animate,
+      });
+      return;
+    }
+
+    // Caso 2: Mapa de ofertas (no tiene polígono) -> centrar a marcadores (predio + ofertas)
+    if (this.markers.length > 0) {
+      const group = L.featureGroup(this.markers);
+      const bounds = group.getBounds();
+      if (bounds.isValid()) {
+        this.map.fitBounds(bounds, {
+          maxZoom: 19,
+          paddingTopLeft: [20, 20],
+          paddingBottomRight: [80, 20],
+          animate,
+        });
+      }
+    }
   }
 
   isTooltipVisible(): boolean {
