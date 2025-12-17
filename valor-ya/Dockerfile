@@ -4,12 +4,14 @@ FROM node:20-alpine AS build-step
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY package.json /app
-RUN npm install
+COPY package.json pnpm-lock.yaml /app/
+
+# Use pnpm (repo uses pnpm-lock.yaml). This avoids npm peer-deps resolution failures (ERESOLVE).
+RUN corepack enable && pnpm install --frozen-lockfile
 
 COPY . /app
 # RUN npm run build:prod
-RUN npm run build:dev
+RUN pnpm run build:dev
 
 ### STAGE 2:RUN ###
 FROM nginx:1.17.1-alpine
