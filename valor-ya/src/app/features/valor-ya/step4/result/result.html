@@ -40,15 +40,18 @@
       </div>
 
       <!-- Mapa 2: Ofertas de Referencia -->
+      @if (isMcmApplicable()) {
       <div class="map-section">
         <h3 class="section-title">Ofertas de Referencia</h3>
         <div class="map-wrapper">
           <app-map #mapOfertas [config]="{ zoom: 15 }" [showDireccion]="false"></app-map>
         </div>
       </div>
+      }
     </div>
 
     <!-- Aproximación de Valor -->
+    @if (isMcmApplicable()) {
     <div class="info-section">
       <h3 class="section-title">Aproximación de Valor</h3>
       <div class="info-grid">
@@ -78,6 +81,7 @@
         </div>
       </div>
     </div>
+    }
 
     <div class="info-section highlight-section">
       <h3 class="section-title">Valoración Final</h3>
@@ -86,10 +90,12 @@
           <span class="valuation-label">Valor Ya</span>
           <span class="valuation-value">{{ formatCurrency(resumen.VALOR_YA) }}</span>
         </div>
+        @if (isMcmApplicable()) {
         <div class="valuation-item">
           <span class="valuation-label">Valor por m²</span>
           <span class="valuation-value">{{ formatCurrency(resumen.VALORYA_M2) }}</span>
         </div>
+        }
       </div>
     </div>
 

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { ValorYaStateService } from '../../services/valor-ya-state.service';
+import { TipoBusqueda, ValorYaStateService } from '../../services/valor-ya-state.service';
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { MCMValorYaService } from '../../services/mcm-valor-ya.service';
 import { ReporteService } from '../../services/reporte.service';
@@ -71,15 +71,13 @@ export class ResultComponent implements OnInit {
   valorYaResumen = signal<CalcularValorYaResponse | null>(null);
   ofertasResponse = signal<MCMValorYAResultado | null>(null);
 
+  public isMcmApplicable(): boolean {
+    const codigoUso = this.stateService.predioData()?.codigoUso;
+    return codigoUso === '037' || codigoUso === '038';
+  }
+
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.RESPUESTA);
-
-    const chip = this.stateService.predioData()?.chip;
-    if (!chip) {
-      console.error('No se encontró el CHIP del predio para consultar resultados');
-      this.errorLoadingResult.set('No se encontró información del predio');
-      return;
-    }
 
     this.isLoadingResult.set(true);
 
@@ -89,8 +87,9 @@ export class ResultComponent implements OnInit {
     if (storedData) {
       try {
         const predioData: PredioData = JSON.parse(storedData);
-        if (predioData.chip === chip) {
-          const tipoBusqueda = this.stateService.tipoBusqueda()!;
+        const chip = predioData.chip;
+        if (chip) {
+          const tipoBusqueda = this.stateService.tipoBusqueda() ?? TipoBusqueda.CHIP;
           this.stateService.setPredioData(predioData, tipoBusqueda, chip);
           this.loadValorYaResults(chip);
           return;
@@ -100,25 +99,34 @@ export class ResultComponent implements OnInit {
       }
     }
 
+    // Fallback: usar chip restaurado desde sessionStorage (valorya-resultado-state)
+    const chipFallback = this.stateService.predioData()?.chip;
+    if (chipFallback) {
+      this.loadValorYaResults(chipFallback);
+      return;
+    }
+
     // Si no hay datos en localStorage, mostrar error
     this.errorLoadingResult.set('Error al cargar la información del predio.');
     this.isLoadingResult.set(false);
   }
 
   private loadValorYaResults(chip: string): void {
-    // Primero validar conexión con el servicio MCM
+    // Solo validar conexión MCM si aplica (códigos 037/038).
+    if (!this.isMcmApplicable()) {
+      this.cargarResultadosValorYa(chip);
+      return;
+    }
+
     this.apiService.testConexion().subscribe({
       next: (conexionResponse) => {
         if (conexionResponse.estado !== 'CONECTADO') {
           this.mostrarErrorSistema();
           return;
         }
-        // Conexión OK, cargar resultados
         this.cargarResultadosValorYa(chip);
       },
-      error: () => {
-        this.mostrarErrorSistema();
-      },
+      error: () => this.mostrarErrorSistema(),
     });
   }
 
@@ -136,16 +144,20 @@ export class ResultComponent implements OnInit {
       },
     });
 
-    // Cargar datos de ofertas/predios circundantes para el mapa
-    this.apiService.procesarChip(chip).subscribe({
-      next: (resp: MCMValorYAResultado) => {
-        this.ofertasResponse.set(resp);
-        this.tryRenderMapOfertas();
-      },
-      error: (err: any) => {
-        console.warn('Error al obtener ofertas para el mapa:', err);
-      },
-    });
+    // Cargar datos de ofertas/predios circundantes SOLO si aplica MCM (037/038)
+    if (this.isMcmApplicable()) {
+      this.apiService.procesarChip(chip).subscribe({
+        next: (resp: MCMValorYAResultado) => {
+          this.ofertasResponse.set(resp);
+          this.tryRenderMapOfertas();
+        },
+        error: (err: any) => {
+          console.warn('Error al obtener ofertas para el mapa:', err);
+        },
+      });
+    } else {
+      this.ofertasResponse.set(null);
+    }
   }
 
   private tryRenderMapPredio(): void {
@@ -160,6 +172,7 @@ export class ResultComponent implements OnInit {
 
   private tryRenderMapOfertas(): void {
     const ofertas = this.ofertasResponse();
+    if (!this.isMcmApplicable()) return;
     if (this.mapOfertas && ofertas) {
       this.renderizarMapaOfertas(this.mapOfertas, ofertas);
     }

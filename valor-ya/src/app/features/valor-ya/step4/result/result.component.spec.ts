@@ -27,6 +27,7 @@ describe('ResultComponent', () => {
     chip: 'AAA123',
     direccion: 'Calle 123',
     coordenadasPoligono: [{ lat: 1, lng: 1 }],
+    codigoUso: '038',
   };
 
   const mockValorYaResumen = {
@@ -127,6 +128,18 @@ describe('ResultComponent', () => {
     expect(mockApiService.testConexion).toHaveBeenCalled();
     expect(mockApiService.calcularValorYa).toHaveBeenCalledWith('AAA123');
     expect(component.valorYaResumen()).toEqual(mockValorYaResumen as any);
+  });
+
+  it('should skip MCM calls for non-037/038 codes', () => {
+    (localStorage.getItem as jasmine.Spy).and.returnValue(
+      JSON.stringify({ ...mockPredioData, codigoUso: '048' })
+    );
+
+    fixture.detectChanges();
+
+    expect(mockApiService.testConexion).not.toHaveBeenCalled();
+    expect(mockApiService.procesarChip).not.toHaveBeenCalled();
+    expect(mockApiService.calcularValorYa).toHaveBeenCalledWith('AAA123');
   });
 
   it('should show error if connection fails', () => {
