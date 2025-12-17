@@ -244,15 +244,23 @@ export class ResultComponent implements OnInit {
 
     try {
       if (this.mapPredio) {
-        // Capturar el mapa tal como el usuario lo dejó (sin re-centrar ni forzar la tarjeta/tooltip)
+        // Para el reporte: centrar antes de capturar (pero restaurar la vista original después)
+        const predioViewBefore = this.mapPredio.getViewState();
+        this.mapPredio.centerOnPredio(false);
+        await new Promise((resolve) => setTimeout(resolve, 350));
         imagenBase64 = (await this.mapPredio.captureMapAsBase64()) || '';
+        this.mapPredio.restoreViewState(predioViewBefore, false);
         if (!imagenBase64) {
           console.warn('No se pudo capturar el mapa del predio');
         }
       }
       if (this.mapOfertas && this.ofertasResponse()) {
-        // Capturar el mapa tal como el usuario lo dejó (sin re-centrar)
+        // Para el reporte: centrar antes de capturar (pero restaurar la vista original después)
+        const ofertasViewBefore = this.mapOfertas.getViewState();
+        this.mapOfertas.centerOnPredio(false);
+        await new Promise((resolve) => setTimeout(resolve, 350));
         imagenBase64Ofertas = (await this.mapOfertas.captureMapAsBase64()) || '';
+        this.mapOfertas.restoreViewState(ofertasViewBefore, false);
         if (!imagenBase64Ofertas) {
           console.warn('No se pudo capturar el mapa de ofertas');
         }

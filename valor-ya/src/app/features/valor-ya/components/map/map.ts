@@ -114,6 +114,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.setView([lat, lng], zoomLevel, { animate });
   }
 
+  getViewState(): { lat: number; lng: number; zoom: number } | null {
+    if (!this.map) return null;
+    const center = this.map.getCenter();
+    return { lat: center.lat, lng: center.lng, zoom: this.map.getZoom() };
+  }
+
+  restoreViewState(
+    view: { lat: number; lng: number; zoom: number } | null,
+    animate: boolean = false
+  ): void {
+    if (!this.map || !view) return;
+    this.map.setView([view.lat, view.lng], view.zoom, { animate });
+  }
+
   addMarker(markerConfig: MarkerConfig, options?: { replace?: boolean }): void {
     if (!this.map) return;
 
