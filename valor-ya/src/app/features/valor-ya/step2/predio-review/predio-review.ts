@@ -213,8 +213,18 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
           this.mostrarErrorServicioNoDisponible();
           return;
         }
-        // Continuar con la siguiente validación
-        this.validarMinimoOfertas(predio);
+        // Validación de mínimo ofertas SOLO aplica para códigos de uso PH: 037 y 038
+        const codigoUso = predio.codigoUso;
+        const requiereMinimoOfertas = codigoUso === '037' || codigoUso === '038';
+
+        if (requiereMinimoOfertas) {
+          this.validarMinimoOfertas(predio);
+          return;
+        }
+
+        // Si no aplica, continuar directo a autenticación
+        this.isValidatingAvailability.set(false);
+        this.verificarAutenticacionYContinuar(predio);
       },
       error: () => {
         this.mostrarErrorServicioNoDisponible();

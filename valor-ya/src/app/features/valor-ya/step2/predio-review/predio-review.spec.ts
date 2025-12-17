@@ -37,7 +37,7 @@ describe('PredioReviewComponent', () => {
     areaConstruida: '80',
     edad: '10',
     coordenadas: { lat: 0, lng: 0 },
-    codigoUso: '001',
+    codigoUso: '038',
     coordenadasPoligono: [],
   };
 
@@ -159,6 +159,17 @@ describe('PredioReviewComponent', () => {
       component.onContinuar();
       expect(component.showModal()).toBeTrue();
       expect(component.modalTitle()).toBe('Información no disponible');
+    });
+
+    it('should skip minimo ofertas validation for non-037/038 codes', () => {
+      // simular un código permitido distinto a 037/038
+      component.predioData.set({ ...(component.predioData() as any), codigoUso: '048' });
+
+      component.onContinuar();
+
+      expect(mockMCMService.testConexion).toHaveBeenCalled();
+      expect(mockMCMService.validarMinimoOfertas).not.toHaveBeenCalled();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/valor-ya/pago']);
     });
 
     it('should prompt login if not authenticated', () => {
