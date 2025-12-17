@@ -208,7 +208,7 @@ export class ResultComponent implements OnInit {
         },
         color: coloresOfertas[index % coloresOfertas.length],
         markerType: 'circle',
-      });
+      }, { replace: false });
     });
 
     // 3. Centrar el mapa en el predio

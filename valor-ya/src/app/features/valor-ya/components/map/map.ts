@@ -55,7 +55,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private readonly http = inject(HttpClient);
   private map!: L.Map;
-  private currentMarker?: L.Marker;
+  private markers: L.Marker[] = [];
   private currentPolygon?: L.Polygon;
   private centerControl?: L.Control;
   private restoreCardAfterZoom = false;
@@ -114,10 +114,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.setView([lat, lng], zoomLevel, { animate });
   }
 
-  addMarker(markerConfig: MarkerConfig): void {
+  addMarker(markerConfig: MarkerConfig, options?: { replace?: boolean }): void {
     if (!this.map) return;
 
-    this.clearMarker();
+    const replace = options?.replace ?? true;
+    if (replace) {
+      this.clearMarker();
+    }
 
     const { lat, lng, popupText, popupOptions, tooltipContent, tooltipOptions, color, markerType } =
       markerConfig;
@@ -132,7 +135,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       marker = L.marker([lat, lng]).addTo(this.map);
     }
 
-    this.currentMarker = marker;
+    this.markers.push(marker);
 
     if (popupText) {
       marker.bindPopup(popupText, popupOptions).openPopup();
@@ -223,10 +226,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   clearMarker(): void {
-    if (this.currentMarker && this.map) {
-      this.map.removeLayer(this.currentMarker);
-      this.currentMarker = undefined;
-    }
+    if (!this.map) return;
+    this.markers.forEach((m) => this.map.removeLayer(m));
+    this.markers = [];
   }
 
   clearPolygon(): void {
