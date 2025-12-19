@@ -45,6 +45,7 @@ export interface CatastroResponse {
       distanciaPortalTM?: string | null;
       codigoManzana?: string | null;
       codigoPredio?: string | null;
+      valorAvaluo?: string;
     };
   };
   error?: string | null;

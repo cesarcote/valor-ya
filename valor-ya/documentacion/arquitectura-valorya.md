@@ -116,28 +116,36 @@ graph TD
     C -->|No| B
     C -->|Sí| D[Step 2: Revisión del Predio]
     D --> E{Validaciones}
-    E -->|Código de Uso| F{¿Es PH?}
-    F -->|No| G[Modal: Predio no elegible]
-    G --> B
-    F -->|Sí| H{Conexión MCM}
-    H -->|Error| I[Modal: Servicio no disponible]
-    I --> D
-    H -->|OK| J{Mínimo de Ofertas}
-    J -->|< 3| K[Modal: No se puede calcular]
+    E -->|1. Datos completos| F{¿Chip y loteid?}
+    F -->|No| G[Error: Datos incompletos]
+    G --> D
+    F -->|Sí| H{2. Valor Ya vs Avalúo}
+    H -->|VALOR_YA < valorAvaluo| I[Modal: No hay suficiente información]
+    I --> B
+    H -->|VALOR_YA >= valorAvaluo| J{3. Código de Uso}
+    J -->|No permitido| K[Modal: Predio no elegible]
     K --> B
-    J -->|>= 3| L{¿Autenticado?}
-    L -->|No| M[Modal Login/Registro]
-    M --> L
-    L -->|Sí| N[Step 3: Pago]
-    N --> O[Crear Compra]
-    O --> P[Crear Pago]
-    P --> Q[Redirigir a Paymentez]
-    Q --> R[Callback de Pago]
-    R --> S{¿Pago exitoso?}
-    S -->|No| T[Step 4: Estado Rechazado]
-    S -->|Sí| U[Step 4: Resultado]
-    U --> V[Mostrar ValorYa]
-    V --> W[Descargar PDF]
+    J -->|Permitido| L{¿Es 037 o 038?}
+    L -->|No| M{6. ¿Autenticado?}
+    L -->|Sí| N{4. Conexión MCM}
+    N -->|Error| O[Modal: Servicio no disponible]
+    O --> D
+    N -->|OK| P{5. Mínimo de Ofertas}
+    P -->|< 3| Q[Modal: No se puede calcular]
+    Q --> B
+    P -->|>= 3| M
+    M -->|No| R[Modal Login/Registro]
+    R --> M
+    M -->|Sí| S[Step 3: Pago]
+    S --> T[Crear Compra]
+    T --> U[Crear Pago]
+    U --> V[Redirigir a Paymentez]
+    V --> W[Callback de Pago]
+    W --> X{¿Pago exitoso?}
+    X -->|No| Y[Step 4: Estado Rechazado]
+    X -->|Sí| Z[Step 4: Resultado]
+    Z --> AA[Mostrar ValorYa]
+    AA --> AB[Descargar PDF]
 ```
 
 ### 2. Flujo de Test (Sin pago real)
@@ -394,19 +402,33 @@ GET /api/catastro/consultar?Opcion=2&Identificador=CL 10 # 5 30
 
 ```json
 {
-  "chip": "AAA0036YERJ",
-  "direccion": "CL 10 # 5 30",
-  "cedula_catastral": "8A 36 17 167",
-  "area_construida": 37.4,
-  "area_terreno": 9.7,
-  "codigo_uso": "038",
-  "descripcion_uso": "APARTAMENTO",
-  "estrato": 3,
-  "geometry": {
-    "rings": [[[...coordenadas...]]]
+  "success": true,
+  "message": "Consulta realizada exitosamente",
+  "data": {
+    "infoConsultaPredio": {
+      "chip": "AAA0036YERJ",
+      "loteid": "123456"
+    },
+    "infoAdicional": {
+      "direccion": "CL 10 # 5 30",
+      "municipio": "Bogotá D.C.",
+      "localidad": "La Candelaria",
+      "barrio": "Centro",
+      "tipoPredio": "Apartamento",
+      "estrato": "3",
+      "areaConstruidaPrivada": "37.4",
+      "codigoUso": "038",
+      "valorAvaluo": "75000000"
+    },
+    "infoGeografica": {
+      "coordenadasPoligono": [[[...coordenadas...]]],
+      "areaPoligono": 9.7
+    }
   }
 }
 ```
+
+**Nota:** El campo `valorAvaluo` en `infoAdicional` es utilizado para la validación de Valor Ya vs Valor Avalúo en el Step 2.
 
 #### 2. **Compras Controller** - `/api/compras`
 
@@ -471,12 +493,14 @@ POST /api/compras/pagos
 
 #### 3. **Procesar Chips Controller** - `/api/procesar-chips`
 
-| Método | Endpoint            | Descripción                               |
-| ------ | ------------------- | ----------------------------------------- |
-| GET    | `/test-conexion`    | Verificar disponibilidad del servicio MCM |
-| POST   | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas     |
-| POST   | `/calcular-valorya` | Calcular valor final del predio           |
-| POST   | `/chip-unico`       | Obtener máximo 5 ofertas para el mapa     |
+| Método | Endpoint                  | Descripción                                                                                      |
+| ------ | ------------------------- | ------------------------------------------------------------------------------------------------ |
+| GET    | `/test-conexion`          | Verificar disponibilidad del servicio MCM                                                        |
+| POST   | `/validar-minimo-ofertas` | Validar que existan >= 3 ofertas                                                                 |
+| POST   | `/calcular-valorya`       | Calcular valor final del predio (también usado temporalmente para validación Valor Ya vs Avalúo) |
+| POST   | `/chip-unico`             | Obtener máximo 5 ofertas para el mapa                                                            |
+
+**⚠️ Nota sobre `/calcular-valorya`:** Este endpoint se utiliza actualmente en el Step 2 para la validación de Valor Ya vs Valor Avalúo. Esta es una implementación temporal. En el futuro, esta validación debe realizarse en el backend antes de permitir continuar al proceso de pago.
 
 **Ejemplo - Calcular ValorYa:**
 
@@ -965,11 +989,61 @@ async captureMapAsBase64(): Promise<string | null> {
 
 ### Validaciones en Step 2 (Revisión del Predio)
 
-#### 1. Validación de Código de Uso
+#### 1. Validación de Datos Completos
+
+```typescript
+if (!predio?.loteid || !predio?.chip) {
+  this.errorMessage.set('No hay información completa del predio');
+  return;
+}
+```
+
+**Criterio:** El predio debe tener chip y loteid válidos
+
+**Si no cumple:**
+
+- Error en pantalla
+- No permite continuar
+
+#### 2. Validación Valor Ya vs Valor Avalúo
+
+```typescript
+private validarValorYaVsAvaluo(predio: PredioData): void {
+  const valorAvaluo = parseFloat(predio.valorAvaluo);
+  this.mcmValorYaService.calcularValorYa(predio.chip!).subscribe({
+    next: (response) => {
+      const valorYa = response.data?.VALOR_YA;
+      if (valorYa < valorAvaluo) {
+        // Mostrar modal de error
+      }
+    }
+  });
+}
+```
+
+**Criterio:** `VALOR_YA >= valorAvaluo`
+
+**Fuentes de datos:**
+
+- `valorAvaluo`: Se obtiene del endpoint `/catastro/consultar` (campo `valorAvaluo` en `infoAdicional`)
+- `VALOR_YA`: Se obtiene temporalmente del endpoint `POST /api/procesar-chips/calcular-valorya`
+
+**⚠️ Nota Importante:** Esta validación se realiza actualmente desde el frontend llamando al endpoint `calcularValorYa`. Esta es una implementación temporal. En el futuro, esta validación debe implementarse en el backend para:
+
+- Mayor eficiencia (evitar llamadas innecesarias desde el frontend)
+- Mayor seguridad (validaciones de negocio en el servidor)
+- Mejor rendimiento (validación antes de procesar el pago)
+
+**Si no cumple:**
+
+- Modal "No se puede mostrar resultado, No hay suficiente informacion para determinar el valor de su propiedad"
+- No permite continuar al pago
+
+#### 3. Validación de Código de Uso
 
 ```typescript
 private validarCodigoUso(predio: PredioData): boolean {
-  const CODIGOS_PERMITIDOS = ['037', '038'];
+  const CODIGOS_PERMITIDOS = ['037', '038', '048', '049', '051'];
   return CODIGOS_PERMITIDOS.includes(predio.codigoUso);
 }
 ```
@@ -978,23 +1052,28 @@ private validarCodigoUso(predio: PredioData): boolean {
 
 - **037** - Casa en Propiedad Horizontal
 - **038** - Apartamento
+- **048** - Otro tipo de predio
+- **049** - Parqueadero
+- **051** - Depósito
 
 **Si no cumple:**
 
-- Modal "Predio no elegible para ValorYa"
+- Modal "Predio no elegible" con mensaje indicando que solo está disponible para ciertos tipos de predios (códigos 037, 038, 048, 049, 051)
 - Contacto de soporte
 - Regreso a búsqueda
 
-#### 2. Validación de Conexión MCM
+#### 4. Validación de Conexión MCM (Solo códigos 037 y 038)
 
 ```typescript
 private validarConexionMCM(): Observable<boolean> {
   return this.apiService.testConexion().pipe(
-    map(resp => resp.estado === 'disponible'),
+    map(resp => resp.estado === 'CONECTADO'),
     catchError(() => of(false))
   );
 }
 ```
+
+**Aplicación:** Solo para predios con código de uso 037 o 038
 
 **Si no cumple:**
 
@@ -1002,7 +1081,7 @@ private validarConexionMCM(): Observable<boolean> {
 - Información de mantenimiento
 - Contacto de soporte
 
-#### 3. Validación de Mínimo de Ofertas
+#### 5. Validación de Mínimo de Ofertas (Solo códigos 037 y 038)
 
 ```typescript
 private validarMinimoOfertas(chip: string): Observable<boolean> {
@@ -1013,6 +1092,8 @@ private validarMinimoOfertas(chip: string): Observable<boolean> {
 }
 ```
 
+**Aplicación:** Solo para predios con código de uso 037 o 038
+
 **Criterio:** Mínimo 3 ofertas de referencia procesadas
 
 **Si no cumple:**
@@ -1020,6 +1101,23 @@ private validarMinimoOfertas(chip: string): Observable<boolean> {
 - Modal "No podemos calcular el valor"
 - Explicación técnica
 - Regreso a búsqueda
+
+#### 6. Autenticación (Última validación)
+
+```typescript
+private verificarAutenticacionYContinuar(predio: PredioData): void {
+  if (!this.authService.isAuthenticated()) {
+    this.authModalService.openLoginModal();
+    return;
+  }
+  this.navegarAlPago(predio);
+}
+```
+
+**Si no está autenticado:**
+
+- Modal de login/registro
+- Después del login exitoso, continúa al Step 3
 
 ---
 
@@ -1068,12 +1166,12 @@ onNuevaConsulta(): void {
 
 ### Diferencias con ValorYa
 
-| Aspecto           | ValorYa            | Test                 |
-| ----------------- | ------------------ | -------------------- |
-| **Código de Uso** | Solo 037 y 038     | Cualquier código     |
-| **Pago**          | Real con Paymentez | Mock (no real)       |
-| **Propósito**     | Producción         | Testing y desarrollo |
-| **Validaciones**  | Todas activas      | Relajadas            |
+| Aspecto           | ValorYa                      | Test                 |
+| ----------------- | ---------------------------- | -------------------- |
+| **Código de Uso** | Solo 037, 038, 048, 049, 051 | Cualquier código     |
+| **Pago**          | Real con Paymentez           | Mock (no real)       |
+| **Propósito**     | Producción                   | Testing y desarrollo |
+| **Validaciones**  | Todas activas                | Relajadas            |
 
 ### Uso del Módulo Test
 

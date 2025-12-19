@@ -32,23 +32,35 @@ Se muestra la información del predio en un mapa con sus datos catastrales.
 
 #### Validaciones al dar "Continuar":
 
-1. **Código de Uso** - Solo predios PH (códigos 037, 038)
+1. **Datos Completos del Predio** - Validar que existan chip y loteid
+
+   - Si no cumple → Error "No hay información completa del predio"
+
+2. **Validación Valor Ya vs Valor Avalúo** - Para TODOS los predios permitidos
+
+   - Obtiene `valorAvaluo` del endpoint `/catastro/consultar` (ya incluido en la respuesta)
+   - Llama temporalmente a `POST /api/procesar-chips/calcular-valorya` para obtener `VALOR_YA`
+   - Compara: Si `VALOR_YA < valorAvaluo` → Modal "No se puede mostrar resultado, No hay suficiente informacion para determinar el valor de su propiedad"
+   - **Nota:** Esta validación es temporal desde el frontend. En el futuro se debe implementar en el backend para mayor eficiencia y seguridad.
+
+3. **Código de Uso** - Solo predios permitidos (códigos 037, 038, 048, 049, 051)
 
    - Si no cumple → Modal "Predio no elegible" → Vuelve al Step 1
 
-2. **Conexión MCM** - Verifica disponibilidad del servicio
+4. **Validación MCM y Mínimo de Ofertas** - Solo para códigos 037 y 038
 
-   - Endpoint: `GET /api/procesar-chips/test-conexion`
-   - Si falla → Modal "Servicio no disponible"
+   - **Conexión MCM** - Verifica disponibilidad del servicio
+
+     - Endpoint: `GET /api/procesar-chips/test-conexion`
+     - Si falla → Modal "Servicio no disponible"
+
+   - **Mínimo de Ofertas** - Valida que existan ofertas de referencia
+     - Endpoint: `POST /api/procesar-chips/validar-minimo-ofertas`
+     - Si falla → Modal "No podemos calcular el valor"
 
    Esto se hace con el fin de que si el servicio de mcm se cae en ese momento, no deje avanzar al usuario a quiza a realizar un registro innecesario por el momento o peor, llevarlo a un pago y que no obtenga de manera inmediata su producto.
 
-3. **Mínimo de Ofertas** - Valida que existan ofertas de referencia
-
-   - Endpoint: `POST /api/procesar-chips/validar-minimo-ofertas`
-   - Si falla → Modal "No podemos calcular el valor"
-
-4. **Autenticación** - Se pide login/registro (última validación)
+5. **Autenticación** - Se pide login/registro (última validación)
    - Si no está logueado → Modal de login
    - Después del login exitoso → Continúa al Step 3
 
@@ -143,8 +155,11 @@ Al cerrar sesión (`logout`) se limpian:
 | ------ | ---------------------------- |
 | 037    | Casa en Propiedad Horizontal |
 | 038    | Apartamento                  |
+| 048    | Otro tipo de predio          |
+| 049    | Parqueadero                  |
+| 051    | Depósito                     |
 
-_Otros tipos de predio no son elegibles actualmente._
+**Nota:** Los códigos 037 y 038 requieren validación adicional de MCM y mínimo de ofertas. Los códigos 048, 049 y 051 solo requieren la validación de Valor Ya vs Valor Avalúo.
 
 ---
 

@@ -49,6 +49,7 @@ export class PredioService {
       codigoUso: infoAdicional.codigoUso,
       vetustez: infoAdicional.vetustez,
       condicionJuridica: infoAdicional.condicionJuridica,
+      valorAvaluo: infoAdicional.valorAvaluo,
     };
   }
   esCodigoUsoValido(codigoUso?: string): boolean {

@@ -23,4 +23,5 @@ export interface PredioData {
   codigoUso?: string;
   vetustez?: string;
   condicionJuridica?: string;
+  valorAvaluo?: string;
 }

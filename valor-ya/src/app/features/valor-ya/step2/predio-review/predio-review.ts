@@ -144,7 +144,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
 
     consulta$.subscribe({
       next: (data) => {
-        // Validar primero si el predio es elegible para ValorYa (solo PH con códigos 037 o 038)
+        // Validar primero si el predio es elegible para ValorYa (solo PH con códigos 037, 038, 048, 049, 051)
         const esElegible = this.predioService.esCodigoUsoValido(data.codigoUso);
         this.isPredioElegible.set(esElegible);
 
@@ -173,7 +173,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.showModal.set(true);
     this.modalTitle.set('Predio no elegible');
     this.modalMessage.set(
-      'Por el momento, ValorYa solo está disponible para predios en Propiedad Horizontal (apartamentos y casas PH). ' +
+      'Por el momento, ValorYa solo está disponible para ciertos tipos de predios (códigos de uso 037, 038, 048, 049, 051). ' +
         'Estamos trabajando para ampliar este servicio a otros tipos de predios.\n\n' +
         'Si tienes dudas, contáctanos:\n' +
         '📞 +57 601 234 7600 ext. 7600\n' +
@@ -190,7 +190,6 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   onContinuar(): void {
     const predio = this.predioData();
 
-    // Validación 1: Datos completos del predio
     if (!predio?.loteid || !predio?.chip) {
       this.errorMessage.set('No hay información completa del predio');
       return;
@@ -199,32 +198,57 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.isValidatingAvailability.set(true);
     this.errorMessage.set('');
 
-    // Validación 2: Verificar conexión con el servicio MCM
-    this.validarConexionMCM(predio);
+    this.validarValorYaVsAvaluo(predio);
   }
 
-  /**
-   * Paso 1: Verificar que el servicio MCM esté disponible
-   */
-  private validarConexionMCM(predio: PredioData): void {
-    this.mcmValorYaService.testConexion().subscribe({
-      next: (conexionResponse) => {
-        if (conexionResponse.estado !== 'CONECTADO') {
+  private validarValorYaVsAvaluo(predio: PredioData): void {
+    if (!predio.valorAvaluo) {
+      this.mostrarErrorServicioNoDisponible();
+      return;
+    }
+
+    const valorAvaluo = parseFloat(predio.valorAvaluo);
+    if (isNaN(valorAvaluo) || valorAvaluo <= 0) {
+      this.mostrarErrorServicioNoDisponible();
+      return;
+    }
+
+    this.mcmValorYaService.calcularValorYa(predio.chip!).subscribe({
+      next: (response) => {
+        const valorYa = response.data?.VALOR_YA;
+        if (!valorYa || isNaN(valorYa)) {
           this.mostrarErrorServicioNoDisponible();
           return;
         }
-        // Validación de mínimo ofertas SOLO aplica para códigos de uso PH: 037 y 038
-        const codigoUso = predio.codigoUso;
-        const requiereMinimoOfertas = codigoUso === '037' || codigoUso === '038';
 
-        if (requiereMinimoOfertas) {
-          this.validarMinimoOfertas(predio);
+        if (valorYa < valorAvaluo) {
+          this.isValidatingAvailability.set(false);
+          this.showModal.set(true);
+          this.modalTitle.set('Información no disponible');
+          this.modalMessage.set(
+            'No se puede mostrar resultado, No hay suficiente informacion para determinar el valor de su propiedad'
+          );
+          this.modalIconType.set('error');
+          this.modalButtonText.set('Aceptar');
           return;
         }
 
-        // Si no aplica, continuar directo a autenticación
-        this.isValidatingAvailability.set(false);
-        this.verificarAutenticacionYContinuar(predio);
+        const codigoUso = predio.codigoUso;
+
+        if (!this.predioService.esCodigoUsoValido(codigoUso)) {
+          this.isValidatingAvailability.set(false);
+          this.showPredioNoElegibleModal();
+          return;
+        }
+
+        const requiereValidacionMCM = codigoUso === '037' || codigoUso === '038';
+
+        if (requiereValidacionMCM) {
+          this.validarConexionMCM(predio);
+        } else {
+          this.isValidatingAvailability.set(false);
+          this.verificarAutenticacionYContinuar(predio);
+        }
       },
       error: () => {
         this.mostrarErrorServicioNoDisponible();
@@ -232,13 +256,24 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Paso 2: Validar que existan suficientes ofertas para calcular el valor
-   */
+  private validarConexionMCM(predio: PredioData): void {
+    this.mcmValorYaService.testConexion().subscribe({
+      next: (conexionResponse) => {
+        if (conexionResponse.estado !== 'CONECTADO') {
+          this.mostrarErrorServicioNoDisponible();
+          return;
+        }
+        this.validarMinimoOfertas(predio);
+      },
+      error: () => {
+        this.mostrarErrorServicioNoDisponible();
+      },
+    });
+  }
+
   private validarMinimoOfertas(predio: PredioData): void {
     this.mcmValorYaService.validarMinimoOfertas([predio.chip!]).subscribe({
       next: () => {
-        // Las validaciones técnicas pasaron, ahora verificar autenticación
         this.isValidatingAvailability.set(false);
         this.verificarAutenticacionYContinuar(predio);
       },
@@ -248,9 +283,6 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Paso 3: Verificar autenticación del usuario (última validación)
-   */
   private verificarAutenticacionYContinuar(predio: PredioData): void {
     if (!this.authService.isAuthenticated()) {
       this.pendingContinue.set(true);
@@ -261,9 +293,6 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.navegarAlPago(predio);
   }
 
-  /**
-   * Paso final: Guardar datos y navegar al paso de pago
-   */
   private navegarAlPago(predio: PredioData): void {
     localStorage.setItem('valorya-predio-data', JSON.stringify(predio));
     this.stepperService.setStep(ValorYaStep.PROCESO);
