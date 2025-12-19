@@ -3,7 +3,7 @@
   Dirección del predio: <span class="address">{{ direccion() }}</span>
 </h4>
 }
-<div class="map-container" #mapWrapper>
+<div class="map-container" #mapWrapper [class.is-capturing]="isCapturing()">
   <div #map class="map"></div>
 
   

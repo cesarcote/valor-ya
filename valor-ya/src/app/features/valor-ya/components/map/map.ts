@@ -71,7 +71,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   config = input<MapConfig>({
     center: [4.6097, -74.0817],
     zoom: 14,
-    minZoom: 12,
+    minZoom: 10,
     maxZoom: 20,
   });
 
@@ -191,10 +191,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     const bounds = this.currentPolygon.getBounds();
+
+    let paddingRight = 80;
+    if (this.isMobile()) {
+      paddingRight = 20;
+    }
+    if (!this.isMobile() && this.cardVisible()) {
+      paddingRight = 360;
+    }
+
     this.map.fitBounds(bounds, {
       maxZoom: 19,
       paddingTopLeft: [20, 20],
-      paddingBottomRight: [80, 20],
+      paddingBottomRight: [paddingRight, 20],
     });
   }
 
@@ -278,7 +287,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       this.map.invalidateSize();
 
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
 
       const html2canvas = (await import('html2canvas')).default;
 
@@ -336,6 +345,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
   private registerZoomHandlers(): void {
     this.map.on('zoomstart', () => {
+      if (this.isCapturing()) {
+        return;
+      }
       this.removeCustomTooltipCards();
       if (this.cardVisible()) {
         this.restoreCardAfterZoom = true;
@@ -346,6 +358,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.map.on('zoomend', () => {
+      if (this.isCapturing()) {
+        return;
+      }
       this.removeCustomTooltipCards();
       if (this.restoreCardAfterZoom && this.cardPredioData()) {
         this.showCard();
@@ -425,8 +440,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         'Powered by <a href="https://www.esri.com">Esri</a> | IDECA - UAECD, Secretaría General de la Alcaldía Mayor de Bogotá D.C.',
     });
 
-    this.map.on('zoomstart', () => catastroLayer.setOpacity(0.3));
-    this.map.on('zoomend', () => catastroLayer.setOpacity(0.8));
+    this.map.on('zoomstart', () => {
+      if (this.isCapturing()) {
+        return;
+      }
+      catastroLayer.setOpacity(0.3);
+    });
+    this.map.on('zoomend', () => {
+      if (this.isCapturing()) {
+        return;
+      }
+      catastroLayer.setOpacity(0.8);
+    });
 
     catastroLayer.addTo(this.map);
   }
@@ -453,10 +478,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     // Caso 1: Mapa del predio (tiene polígono) -> centrar al polígono
     if (this.currentPolygon) {
       const bounds = this.currentPolygon.getBounds();
+
+      let paddingRight = 80;
+      if (this.isMobile()) {
+        paddingRight = 20;
+      }
+      if (!this.isMobile() && this.cardVisible()) {
+        paddingRight = 360;
+      }
+
       this.map.fitBounds(bounds, {
         maxZoom: 19,
         paddingTopLeft: [20, 20],
-        paddingBottomRight: [80, 20],
+        paddingBottomRight: [paddingRight, 20],
         animate,
       });
       return;
@@ -467,10 +501,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const group = L.featureGroup(this.markers);
       const bounds = group.getBounds();
       if (bounds.isValid()) {
+        let paddingRight = 80;
+        if (this.isMobile()) {
+          paddingRight = 20;
+        }
+        if (!this.isMobile() && this.cardVisible()) {
+          paddingRight = 360;
+        }
+
         this.map.fitBounds(bounds, {
           maxZoom: 19,
           paddingTopLeft: [20, 20],
-          paddingBottomRight: [80, 20],
+          paddingBottomRight: [paddingRight, 20],
           animate,
         });
       }

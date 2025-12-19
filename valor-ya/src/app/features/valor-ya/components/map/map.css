@@ -176,3 +176,13 @@
   width: 18px;
   height: 18px;
 }
+.map-container.is-capturing .card-overlay {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.map-container.is-capturing .card-overlay * {
+  animation: none !important;
+  transition: none !important;
+}
