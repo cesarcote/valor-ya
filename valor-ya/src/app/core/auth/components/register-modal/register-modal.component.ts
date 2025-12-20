@@ -52,6 +52,8 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
 
   ngOnInit(): void {
     this.initForms();
+    this.setupDocumentNumberValidation();
+    this.setupCellphoneLengths();
     this.loadDocumentTypes();
     this.loadSexTypes();
   }
@@ -60,8 +62,8 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     this.stepOneForm = this.fb.group(
       {
         documentType: ['', [Validators.required]],
-        documentNumber: [''],
-        documentNumberConfirm: ['', [Validators.required]],
+        documentNumber: ['', colombiaDocumentNumberValidators()],
+        documentNumberConfirm: ['', [Validators.required, ...colombiaDocumentNumberValidators()]],
         expeditionDate: ['', [Validators.required]],
       },
       { validators: this.documentMatchValidator }
