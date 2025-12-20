@@ -74,8 +74,9 @@
                 type="text"
                 class="form-control"
                 formControlName="documentNumber"
+                [attr.inputmode]="documentNumberInputMode()"
                 placeholder="Escribe el número de documento"
-                maxlength="12"
+                [attr.maxlength]="documentNumberMaxLength()"
               />
               @if (documentNumber?.invalid && documentNumber?.touched) {
               <div class="invalid-feedback d-block">
@@ -94,8 +95,9 @@
                 type="text"
                 class="form-control"
                 formControlName="documentNumberConfirm"
+                [attr.inputmode]="documentNumberInputMode()"
                 placeholder="Confirma el número de documento"
-                maxlength="12"
+                [attr.maxlength]="documentNumberMaxLength()"
                 autocomplete="off"
                 (paste)="$event.preventDefault()"
               />
@@ -274,8 +276,10 @@
                   type="tel"
                   class="form-control"
                   formControlName="cellphone"
+                [attr.inputmode]="'numeric'"
+                [attr.maxlength]="cellphoneMaxLength()"
                   placeholder="Escriba su número de celular"
-                  maxlength="20"
+
                 />
                 @if (cellphone?.invalid && cellphone?.touched) {
                 <div class="invalid-feedback d-block">

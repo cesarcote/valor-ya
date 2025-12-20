@@ -14,6 +14,7 @@ import { DocumentType, SexType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { FormModalBaseComponent } from '../../../../shared/components/base/form-modal-base.component';
+import { colombiaDocumentNumberValidators, colombiaPhoneValidators, getColombiaDocumentRules } from '../../../../shared/validators/colombia-identification.validators';
 
 @Component({
   selector: 'app-register-modal',
@@ -36,6 +37,11 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
   acceptTerms = signal(false);
   documentTypes = signal<DocumentType[]>([]);
   sexTypes = signal<SexType[]>([]);
+  documentNumberMinLength = signal(4);
+  documentNumberMaxLength = signal(16);
+  documentNumberInputMode = signal<'numeric' | 'text'>('text');
+  cellphoneMinLength = signal(10);
+  cellphoneMaxLength = signal(10);
 
   // Formularios
   stepOneForm!: FormGroup;
@@ -54,15 +60,7 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     this.stepOneForm = this.fb.group(
       {
         documentType: ['', [Validators.required]],
-        documentNumber: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(12),
-            Validators.pattern(/^[0-9A-Za-z]+$/),
-          ],
-        ],
+        documentNumber: [''],
         documentNumberConfirm: ['', [Validators.required]],
         expeditionDate: ['', [Validators.required]],
       },
@@ -91,15 +89,7 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
         ],
         email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
         emailConfirm: ['', [Validators.required]],
-        cellphone: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(7),
-            Validators.maxLength(20),
-            Validators.pattern(/^\d+$/),
-          ],
-        ],
+        cellphone: ['', colombiaPhoneValidators()],
         sexType: ['', [Validators.required]],
         acceptTerms: [false, [Validators.requiredTrue]],
       },
@@ -107,6 +97,65 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     );
   }
 
+  private mapDocumentTypeToCodigo(documentTypeValue: unknown): any {
+    const map: { [key: number]: string } = {
+      1: 'CC',
+      2: 'NIT',
+      3: 'CE',
+      4: 'PA',
+      5: 'TI',
+      6: 'NUIP',
+    };
+
+    const key = Number(documentTypeValue);
+    const tipo = map[key];
+    return tipo || 'CC';
+  }
+
+  private applyDocumentNumberValidators(documentTypeValue: unknown): void {
+    const tipoDocumento = this.mapDocumentTypeToCodigo(documentTypeValue);
+    const rules = getColombiaDocumentRules(tipoDocumento);
+
+    this.documentNumberMinLength.set(rules.minLength);
+    this.documentNumberMaxLength.set(rules.maxLength);
+    this.documentNumberInputMode.set(rules.inputMode);
+
+    const doc = this.documentNumber;
+    const docConfirm = this.documentNumberConfirm;
+
+    if (doc) {
+      doc.setValidators(colombiaDocumentNumberValidators(tipoDocumento));
+      doc.updateValueAndValidity();
+    }
+
+    if (docConfirm) {
+      docConfirm.setValidators([Validators.required, ...colombiaDocumentNumberValidators(tipoDocumento)]);
+      docConfirm.updateValueAndValidity();
+    }
+  }
+
+  private setupDocumentNumberValidation(): void {
+    const control = this.documentType;
+    if (!control) {
+      return;
+    }
+
+    control.valueChanges.subscribe((value) => {
+      this.applyDocumentNumberValidators(value);
+    });
+
+    const initialValue = control.value;
+    if (!initialValue) {
+      return;
+    }
+
+    this.applyDocumentNumberValidators(initialValue);
+  }
+
+  private setupCellphoneLengths(): void {
+    this.cellphoneMinLength.set(10);
+    this.cellphoneMaxLength.set(10);
+  }
   private loadDocumentTypes(): void {
     this.authService.getDocumentTypes().subscribe({
       next: (types) => this.documentTypes.set(types),
@@ -299,7 +348,8 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepOneForm.get('documentNumber');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Debe escribir su número de documento.';
-      if (control.hasError('minlength')) return 'El documento debe tener mínimo 4 dígitos.';
+      if (control.hasError('minlength')) return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
+      if (control.hasError('maxlength')) return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
       if (control.hasError('pattern')) return 'El formato del número de documento no es válido.';
       if (control.hasError('duplicateID'))
         return 'Este número de documento ya se encuentra registrado.';
@@ -311,6 +361,9 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepOneForm.get('documentNumberConfirm');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Debe confirmar su número de documento.';
+      if (control.hasError('minlength')) return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
+      if (control.hasError('maxlength')) return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
+      if (control.hasError('pattern')) return 'El formato del número de documento no es válido.';
       if (control.hasError('mismatch')) return 'Los documentos deben coincidir.';
     }
     return '';
@@ -350,7 +403,7 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepTwoForm.get('cellphone');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Ingrese su número de celular.';
-      if (control.hasError('minlength')) return 'Ingrese un número de mínimo 7 caracteres.';
+      if (control.hasError('minlength') || control.hasError('maxlength')) return 'Ingrese un número de 10 dígitos.';
       if (control.hasError('pattern')) return 'El número de celular no es válido.';
     }
     return '';

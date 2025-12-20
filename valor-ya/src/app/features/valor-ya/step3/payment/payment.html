@@ -44,6 +44,8 @@
             id="numeroDocumento"
             label="Número de Documento"
             [formCtr]="numeroDocumentoControl"
+            [minLength]="documentNumberMinLength()"
+            [maxLength]="documentNumberMaxLength()"
             placeholder="Ej: 1234567890"
           ></app-input>
         </div>
@@ -90,6 +92,8 @@
             id="telefono"
             label="Teléfono"
             [formCtr]="telefonoControl"
+            [minLength]="telefonoMinLength()"
+            [maxLength]="telefonoMaxLength()"
             placeholder="Ej: 3001234567"
           ></app-input>
 

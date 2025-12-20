@@ -20,6 +20,7 @@ import { ModalComponent } from '../../../../shared/components/ui/modal/modal.com
 import { ContainerContentComponent } from '../../../../shared/components/layout/container-content/container-content';
 
 import { ComprasService } from '../../services/compras.service';
+import { colombiaDocumentNumberValidators, colombiaPhoneValidators, getColombiaDocumentRules } from '../../../../shared/validators/colombia-identification.validators';
 
 @Component({
   selector: 'app-payment',
@@ -52,6 +53,12 @@ export class PaymentComponent implements OnInit {
   modalTitle = signal('Advertencia');
   modalIconType = signal<'success' | 'warning' | 'error'>('warning');
   modalButtonText = signal('Aceptar');
+
+  documentNumberMinLength = signal(4);
+  documentNumberMaxLength = signal(16);
+  documentNumberInputMode = signal<'numeric' | 'text'>('text');
+  telefonoMinLength = signal(10);
+  telefonoMaxLength = signal(10);
 
   tiposDocumento: SelectOption[] = [
     { value: 'CC', label: 'Cédula de Ciudadanía' },
@@ -107,16 +114,44 @@ export class PaymentComponent implements OnInit {
   initForm(): void {
     this.facturacionForm = this.fb.group({
       tipoDocumento: ['', Validators.required],
-      numeroDocumento: ['', [Validators.required, Validators.minLength(5)]],
+      numeroDocumento: [''],
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       apellidos: ['', [Validators.required, Validators.minLength(2)]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       ciudad: ['', [Validators.required, Validators.minLength(3)]],
-      telefono: ['', [Validators.required, Validators.minLength(7)]],
+      telefono: ['', colombiaPhoneValidators()],
       email: ['', [Validators.required, Validators.email]],
     });
+
+    this.setupDocumentoValidation();
   }
 
+  private applyDocumentoValidators(tipoDocumento: string): void {
+    const rules = getColombiaDocumentRules(tipoDocumento as any);
+    this.documentNumberMinLength.set(rules.minLength);
+    this.documentNumberMaxLength.set(rules.maxLength);
+    this.documentNumberInputMode.set(rules.inputMode);
+
+    const control = this.facturacionForm.get('numeroDocumento');
+    if (!control) return;
+
+    control.setValidators(colombiaDocumentNumberValidators(tipoDocumento as any));
+    control.updateValueAndValidity();
+  }
+
+  private setupDocumentoValidation(): void {
+    const control = this.facturacionForm.get('tipoDocumento');
+    if (!control) return;
+
+    control.valueChanges.subscribe((tipoDocumento) => {
+      this.applyDocumentoValidators(tipoDocumento);
+    });
+
+    const initialTipo = control.value;
+    if (!initialTipo) return;
+
+    this.applyDocumentoValidators(initialTipo);
+  }
   onSubmitFacturacion(): void {
     if (this.facturacionForm.valid) {
       this.isSubmitting.set(true);

@@ -58,8 +58,9 @@
                 type="text"
                 class="form-control"
                 formControlName="documentNumber"
+                [attr.inputmode]="documentNumberInputMode()"
                 placeholder="Escribe tu número de documento"
-                maxlength="12"
+                [attr.maxlength]="documentNumberMaxLength()"
               />
               @if (documentNumber?.invalid && documentNumber?.touched) {
               <div class="invalid-feedback d-block">

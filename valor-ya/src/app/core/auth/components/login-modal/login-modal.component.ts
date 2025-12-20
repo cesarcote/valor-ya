@@ -8,6 +8,7 @@ import { DocumentType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { FormModalBaseComponent } from '../../../../shared/components/base/form-modal-base.component';
+import { colombiaDocumentNumberValidators, getColombiaDocumentRules } from '../../../../shared/validators/colombia-identification.validators';
 
 @Component({
   selector: 'app-login-modal',
@@ -34,6 +35,9 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
   emailUser = signal('');
   tiempoExpiracion = signal(5);
   documentTypes = signal<DocumentType[]>([]);
+  documentNumberMinLength = signal(4);
+  documentNumberMaxLength = signal(16);
+  documentNumberInputMode = signal<'numeric' | 'text'>('text');
   // showConfirmation heredado de FormModalBaseComponent
 
   // Datos guardados del paso 1 para usar en paso 2
@@ -54,15 +58,7 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
   private initForms(): void {
     this.stepOneForm = this.fb.group({
       documentType: ['', [Validators.required]],
-      documentNumber: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(12),
-          Validators.pattern(/^\d+$/),
-        ],
-      ],
+      documentNumber: [''],
     });
 
     this.stepTwoForm = this.fb.group({
@@ -70,6 +66,55 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
     });
   }
 
+  private mapDocumentTypeToCodigo(documentTypeValue: unknown): any {
+    const map: { [key: number]: string } = {
+      1: 'CC',
+      2: 'NIT',
+      3: 'CE',
+      4: 'PA',
+      5: 'TI',
+      6: 'NUIP',
+    };
+
+    const key = Number(documentTypeValue);
+    const tipo = map[key];
+    return tipo || 'CC';
+  }
+
+  private applyDocumentNumberValidators(documentTypeValue: unknown): void {
+    const tipoDocumento = this.mapDocumentTypeToCodigo(documentTypeValue);
+    const rules = getColombiaDocumentRules(tipoDocumento);
+
+    this.documentNumberMinLength.set(rules.minLength);
+    this.documentNumberMaxLength.set(rules.maxLength);
+    this.documentNumberInputMode.set(rules.inputMode);
+
+    const control = this.documentNumber;
+    if (!control) {
+      return;
+    }
+
+    control.setValidators(colombiaDocumentNumberValidators(tipoDocumento));
+    control.updateValueAndValidity();
+  }
+
+  private setupDocumentNumberValidation(): void {
+    const control = this.documentType;
+    if (!control) {
+      return;
+    }
+
+    control.valueChanges.subscribe((value) => {
+      this.applyDocumentNumberValidators(value);
+    });
+
+    const initialValue = control.value;
+    if (!initialValue) {
+      return;
+    }
+
+    this.applyDocumentNumberValidators(initialValue);
+  }
   private loadDocumentTypes(): void {
     this.authService.getDocumentTypes().subscribe({
       next: (types) => this.documentTypes.set(types),
@@ -94,7 +139,7 @@ export class LoginModalComponent extends FormModalBaseComponent implements OnIni
       return 'Este campo es requerido.';
     }
     if (this.documentNumber?.hasError('minlength')) {
-      return 'El documento debe tener mínimo 4 dígitos.';
+      return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
     }
     if (this.documentNumber?.hasError('pattern')) {
       return 'El formato del número de documento no es válido.';
