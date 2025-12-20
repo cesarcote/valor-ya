@@ -46,7 +46,7 @@ export const routes: Routes = [
       {
         path: 'complementar',
         title: 'Valor YA - Complementar Información',
-        canActivate: [predioDataGuard],
+        canActivate: [authGuard, predioDataGuard],
         loadComponent: () =>
           import('./features/valor-ya/step2/complement-info/complement-info').then(
             (m) => m.ComplementInfo

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ValorYaStepperService, ValorYaStep } from '../../services/valor-ya-stepper.service';
 import { ValorYaStateService } from '../../services/valor-ya-state.service';
@@ -15,6 +16,8 @@ import {
   DatosUsuario,
 } from '../../services/solicitud-datos-complementarios.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { AuthModalService } from '../../../../core/auth/services/auth-modal.service';
 import { StepperComponent } from '../../../../shared/components/ui/stepper/stepper';
 import { InputComponent } from '../../../../shared/components/ui/input/input';
 import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select';
@@ -34,13 +37,17 @@ import { ContainerContentComponent } from '../../../../shared/components/layout/
   templateUrl: './complement-info.html',
   styleUrls: ['./complement-info.css'],
 })
-export class ComplementInfo implements OnInit {
+export class ComplementInfo implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private stepperService = inject(ValorYaStepperService);
   public stateService = inject(ValorYaStateService);
   private solicitudDatosService = inject(SolicitudDatosComplementariosService);
   private notificationService = inject(NotificationService);
+  private readonly authService = inject(AuthService);
+  private readonly authModalService = inject(AuthModalService);
+  private loginSubscription?: Subscription;
+  private readonly pendingEnviar = signal(false);
 
   readonly TIPO_PREDIO_OPTIONS: SelectOption[] = [
     { value: 'Apartamento', label: 'Apartamento' },
@@ -58,8 +65,20 @@ export class ComplementInfo implements OnInit {
 
   ngOnInit(): void {
     this.stepperService.setStep(ValorYaStep.SOLICITUD);
+
+    this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
+      if (this.pendingEnviar()) {
+        this.pendingEnviar.set(false);
+        this.onConsultarMCM();
+      }
+    });
+
     this.initForm();
     this.loadPredioData();
+  }
+
+  ngOnDestroy(): void {
+    this.loginSubscription?.unsubscribe();
   }
 
   initForm(): void {
@@ -90,7 +109,6 @@ export class ComplementInfo implements OnInit {
     const predioData = this.stateService.predioData();
 
     if (predioData) {
-      // Asegurarse de que el formulario existe
       if (!this.complementForm) {
         return;
       }
@@ -126,6 +144,12 @@ export class ComplementInfo implements OnInit {
   }
 
   onConsultarMCM(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.pendingEnviar.set(true);
+      this.authModalService.openLoginModal();
+      return;
+    }
+
     if (this.complementForm.valid || this.complementForm.get('tipoPredio')?.disabled) {
       this.isLoading.set(true);
       this.errorMessage.set('');
@@ -143,7 +167,6 @@ export class ComplementInfo implements OnInit {
         tipoPredio: tipoPredioFinal,
       };
 
-      // Solo agregar campos que el usuario realmente completó
       if (formValues.numeroHabitaciones !== '') {
         datosUsuario.numeroHabitaciones = Number.parseInt(formValues.numeroHabitaciones);
       }

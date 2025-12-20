@@ -42,6 +42,7 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   private mapComponent?: MapComponent;
   private loginSubscription?: Subscription;
   private readonly pendingContinue = signal(false);
+  private readonly pendingComplementar = signal(false);
   private mapInitialized = false;
 
   @ViewChild(MapComponent)
@@ -82,8 +83,13 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
     this.loginSubscription = this.authModalService.onLoginSuccess$.subscribe(() => {
       if (this.pendingContinue()) {
         this.pendingContinue.set(false);
-        // Después del login, ejecutar las validaciones completas de nuevo
         this.onContinuar();
+        return;
+      }
+
+      if (this.pendingComplementar()) {
+        this.pendingComplementar.set(false);
+        this.router.navigate(['/valor-ya/complementar']);
       }
     });
 
@@ -184,6 +190,12 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   }
 
   onNoEsCorrecta(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.pendingComplementar.set(true);
+      this.authModalService.openLoginModal();
+      return;
+    }
+
     this.router.navigate(['/valor-ya/complementar']);
   }
 
@@ -333,7 +345,6 @@ export class PredioReviewComponent implements OnInit, OnDestroy {
   onCloseModal(): void {
     this.showModal.set(false);
 
-    // Si el predio no es elegible, redirigir al step1
     if (!this.isPredioElegible()) {
       this.onVolver();
     }
