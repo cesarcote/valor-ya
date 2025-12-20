@@ -14,7 +14,11 @@ import { DocumentType, SexType } from '../../../models/user.model';
 import { ConfirmationModalComponent } from '../../../../shared/components/ui/confirmation-modal/confirmation-modal.component';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button';
 import { FormModalBaseComponent } from '../../../../shared/components/base/form-modal-base.component';
-import { colombiaDocumentNumberValidators, colombiaPhoneValidators, getColombiaDocumentRules } from '../../../../shared/validators/colombia-identification.validators';
+import {
+  colombiaDocumentNumberValidators,
+  colombiaPhoneValidators,
+  getColombiaDocumentRules,
+} from '../../../../shared/validators/colombia-identification.validators';
 
 @Component({
   selector: 'app-register-modal',
@@ -131,7 +135,10 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     }
 
     if (docConfirm) {
-      docConfirm.setValidators([Validators.required, ...colombiaDocumentNumberValidators(tipoDocumento)]);
+      docConfirm.setValidators([
+        Validators.required,
+        ...colombiaDocumentNumberValidators(tipoDocumento),
+      ]);
       docConfirm.updateValueAndValidity();
     }
   }
@@ -177,10 +184,24 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const docNumber = control.get('documentNumber');
     const docConfirm = control.get('documentNumberConfirm');
 
-    if (docNumber && docConfirm && docNumber.value !== docConfirm.value) {
-      docConfirm.setErrors({ mismatch: true });
+    if (!docNumber || !docConfirm) {
+      return null;
+    }
+
+    if (docNumber.value !== docConfirm.value) {
+      const errors = docConfirm.errors || {};
+      docConfirm.setErrors({ ...errors, mismatch: true });
       return { documentMismatch: true };
     }
+
+    const errors = docConfirm.errors;
+    if (!errors?.['mismatch']) {
+      return null;
+    }
+
+    const nextErrors = { ...errors };
+    delete nextErrors['mismatch'];
+    docConfirm.setErrors(Object.keys(nextErrors).length ? nextErrors : null);
     return null;
   }
 
@@ -188,10 +209,24 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const email = control.get('email');
     const emailConfirm = control.get('emailConfirm');
 
-    if (email && emailConfirm && email.value !== emailConfirm.value) {
-      emailConfirm.setErrors({ mismatch: true });
+    if (!email || !emailConfirm) {
+      return null;
+    }
+
+    if (email.value !== emailConfirm.value) {
+      const errors = emailConfirm.errors || {};
+      emailConfirm.setErrors({ ...errors, mismatch: true });
       return { emailMismatch: true };
     }
+
+    const errors = emailConfirm.errors;
+    if (!errors?.['mismatch']) {
+      return null;
+    }
+
+    const nextErrors = { ...errors };
+    delete nextErrors['mismatch'];
+    emailConfirm.setErrors(Object.keys(nextErrors).length ? nextErrors : null);
     return null;
   }
 
@@ -350,8 +385,10 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepOneForm.get('documentNumber');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Debe escribir su número de documento.';
-      if (control.hasError('minlength')) return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
-      if (control.hasError('maxlength')) return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
+      if (control.hasError('minlength'))
+        return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
+      if (control.hasError('maxlength'))
+        return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
       if (control.hasError('pattern')) return 'El formato del número de documento no es válido.';
       if (control.hasError('duplicateID'))
         return 'Este número de documento ya se encuentra registrado.';
@@ -363,8 +400,10 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepOneForm.get('documentNumberConfirm');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Debe confirmar su número de documento.';
-      if (control.hasError('minlength')) return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
-      if (control.hasError('maxlength')) return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
+      if (control.hasError('minlength'))
+        return 'El documento debe tener mínimo ' + this.documentNumberMinLength() + ' caracteres.';
+      if (control.hasError('maxlength'))
+        return 'El documento debe tener máximo ' + this.documentNumberMaxLength() + ' caracteres.';
       if (control.hasError('pattern')) return 'El formato del número de documento no es válido.';
       if (control.hasError('mismatch')) return 'Los documentos deben coincidir.';
     }
@@ -405,7 +444,8 @@ export class RegisterModalComponent extends FormModalBaseComponent implements On
     const control = this.stepTwoForm.get('cellphone');
     if (control?.invalid && control?.touched) {
       if (control.hasError('required')) return 'Ingrese su número de celular.';
-      if (control.hasError('minlength') || control.hasError('maxlength')) return 'Ingrese un número de 10 dígitos.';
+      if (control.hasError('minlength') || control.hasError('maxlength'))
+        return 'Ingrese un número de 10 dígitos.';
       if (control.hasError('pattern')) return 'El número de celular no es válido.';
     }
     return '';
