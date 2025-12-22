@@ -636,6 +636,8 @@ PROCEDURE SP_CALCULAR_VALOR_POR_CHIP (
 7. Backend → Validar token en cada endpoint protegido
 ```
 
+**⚠️ Nota de seguridad (validación de existencia por documento):** Actualmente, la validación de “si ya existe una cuenta asociada a un tipo/número de documento” se realiza de forma indirecta reutilizando el flujo de “clave temporal”. Esto expone un riesgo porque, ante un documento válido, la respuesta incluye un `emailOfuscado` que puede servir como pista para un atacante (enumeración/confirmación de identidad). Al igual que la validación temporal de **ValorYa vs Valor Avalúo** desde frontend, esta validación debe refactorizarse a un **endpoint dedicado** que únicamente responda el estado (por ejemplo, existe/no existe) **sin enviar correos ni retornar datos derivables**.
+
 ### Token JWT
 
 **Estructura:**
