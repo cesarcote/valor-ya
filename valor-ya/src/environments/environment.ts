@@ -18,7 +18,7 @@ export const environment = {
     baseUrl: 'http://vmprocondock.catastrobogota.gov.co:3402',
     recaptcha: {
       siteKey: '6Lc64CgsAAAAAABnhATIqME3vAH1-FFdVZK74wAA',
-      enabled: false,
+      enabled: true,
     },
   },
   prod: {
