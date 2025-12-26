@@ -12,6 +12,7 @@ import {
 export interface Tab {
   label: string;
   disabled?: boolean;
+  tooltip?: string;
 }
 
 @Component({
@@ -25,6 +26,10 @@ export class TabsComponent {
   @Input() selectedTabIndex: number = 0;
   @Output() tabChange = new EventEmitter<number>();
   @Input() description: string = '';
+
+  getTitle(tab: Tab): string {
+    return tab.tooltip || this.description;
+  }
 
   selectTab(index: number): void {
     if (!this.tabs[index]?.disabled) {

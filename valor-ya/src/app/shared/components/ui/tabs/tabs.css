@@ -29,6 +29,11 @@
   cursor: pointer;
 }
 
+.tabs-govco button.disable {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .tab-pane {
   animation: fadeIn 0.3s ease-in;
 }

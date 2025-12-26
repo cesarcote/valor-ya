@@ -9,7 +9,7 @@
           [class.active]="selectedTabIndex === $index"
           [class.disable]="tab.disabled"
           [attr.aria-disabled]="tab.disabled"
-          [title]="description"
+          [title]="getTitle(tab)"
         >
           {{ tab.label }}
         </button>

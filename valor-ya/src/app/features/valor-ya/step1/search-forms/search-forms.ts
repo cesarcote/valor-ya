@@ -30,6 +30,8 @@ export class SearchFormsComponent {
   private readonly authService = inject(AuthService);
   public readonly stateService = inject(ValorYaStateService);
 
+  private readonly fmiDisabledMessage = 'Por el momento el servicio de FMI no está disponible';
+
   public selectedTabIndex = computed(() => {
     const tipoBusqueda = this.stateService.tipoBusqueda();
     switch (tipoBusqueda) {
@@ -47,7 +49,7 @@ export class SearchFormsComponent {
   tabs: Tab[] = [
     { label: 'Dirección Catastral', disabled: false },
     { label: 'CHIP', disabled: false },
-    { label: 'Folio Matrícula Inmobiliaria', disabled: false },
+    { label: 'Folio Matrícula Inmobiliaria', disabled: true, tooltip: this.fmiDisabledMessage },
   ];
 
   public currentTitle = computed(() => {
@@ -58,18 +60,17 @@ export class SearchFormsComponent {
   constructor() {
     this.stepperService.setStep(ValorYaStep.INICIO);
 
-    // Limpiar datos de consulta de predio y pago de ValorYa al volver al step1
     this.authService.clearValorYaSessionData();
-    // Limpiar estado de búsqueda persistido
     this.stateService.clearStorage();
 
-    if (!this.stateService.tipoBusqueda()) {
-      this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);
-    }
+    this.stateService.setTipoBusqueda(TipoBusqueda.DIRECCION);
   }
 
   onTabChange(index: number): void {
     const tipos = [TipoBusqueda.DIRECCION, TipoBusqueda.CHIP, TipoBusqueda.FMI];
+    if (tipos[index] === TipoBusqueda.FMI) {
+      return;
+    }
     this.stateService.setTipoBusqueda(tipos[index]);
   }
 
