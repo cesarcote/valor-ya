@@ -192,29 +192,103 @@ export class ResultComponent implements OnInit {
 
     const predioBase = response.resultados[0];
     const coloresOfertas = ['#2563eb', '#10b981', '#f9bc16ff', '#8b5cf6', '#f97316'];
+    const chipPredioEvaluado = this.stateService.predioData()?.chip?.trim();
+    const chipPredio = predioBase.CHIP_PREDIO?.trim();
 
-    // 1. Marcador del Predio a Valorar (Pin Rojo)
-    map.addMarker({
-      lat: predioBase.POINT_Y_PREDIO,
-      lng: predioBase.POINT_X_PREDIO,
-      tooltipContent: '<strong>Predio a Valorar</strong>',
-      tooltipOptions: {
-        permanent: true,
-        direction: 'top',
-        offset: [0, -35],
+    map.clearMarker();
+
+    map.addMarker(
+      {
+        lat: predioBase.POINT_Y_PREDIO,
+        lng: predioBase.POINT_X_PREDIO,
+        tooltipContent: '<strong>Predio a Valorar</strong>',
+        tooltipOptions: {
+          permanent: true,
+          direction: 'top',
+          offset: [0, -35],
+        },
+        color: '#e3192f',
+        markerType: 'pin',
       },
-      color: '#e3192f',
-      markerType: 'pin',
-    });
+      { replace: false }
+    );
 
-    // 2. Marcadores de los Predios Circundantes (máximo 5)
-    const prediosCircundantes = response.resultados.slice(0, 5);
-    prediosCircundantes.forEach((oferta, index) => {
+    const chipsVistos = new Set<string>();
+    const coordenadasVistas = new Set<string>();
+    const prediosCircundantes: typeof response.resultados = [];
+
+    const descartes = {
+      sinChipOferta: 0,
+      sinCoordenadasValidas: 0,
+      esPredioEvaluado: 0,
+      repetido: 0,
+      repetidoCoordenada: 0,
+      agregado: 0,
+    };
+
+    for (const resultado of response.resultados) {
+      if (prediosCircundantes.length >= 5) break;
+
+      const chipOferta = resultado.CHIP_OFERTA?.trim();
+      if (!chipOferta) {
+        descartes.sinChipOferta += 1;
+        continue;
+      }
+
+      const ofertaLat = Number(resultado.POINT_Y_OFERTA);
+      const ofertaLng = Number(resultado.POINT_X_OFERTA);
+      if (!Number.isFinite(ofertaLat) || !Number.isFinite(ofertaLng)) {
+        descartes.sinCoordenadasValidas += 1;
+        continue;
+      }
+
+      const keyCoordenada = `${ofertaLat.toFixed(6)},${ofertaLng.toFixed(6)}`;
+      if (coordenadasVistas.has(keyCoordenada)) {
+        descartes.repetidoCoordenada += 1;
+        continue;
+      }
+
+      const esPredioEvaluado = chipOferta === chipPredio || chipOferta === chipPredioEvaluado;
+      if (esPredioEvaluado) {
+        descartes.esPredioEvaluado += 1;
+        continue;
+      }
+
+      if (chipsVistos.has(chipOferta)) {
+        descartes.repetido += 1;
+        continue;
+      }
+
+      chipsVistos.add(chipOferta);
+      coordenadasVistas.add(keyCoordenada);
+      prediosCircundantes.push(resultado);
+      descartes.agregado += 1;
+    }
+
+    if (prediosCircundantes.length < 5) {
+      console.warn(
+        `Solo se encontraron ${prediosCircundantes.length} predios circundantes únicos de ${response.resultados.length} resultados (se esperaban 5)`
+      );
+      console.log('CHIP predio evaluado:', chipPredioEvaluado);
+      console.log('CHIP_PREDIO del primer resultado:', chipPredio);
+      console.log(
+        'CHIPs de ofertas filtradas:',
+        prediosCircundantes.map((r) => r.CHIP_OFERTA?.trim())
+      );
+    }
+
+    let numeroPredio = 1;
+    for (const oferta of prediosCircundantes) {
+      const ofertaLat = Number(oferta.POINT_Y_OFERTA);
+      const ofertaLng = Number(oferta.POINT_X_OFERTA);
+      if (!Number.isFinite(ofertaLat) || !Number.isFinite(ofertaLng)) continue;
+
+      const index = numeroPredio - 1;
       map.addMarker(
         {
-          lat: oferta.POINT_Y_OFERTA,
-          lng: oferta.POINT_X_OFERTA,
-          tooltipContent: `<strong>Predio ${index + 1}</strong>`,
+          lat: ofertaLat,
+          lng: ofertaLng,
+          tooltipContent: `<strong>Predio ${numeroPredio}</strong>`,
           tooltipOptions: {
             permanent: true,
             direction: 'top',
@@ -225,7 +299,9 @@ export class ResultComponent implements OnInit {
         },
         { replace: false }
       );
-    });
+
+      numeroPredio += 1;
+    }
 
     // 3. Centrar automáticamente mostrando predio + ofertas (igual que el botón de centrar)
     map.centerOnPredio(true);
